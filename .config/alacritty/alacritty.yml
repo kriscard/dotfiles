@@ -5,6 +5,8 @@ import:
 #   program: /usr/bin/env
 #   args:
 #     - zsh
+env:
+  TERM: xterm-256color
 
 window:
   # window padding (change requires restart)
