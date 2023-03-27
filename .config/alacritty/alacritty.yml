@@ -1,6 +1,6 @@
 # Configuration for Alacritty terminal emulator
 import:
-  - ~/.config/alacritty/themes/catppuccin-mocha.yml
+  - ~/.config/alacritty/catppuccin/catppuccin-mocha.yml
 # shell:
 #   program: /usr/bin/env
 #   args:
