@@ -7,6 +7,6 @@ end
 -- configure lualine with modified theme
 lualine.setup({
   options = {
-    theme = "tokyonight",
+    theme = "catppuccin",
   },
 })

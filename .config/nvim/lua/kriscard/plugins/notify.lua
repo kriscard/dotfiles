@@ -1,9 +1,9 @@
-local status, notify = pcall(require, "notify")
+local status, nvimnotify = pcall(require, "notify")
 if not status then
   return
 end
 
-notify.setup {
+nvimnotify.setup {
   stages = "slide",
   render = "compact",
   fps = 60,
