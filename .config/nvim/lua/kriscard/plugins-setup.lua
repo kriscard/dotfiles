@@ -104,7 +104,6 @@ return packer.startup(function(use)
 
   -- Dashboard
   use 'goolord/alpha-nvim'
-  use 'rcarriga/nvim-notify'
 
   --Projects
   use "ahmedkhalf/project.nvim"

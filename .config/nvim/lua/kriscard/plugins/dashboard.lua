@@ -20,34 +20,6 @@ local header = {
   },
 }
 
-local function getGreeting(name)
-  local tableTime = os.date("*t")
-  local hour = tableTime.hour
-  local greetingsTable = {
-    [1] = "  Sleep well",
-    [2] = "  Good morning",
-    [3] = "  Good afternoon",
-    [4] = "  Good evening",
-    [5] = "望 Good night",
-  }
-  local greetingIndex = 0
-  if hour == 23 or hour < 7 then
-    greetingIndex = 1
-  elseif hour < 12 then
-    greetingIndex = 2
-  elseif hour >= 12 and hour < 18 then
-    greetingIndex = 3
-  elseif hour >= 18 and hour < 21 then
-    greetingIndex = 4
-  elseif hour >= 21 then
-    greetingIndex = 5
-  end
-  return greetingsTable[greetingIndex] .. ", " .. name
-end
-
-vim.notify = require("notify")(getGreeting("Kriscard"), "info",
-{ title = "Greetings", stages = "slide", render = "minimal" })
-
 local function button(sc, txt, keybind)
   local sc_ = sc:gsub("%s", ""):gsub("SPC", "<leader>")
   local opts = {
