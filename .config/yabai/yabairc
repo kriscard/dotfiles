@@ -32,5 +32,8 @@ yabai -m rule --add app="^Karabiner-Elements$" manage=off
 yabai -m rule --add app="^Spotify$" manage=off
 yabai -m rule --add app="^RapidAPI$" manage=off
 yabai -m rule --add app="^Slack$" manage=off
+yabai -m rule --add app="Spark Desktop" manage=off
+yabai -m rule --add app="^Discord$" manage=off
+yabai -m rule --add app="^Gather$" manage=off
 
 
