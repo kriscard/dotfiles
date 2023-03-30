@@ -1,10 +1,11 @@
 local lsp = require("lsp-zero")
-
 lsp.preset("recommended")
 
 lsp.ensure_installed({
   'tsserver',
   'eslint',
+  'tailwindcss',
+  'lua_ls',
 })
 
 -- Fix Undefined global 'vim'
@@ -21,6 +22,11 @@ lsp.configure('lualanguage-server', {
 lsp.set_preferences({
   sign_icons = { error = " ", warn = " ", hint = " ", info = " " }
 })
+
+require 'lspconfig'.tsserver.setup {
+  filetypes = { "javscript", "typescript", "typescriptreact", "typescript.tsx" },
+  root_dir = function() return vim.loop.cwd() end
+}
 
 local cmp = require('cmp')
 local cmp_select = { behavior = cmp.SelectBehavior.Insert }
@@ -48,7 +54,6 @@ lsp.on_attach(function(client, bufnr)
 
   vim.keymap.set("n", "gd", '<cmd>Telescope lsp_definitions<CR>', opts)
   vim.keymap.set("n", "gr", '<cmd>Telescope lsp_references<CR>', opts)
-  vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
   vim.keymap.set("n", "<leader>ws", function() vim.lsp.buf.workspace_symbol() end, opts)
   vim.keymap.set("n", "<leader>vd", function() vim.diagnostic.open_float() end, opts)
   vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
@@ -60,6 +65,9 @@ lsp.on_attach(function(client, bufnr)
 end)
 
 lsp.setup()
+
+vim.o.updatetime = 250
+vim.cmd [[autocmd! CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
 
 vim.diagnostic.config({
   virtual_text = true
