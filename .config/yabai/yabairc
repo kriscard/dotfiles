@@ -35,5 +35,7 @@ yabai -m rule --add app="^Slack$" manage=off
 yabai -m rule --add app="Spark Desktop" manage=off
 yabai -m rule --add app="^Discord$" manage=off
 yabai -m rule --add app="^Gather$" manage=off
+yabai -m rule --add app="^Finder$" manage=off
+
 
 
