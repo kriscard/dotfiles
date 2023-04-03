@@ -10,3 +10,4 @@ lualine.setup({
     theme = "catppuccin",
   },
 })
+

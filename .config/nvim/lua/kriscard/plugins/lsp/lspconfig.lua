@@ -28,25 +28,69 @@ require 'lspconfig'.tsserver.setup {
   root_dir = function() return vim.loop.cwd() end
 }
 
+local lspkind = require('lspkind')
 local cmp = require('cmp')
 local cmp_select = { behavior = cmp.SelectBehavior.Insert }
+
 local cmp_mappings = lsp.defaults.cmp_mappings({
   ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
   ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
   ['<C-y>'] = cmp.mapping.confirm({ select = true }),
   ["<C-Space>"] = cmp.mapping.complete(),
   ['<Tab>'] = cmp.mapping.select_next_item({ behaviour = cmp.SelectBehavior.Insert }),
-  ['<S-Tab>'] = cmp.mapping.select_prev_item({ behaviour = cmp.SelectBehavior.Insert })
+  ['<S-Tab>'] = cmp.mapping.select_prev_item({ behaviour = cmp.SelectBehavior.Insert }),
+  ["<CR>"] = cmp.mapping.confirm({
+    -- this is the important line
+    behavior = cmp.ConfirmBehavior.Replace,
+    select = false,
+  }),
 })
 
 lsp.setup_nvim_cmp({
   mapping = cmp_mappings,
   sources = {
     { name = 'path' },
-    { name = 'nvim_lsp', keyword_length = 1 },
-    { name = 'buffer',   keyword_length = 3 },
-    { name = 'luasnip',  keyword_length = 2 },
-  }
+    { name = 'nvim_lsp', group_index = 1 },
+    { name = "copilot",  group_index = 2 },
+    { name = 'luasnip',  group_index = 3 },
+    { name = 'buffer',   group_index = 2 },
+  },
+  formatting = {
+    format = lspkind.cmp_format({
+      mode = 'symbol_text',
+      max_width = 50,
+      ellipsis_char = '...',
+      preset = 'codicons',
+      symbol_map = {
+        Copilot = "",
+        Text = "",
+        Method = "",
+        Function = "",
+        Constructor = "",
+        Field = "ﰠ",
+        Variable = "",
+        Class = "ﴯ",
+        Interface = "",
+        Module = "",
+        Property = "ﰠ",
+        Unit = "塞",
+        Value = "",
+        Enum = "",
+        Keyword = "",
+        Snippet = "",
+        Color = "",
+        File = "",
+        Reference = "",
+        Folder = "",
+        EnumMember = "",
+        Constant = "",
+        Struct = "פּ",
+        Event = "",
+        Operator = "",
+        TypeParameter = ""
+      },
+    })
+  },
 })
 
 lsp.on_attach(function(client, bufnr)

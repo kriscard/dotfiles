@@ -43,3 +43,10 @@ vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir" -- undotree can way beyon
 vim.opt.undofile = true
 
 vim.opt.isfname:append("@-@")
+
+-- Code & function folding
+-- vim.o.foldlevel = 99
+-- vim.o.foldmethod = "indent"
+-- vim.o.foldenable = true
+
+
