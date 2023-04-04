@@ -17,4 +17,9 @@ nvimtree.setup({
   git = {
     ignore = true
   },
+  view = {
+    float = {
+      enable = true
+    }
+  }
 })
