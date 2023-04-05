@@ -100,6 +100,7 @@ return packer.startup(function(use)
 
   -- git integration
   use 'lewis6991/gitsigns.nvim'
+  use 'tpope/vim-fugitive'
 
   use 'mbbill/undotree' -- visualizes the undo history
 
@@ -123,17 +124,11 @@ return packer.startup(function(use)
   -- colorizer for HEX CSS
   use 'norcalli/nvim-colorizer.lua'
 
-  -- diff view
-  use { 'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim' }
-
   --nvim-lsp progress
   use 'j-hui/fidget.nvim'
 
   -- Github Copilot
   use 'github/copilot.vim'
-
-  --neogit
-  use { 'TimUntersberger/neogit', requires = 'nvim-lua/plenary.nvim' }
 
   -- Todo Comments
   use {

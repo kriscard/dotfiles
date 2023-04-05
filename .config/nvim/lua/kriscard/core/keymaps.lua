@@ -62,6 +62,11 @@ vim.keymap.set("n", "<leader>tx", ":tabclose<CR>") -- close current tab
 vim.keymap.set("n", "<leader>tn", ":tabn<CR>")     --  go to next tab
 vim.keymap.set("n", "<leader>tp", ":tabp<CR>")     --  go to previous tab
 
+-- buffer management
+
+-- Save and quit file
+vim.api.nvim_set_keymap("n", "QQ", ":q!<enter>", {noremap=false})
+vim.api.nvim_set_keymap("n", "WW", ":w!<enter>", {noremap=false})
 ----------------------
 -- Plugin Keybinds
 ----------------------
@@ -83,10 +88,12 @@ vim.keymap.set('n', '<leader>pg', builtin.git_files, {})
 vim.keymap.set('n', '<leader>pG', builtin.live_grep, {})
 
 -- Git & Neogit & diffview
-vim.keymap.set('n', "<leader>gg", ":Neogit<CR>")
-vim.keymap.set('n', "<leader>gl", ":Neogit log<CR>")
-vim.keymap.set('n', "<leader>gd", ":DiffviewOpen<CR>")
-vim.keymap.set('n', "<leader>gdc", ":DiffviewClose<CR>")
+vim.keymap.set('n', "<leader>gg", ":Git<CR>")
+vim.keymap.set('n', "<leader>gl", ":Git log<CR>")
+vim.keymap.set('n', "<leader>gb", ":Git blame<CR>")
+vim.keymap.set('n', "<leader>gd", ":Gvdiff<CR>")
+vim.api.nvim_set_keymap("n", "<leader>gc", ":Git commit -m \"", {noremap=false})
+vim.api.nvim_set_keymap("n", "<leader>gp", ":Git push -u origin HEAD<CR>", {noremap=false})
 
 -- FTerm Float Terminal
 vim.keymap.set("n", "`", '<CMD>lua require("FTerm").toggle()<CR>')
@@ -104,3 +111,5 @@ vim.keymap.set("n", '<leader>7', '<cmd>lua require("bufferline").go_to_buffer(7)
 vim.keymap.set("n", '<C-n>', ":bnext<CR>")
 vim.keymap.set("n", '<C-p>', ":bprev<CR>")
 vim.keymap.set("n", '<C-x>', ":bd<CR>")
+vim.api.nvim_set_keymap("n", "<C-h>", ":bfirst<enter>", {noremap=false})
+vim.api.nvim_set_keymap("n", "<C-l>", ":blast<enter>", {noremap=false})
