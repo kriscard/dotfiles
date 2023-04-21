@@ -164,9 +164,9 @@ return packer.startup(function(use)
     opt = true,
     branch = "main",
     event = "LspAttach",
-    config = function()
-      require("lspsaga").setup({})
-    end,
+    -- config = function()
+    --   require("lspsaga").setup({})
+    -- end,
     requires = {
       { "nvim-tree/nvim-web-devicons" },
       --Please make sure you install markdown and markdown_inline parser
