@@ -1,14 +1,16 @@
-# -- Changing Window Focus --
+# opens Alacritty
+# TODO: Create a script to open  Alacritty with a Tmux session
+# alt + shift - return : "${HOME}"/.config/yabai/scripts/open_iterm2.sh
+#
+# opens new Brave Window
+alt - return : open -n -a "Brave Browser"
 
+# -- Changing Window Focus --
 # change window focus within space
 alt - j : yabai -m window --focus south
 alt - k : yabai -m window --focus north
 alt - h : yabai -m window --focus west
 alt - l : yabai -m window --focus east
-
-#change focus between external displays (left and right)
-alt - s: yabai -m display --focus west
-alt - g: yabai -m display --focus east
 
 # -- Modifying the Layout --
 
@@ -32,6 +34,9 @@ shift + alt - m : yabai -m window --toggle zoom-fullscreen
 
 # balance out tree of windows (resize to occupy same area)
 shift + alt - e : yabai -m space --balance
+
+# Toggle Split
+shift + alt + lctrl - e : yabai -m window --toggle split
 
 # -- Moving Windows Around --
 
@@ -84,3 +89,6 @@ alt - t : yabai -m window --toggle float --grid 4:4:1:1:2:2
 
 # toggle sticky(+float), topmost, picture-in-picture
 alt - p : yabai -m window --toggle sticky --toggle topmost --toggle pip
+
+# Sleep Computer
+lctrl - backspace : afplay /System/Library/Sounds/Blow.aiff && pmset displaysleepnow
