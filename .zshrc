@@ -29,3 +29,6 @@ source $(dirname $(gem which colorls))/tab_complete.sh
 # Load the VS Code plugin for Zsh
 source ~/.zsh/vscode/vscode.plugin.zsh
 
+# Shell Startship
+eval "$(starship init zsh)"
+export STARSHIP_CONFIG="$HOME/.config/starship.toml"
