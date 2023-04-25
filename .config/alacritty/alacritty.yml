@@ -34,7 +34,7 @@ window:
 
 scrolling:
   history: 10000
-  multiplier: 3
+  multiplier: 6
 
 # Font settings
 font:
