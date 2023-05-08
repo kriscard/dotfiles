@@ -1,127 +1,147 @@
-local lsp = require("lsp-zero")
-lsp.preset("recommended")
+--vim.lsp.set_log_level("debug")
 
-lsp.ensure_installed({
-  'tsserver',
-  'eslint',
-  'tailwindcss',
-  'lua_ls',
-})
+local status, nvim_lsp = pcall(require, "lspconfig")
+if (not status) then return end
 
-local lspconfig = require('lspconfig')
+local protocol = require('vim.lsp.protocol')
 
-lspconfig.lua_ls.setup {
+local augroup_format = vim.api.nvim_create_augroup("Format", { clear = true })
+local enable_format_on_save = function(_, bufnr)
+  vim.api.nvim_clear_autocmds({ group = augroup_format, buffer = bufnr })
+  vim.api.nvim_create_autocmd("BufWritePre", {
+    group = augroup_format,
+    buffer = bufnr,
+    callback = function()
+      vim.lsp.buf.format({ bufnr = bufnr })
+    end,
+  })
+end
+
+-- Use an on_attach function to only map the following keys
+-- after the language server attaches to the current buffer
+local on_attach = function(client, bufnr)
+  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+
+  --Enable completion triggered by <c-x><c-o>
+  --local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+  --buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+  -- Mappings.
+  local opts = { noremap = true, silent = true }
+
+  -- See `:help vim.lsp.*` for documentation on any of the below functions
+  buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  --buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+  --buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
+end
+
+protocol.CompletionItemKind = {
+  '', -- Text
+  '', -- Method
+  '', -- Function
+  '', -- Constructor
+  '', -- Field
+  '', -- Variable
+  '', -- Class
+  'ﰮ', -- Interface
+  '', -- Module
+  '', -- Property
+  '', -- Unit
+  '', -- Value
+  '', -- Enum
+  '', -- Keyword
+  '﬌', -- Snippet
+  '', -- Color
+  '', -- File
+  '', -- Reference
+  '', -- Folder
+  '', -- EnumMember
+  '', -- Constant
+  '', -- Struct
+  '', -- Event
+  'ﬦ', -- Operator
+  '', -- TypeParameter
+}
+
+-- Set up completion using nvim_cmp with LSP source
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+nvim_lsp.flow.setup {
+  on_attach = on_attach,
+  capabilities = capabilities
+}
+
+nvim_lsp.tsserver.setup {
+  on_attach = on_attach,
+  filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
+  cmd = { "typescript-language-server", "--stdio" },
+  capabilities = capabilities
+}
+
+nvim_lsp.sourcekit.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+}
+
+nvim_lsp.lua_ls.setup {
+  capabilities = capabilities,
+  on_attach = function(client, bufnr)
+    on_attach(client, bufnr)
+    enable_format_on_save(client, bufnr)
+  end,
   settings = {
     Lua = {
       diagnostics = {
         -- Get the language server to recognize the `vim` global
-        globals = {
-          'vim',
-          'require'
-        },
+        globals = { 'vim' },
+      },
+      workspace = {
+        -- Make the server aware of Neovim runtime files
+        library = vim.api.nvim_get_runtime_file("", true),
+        checkThirdParty = false
       },
     },
   },
 }
 
-lsp.set_preferences({
-  sign_icons = { error = " ", warn = " ", hint = " ", info = " " }
-})
+nvim_lsp.tailwindcss.setup {
+  on_attach = on_attach,
+  capabilities = capabilities
+}
 
--- require 'lspconfig'.tsserver.setup {
---   filetypes = { "javscript", "typescript", "typescriptreact", "typescript.tsx" },
---   root_dir = function() return vim.loop.cwd() end
--- }
+nvim_lsp.cssls.setup {
+  on_attach = on_attach,
+  capabilities = capabilities
+}
 
-local lspkind = require('lspkind')
-local cmp = require('cmp')
-local cmp_select = { behavior = cmp.SelectBehavior.Insert }
+nvim_lsp.astro.setup {
+  on_attach = on_attach,
+  capabilities = capabilities
+}
 
-local cmp_mappings = lsp.defaults.cmp_mappings({
-  ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
-  ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
-  ['<C-y>'] = cmp.mapping.confirm({ select = true }),
-  ["<C-Space>"] = cmp.mapping.complete(),
-  -- ['<Tab>'] = cmp.mapping.select_next_item({ behaviour = cmp.SelectBehavior.Insert }),
-  ['<S-Tab>'] = cmp.mapping.select_prev_item({ behaviour = cmp.SelectBehavior.Insert }),
-  ["<CR>"] = cmp.mapping.confirm({
-    -- this is the important line
-    behavior = cmp.ConfirmBehavior.Replace,
-    select = false,
-  }),
-})
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+  vim.lsp.diagnostic.on_publish_diagnostics, {
+    underline = true,
+    update_in_insert = false,
+    virtual_text = { spacing = 4, prefix = "●" },
+    severity_sort = true,
+  }
+)
 
-lsp.setup_nvim_cmp({
-  mapping = cmp_mappings,
-  sources = {
-    { name = 'path' },
-    { name = 'nvim_lsp', group_index = 1 },
-    { name = 'luasnip',  group_index = 3 },
-    { name = 'buffer',   group_index = 2 },
-  },
-  formatting = {
-    format = lspkind.cmp_format({
-      mode = 'symbol_text',
-      max_width = 50,
-      ellipsis_char = '...',
-      preset = 'codicons',
-      symbol_map = {
-        Copilot = "",
-        Text = "",
-        Method = "",
-        Function = "",
-        Constructor = "",
-        Field = "ﰠ",
-        Variable = "",
-        Class = "ﴯ",
-        Interface = "",
-        Module = "",
-        Property = "ﰠ",
-        Unit = "塞",
-        Value = "",
-        Enum = "",
-        Keyword = "",
-        Snippet = "",
-        Color = "",
-        File = "",
-        Reference = "",
-        Folder = "",
-        EnumMember = "",
-        Constant = "",
-        Struct = "פּ",
-        Event = "",
-        Operator = "",
-        TypeParameter = ""
-      },
-    })
-  },
-})
-
-lsp.on_attach(function(client, bufnr)
-  local opts = { buffer = bufnr, remap = false }
-
-  vim.keymap.set("n", "gd", '<cmd>Telescope lsp_definitions<CR>', opts)
-  vim.keymap.set("n", "gr", '<cmd>Telescope lsp_references<CR>', opts)
-  vim.keymap.set("n", "<leader>ws", function() vim.lsp.buf.workspace_symbol() end, opts)
-  vim.keymap.set("n", "<leader>vd", function() vim.diagnostic.open_float() end, opts)
-  vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
-  vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)
-  vim.keymap.set("n", "<leader>ca", function() vim.lsp.buf.code_action() end, opts)
-  vim.keymap.set("n", "<leader>rr", function() vim.lsp.buf.references() end, opts)
-  vim.keymap.set("n", "<leader>rn", function() vim.lsp.buf.rename() end, opts)
-  vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
-end)
-
-lsp.configure("tsserver", {
-  root_dir = require("lspconfig").util.root_pattern(".git", "pnpm-workspace.yaml", "pnpm-lock.yaml", "yarn.lock",
-    "package-lock.json", "bun.lockb"),
-})
-
-lsp.setup()
-
-vim.o.updatetime = 250
-vim.cmd [[autocmd! CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
+-- Diagnostic symbols in the sign column (gutter)
+local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+for type, icon in pairs(signs) do
+  local hl = "DiagnosticSign" .. type
+  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+end
 
 vim.diagnostic.config({
-  virtual_text = true
+  virtual_text = {
+    prefix = '●'
+  },
+  update_in_insert = true,
+  float = {
+    source = "always", -- Or "if_many"
+  },
 })

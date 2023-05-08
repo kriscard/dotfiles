@@ -284,11 +284,6 @@ _G.packer_plugins = {
     path = "/Users/christophercardoso/.local/share/nvim/site/pack/packer/start/todo-comments.nvim",
     url = "https://github.com/folke/todo-comments.nvim"
   },
-  ["tsc.nvim"] = {
-    loaded = true,
-    path = "/Users/christophercardoso/.local/share/nvim/site/pack/packer/start/tsc.nvim",
-    url = "https://github.com/dmmulroy/tsc.nvim"
-  },
   undotree = {
     loaded = true,
     path = "/Users/christophercardoso/.local/share/nvim/site/pack/packer/start/undotree",

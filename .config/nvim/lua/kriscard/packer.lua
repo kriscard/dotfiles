@@ -143,6 +143,4 @@ return packer.startup(function(use)
       { "nvim-treesitter/nvim-treesitter" }
     }
   })
-  -- tsc compiler
-  use('dmmulroy/tsc.nvim')
 end)
