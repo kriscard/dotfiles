@@ -8,25 +8,30 @@ lsp.ensure_installed({
   'lua_ls',
 })
 
--- Fix Undefined global 'vim'
-lsp.configure('lualanguage-server', {
+local lspconfig = require('lspconfig')
+
+lspconfig.lua_ls.setup {
   settings = {
     Lua = {
       diagnostics = {
-        globals = { 'vim' }
-      }
-    }
-  }
-})
+        -- Get the language server to recognize the `vim` global
+        globals = {
+          'vim',
+          'require'
+        },
+      },
+    },
+  },
+}
 
 lsp.set_preferences({
   sign_icons = { error = " ", warn = " ", hint = " ", info = " " }
 })
 
-require 'lspconfig'.tsserver.setup {
-  filetypes = { "javscript", "typescript", "typescriptreact", "typescript.tsx" },
-  root_dir = function() return vim.loop.cwd() end
-}
+-- require 'lspconfig'.tsserver.setup {
+--   filetypes = { "javscript", "typescript", "typescriptreact", "typescript.tsx" },
+--   root_dir = function() return vim.loop.cwd() end
+-- }
 
 local lspkind = require('lspkind')
 local cmp = require('cmp')
@@ -37,7 +42,7 @@ local cmp_mappings = lsp.defaults.cmp_mappings({
   ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
   ['<C-y>'] = cmp.mapping.confirm({ select = true }),
   ["<C-Space>"] = cmp.mapping.complete(),
-  ['<Tab>'] = cmp.mapping.select_next_item({ behaviour = cmp.SelectBehavior.Insert }),
+  -- ['<Tab>'] = cmp.mapping.select_next_item({ behaviour = cmp.SelectBehavior.Insert }),
   ['<S-Tab>'] = cmp.mapping.select_prev_item({ behaviour = cmp.SelectBehavior.Insert }),
   ["<CR>"] = cmp.mapping.confirm({
     -- this is the important line
@@ -51,7 +56,6 @@ lsp.setup_nvim_cmp({
   sources = {
     { name = 'path' },
     { name = 'nvim_lsp', group_index = 1 },
-    { name = "copilot",  group_index = 2 },
     { name = 'luasnip',  group_index = 3 },
     { name = 'buffer',   group_index = 2 },
   },
@@ -107,6 +111,11 @@ lsp.on_attach(function(client, bufnr)
   vim.keymap.set("n", "<leader>rn", function() vim.lsp.buf.rename() end, opts)
   vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
 end)
+
+lsp.configure("tsserver", {
+  root_dir = require("lspconfig").util.root_pattern(".git", "pnpm-workspace.yaml", "pnpm-lock.yaml", "yarn.lock",
+    "package-lock.json", "bun.lockb"),
+})
 
 lsp.setup()
 
