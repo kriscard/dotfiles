@@ -25,7 +25,7 @@ local on_attach = function(client, bufnr)
   --buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
 
   -- Mappings.
-  local opts = {buffer = bufnr, remap = false}
+  local opts = { buffer = bufnr, remap = false }
 
   -- See `:help vim.lsp.*` for documentation on any of the below functions
   vim.keymap.set("n", "gd", '<cmd>Telescope lsp_definitions<CR>', opts)
@@ -79,7 +79,7 @@ nvim_lsp.flow.setup {
 
 nvim_lsp.tsserver.setup {
   on_attach = on_attach,
-  filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
+  filetypes = { "typescript", "typescriptreact", "typescript.tsx", "javascript", "javascriptreact", "javascript.jsx" },
   cmd = { "typescript-language-server", "--stdio" },
   capabilities = capabilities
 }
