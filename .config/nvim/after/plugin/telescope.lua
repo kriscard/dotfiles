@@ -21,20 +21,8 @@ telescope.setup({
         ["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist, -- send selected to quickfixlist
       },
     },
-    file_ignore_patterns = { "node_modules" },
-    project = {
-      base_dirs = {
-        '~/christophercardoso/Northone',
-        { '~/Northone/northone-web-banking/' },
-        { '~/Northone/banking/', },
-        { '~/Northone/northone-graphql/', },
-        { '~/Northone/customer-identity/', },
-      },
-    },
+    file_ignore_patters = { "yarn.lock", "node_modules/*" },
   },
 })
 
 telescope.load_extension("fzf")
-
-
-

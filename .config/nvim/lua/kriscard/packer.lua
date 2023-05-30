@@ -74,6 +74,7 @@ return packer.startup(function(use)
 
   -- treesitter configuration
   use({ "nvim-treesitter/nvim-treesitter", run = ':TSUpdate' })
+  use 'nvim-treesitter/nvim-treesitter-context'
 
   -- git integration
   use 'lewis6991/gitsigns.nvim'
@@ -88,15 +89,7 @@ return packer.startup(function(use)
   use "ahmedkhalf/project.nvim"
 
   --autosave
-  use {
-    'rmagatti/auto-session',
-    config = function()
-      require("auto-session").setup {
-        log_level = "error",
-        auto_session_suppress_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
-      }
-    end
-  }
+  use 'rmagatti/auto-session'
 
   -- colorizer for HEX CSS
   use 'norcalli/nvim-colorizer.lua'

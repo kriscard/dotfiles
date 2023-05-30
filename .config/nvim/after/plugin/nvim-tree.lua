@@ -1,5 +1,5 @@
 local setup, nvimtree = pcall(require, "nvim-tree")
-if not setup then 
+if not setup then
   return
 end
 
@@ -12,10 +12,8 @@ vim.cmd([[ highlight NvimTreeIndentMarker guifg=#3FC5FF ]])
 
 nvimtree.setup({
   filters = {
-    custom = {".git", "node_modules", ".vscode"}
-  },
-  git = {
-    ignore = true
+    dotfiles = false,
+    custom = { '^.git$' },
   },
   view = {
     float = {
