@@ -4,9 +4,5 @@ if not present then
 end
 
 colorizer.setup({
-  'css',
-  'javascript',
-  'lua',
-  'json',
-  'svelte',
+  "*"
 })
