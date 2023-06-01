@@ -65,8 +65,8 @@ vim.keymap.set("n", "<leader>tp", ":tabp<CR>")     --  go to previous tab
 -- buffer management
 
 -- Save and quit file
-vim.api.nvim_set_keymap("n", "QQ", ":q!<enter>", {noremap=false})
-vim.api.nvim_set_keymap("n", "WW", ":w!<enter>", {noremap=false})
+vim.api.nvim_set_keymap("n", "QQ", ":q!<enter>", { noremap = false })
+vim.api.nvim_set_keymap("n", "WW", ":w!<enter>", { noremap = false })
 ----------------------
 -- Plugin Keybinds
 ----------------------
@@ -81,19 +81,19 @@ vim.keymap.set("n", "<leader>sm", ":MaximizerToggle<CR>") -- toggle split window
 vim.keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>") -- toggle file explorer
 vim.keymap.set("n", "<leader>b", ":NvimTreeFocus<CR>")  -- toggle file explorer
 
--- telescope
-local builtin = require("telescope.builtin")
-vim.keymap.set("n", "<leader>pf", "<cmd>Telescope find_files<cr>") -- find files within current working directory, respects .gitignore
-vim.keymap.set('n', '<leader>pg', builtin.git_files, {})
-vim.keymap.set('n', '<leader>pG', builtin.live_grep, {})
+-- -- telescope
+-- local builtin = require("telescope.builtin")
+-- vim.keymap.set("n", "<leader>pf", "<cmd>Telescope find_files hidden=true<cr>") -- find files within current working directory, respects .gitignore
+-- vim.keymap.set('n', '<leader>pg', builtin.git_files, {})
+-- vim.keymap.set('n', '<leader>pG', builtin.live_grep, {})
 
 -- Git & Neogit & diffview
 vim.keymap.set('n', "<leader>gg", ":Git<CR>")
 vim.keymap.set('n', "<leader>gl", ":Git log<CR>")
 vim.keymap.set('n', "<leader>gb", ":Git blame<CR>")
 vim.keymap.set('n', "<leader>gd", ":Gvdiff<CR>")
-vim.api.nvim_set_keymap("n", "<leader>gc", ":Git commit -m \"", {noremap=false})
-vim.api.nvim_set_keymap("n", "<leader>gp", ":Git push -u origin HEAD<CR>", {noremap=false})
+vim.api.nvim_set_keymap("n", "<leader>gc", ":Git commit -m \"", { noremap = false })
+vim.api.nvim_set_keymap("n", "<leader>gp", ":Git push -u origin HEAD<CR>", { noremap = false })
 
 -- FTerm Float Terminal
 vim.keymap.set("n", "`", '<CMD>lua require("FTerm").toggle()<CR>')
@@ -102,7 +102,7 @@ vim.keymap.set("t", "`", '<C-\\><C-n><CMD>lua require("FTerm").toggle()<CR>')
 
 -- bufferline
 vim.keymap.set("n", '<leader>1', '<cmd>lua require("bufferline").go_to_buffer(1)<CR>')
-vim.keymap.set("n", '<leader>2','<cmd>lua require("bufferline").go_to_buffer(2)<CR>')
+vim.keymap.set("n", '<leader>2', '<cmd>lua require("bufferline").go_to_buffer(2)<CR>')
 vim.keymap.set("n", '<leader>3', '<cmd>lua require("bufferline").go_to_buffer(3)<CR>')
 vim.keymap.set("n", '<leader>4', '<cmd>lua require("bufferline").go_to_buffer(4)<CR>')
 vim.keymap.set("n", '<leader>5', '<cmd>lua require("bufferline").go_to_buffer(5)<CR>')
@@ -111,5 +111,5 @@ vim.keymap.set("n", '<leader>7', '<cmd>lua require("bufferline").go_to_buffer(7)
 vim.keymap.set("n", '<C-n>', ":bnext<CR>")
 vim.keymap.set("n", '<C-p>', ":bprev<CR>")
 vim.keymap.set("n", '<C-x>', ":bd<CR>")
-vim.api.nvim_set_keymap("n", "<C-h>", ":bfirst<enter>", {noremap=false})
-vim.api.nvim_set_keymap("n", "<C-l>", ":blast<enter>", {noremap=false})
+vim.api.nvim_set_keymap("n", "<C-h>", ":bfirst<enter>", { noremap = false })
+vim.api.nvim_set_keymap("n", "<C-l>", ":blast<enter>", { noremap = false })
