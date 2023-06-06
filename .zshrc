@@ -26,9 +26,14 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=cyan,bold,underline"
 # Enable the colorls plugin
 source $(dirname $(gem which colorls))/tab_complete.sh
 
+# Set default browser
+export BROWSER=/usr/bin/brave-browser
+
 # Load the VS Code plugin for Zsh
 source ~/.zsh/vscode/vscode.plugin.zsh
 
 # Shell Startship
 eval "$(starship init zsh)"
 export STARSHIP_CONFIG="$HOME/.config/starship.toml"
+
+
