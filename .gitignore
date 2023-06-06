@@ -1,2 +1,5 @@
 # Packer build
 .config/nvim/plugin/packer_compiled.lua
+
+# auto-ssession
+Session.vim
