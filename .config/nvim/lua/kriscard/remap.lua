@@ -51,10 +51,15 @@ vim.keymap.set("n", "<leader>+", "<C-a>") -- increment
 vim.keymap.set("n", "<leader>-", "<C-x>") -- decrement
 
 -- window management
-vim.keymap.set("n", "<leader>sv", "<C-w>v")     -- split window vertically
-vim.keymap.set("n", "<leader>sh", "<C-w>s")     -- split window horizontally
-vim.keymap.set("n", "<leader>se", "<C-w>=")     -- make split windows equal width & height
-vim.keymap.set("n", "<leader>sx", ":close<CR>") -- closecurrent split window
+vim.keymap.set("n", "<leader>sv", "<C-w>v")                 -- split window vertically
+vim.keymap.set("n", "<leader>sh", "<C-w>s")                 -- split window horizontally
+vim.keymap.set("n", "<leader>cn", "<C-w>n")                 -- split window horizontally
+vim.keymap.set("n", "<leader>se", "<C-w>=")                 -- make split windows equal width & height
+vim.keymap.set("n", "<leader>so", "<C-w>o")                 -- close all windows except current
+vim.keymap.set("n", "<leader>st", ":split term://zsh<CR>")  -- open terminal in split window
+vim.keymap.set("n", "<leader>ss", ":vsplit term://zsh<CR>") -- open terminal in split window
+vim.keymap.set("n", "<leader>svb", ":vnew<CR>")             -- split window vertically in a new buffer
+vim.keymap.set("n", "<leader>sx", ":close<CR>")             -- close current split window
 
 -- tab management
 vim.keymap.set("n", "<leader>to", ":tabnew<CR>")   -- open new tab
