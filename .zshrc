@@ -10,8 +10,8 @@ ZSH_THEME="robbyrussell"
 # Specify which plugins to load for Oh My Zsh
 plugins=(git autojump zsh-syntax-highlighting node vscode npm yarn zsh-autosuggestions web-search)
 
-source "$HOME/aliases.zsh"
-source "$HOME/functions.zsh"
+source "$HOME/zsh/aliases.zsh"
+source "$HOME/zsh/functions.zsh"
 
 # Load the Oh My Zsh framework
 source $ZSH/oh-my-zsh.sh
