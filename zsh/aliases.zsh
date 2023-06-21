@@ -52,3 +52,10 @@ alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
 # Define an alias for nvim
 alias v='nvim'
 
+# tmux aliases
+alias ta='tmux attach'
+alias tls='tmux ls'
+alias tat='tmux attach -t'
+alias tns='tmux new-session -s'
+alias tks='tmux kill-session -t'
+alias tx='tmux kill-server'
