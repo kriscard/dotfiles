@@ -16,14 +16,30 @@ Here are some of the features of my dotfiles:
 
 Here are the list of available commands:
 
-- ./install.sh backup
-- ./install git
-- ./install homebrew
-- ./install shell
-- ./install terminfo
-- ./install macos
-- ./install catppuccin
-- ./install all
+```bash
+./install.sh backup
+```
+```bash
+./install.sh git
+```
+```bash
+./install.sh homebrew
+```
+```bash
+./install.sh shell
+```
+```bash
+./install.sh terminfo
+```
+```bash
+./install.sh macos
+```
+```bash
+./install.sh catppuccin
+```
+```bash
+./install.sh all
+```
 
 ## Inspiration
 
