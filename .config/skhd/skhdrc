@@ -1,7 +1,3 @@
-# opens Alacritty
-# TODO: Create a script to open  Alacritty with a Tmux session
-# alt + shift - return : "${HOME}"/.config/yabai/scripts/open_iterm2.sh
-#
 # opens new Brave Window
 alt - return : open -n -a "Brave Browser"
 
