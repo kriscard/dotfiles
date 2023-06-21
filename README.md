@@ -25,6 +25,15 @@ Here are the list of available commands:
 - ./install catppuccin
 - ./install all
 
+## Inspiration
+
+Here a list of dotfiles projects that inspired me:
+
+- [Nicknisi's Dotfiles](https://github.com/nicknisi/dotfiles)
+- [Mathiasbynens's Dotfiles](https://github.com/mathiasbynens/dotfiles)
+- [Christopher2k's Dotfiles](https://github.com/Christopher2K/dotfiles)
+- [Craftdog's Dotfiles](https://github.com/craftzdog/dotfiles-public)
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
