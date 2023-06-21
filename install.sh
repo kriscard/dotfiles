@@ -31,29 +31,15 @@ success() {
     echo -e "${COLOR_GREEN}$1${COLOR_NONE}"
 }
 
-get_linkables() {
-    find -H "$DOTFILES" -maxdepth 3 -name '*.symlink'
-}
 
 backup() {
-    BACKUP_DIR=$HOME/dotfiles-backup
+    BACKUP_DIR="$HOME/dotfiles-backup"
 
     echo "Creating backup directory at $BACKUP_DIR"
     mkdir -p "$BACKUP_DIR"
 
-    for file in $(get_linkables); do
-        filename=".$(basename "$file" '.symlink')"
-        target="$HOME/$filename"
-        if [ -f "$target" ]; then
-            echo "backing up $filename"
-            cp "$target" "$BACKUP_DIR"
-        else
-            warning "$filename does not exist at this location or is a symlink"
-        fi
-    done
-
-    for filename in "$HOME/.config/nvim" "$HOME/.vim" "$HOME/.vimrc"; do
-        if [ ! -L "$filename" ]; then
+    for filename in "$HOME/.config/nvim" "$HOME/.config/tmux" "$HOME/.config/kitty" "$HOME/.config/alacritty" "$HOME/.config/skhd" "$HOME/.config/yabai"; do
+        if [ -e "$filename" ]; then
             echo "backing up $filename"
             cp -rf "$filename" "$BACKUP_DIR"
         else
@@ -77,7 +63,7 @@ setup_git() {
     git config -f ~/.gitconfig-local user.email "${email:-$defaultEmail}"
     git config -f ~/.gitconfig-local github.user "${github:-$defaultGithub}"
 
-    if [[ "$(uname)" == "Darwin" ]]; then
+    if [[ "$(uname)" == "kriscard" ]]; then
         git config --global credential.helper "osxkeychain"
     else
         read -rn 1 -p "Save user and password to an unencrypted file to avoid writing? [y/N] " save
