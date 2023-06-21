@@ -12,6 +12,19 @@ Here are some of the features of my dotfiles:
 - Yabai and skhd configurations, including custom key mappings
 - A script to automatically install necessary packages and tools for development (coming soon)
 
+## Install.sh 
+
+Here are the list of available commands:
+
+- ./install.sh backup
+- ./install git
+- ./install homebrew
+- ./install shell
+- ./install terminfo
+- ./install macos
+- ./install catppuccin
+- ./install all
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
