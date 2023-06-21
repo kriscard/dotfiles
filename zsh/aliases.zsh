@@ -26,6 +26,8 @@ alias cleanup="find . -name '*.DS_Store' -type f -ls -delete"
 # remove broken symlinks
 alias clsym="find -L . -name . -o -type d -prune -o -type l -exec rm {} +"
 
+# Delete merged branches
+alias delete-merged-branches='git branch --merged | egrep -v "(^\*|master|main|dev)" | xargs git branch -D'
 
 # use exa if available
 if [[ -x "$(command -v exa)" ]]; then
