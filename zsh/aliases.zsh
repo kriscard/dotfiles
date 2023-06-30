@@ -27,7 +27,7 @@ alias cleanup="find . -name '*.DS_Store' -type f -ls -delete"
 alias clsym="find -L . -name . -o -type d -prune -o -type l -exec rm {} +"
 
 # Delete merged branches
-alias delete-merged-branches='git branch --merged | egrep -v "(^\*|master|main|dev)" | xargs git branch -D'
+alias delete_all_branch='git branch | grep -v "master" | grep -v "main" | grep -v "dev" | grep -v "production" | xargs git branch -D'
 
 # use exa if available
 if [[ -x "$(command -v exa)" ]]; then
@@ -48,7 +48,6 @@ alias ls='colorls --sd'
 # Define aliases for various Git and directory-related tasks
 alias root_level='cd $(git rev-parse --show-toplevel)'
 alias root='~'
-alias delete_all_branch='git branch | grep -v "master" | xargs git branch -D'
 alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
 
 # Define an alias for nvim
