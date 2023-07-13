@@ -1,140 +1,141 @@
 local status, packer = pcall(require, "packer")
 if not status then
-  return
+	return
 end
 
 return packer.startup(function(use)
-  use 'wbthomason/packer.nvim'
-  use 'nvim-lua/plenary.nvim' -- lua functions that many plugins use
+	use("wbthomason/packer.nvim")
+	use("nvim-lua/plenary.nvim") -- lua functions that many plugins use
 
-  -- My plugins here
-  -- colorscheme
-  use { "catppuccin/nvim", as = "catppuccin" }
-  -- tmux & split window navigation
-  use 'christoomey/vim-tmux-navigator'
+	-- My plugins here
+	-- colorscheme
+	use({ "catppuccin/nvim", as = "catppuccin" })
 
-  -- maximizes and restores current window
-  use 'szw/vim-maximizer'
+	-- maximizes and restores current window
+	use("szw/vim-maximizer")
 
-  -- essential plugins
-  use 'tpope/vim-surround'               -- add, delete, change surroundings (it's awesome)
-  use 'inkarkat/vim-ReplaceWithRegister' -- replace with register contents using motion (gr + motion)
-  -- set leader key to space
-  -- file explorer
-  use 'nvim-tree/nvim-tree.lua'
+	-- essential plugins
+	use("tpope/vim-surround") -- add, delete, change surroundings (it's awesome)
+	use("inkarkat/vim-ReplaceWithRegister") -- replace with register contents using motion (gr + motion)
+	-- set leader key to space
+	-- file explorer
+	use("nvim-tree/nvim-tree.lua")
 
-  -- commenting with gc
-  use 'numToStr/Comment.nvim'
+	-- commenting with gc
+	use("numToStr/Comment.nvim")
 
-  -- vs-code like icons
-  use 'nvim-tree/nvim-web-devicons'
+	-- vs-code like icons
+	use("nvim-tree/nvim-web-devicons")
 
-  -- statusline
-  use {
-    'nvim-lualine/lualine.nvim',
-    requires = { 'kyazdani42/nvim-web-devicons', opt = true }
-  }
+	-- statusline
+	use({
+		"nvim-lualine/lualine.nvim",
+		requires = { "kyazdani42/nvim-web-devicons", opt = true },
+	})
 
-  -- fuzzy finding w/ telescope
-  use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" }) -- dependency for better sorting performance
-  use({ "nvim-telescope/telescope.nvim", branch = "0.1.x" })        -- fuzzy finder
-  use 'nvim-telescope/telescope-file-browser.nvim'
+	-- fuzzy finding w/ telescope
+	use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" }) -- dependency for better sorting performance
+	use({ "nvim-telescope/telescope.nvim", branch = "0.1.x" }) -- fuzzy finder
+	use("nvim-telescope/telescope-file-browser.nvim")
 
-  use {
-    'VonHeikemen/lsp-zero.nvim',
-    branch = 'v1.x',
-    requires = {
-      -- LSP Support
-      { 'neovim/nvim-lspconfig' },             -- Required
-      { 'williamboman/mason.nvim' },           -- Optional
-      { 'williamboman/mason-lspconfig.nvim' }, -- Optional
+	use({
+		"VonHeikemen/lsp-zero.nvim",
+		branch = "v1.x",
+		requires = {
+			-- LSP Support
+			{ "neovim/nvim-lspconfig" }, -- Required
+			{ "williamboman/mason.nvim" }, -- Optional
+			{ "williamboman/mason-lspconfig.nvim" }, -- Optional
 
-      -- Autocompletion & snippets
-      { 'hrsh7th/nvim-cmp' },             -- Required
-      { 'hrsh7th/cmp-nvim-lsp' },         -- Required
-      { 'hrsh7th/cmp-buffer' },           -- Optional
-      { 'hrsh7th/cmp-path' },             -- Optional
-      { 'saadparwaiz1/cmp_luasnip' },     -- Optional
-      { 'hrsh7th/cmp-nvim-lua' },         -- Optional
-      { 'L3MON4D3/LuaSnip' },             -- Required
-      { 'rafamadriz/friendly-snippets' }, -- Optional
-    }
-  }
+			-- Autocompletion & snippets
+			{ "hrsh7th/nvim-cmp" }, -- Required
+			{ "hrsh7th/cmp-nvim-lsp" }, -- Required
+			{ "hrsh7th/cmp-buffer" }, -- Optional
+			{ "hrsh7th/cmp-path" }, -- Optional
+			{ "saadparwaiz1/cmp_luasnip" }, -- Optional
+			{ "hrsh7th/cmp-nvim-lua" }, -- Optional
+			{ "L3MON4D3/LuaSnip" }, -- Required
+			{ "rafamadriz/friendly-snippets" }, -- Optional
+		},
+	})
 
-  -- lspkind for icons as vscode in lsp
-  use 'onsails/lspkind.nvim'
+	-- lspkind for icons as vscode in lsp
+	use("onsails/lspkind.nvim")
 
-  -- formatting & linting
-  use 'jose-elias-alvarez/null-ls.nvim' -- configure formatters & linters
-  use 'jayp0521/mason-null-ls.nvim'     -- bridges gap b/w mason & null-ls
+	-- formatting & linting
+	use("jose-elias-alvarez/null-ls.nvim") -- configure formatters & linters
+	use("jayp0521/mason-null-ls.nvim") -- bridges gap b/w mason & null-ls
 
-  -- auto closing
-  use 'windwp/nvim-autopairs'                                  -- autoclose parens, brackets, quotes, etc...
-  use({ "windwp/nvim-ts-autotag", after = "nvim-treesitter" }) -- autoclose tags
+	-- auto closing
+	use("windwp/nvim-autopairs") -- autoclose parens, brackets, quotes, etc...
+	use({ "windwp/nvim-ts-autotag", after = "nvim-treesitter" }) -- autoclose tags
 
-  -- treesitter configuration
-  use({ "nvim-treesitter/nvim-treesitter", run = ':TSUpdate' })
-  use 'nvim-treesitter/nvim-treesitter-context'
-  use 'JoosepAlviste/nvim-ts-context-commentstring'
+	-- treesitter configuration
+	use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" })
+	use("nvim-treesitter/nvim-treesitter-context")
+	use("JoosepAlviste/nvim-ts-context-commentstring")
 
-  -- git integration
-  use 'lewis6991/gitsigns.nvim'
-  use 'tpope/vim-fugitive'
+	-- git integration
+	use("lewis6991/gitsigns.nvim")
+	use("tpope/vim-fugitive")
 
-  use 'mbbill/undotree' -- visualizes the undo history
+	use("mbbill/undotree") -- visualizes the undo history
 
-  -- Dashboard
-  use 'goolord/alpha-nvim'
+	-- Tmux vim navigator
+	use("christoomey/vim-tmux-navigator")
 
-  --Projects
-  use "ahmedkhalf/project.nvim"
+	-- Dashboard
+	use("goolord/alpha-nvim")
 
-  --autosave
-  use 'rmagatti/auto-session'
+	--Projects
+	use("ahmedkhalf/project.nvim")
 
-  -- colorizer for HEX CSS
-  use 'norcalli/nvim-colorizer.lua'
+	--autosave
+	use("rmagatti/auto-session")
 
-  --nvim-lsp progress
-  use 'j-hui/fidget.nvim'
+	-- colorizer for HEX CSS
+	use("norcalli/nvim-colorizer.lua")
 
-  -- Github Copilot
-  use 'github/copilot.vim'
+	--nvim-lsp progress
+	use("j-hui/fidget.nvim")
 
-  -- Todo Comments
-  use {
-    "folke/todo-comments.nvim",
-    requires = "nvim-lua/plenary.nvim",
-  }
+	-- Github Copilot
+	use("github/copilot.vim")
 
-  -- blankline
-  use "lukas-reineke/indent-blankline.nvim"
+	-- Todo Comments
+	use({
+		"folke/todo-comments.nvim",
+		requires = "nvim-lua/plenary.nvim",
+	})
 
-  -- nvim lint
-  use 'mfussenegger/nvim-lint'
+	-- blankline
+	use("lukas-reineke/indent-blankline.nvim")
 
-  --float terminal
-  use 'numToStr/FTerm.nvim'
+	-- nvim lint
+	use("mfussenegger/nvim-lint")
 
-  -- tabline plugin
-  use { 'akinsho/bufferline.nvim', tag = "v3.*", requires = 'nvim-tree/nvim-web-devicons' }
+	--float terminal
+	use("numToStr/FTerm.nvim")
 
-  -- git-conflict
-  use 'akinsho/git-conflict.nvim'
+	-- tabline plugin
+	use({ "akinsho/bufferline.nvim", tag = "v3.*", requires = "nvim-tree/nvim-web-devicons" })
 
-  -- lsp saga
-  use({
-    "glepnir/lspsaga.nvim",
-    opt = true,
-    branch = "main",
-    event = "LspAttach",
-    -- config = function()
-    --   require("lspsaga").setup({})
-    -- end,
-    requires = {
-      { "nvim-tree/nvim-web-devicons" },
-      --Please make sure you install markdown and markdown_inline parser
-      { "nvim-treesitter/nvim-treesitter" }
-    }
-  })
+	-- git-conflict
+	use("akinsho/git-conflict.nvim")
+
+	-- lsp saga
+	use({
+		"glepnir/lspsaga.nvim",
+		opt = true,
+		branch = "main",
+		event = "LspAttach",
+		-- config = function()
+		--   require("lspsaga").setup({})
+		-- end,
+		requires = {
+			{ "nvim-tree/nvim-web-devicons" },
+			--Please make sure you install markdown and markdown_inline parser
+			{ "nvim-treesitter/nvim-treesitter" },
+		},
+	})
 end)
