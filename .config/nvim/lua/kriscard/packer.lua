@@ -90,9 +90,6 @@ return packer.startup(function(use)
 	--Projects
 	use("ahmedkhalf/project.nvim")
 
-	--autosave
-	use("rmagatti/auto-session")
-
 	-- colorizer for HEX CSS
 	use("norcalli/nvim-colorizer.lua")
 
