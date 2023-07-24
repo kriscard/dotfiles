@@ -89,7 +89,7 @@ vim.keymap.set("n", "<leader>sm", ":MaximizerToggle<CR>") -- toggle split window
 vim.keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>") -- toggle file explorer
 vim.keymap.set("n", "<leader>b", ":NvimTreeFocus<CR>") -- toggle file explorer
 
--- Git & Neogit & diffview
+-- Git & Fugitive & diffview
 vim.keymap.set("n", "<leader>gg", ":Git<CR>")
 vim.keymap.set("n", "<leader>gl", ":Git log<CR>")
 vim.keymap.set("n", "<leader>gb", ":Git blame<CR>")

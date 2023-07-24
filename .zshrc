@@ -39,6 +39,10 @@ export ZSH="$HOME/.oh-my-zsh"
 # Set the path to DOTFILES folder
 export DOTFILES="$HOME/.dotfiles"
 
+# Set Nvim editor
+export EDITOR=nvim
+export GIT_EDITOR=nvim
+
 # Set the default Oh My Zsh theme
 ZSH_THEME="robbyrussell"
 
