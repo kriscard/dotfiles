@@ -74,6 +74,7 @@ return packer.startup(function(use)
 	use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" })
 	use("nvim-treesitter/nvim-treesitter-context")
 	use("JoosepAlviste/nvim-ts-context-commentstring")
+	use("nvim-treesitter/playground")
 
 	-- git integration
 	use("lewis6991/gitsigns.nvim")
