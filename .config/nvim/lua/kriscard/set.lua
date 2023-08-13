@@ -39,14 +39,12 @@ opt.splitbelow = true -- split horizontal window to the bottom
 
 opt.iskeyword:append("-") -- consider string-string as whole word
 
-vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir" -- undotree can way beyond
-vim.opt.undofile = true
+opt.undodir = os.getenv("HOME") .. "/.vim/undodir" -- undotree can way beyond
+opt.undofile = true
 
-vim.opt.isfname:append("@-@")
+opt.isfname:append("@-@")
 
 -- Code & function folding
 -- vim.o.foldlevel = 99
 -- vim.o.foldmethod = "indent"
 -- vim.o.foldenable = true
-
-
