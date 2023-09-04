@@ -97,10 +97,6 @@ vim.keymap.set("n", "<leader>gd", ":Gvdiff<CR>")
 vim.api.nvim_set_keymap("n", "<leader>gc", ':Git commit -m "', { noremap = false })
 vim.api.nvim_set_keymap("n", "<leader>gp", ":Git push -u origin HEAD<CR>", { noremap = false })
 
--- FTerm Float Terminal
-vim.keymap.set("n", "`", '<CMD>lua require("FTerm").toggle()<CR>')
-vim.keymap.set("t", "`", '<C-\\><C-n><CMD>lua require("FTerm").toggle()<CR>')
-
 -- bufferline
 vim.keymap.set("n", "<leader>1", '<cmd>lua require("bufferline").go_to_buffer(1)<CR>')
 vim.keymap.set("n", "<leader>2", '<cmd>lua require("bufferline").go_to_buffer(2)<CR>')
