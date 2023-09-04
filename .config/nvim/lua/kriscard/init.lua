@@ -1,3 +1,3 @@
 require("kriscard.remap")
-require("kriscard.packer")
+require("kriscard.lazy")
 require("kriscard.set")
