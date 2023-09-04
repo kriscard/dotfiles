@@ -55,25 +55,16 @@ return {
 		keymap.set("n", "<leader>fr", "<cmd>Telescope oldfiles<cr>", { desc = "Fuzzy find recent files" })
 		keymap.set("n", "<leader>fs", "<cmd>Telescope live_grep<cr>", { desc = "Find string in cwd" })
 		keymap.set("n", "<leader>fc", "<cmd>Telescope grep_string<cr>", { desc = "Find string under cursor in cwd" })
-		keymap.set("n", ";t", function()
-			builtin.help_tags()
-		end)
-		keymap.set("n", ";t", function()
+		keymap.set(
+			"n", "<leader>fF", "<cmd>Telescope file_browser path=%:p:h<cr>", { desc = "Open file browser (current dir)" })
+		keymap.set("n", "<leader>fh", function()
 			builtin.help_tags()
 		end)
 		keymap.set("n", ";;", function()
 			builtin.resume()
 		end)
-
-		keymap.set(
-			"n",
-			"<leader>fF",
-			"<cmd>Telescope file_browser path=%:p:h<CR>",
-			{ silent = true, desc = "Open file browser (current dir)" }
-		)
-
-		-- keymap.set('n', '<leader>pd', function()
-		--   builtin.diagnostics()
-		-- end)
+		keymap.set('n', '\\\\', function()
+			builtin.buffers()
+		end)
 	end,
 }
