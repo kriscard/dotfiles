@@ -1,5 +1,8 @@
 # Packer build
 .config/nvim/plugin/packer_compiled.lua
 
+# Lazy Build
+.config/nvim/lazy-lock.json 
+
 # auto-ssession
 Session.vim
