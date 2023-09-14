@@ -80,6 +80,9 @@ return {
 		lspconfig["tsserver"].setup({
 			capabilities = capabilities,
 			on_attach = on_attach,
+			init_options = {
+				disableSuggestions = true,
+			},
 		})
 
 		-- configure css server

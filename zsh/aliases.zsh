@@ -59,7 +59,8 @@ alias tls='tmux ls'
 alias tat='tmux attach -t'
 alias tns='tmux new-session -s'
 alias tks='tmux kill-session -t'
-alias tx='tmux kill-server'
+alias tk='tmux kill-server'
+alias tx='tmuxinator'
 
 # clear terminal
 alias K='clear'
