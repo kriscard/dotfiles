@@ -182,6 +182,12 @@ setup_macos() {
         echo "Move dock to right side of screen"
         defaults write com.apple.dock orientation -string "right"
 
+        echo "Set short Delay to Display Dock"
+        defaults write com.apple.dock autohide-delay -float 0
+
+        echo "Set Dock Modifier"
+        defaults write com.apple.dock autohide-time-modifier -float 0.4
+
         echo "Kill affected applications"
 
         for app in Safari Finder Dock Mail SystemUIServer; do killall "$app" >/dev/null 2>&1; done
