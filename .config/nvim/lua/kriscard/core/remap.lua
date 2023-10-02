@@ -79,8 +79,8 @@ vim.api.nvim_set_keymap("n", "WW", ":w!<enter>", { noremap = false })
 -- Plugin Keybinds
 ----------------------
 -- Linting & formatting
-vim.cmd([[ command! Format execute 'lua vim.lsp.buf.format({async=true})']])
-vim.keymap.set("n", "<leader>f", ":Format<cr>")
+-- vim.cmd([[ command! Format execute 'lua vim.lsp.buf.format({async=true})']])
+-- vim.keymap.set("n", "<leader>f", ":Format<cr>")
 
 -- vim-maximizer
 vim.keymap.set("n", "<leader>sm", ":MaximizerToggle<CR>") -- toggle split window maximization

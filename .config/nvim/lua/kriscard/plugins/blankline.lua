@@ -1,10 +1,24 @@
 return {
-  "lukas-reineke/indent-blankline.nvim",
-  config = function()
-    local blankline = require("indent_blankline")
-
-    blankline.setup {
-      show_end_of_line = true,
-    }
-  end
+	"lukas-reineke/indent-blankline.nvim",
+	event = "VeryLazy",
+	main = "ibl",
+	show_start = false,
+	show_end = false,
+	opts = {
+		indent = { char = "▏" },
+		exclude = {
+			filetypes = {
+				"help",
+				"markdown",
+				"alpha",
+				"sagahover",
+				"NvimTree",
+				"mason",
+				"toggleterm",
+				"lazy",
+				"noice",
+			},
+			buftypes = { "fzf", "help", "terminal", "nofile" },
+		},
+	},
 }
