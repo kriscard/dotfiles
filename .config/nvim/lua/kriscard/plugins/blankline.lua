@@ -2,8 +2,6 @@ return {
 	"lukas-reineke/indent-blankline.nvim",
 	event = "VeryLazy",
 	main = "ibl",
-	show_start = false,
-	show_end = false,
 	opts = {
 		indent = { char = "▏" },
 		exclude = {
