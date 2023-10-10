@@ -12,45 +12,42 @@ Here are some of the features of my dotfiles:
 - Yabai and skhd configurations, including custom key mappings
 - A script to automatically install necessary packages and tools for development (coming soon)
 
-## Install.sh 
+## Install.sh
 
 Here are the list of available commands:
 
 ```bash
 ./install.sh backup
 ```
+
 ```bash
 ./install.sh git
 ```
+
 ```bash
 ./install.sh homebrew
 ```
+
 ```bash
 ./install.sh shell
 ```
+
 ```bash
 ./install.sh terminfo
 ```
+
 ```bash
 ./install.sh macos
 ```
+
 ```bash
 ./install.sh catppuccin
 ```
+
 ```bash
 ./install.sh all
 ```
 
-## Inspiration
-
-Here a list of dotfiles projects that inspired me:
-
-- [Nicknisi's Dotfiles](https://github.com/nicknisi/dotfiles)
-- [Mathiasbynens's Dotfiles](https://github.com/mathiasbynens/dotfiles)
-- [Christopher2k's Dotfiles](https://github.com/Christopher2K/dotfiles)
-- [Craftdog's Dotfiles](https://github.com/craftzdog/dotfiles-public)
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
