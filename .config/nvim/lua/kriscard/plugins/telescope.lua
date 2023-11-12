@@ -57,6 +57,8 @@ return {
 		keymap.set("n", "<leader>fs", "<cmd>Telescope live_grep<cr>", { desc = "Find string in cwd" })
 		keymap.set("n", "<leader>fc", "<cmd>Telescope grep_string<cr>", { desc = "Find string under cursor in cwd" })
 		keymap.set("n", "<leader>fm", "<cmd>Telescope harpoon marks<cr>", { desc = "Find harpoon marks" })
+		keymap.set("n", "<leader>fk", "<cmd>WhichKey<cr>", { desc = "Display vim basic key bindings" })
+
 		keymap.set("n", "<leader>fd", function()
 			builtin.diagnostics()
 		end)
