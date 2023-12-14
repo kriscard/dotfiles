@@ -39,15 +39,15 @@ scrolling:
 # Font settings
 font:
   normal:
-    family: MonoLisa Nerd Font Mono
+    family: FiraCode Nerd Font Mono
     # family: 3270Medium Nerd Font
     style: Regular
   bold:
-    family: MonoLisa Nerd Font Mono
+    family: FiraCode Nerd Font Mono
     style: Bold
 
   italic:
-    family: MonoLisa Nerd Font Mono
+    family: FiraCode Nerd Font Mono
     style: Bold Italic
   # point size
   size: 14.0
