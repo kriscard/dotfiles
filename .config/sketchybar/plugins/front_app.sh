@@ -54,6 +54,10 @@ case $INFO in
 "Spotify")
 	ICON=
 	;;
+"Slack")
+  ICON_PADDING_RIGHT=4
+  ICON=
+  ;;
 "TextEdit")
 	ICON_PADDING_RIGHT=4
 	ICON=
