@@ -56,7 +56,7 @@ case $INFO in
 	;;
 "Slack")
   ICON_PADDING_RIGHT=4
-  ICON=
+  ICON=󰒱
   ;;
 "TextEdit")
 	ICON_PADDING_RIGHT=4
