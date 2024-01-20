@@ -33,10 +33,6 @@ vim.keymap.set("n", "<leader>tx", ":tabclose<CR>", { silent = true, desc = "clos
 vim.api.nvim_set_keymap("n", "QQ", ":q!<enter>", { noremap = false, desc = "Quit all" })
 vim.api.nvim_set_keymap("n", "WW", ":w!<enter>", { noremap = false, desc = "Save file" })
 
-vim.keymap.set("n", "<leader>gb", ":Git blame<CR>", { silent = true, desc = "Display git blame" })
-vim.keymap.set("n", "<leader>gd", ":Gvdiff<CR>", { silent = true, desc = "Display git diff" })
-
 vim.keymap.set("n", "<C-x>", ":bd<CR>", { silent = false, desc = "Close current buffer" })
 
-vim.keymap.set("n", "<leader>gl", ":Git log<CR>", { silent = true, desc = "Fugitive git log" })
-vim.keymap.set("n", "<leader>gb", ":Git blame<CR>", { silent = true, desc = "Fugitive git blame" })
+vim.keymap.set("n", "<leader>rn", ":IncRename ")
