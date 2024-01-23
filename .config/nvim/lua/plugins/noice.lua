@@ -43,6 +43,9 @@ return {
     }
     -- opts.status = { lsp_progress = { event = "lsp", kind = "progress" } }
 
+    -- Config for nvim inc_rename
+    opts.presets = { inc_rename = true }
+
     vim.api.nvim_create_autocmd("FileType", {
       pattern = "markdown",
       callback = function(event)

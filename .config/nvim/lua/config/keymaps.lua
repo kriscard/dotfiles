@@ -35,4 +35,6 @@ vim.api.nvim_set_keymap("n", "WW", ":w!<enter>", { noremap = false, desc = "Save
 
 vim.keymap.set("n", "<C-x>", ":bd<CR>", { silent = false, desc = "Close current buffer" })
 
-vim.keymap.set("n", "<leader>rn", ":IncRename ")
+vim.keymap.set("n", "<leader>rn", function()
+  return ":IncRename " .. vim.fn.expand("<cword>")
+end, { expr = true })
