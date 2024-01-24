@@ -43,6 +43,7 @@ return {
         html = {},
         marksman = {},
         yamlls = {},
+        emmet_ls = {},
       },
     },
   },
