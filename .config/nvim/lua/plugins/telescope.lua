@@ -3,6 +3,19 @@ return {
     "telescope.nvim",
     dependencies = {
       {
+        "nvim-telescope/telescope-dap.nvim",
+        config = function()
+          require("telescope").load_extension("dap")
+        end,
+      },
+      {
+        "nvim-telescope/telescope-fzf-native.nvim",
+        build = "make",
+        config = function()
+          require("telescope").load_extension("fzf")
+        end,
+      },
+      {
         "debugloop/telescope-undo.nvim",
         keys = { { "<leader>U", "<cmd>Telescope undo<cr>" } },
         config = function()
@@ -56,7 +69,17 @@ return {
           preview_cutoff = 120,
         },
         sorting_strategy = "ascending",
-        winblend = 0,
+        winblend = 10,
+      },
+      extensions = {
+        undo = {
+          use_delta = true,
+          side_by_side = true,
+          layout_strategy = "vertical",
+          layout_config = {
+            preview_height = 0.4,
+          },
+        },
       },
     },
   },
