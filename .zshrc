@@ -52,6 +52,8 @@ plugins=(git autojump zsh-syntax-highlighting node vscode npm yarn zsh-autosugge
 source "$HOME/zsh/aliases.zsh"
 source "$HOME/zsh/functions.zsh"
 
+source "$HOME/.dotfiles/work-config/config.zsh"
+
 # Load the Oh My Zsh framework
 source $ZSH/oh-my-zsh.sh
 
