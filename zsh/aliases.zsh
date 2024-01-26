@@ -41,10 +41,6 @@ alias la="ls -AF ${colorflag}"
 alias lld="ls -l | grep ^d"
 alias rmf="rm -rf"
 
-# Define aliases for the colorls plugin
-alias lc='colorls -lA --sd'
-alias ls='colorls --sd'
-
 # Define aliases for various Git and directory-related tasks
 alias root_level='cd $(git rev-parse --show-toplevel)'
 alias root='~'

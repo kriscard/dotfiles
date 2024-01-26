@@ -62,9 +62,6 @@ export NVIM_CONFIG="$HOME/.config/nvim/init.lua"
 # Set the style for the zsh-autosuggestions plugin
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=cyan,bold,underline"
 
-# Enable the colorls plugin
-source $(dirname $(gem which colorls))/tab_complete.sh
-
 # Set default browser
 export BROWSER=/usr/bin/brave-browser
 
