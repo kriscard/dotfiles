@@ -52,8 +52,6 @@ plugins=(git autojump zsh-syntax-highlighting node npm yarn zsh-autosuggestions 
 source "$HOME/zsh/aliases.zsh"
 source "$HOME/zsh/functions.zsh"
 
-source "$HOME/.dotfiles/work-config/config.zsh"
-
 # Load the Oh My Zsh framework
 source $ZSH/oh-my-zsh.sh
 
@@ -81,4 +79,16 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+#
 export PATH=$PATH:/Users/kriscard/.spicetify
+
+# GCC config
+export PATH="/usr/local/bin:$PATH"
+
+# Make config
+export PATH="/usr/local/opt/make/libexec/gnubin:$PATH"
+
+source "$HOME/.dotfiles/work-config/config.zsh"
+
+
+. /opt/homebrew/opt/asdf/libexec/asdf.sh
