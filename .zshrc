@@ -47,7 +47,7 @@ export GIT_EDITOR=nvim
 ZSH_THEME="robbyrussell"
 
 # Specify which plugins to load for Oh My Zsh
-plugins=(git autojump zsh-syntax-highlighting node vscode npm yarn zsh-autosuggestions web-search)
+plugins=(git autojump zsh-syntax-highlighting node npm yarn zsh-autosuggestions web-search)
 
 source "$HOME/zsh/aliases.zsh"
 source "$HOME/zsh/functions.zsh"
@@ -66,9 +66,6 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=cyan,bold,underline"
 
 # Set default browser
 export BROWSER=/usr/bin/brave-browser
-
-# Load the VS Code plugin for Zsh
-source ~/.zsh/vscode/vscode.plugin.zsh
 
 # Shell Startship
 eval "$(starship init zsh)"
