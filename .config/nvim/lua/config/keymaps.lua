@@ -21,7 +21,15 @@ vim.keymap.set(
 
 -- use jk and kj to exit insert mode
 vim.keymap.set("i", "jk", "<ESC>", { silent = true, desc = "Exit insert mode" })
-vim.keymap.set("i", "kj", "<ESC>", { silent = true, desc = "Exit insert mode" })
+-- vim.keymap.set("i", "kj", "<ESC>", { silent = true, desc = "Exit insert mode" })
+
+-- -- Perusing code faster with K and J
+vim.keymap.set({ "n", "v" }, "K", "5k", { noremap = true, desc = "Up faster" })
+vim.keymap.set({ "n", "v" }, "J", "5j", { noremap = true, desc = "Down faster" })
+
+-- Remap K and J
+vim.keymap.set({ "n", "v" }, "<leader>k", "K", { noremap = true, desc = "Keyword" })
+vim.keymap.set({ "n", "v" }, "<leader>j", "J", { noremap = true, desc = "Join lines" })
 
 -- clear search highlights
 vim.keymap.set("n", "<leader>nh", ":nohl<CR>", { silent = true, desc = "clear search highlights" })
@@ -34,6 +42,17 @@ vim.api.nvim_set_keymap("n", "QQ", ":q!<enter>", { noremap = false, desc = "Quit
 vim.api.nvim_set_keymap("n", "WW", ":w!<enter>", { noremap = false, desc = "Save file" })
 
 vim.keymap.set("n", "<C-x>", ":bd<CR>", { silent = false, desc = "Close current buffer" })
+
+-- Unmap mappings used by tmux plugin
+-- TODO(vintharas): There's likely a better way to do this.
+vim.keymap.del("n", "<C-h>")
+vim.keymap.del("n", "<C-j>")
+vim.keymap.del("n", "<C-k>")
+vim.keymap.del("n", "<C-l>")
+vim.keymap.set("n", "<C-h>", "<cmd>TmuxNavigateLeft<cr>")
+vim.keymap.set("n", "<C-j>", "<cmd>TmuxNavigateDown<cr>")
+vim.keymap.set("n", "<C-k>", "<cmd>TmuxNavigateUp<cr>")
+vim.keymap.set("n", "<C-l>", "<cmd>TmuxNavigateRight<cr>")
 
 vim.keymap.set("n", "<leader>rn", function()
   return ":IncRename " .. vim.fn.expand("<cword>")
