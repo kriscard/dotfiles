@@ -2,19 +2,6 @@ return {
   -- neodev
   { "folke/neodev.nvim", opts = {} },
 
-  -- tools
-  {
-    "williamboman/mason.nvim",
-    opts = function(_, opts)
-      vim.list_extend(opts.ensure_installed, {
-        "stylua",
-        "selene",
-        "luacheck",
-        "shellcheck",
-        "shfmt",
-      })
-    end,
-  },
   {
     "VidocqH/lsp-lens.nvim",
     opts = {
