@@ -43,6 +43,10 @@ return {
         name = "code",
         path = "~/obsidian-vault-code/",
       },
+      {
+        name = "work",
+        path = "~/obsidian-vault-work/",
+      },
       -- {
       --   name = "repro",
       --   path = "~/Downloads/repro",
@@ -91,7 +95,7 @@ return {
     },
 
     templates = {
-      subdir = "templates",
+      subdir = "Templates",
       date_format = "%Y-%m-%d-%a",
       time_format = "%H:%M",
       substitutions = {
