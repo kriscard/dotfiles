@@ -4,18 +4,6 @@ export ZSH=$DOTFILES/zsh
 # Configuration
 #################
 
-# define the code directory
-# This is where my code exists and where I want the `c` autocomplete to work from exclusively
-if [[ -d ~/code ]]; then
-    export CODE_DIR=~/code
-elif [[ -d ~/Developer ]]; then
-    export CODE_DIR=~/Developer
-elif [[ -d ~/Northone ]]; then
-    export CODE_DIR=~/Northone
-elif [[ -d ~/Projects ]]; then
-    export CODE_DIR=~/Projects
-fi
-
 # display how long all tasks over 10 seconds take
 export REPORTTIME=10
 export KEYTIMEOUT=1              # 10ms delay for key sequences
@@ -47,7 +35,7 @@ export GIT_EDITOR=nvim
 ZSH_THEME="robbyrussell"
 
 # Specify which plugins to load for Oh My Zsh
-plugins=(git autojump zsh-syntax-highlighting node npm yarn zsh-autosuggestions web-search)
+plugins=(git autojump zsh-syntax-highlighting zsh-autosuggestions)
 
 source "$HOME/zsh/aliases.zsh"
 source "$HOME/zsh/functions.zsh"
@@ -88,7 +76,12 @@ export PATH="/usr/local/bin:$PATH"
 # Make config
 export PATH="/usr/local/opt/make/libexec/gnubin:$PATH"
 
-source "$HOME/.dotfiles/work-config/config.zsh"
 
+### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
+export PATH="/Users/chriscardoso/.rd/bin:$PATH"
+### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
 
-. /opt/homebrew/opt/asdf/libexec/asdf.sh
+## WORK CONFIG ##
+if [[ $USER = 'chriscardoso' ]]; then
+  source "$HOME/.dotfiles/work-config/config.zsh"
+fi

@@ -19,13 +19,9 @@ vim.keymap.set(
   { silent = true, desc = "replace the highlited word" }
 )
 
--- use jk and kj to exit insert mode
+-- use jk to exit insert mode
 vim.keymap.set("i", "jk", "<ESC>", { silent = true, desc = "Exit insert mode" })
 -- vim.keymap.set("i", "kj", "<ESC>", { silent = true, desc = "Exit insert mode" })
-
--- -- Perusing code faster with K and J
-vim.keymap.set({ "n", "v" }, "K", "5k", { noremap = true, desc = "Up faster" })
-vim.keymap.set({ "n", "v" }, "J", "5j", { noremap = true, desc = "Down faster" })
 
 -- Remap K and J
 vim.keymap.set({ "n", "v" }, "<leader>k", "K", { noremap = true, desc = "Keyword" })
