@@ -63,27 +63,48 @@ return {
             end
           end)
         end,
-      },
-    },
-  },
-  {
-    "williamboman/mason.nvim",
-    opts = {
-      ensure_installed = {
-        "solargraph",
-        "rubocop",
-        "eslint-lsp",
-        "prettierd",
-        "tsserver",
-        "astro",
-        "html",
-        "cssls",
-        "tailwindcss",
-        "lua_ls",
-        "emmet_ls",
-        "prismals",
-        "pyright",
-        "clangd",
+        tailwindcss = function()
+          require("lazyvim.util").lsp.on_attach(function(client, _)
+            if client.name == "tailwindcss" then
+              client.server_capabilities.documentFormattingProvider = false
+            end
+          end)
+        end,
+        astro = function()
+          require("lazyvim.util").lsp.on_attach(function(client, _)
+            if client.name == "astro" then
+              client.server_capabilities.documentFormattingProvider = false
+            end
+          end)
+        end,
+        html = function()
+          require("lazyvim.util").lsp.on_attach(function(client, _)
+            if client.name == "html" then
+              client.server_capabilities.documentFormattingProvider = false
+            end
+          end)
+        end,
+        cssls = function()
+          require("lazyvim.util").lsp.on_attach(function(client, _)
+            if client.name == "cssls" then
+              client.server_capabilities.documentFormattingProvider = false
+            end
+          end)
+        end,
+        svelte = function()
+          require("lazyvim.util").lsp.on_attach(function(client, _)
+            if client.name == "svelte" then
+              client.server_capabilities.documentFormattingProvider = false
+            end
+          end)
+        end,
+        erb_lint = function()
+          require("lazyvim.util").lsp.on_attach(function(client, _)
+            if client.name == "erb_lint" then
+              client.server_capabilities.documentFormattingProvider = false
+            end
+          end)
+        end,
       },
     },
   },
