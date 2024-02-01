@@ -35,7 +35,7 @@ export GIT_EDITOR=nvim
 ZSH_THEME="robbyrussell"
 
 # Specify which plugins to load for Oh My Zsh
-plugins=(git autojump zsh-syntax-highlighting zsh-autosuggestions)
+plugins=(git autojump npm zsh-syntax-highlighting zsh-autosuggestions)
 
 source "$HOME/zsh/aliases.zsh"
 source "$HOME/zsh/functions.zsh"
