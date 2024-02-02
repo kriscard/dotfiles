@@ -98,9 +98,9 @@ return {
             end
           end)
         end,
-        erb_lint = function()
+        prismals = function()
           require("lazyvim.util").lsp.on_attach(function(client, _)
-            if client.name == "erb_lint" then
+            if client.name == "prismals" then
               client.server_capabilities.documentFormattingProvider = false
             end
           end)

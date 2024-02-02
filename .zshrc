@@ -51,7 +51,7 @@ export NVIM_CONFIG="$HOME/.config/nvim/init.lua"
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=cyan,bold,underline"
 
 # Set default browser
-export BROWSER=/usr/bin/brave-browser
+export BROWSER=/usr/bin/arc
 
 # Shell Startship
 eval "$(starship init zsh)"
@@ -76,12 +76,16 @@ export PATH="/usr/local/bin:$PATH"
 # Make config
 export PATH="/usr/local/opt/make/libexec/gnubin:$PATH"
 
-
-### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
-export PATH="/Users/chriscardoso/.rd/bin:$PATH"
-### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
+#PERSONAL CONFIG
+if [[ $USER = 'kriscard' ]]; then 
+. /opt/homebrew/opt/asdf/libexec/asdf.sh
+fi
 
 ## WORK CONFIG ##
 if [[ $USER = 'chriscardoso' ]]; then
+  ### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
+  export PATH="/Users/chriscardoso/.rd/bin:$PATH"
+  ### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
+  
   source "$HOME/.dotfiles/work-config/config.zsh"
 fi
