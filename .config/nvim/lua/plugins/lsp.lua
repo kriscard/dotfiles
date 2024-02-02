@@ -126,6 +126,8 @@ return {
       },
     },
   },
+
+  { "prisma/vim-prisma" },
 }
 
 -- return {
