@@ -9,13 +9,6 @@ return {
         end,
       },
       {
-        "nvim-telescope/telescope-fzf-native.nvim",
-        build = "make",
-        config = function()
-          require("telescope").load_extension("fzf")
-        end,
-      },
-      {
         "debugloop/telescope-undo.nvim",
         keys = { { "<leader>U", "<cmd>Telescope undo<cr>" } },
         config = function()
