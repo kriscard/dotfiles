@@ -4,6 +4,15 @@ export ZSH=$DOTFILES/zsh
 # Configuration
 #################
 
+## WORK CONFIG ##
+if [[ $USER = 'chriscardoso' ]]; then
+  ### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
+  export PATH="/Users/chriscardoso/.rd/bin:$PATH"
+  ### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
+  
+  source "$HOME/.dotfiles/work-config/config.zsh"
+fi
+
 # display how long all tasks over 10 seconds take
 export REPORTTIME=10
 export KEYTIMEOUT=1              # 10ms delay for key sequences
@@ -79,13 +88,4 @@ export PATH="/usr/local/opt/make/libexec/gnubin:$PATH"
 #PERSONAL CONFIG
 if [[ $USER = 'kriscard' ]]; then 
 . /opt/homebrew/opt/asdf/libexec/asdf.sh
-fi
-
-## WORK CONFIG ##
-if [[ $USER = 'chriscardoso' ]]; then
-  ### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
-  export PATH="/Users/chriscardoso/.rd/bin:$PATH"
-  ### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
-  
-  source "$HOME/.dotfiles/work-config/config.zsh"
 fi

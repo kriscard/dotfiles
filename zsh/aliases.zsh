@@ -37,8 +37,10 @@ else
   alias l="ls -lah ${colorflag}"
   alias ll="ls -lFh ${colorflag}"
 fi
-alias la="ls -AF ${colorflag}"
-alias lld="ls -l | grep ^d"
+
+alias lls="colorls"
+alias lla="colorls -a"
+alias lld="colors -l | grep ^d"
 alias rmf="rm -rf"
 
 # Define aliases for various Git and directory-related tasks
