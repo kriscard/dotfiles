@@ -20,7 +20,7 @@ vim.keymap.set(
 )
 
 -- use jk to exit insert mode
-vim.keymap.set("i", "jk", "<ESC>", { silent = true, desc = "Exit insert mode" })
+-- vim.keymap.set("i", "jk", "<ESC>", { silent = true, desc = "Exit insert mode" })
 -- vim.keymap.set("i", "kj", "<ESC>", { silent = true, desc = "Exit insert mode" })
 
 -- Remap K and J

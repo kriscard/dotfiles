@@ -62,3 +62,7 @@ alias tx='tmuxinator'
 
 # clear terminal
 alias K='clear'
+
+# Use tab for autocompletion
+bindkey '\t' end-of-line
+
