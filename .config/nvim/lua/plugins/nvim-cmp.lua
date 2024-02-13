@@ -1,15 +1,10 @@
--- nvim-cmp configs
 return {
-  -- customize nvim-cmp configs
-  -- Use <tab> for completion and snippets (supertab)
-  -- first: disable default <tab> and <s-tab> behavior in LuaSnip
   {
     "L3MON4D3/LuaSnip",
     keys = function()
       return {}
     end,
   },
-  -- then: setup supertab in cmp
   {
     "hrsh7th/nvim-cmp",
     dependencies = {
@@ -45,7 +40,7 @@ return {
         end, { "i", "s" }),
         ["<S-Tab>"] = cmp.mapping(function(fallback)
           if cmp.visible() then
-            cmp.select_prev_item()
+            cmp.select_next_item()
           elseif luasnip.jumpable(-1) then
             luasnip.jump(-1)
           else
