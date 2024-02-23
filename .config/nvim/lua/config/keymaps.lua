@@ -14,7 +14,7 @@ vim.keymap.set("n", "<leader>Y", [["+Y]], { silent = true, desc = "Copy availabl
 -- replace the highlited word
 vim.keymap.set(
   "n",
-  "<leader>s",
+  "<leader>sR",
   [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
   { silent = true, desc = "replace the highlited word" }
 )
