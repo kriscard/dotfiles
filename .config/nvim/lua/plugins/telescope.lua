@@ -3,7 +3,8 @@ return {
         event = 'VeryLazy',
          branch = '0.1.x',
       dependencies = { 
-              {'nvim-lua/plenary.nvim'},
+              'nvim-lua/plenary.nvim',
+              "nvim-tree/nvim-web-devicons",
               {
                  "nvim-telescope/telescope-fzf-native.nvim",
                 build = "make",
@@ -12,13 +13,15 @@ return {
 
       },
       config = function()
+        local telescope = require "telescope"
         local actions = require("telescope.actions")
 
-        require('telescope').setup{
+        telescope.setup{
+        hidden = true,
   defaults = {
         prompt_prefix = "🔍 ",
         selection_caret = " ",
-        hidden = true,
+        path_display = { "truncate " },
         layout_strategy = "horizontal",
         layout_config = {
           horizontal = {
@@ -41,20 +44,41 @@ return {
       },
 
     },
-    					file_ignore_patterns = {
-						"node_modules",
-						"yarn.lock",
-            "package-lock.json",
-						".git",
-						".sl",
-						"_build",
-						".next",
-					},
+  },
+  	pickers = {
+		find_files = {
+			-- `hidden = true` will still show the inside of `.git/` as it's not `.gitignore`d.
+        find_command = { 
+                "rg", "--files",
+                "--hidden",
+                "--glob",
+                "!**/.git/*",
+                "--glob",
+                "!**/node_modules/**",
+                "--glob",
+                "!**/package-lock.json",
+                "--glob",
+                "!**/build/**",
+                "--glob",
+                "!**/.next/**",
+                "-u"
+        },
+		},
+	},
+  extensions = {
+          fzf = {
+                case_mode = "respect_case",        -- or "ignore_case" or "smart_case"
+          },
   },
 }
-        pcall(require('telescope').load_extension, 'fzf')
+        pcall(telescope.load_extension, 'fzf')
+        pcall(telescope.load_extension, "file_browser")
+
      
        local builtin = require 'telescope.builtin'
+
+       -- File Browser -- NEED to found another way to found hidden files
+       		vim.keymap.set("n","<leader>fF","<cmd>Telescope file_browser path=%:p:h<cr>",{ desc = "Open file browser (current dir)" })
 
        -- File Pickers
        vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Find Files' })
