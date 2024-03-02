@@ -5,6 +5,7 @@ return {
   dependencies = {
         -- Additional text objects for treesitter
           "nvim-treesitter/nvim-treesitter-textobjects",
+          "windwp/nvim-ts-autotag",
   },
   cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
   -- @type TSConfig
