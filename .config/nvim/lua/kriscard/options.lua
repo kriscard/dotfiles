@@ -8,13 +8,19 @@ local opt = vim.opt
 opt.relativenumber = true -- Relative line numbers
 
 opt.tabstop = 2 -- Set tabs to 2 spaces
-opt.softtabstop = 2 -- Set tabs to 2 spaces
+-- opt.softtabstop = 2 -- Set tabs to 2 spaces
 opt.expandtab = true -- Use spaces instead of tabs
-opt.smartindent = true -- Insert indents automatically
+opt.autoindent = true -- copy indent from current line when starting new one
+opt.shiftwidth = 2 -- 2 spaces for indent width
+
 
 opt.incsearch = true --Enable incremental searching
 
 opt.wrap = false -- Disable line wrap
+
+-- search settings
+opt.ignorecase = true -- ignore case when searching
+opt.smartcase = true -- if you include mixed case in your search, assumes you want case-sensitive
 
 opt.splitbelow = true -- Put new windows below current
 opt.splitkeep = "screen"
