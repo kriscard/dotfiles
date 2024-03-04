@@ -54,7 +54,7 @@ return {
             -- this way you will only jump inside the snippet region
           elseif luasnip.expand_or_jumpable() then
             luasnip.expand_or_jump()
-          elseif luasnip.has_words_before() then
+          elseif has_words_before() then
             cmp.complete()
           else
             fallback()
@@ -77,9 +77,11 @@ return {
         { name = "buffer",  max_item_count = 5 }, -- text within current buffer
         { name = "path",    max_item_count = 3 }, -- file system paths
       }),
+      -- Enable pictogram icons for lsp/autocompletion
       formatting = {
         expandable_indicator = true,
         format = lspkind.cmp_format({
+          mode = "symbol_text",
           maxwidth = 50,
           ellipsis_char = "...",
         }),
