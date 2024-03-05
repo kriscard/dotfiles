@@ -80,16 +80,27 @@ return {
 
 		local builtin = require("telescope.builtin")
 
-		-- File Browser -- NEED to found another way to found hidden files
-		vim.keymap.set(
-			"n",
-			"<leader>fF",
-			"<cmd>Telescope file_browser path=%:p:h<cr>",
-			{ desc = "Open file browser (current dir)" }
-		)
+		function vim.find_files_from_project_git_root()
+			local function is_git_repo()
+				vim.fn.system("git rev-parse --is-inside-work-tree")
+				return vim.v.shell_error == 0
+			end
+			local function get_git_root()
+				local dot_git_path = vim.fn.finddir(".git", ".;")
+				return vim.fn.fnamemodify(dot_git_path, ":h")
+			end
+			local opts = {}
+			if is_git_repo() then
+				opts = {
+					cwd = get_git_root(),
+				}
+			end
+			require("telescope.builtin").find_files(opts)
+		end
 
 		-- File Pickers
-		vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Find Files" })
+		vim.keymap.set("n", "<leader>ff", vim.find_files_from_project_git_root, { desc = "Find Files" })
+		-- vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Find Files" })
 		vim.keymap.set(
 			"n",
 			"<leader>fg",
