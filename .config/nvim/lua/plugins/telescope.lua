@@ -80,27 +80,24 @@ return {
 
 		local builtin = require("telescope.builtin")
 
-		function vim.find_files_from_project_git_root()
-			local function is_git_repo()
-				vim.fn.system("git rev-parse --is-inside-work-tree")
-				return vim.v.shell_error == 0
-			end
-			local function get_git_root()
-				local dot_git_path = vim.fn.finddir(".git", ".;")
-				return vim.fn.fnamemodify(dot_git_path, ":h")
-			end
-			local opts = {}
-			if is_git_repo() then
-				opts = {
-					cwd = get_git_root(),
-				}
-			end
+		local function find_files_from_current_dir()
+			local opts = {
+				cwd = vim.fn.expand("%:p:h"), -- %:p:h gives the current file's directory
+			}
+			require("telescope.builtin").find_files(opts)
+		end
+
+		local function find_files_from_root_dir()
+			local opts = {
+				cwd = vim.fn.getcwd(),
+			}
 			require("telescope.builtin").find_files(opts)
 		end
 
 		-- File Pickers
-		vim.keymap.set("n", "<leader>ff", vim.find_files_from_project_git_root, { desc = "Find Files" })
-		-- vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Find Files" })
+		vim.keymap.set("n", "<leader>ff", find_files_from_current_dir, { desc = "Find Files from current directory" })
+
+		vim.keymap.set("n", "<leader>fF", find_files_from_root_dir, { desc = "Find Files from root directory" })
 		vim.keymap.set(
 			"n",
 			"<leader>fg",
