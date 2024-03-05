@@ -29,6 +29,13 @@ return {
 				["g."] = "actions.toggle_hidden",
 			},
 			use_default_keymaps = false,
+			view_options = {
+				-- Show files and directories that start with "."
+				show_hidden = true,
+			},
+			columns = {
+				"icon",
+			},
 		})
 	end,
 }
