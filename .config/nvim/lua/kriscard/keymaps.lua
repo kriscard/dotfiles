@@ -58,7 +58,7 @@ map("n", "<leader>w|", "<C-W>v", { desc = "Split window right", remap = true })
 -- Map Oil to <leader>e
 map("n", "<leader>e", function()
 	require("oil").toggle_float()
-end)
+end, { desc = "Open Oil" })
 
 -- Center buffer while navigating
 map("n", "<C-u>", "<C-u>zz")
