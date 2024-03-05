@@ -33,6 +33,9 @@ map("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy" })
 -- code actions
 map({ "n", "v" }, "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", { desc = "Code action" })
 
+-- Mason
+map("n", "<leader>cm", "<cmd>Mason<cr>", { desc = "Mason" })
+
 -- diagnostic
 local diagnostic_goto = function(next, severity)
 	local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
