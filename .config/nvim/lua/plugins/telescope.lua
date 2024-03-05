@@ -21,7 +21,7 @@ return {
 			defaults = {
 				prompt_prefix = "🔍 ",
 				selection_caret = " ",
-				path_display = { "truncate" },
+				path_display = { "smart" },
 				layout_strategy = "horizontal",
 				layout_config = {
 					horizontal = {
