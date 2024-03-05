@@ -62,6 +62,9 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=cyan,bold,underline"
 # Set default browser
 export BROWSER=/usr/bin/arc
 
+# Use autocompletion with tabs
+bindkey '^I' autosuggest-accept
+
 # Shell Startship
 eval "$(starship init zsh)"
 export STARSHIP_CONFIG="$HOME/.config/starship.toml"
