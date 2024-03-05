@@ -167,11 +167,6 @@ return {
 		vim.keymap.set("n", "<leader>gS", builtin.git_stash, { desc = "Lists stash items in current repository" })
 
 		-- Treesitter Picker
-		vim.keymap.set(
-			"n",
-			"<leader>tt",
-			builtin.treesitter,
-			{ desc = "Lists Function names, variables, from Treesitter!" }
-		)
+		vim.keymap.set("n", "<leader>tt", builtin.treesitter, { desc = "Lists fn names, variables from Treesitter" })
 	end,
 }
