@@ -75,13 +75,14 @@ return {
 				end, { "i", "s" }),
 			}),
 			sources = cmp.config.sources({
-				{ name = "copilot" }, -- Copilot suggestions
 				{ name = "nvim_lsp" }, -- lsp
+				{ name = "copilot" }, -- Copilot suggestions
 				{ name = "luasnip", max_item_count = 3 }, -- snippets
 				{ name = "buffer", max_item_count = 5 }, -- text within current buffer
 				{ name = "path", max_item_count = 3 }, -- file system paths
 			}),
 			-- Enable pictogram icons for lsp/autocompletion
+			---@diagnostic disable-next-line: missing-fields
 			formatting = {
 				expandable_indicator = true,
 				format = lspkind.cmp_format({
@@ -91,9 +92,7 @@ return {
 				}),
 			},
 			experimental = {
-				ghost_text = {
-					hl_group = "CmpGhostText",
-				},
+				ghost_text = true,
 			},
 			sorting = defaults.sorting,
 		})
