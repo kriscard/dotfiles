@@ -1,16 +1,3 @@
-local function has(plugin)
-	return require("lazy.core.config").spec.plugins[plugin] ~= nil
-end
-
-local function on_very_lazy(fn)
-	vim.api.nvim_create_autocmd("User", {
-		pattern = "VeryLazy",
-		callback = function()
-			fn()
-		end,
-	})
-end
-
 return {
 	"rcarriga/nvim-notify",
 	keys = {
@@ -34,12 +21,5 @@ return {
 			vim.api.nvim_win_set_config(win, { zindex = 100 })
 		end,
 	},
-	init = function()
-		-- when noice is not enabled, install notify on VeryLazy
-		if not has("noice.nvim") then
-			on_very_lazy(function()
-				vim.notify = require("notify")
-			end)
-		end
-	end,
+	init = function() end,
 }
