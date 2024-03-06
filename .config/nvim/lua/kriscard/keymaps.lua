@@ -82,12 +82,5 @@ map("n", "*", "*zz")
 map("n", "#", "#zz")
 
 -- Press 'H', 'L' to jump to start/end of a line (first/last char)
-map("n", "L", "$")
-map("n", "H", "^")
-
--- Press 'H', 'L' to jump to start/end of a line (first/last char)
 map("v", "L", "$<left>")
 map("v", "H", "^")
-
--- Git keymaps --
-map("n", "<leader>gb", ":Gitsigns toggle_current_line_blame<cr>", { desc = "Toggle Blame" })
