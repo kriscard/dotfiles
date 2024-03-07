@@ -2,7 +2,6 @@ vim.g.autoformat = true -- Enable auto format
 vim.g.mapleader = " " -- Set leader key to space
 vim.g.maplocalleader = " " -- Set leader key to space
 
-
 local opt = vim.opt
 
 opt.relativenumber = true -- Relative line numbers
@@ -12,7 +11,6 @@ opt.tabstop = 2 -- Set tabs to 2 spaces
 opt.expandtab = true -- Use spaces instead of tabs
 opt.autoindent = true -- copy indent from current line when starting new one
 opt.shiftwidth = 2 -- 2 spaces for indent width
-
 
 opt.incsearch = true --Enable incremental searching
 
@@ -33,7 +31,7 @@ opt.smartcase = true -- Don't ignore case with capitals
 
 opt.updatetime = 200 -- Save changes to swap file every 200ms and trigger CursorHold
 
-opt.completeopt = "menu,menuone,noselect"  -- Customize completion menu behavior
+opt.completeopt = "menu,menuone,noselect" -- Customize completion menu behavior
 
 opt.undofile = true -- Enable persistent undo history
 
@@ -61,6 +59,8 @@ opt.grepprg = "rg --vimgrep" -- Set the external grep-like search command to use
 
 opt.laststatus = 3 -- global statusline
 
+opt.conceallevel = 2 -- Config for Obsidian
+
 -- Set fold settings
 -- These options were reccommended by nvim-ufo
 -- See: https://github.com/kevinhwang91/nvim-ufo#minimal-configuration
@@ -68,4 +68,3 @@ opt.foldcolumn = "0"
 opt.foldlevel = 99
 opt.foldlevelstart = 99
 opt.foldenable = true
-
