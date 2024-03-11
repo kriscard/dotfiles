@@ -50,25 +50,19 @@ return {
 					name = "Obsidian",
 					o = { "<cmd>ObsidianOpen<cr>", "Open note" },
 					n = { "<cmd>ObsidianNew<cr>", "New note" },
-					t = { "<cmd>ObsidianTemplate<cr>", "Templates list" },
+					t = { "<cmd>ObsidianToday<cr>", "New Daily Note" },
+					T = { "<cmd>ObsidianTemplate<cr>", "Templates list" },
 					b = { "<cmd>ObsidianBacklinks<cr>", "Backlinks" },
 					p = { "<cmd>ObsidianPasteImg<cr>", "Paste image" },
-					q = { "<cmd>ObsidianQuickSwitch<cr>", "Quick switch" },
 					s = { "<cmd>ObsidianSearch<cr>", "Search" },
-					ww = { "<cmd>ObsidianWorkspace work<cr>", "Switch workspaces" },
-					wc = { "<cmd>ObsidianWorkspace code<cr>", "Switch workspaces" },
 				},
 			})
 		end,
 		opts = {
 			workspaces = {
 				{
-					name = "code",
-					path = "~/obsidian-vault-code",
-				},
-				{
-					name = "work",
-					path = "~/obsidian-vault-work",
+					name = "kriscard",
+					path = "~/obsidian-vault-kriscard",
 				},
 			},
 			completion = {
@@ -80,6 +74,17 @@ return {
 				date_format = "%Y-%m-%d-%a",
 				time_format = "%H:%M",
 			},
+			daily_notes = {
+				-- Optional, if you keep daily notes in a separate directory.
+				folder = "Daily Notes",
+				-- Optional, if you want to change the date format for the ID of daily notes.
+				date_format = "%Y-%m-%d",
+				-- Optional, if you want to change the date format of the default alias of daily notes.
+				alias_format = "%B %-d, %Y",
+				-- Optional, if you want to automatically insert a template from your template directory like 'daily.md'
+				template = "Daily Notes.md",
+			},
+
 			picker = {
 				name = picker,
 			},
@@ -88,26 +93,6 @@ return {
 			open_notes_in = "vsplit",
 			log_level = vim.log.levels.INFO,
 			new_notes_location = "notes_subdir",
-
-			-- customize how note IDs are generated given an optional title.
-			---@param title string|?
-			---@return string
-			note_id_func = function(title)
-				-- Create note IDs in a Zettelkasten format with a timestamp and a suffix.
-				-- In this case a note with the title 'My new note' will be given an ID that looks
-				-- like '1657296016-my-new-note', and therefore the file name '1657296016-my-new-note.md'
-				local suffix = ""
-				if title ~= nil then
-					-- If title is given, transform it into valid file name.
-					suffix = title:gsub(" ", "-"):gsub("[^A-Za-z0-9-]", ""):lower()
-				else
-					-- If title is nil, just add 4 random uppercase letters to the suffix.
-					for _ = 1, 4 do
-						suffix = suffix .. string.char(math.random(65, 90))
-					end
-				end
-				return tostring(os.time()) .. "-" .. suffix
-			end,
 
 			-- customize the default name or prefix when pasting images via `:ObsidianPasteImg`.
 			---@return string
