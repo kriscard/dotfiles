@@ -69,9 +69,9 @@ bindkey '^I' autosuggest-accept
 eval "$(starship init zsh)"
 export STARSHIP_CONFIG="$HOME/.config/starship.toml"
 
-# Rbenv
-eval "$(rbenv init - zsh)"
-
+# # Rbenv
+# eval "$(rbenv init - zsh)"
+#
 # pnpm
 export PNPM_HOME="/Users/kriscard/Library/pnpm"
 case ":$PATH:" in

@@ -7,6 +7,12 @@ return {
 		"nvim-tree/nvim-web-devicons",
 		"nvim-telescope/telescope-ui-select.nvim",
 		{
+			"nvim-telescope/telescope-live-grep-args.nvim",
+			-- This will not install any breaking changes.
+			-- For major updates, this must be adjusted manually.
+			version = "^1.0.0",
+		},
+		{
 			"nvim-telescope/telescope-fzf-native.nvim",
 			build = "make",
 			enabled = vim.fn.executable("make") == 1,
@@ -77,8 +83,10 @@ return {
 		pcall(telescope.load_extension, "fzf")
 		pcall(telescope.load_extension, "file_browser")
 		pcall(telescope.load_extension, "ui-select")
+		pcall(telescope.load_extension, "live_grep_args")
 
 		local builtin = require("telescope.builtin")
+		local telescope_extensions = require("telescope").extensions
 
 		local function find_files_from_current_dir()
 			local opts = {
@@ -111,6 +119,12 @@ return {
 			{ desc = "Searches for the string under your cursor or selection in your current working directory" }
 		)
 		vim.keymap.set("n", "<leader>/", builtin.live_grep, { desc = "Grep (root dir)" })
+		vim.keymap.set(
+			"n",
+			"<leader>//",
+			telescope_extensions.live_grep_args.live_grep_args,
+			{ noremap = true, desc = "Grep (root dir) with args" }
+		)
 
 		-- Vim Pickers
 		vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Lists open buffers in current neovim instance" })
