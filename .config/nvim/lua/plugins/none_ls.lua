@@ -36,9 +36,10 @@ return {
 
 				-- diagnostics
 				diagnostics.rubocop,
+				diagnostics.eslint,
 			},
 
-      	-- Configure diagostics border
+			-- Configure diagostics border
 			vim.diagnostic.config({
 				float = {
 					border = "rounded",

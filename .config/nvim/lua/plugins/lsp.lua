@@ -52,7 +52,7 @@ return {
 			tsserver = {},
 			yamlls = {},
 			eslint = {
-				on_attach = function(client, bufnr)
+				on_attach = function(_, bufnr)
 					vim.api.nvim_create_autocmd("BufWritePre", {
 						buffer = bufnr,
 						command = "EslintFixAll",
@@ -85,13 +85,13 @@ return {
 		end
 
 		-- Iterate over our servers and set them up
-		for name, config in pairs(servers) do
+		for _, name in pairs(servers) do
 			require("lspconfig")[name].setup({
 				capabilities = default_capabilities,
-				filetypes = config.filetypes,
-				handlers = vim.tbl_deep_extend("force", {}, default_handlers, config.handlers or {}),
 				on_attach = on_attach,
-				settings = config.settings,
+				-- filetypes = config.filetypes,
+				-- handlers = vim.tbl_deep_extend("force", {}, default_handlers, config.handlers or {}),
+				-- settings = config.settings,
 			})
 		end
 
