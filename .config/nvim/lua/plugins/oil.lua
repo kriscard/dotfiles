@@ -14,7 +14,7 @@ return {
 			keymaps = {
 				["g?"] = "actions.show_help",
 				["<CR>"] = "actions.select",
-				["<C-\\>"] = "actions.select_vsplit",
+				["<C-w>"] = "actions.select_vsplit",
 				["<C-enter>"] = "actions.select_split", -- this is used to navigate left
 				["<C-t>"] = "actions.select_tab",
 				["<C-p>"] = "actions.preview",

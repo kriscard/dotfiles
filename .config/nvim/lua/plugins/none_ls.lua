@@ -36,7 +36,6 @@ return {
 
 				-- diagnostics
 				diagnostics.rubocop,
-				diagnostics.eslint,
 			},
 
 			-- Configure diagostics border

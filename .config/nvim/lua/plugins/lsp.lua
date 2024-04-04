@@ -37,8 +37,6 @@ return {
 			lua_ls = {
 				settings = {
 					Lua = {
-						workspace = { checkThirdParty = false },
-						telemetry = { enabled = false },
 						diagnostics = {
 							globals = { "vim" },
 						},
@@ -51,14 +49,14 @@ return {
 			tailwindcss = {},
 			tsserver = {},
 			yamlls = {},
-			eslint = {
-				on_attach = function(_, bufnr)
-					vim.api.nvim_create_autocmd("BufWritePre", {
-						buffer = bufnr,
-						command = "EslintFixAll",
-					})
-				end,
-			},
+			-- eslint = {
+			-- 	on_attach = function(_, bufnr)
+			-- 		vim.api.nvim_create_autocmd("BufWritePre", {
+			-- 			buffer = bufnr,
+			-- 			command = "EslintFixAll",
+			-- 		})
+			-- 	end,
+			-- },
 		}
 
 		-- Default handlers for LSP
@@ -85,13 +83,13 @@ return {
 		end
 
 		-- Iterate over our servers and set them up
-		for _, name in pairs(servers) do
+		for name, config in pairs(servers) do
 			require("lspconfig")[name].setup({
 				capabilities = default_capabilities,
+				filetypes = config.filetypes,
+				handlers = vim.tbl_deep_extend("force", {}, default_handlers, config.handlers or {}),
 				on_attach = on_attach,
-				-- filetypes = config.filetypes,
-				-- handlers = vim.tbl_deep_extend("force", {}, default_handlers, config.handlers or {}),
-				-- settings = config.settings,
+				settings = config.settings,
 			})
 		end
 
