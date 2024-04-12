@@ -92,3 +92,7 @@ export PATH="/usr/local/opt/make/libexec/gnubin:$PATH"
 if [[ $USER = 'kriscard' ]]; then 
 . /opt/homebrew/opt/asdf/libexec/asdf.sh
 fi
+
+### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
+export PATH="/Users/chriscardoso/.rd/bin:$PATH"
+### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
