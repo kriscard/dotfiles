@@ -45,7 +45,14 @@ return {
       marksman = {},
       prismals = {},
       sqlls = {},
-      tailwindcss = {},
+      tailwindcss = {
+        experimental = {
+          classRegex = {
+            { "cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]" },
+            { "cx\\(([^)]*)\\)",  "(?:'|\"|`)([^']*)(?:'|\"|`)" }
+          },
+        },
+      },
       tsserver = {},
       yamlls = {},
       eslint = {
