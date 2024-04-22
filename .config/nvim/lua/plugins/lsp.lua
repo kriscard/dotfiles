@@ -11,6 +11,11 @@ return {
   config = function()
     local mason = require("mason")
     local null_ls = require("null-ls")
+    local masonLspConfig = require("mason-lspconfig")
+
+    masonLspConfig.setup({
+      automatic_installation = true,
+    })
 
     mason.setup({
       ui = {
