@@ -15,7 +15,6 @@ return {
       json = { { "prettier" } },
       astro = { { "prettier" } },
       css = { { "prettier" } },
-      ruby = { { "rubocop" } },
     },
     format_on_save = {
       quiet = true,
@@ -40,13 +39,6 @@ return {
           return util.root_file({ ".eslintrc", ".eslintrc.js" })(self, ctx) ~= nil
         end
       },
-      rubocop = {
-        command = util.find_executable(_, "rubocop"),
-        args = { "--auto-correct", "--stdin", "$FILENAME" },
-        condition = function(self, ctx)
-          return util.root_file({ ".rubocop.yml" })(self, ctx) ~= nil
-        end
-      }
     }
 
     opts["formatters"] = formatters

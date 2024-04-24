@@ -9,7 +9,6 @@ return {
       typescript = { "eslint_d" },
       javascriptreact = { "eslint_d" },
       typescriptreact = { "eslint_d" },
-      ruby = { "rubocop" },
     }
 
     local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
@@ -21,7 +20,7 @@ return {
       end,
     })
 
-    vim.keymap.set("n", "<leader>f", function()
+    vim.keymap.set("n", "<leader>F", function()
       lint.try_lint()
     end, { desc = "Trigger linting for current file" })
   end,
