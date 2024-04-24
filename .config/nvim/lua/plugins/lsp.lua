@@ -27,7 +27,23 @@ return {
     require("neodev").setup()
     -- Lsp server list https://github.com/williamboman/mason-lspconfig.nvim#available-lsp-servers
     local servers = {
-      solargraph = {},
+      solargraph = {
+        filetypess = { "ruby", "eruby" },
+        settings = {
+          solargraph = {
+            useBundler = true,
+            diagnostic = true,
+            completion = true,
+            hover = true,
+            formatting = true,
+            symbols = true,
+            definitions = true,
+            rename = true,
+            references = true,
+            folding = true
+          }
+        }
+      },
       bashls = {},
       cssls = {},
       graphql = {},
