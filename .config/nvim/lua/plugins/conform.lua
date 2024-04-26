@@ -15,6 +15,7 @@ return {
       json = { { "prettier" } },
       astro = { { "prettier" } },
       css = { { "prettier" } },
+      ruby = { { "rubocop" } }
     },
     format_on_save = {
       quiet = true,
@@ -39,6 +40,22 @@ return {
           return util.root_file({ ".eslintrc", ".eslintrc.js" })(self, ctx) ~= nil
         end
       },
+      rubocop = function()
+        return {
+          command = "rubocop",
+          args = {
+            "--server",
+            "--fix-layout",
+            "--autocorrect-all",
+            "--format",
+            "files",
+            "--stderr",
+            "--stdin",
+            "$FILENAME",
+          },
+          stdin = true,
+        }
+      end,
     }
 
     opts["formatters"] = formatters
