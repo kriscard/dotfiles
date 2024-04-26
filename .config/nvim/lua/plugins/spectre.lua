@@ -5,7 +5,7 @@ return {
   opts = { open_cmd = "noswapfile vnew" },
   -- stylua: ignore
   keys = {
-    { "<leader>s",  function() require("spectre").open() end,                              desc = "Replace in files (Spectre)" },
+    { "<leader>sr", function() require("spectre").open() end,                              desc = "Replace in files (Spectre)" },
     { "<leader>sx", function() require("spectre").close() end,                             desc = "Close Spectre" },
 
     -- Open Spectre for global find/replace for the word under the cursor in visual mode

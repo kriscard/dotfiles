@@ -131,19 +131,13 @@ return {
     vim.keymap.set("n", "<leader>fr", builtin.oldfiles, { desc = "Lists previously open files" })
     vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "Search Help" })
     vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "Search Keymaps" })
-    vim.keymap.set(
-      "n",
-      "<leader>ss",
-      builtin.grep_string,
-      { desc = "Searches for the string under your cursor in current working directory" }
-    )
     vim.keymap.set("n", "<leader>ui", builtin.colorscheme, { desc = "Lists available colorschemes" })
     vim.keymap.set("n", "<leader>sq", builtin.quickfix, { desc = "Lists items in the quickfix list" })
     vim.keymap.set("n", "<leader>sj", builtin.jumplist, { desc = "Lists Jump List entries" })
     vim.keymap.set("n", "<leader>sR", builtin.registers, { desc = "Lists vim registers" })
 
     -- Neovim LSP Pickers
-    vim.keymap.set("n", "<leader>sr", builtin.lsp_references, { desc = "Lists vim registers" })
+    vim.keymap.set("n", "<leader>R", builtin.lsp_references, { desc = "Lists vim registers" })
     vim.keymap.set(
       "n",
       "<leader>sd",
@@ -152,7 +146,7 @@ return {
     )
     vim.keymap.set(
       "n",
-      "gr",
+      "gi",
       builtin.lsp_implementations,
       { desc = "Goto the implementation of the word under the cursor" }
     )
@@ -161,12 +155,6 @@ return {
       "gd",
       builtin.lsp_definitions,
       { desc = "Goto the implementation of the word under the cursor" }
-    )
-    vim.keymap.set(
-      "n",
-      "gt",
-      builtin.lsp_type_definitions,
-      { desc = "Goto the definition of the type of the word under the cursor" }
     )
 
     -- Git Pickers
