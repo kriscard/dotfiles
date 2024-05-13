@@ -46,9 +46,6 @@ plugins=(git autojump npm zsh-autosuggestions)
 source "$HOME/zsh/aliases.zsh"
 source "$HOME/zsh/functions.zsh"
 
-# Load the Oh My Zsh framework
-source $ZSH/oh-my-zsh.sh
-
 # Set the default code editor to VS Code Insiders
 export EDITOR=nvim
 export NVIM_CONFIG="$HOME/.config/nvim/init.lua"
