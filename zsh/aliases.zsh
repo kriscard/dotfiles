@@ -30,17 +30,17 @@ alias clsym="find -L . -name . -o -type d -prune -o -type l -exec rm {} +"
 alias delete_all_branch='git branch | grep -v "master" | grep -v "main" | grep -v "dev" | grep -v "production" | xargs git branch -D'
 
 # use exa if available
-if [[ -x "$(command -v exa)" ]]; then
-  alias ll="exa --icons --git --long"
-  alias l="exa --icons --git --all --long"
-else
-  alias l="ls -lah ${colorflag}"
-  alias ll="ls -lFh ${colorflag}"
-fi
+# if [[ -x "$(command -v eza)" ]]; then
+alias ls="eza --icons --git --long"
+alias ll="eza --icons --git --all --long"
+# else
+#   alias l="ls -lah ${colorflag}"
+#   alias ll="ls -lFh ${colorflag}"
+# fi
 
-alias lls="colorls"
-alias lla="colorls -a"
-alias lld="colors -l | grep ^d"
+# alias lls="colorls"
+# alias lla="colorls -a"
+# alias lld="colors -l | grep ^d"
 alias rmf="rm -rf"
 
 # Define aliases for various Git and directory-related tasks

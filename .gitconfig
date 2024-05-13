@@ -5,6 +5,8 @@
     # A local gitconfig, outside of version control.
     # If the file doesn't exist it is silently ignored
     path = ~/.gitconfig-local
+[includeIf "gitdir:~/workspace/"]
+        path = /Users/chriscardoso/work-config/.gitconfig-jobber
 [alias]
     # list all aliases
     la = "!git config -l | grep alias | cut -c 7-"
@@ -15,18 +17,8 @@
     # push new branch - push a branch to origin and set upstream
     pnb = "!git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)"
 
-    co = checkout
-    s = status --short --branch
-    br = branch -v
-    addnw = "!sh -c 'git diff -U0 -w --no-color \"$@\" | git apply --cached --ignore-whitespace --unidiff-zero -'"
-    cane = commit --amend --no-edit
-
     # gh commands
     browse = "!gh repo view --web"
-
-    # rebase commands
-    cont = rebase --continue
-    conf = "!git s | grep ^U"
 
     l = log --graph --pretty=format:'%Cred%h%Creset %C(bold blue)%an%C(reset) - %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
 
@@ -52,11 +44,6 @@
     # current branch
     cbr = rev-parse --abbrev-ref HEAD
 
-    # submodule shortcuts
-    si = submodule init
-    su = submodule update
-    sub = "!git submodule sync && git submodule update"
-
     # show number of commits per contributer, sorted
     count = shortlog -sn
 
@@ -67,16 +54,6 @@
 
     # rebase the current branch with changes from upstream remote
     update = !git fetch upstream && git rebase upstream/`git rev-parse --abbrev-ref HEAD`
-
-    # tag aliases
-    # show the last tag
-    lt = describe --tags --abbrev=0
-
-    # assume aliases
-    assume = update-index --assume-unchanged
-    unassume = update-index --no-assume-unchanged
-    assumed = "!git ls-files -v | grep ^h | cut -c 3-"
-    unassumeall = "!git assumed | xargs git update-index --no-assume-unchanged"
 
     # clean up all 
     forget = "!git fetch -p origin && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D"
