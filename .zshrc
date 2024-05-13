@@ -30,9 +30,6 @@ setopt HIST_IGNORE_ALL_DUPS      # delete old recorded entry if new entry is a d
 # Set the path to include Homebrew binaries
 export PATH=/opt/homebrew/bin:$PATH
 
-# Set the path to the Oh My Zsh installation directory
-export ZSH="$HOME/.oh-my-zsh"
-
 # Set the path to DOTFILES folder
 export DOTFILES="$HOME/.dotfiles"
 
@@ -44,7 +41,7 @@ export GIT_EDITOR=nvim
 ZSH_THEME="robbyrussell"
 
 # Specify which plugins to load for Oh My Zsh
-plugins=(git autojump npm zsh-syntax-highlighting zsh-autosuggestions)
+plugins=(git autojump npm zsh-autosuggestions)
 
 source "$HOME/zsh/aliases.zsh"
 source "$HOME/zsh/functions.zsh"

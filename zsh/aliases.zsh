@@ -63,6 +63,8 @@ alias K='clear'
 bindkey '\t' end-of-line
 
 # use exa
-alias ls="eza"
+alias ls="eza --icons --git"
 alias lls="eza --icons --git --long"
 alias ll="eza --icons --git --all --long"
+alias lt="eza --icons --git --tree"
+alias la="eza --icons --git --all"
