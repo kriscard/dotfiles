@@ -1,4 +1,4 @@
-# reload zsh config
+# reload zsh confihhhh
 alias reload!='RELOAD=1 source ~/.zshrc'
 
 # Filesystem aliases
@@ -29,18 +29,13 @@ alias clsym="find -L . -name . -o -type d -prune -o -type l -exec rm {} +"
 # Delete merged branches
 alias delete_all_branch='git branch | grep -v "master" | grep -v "main" | grep -v "dev" | grep -v "production" | xargs git branch -D'
 
-# use exa if available
-# if [[ -x "$(command -v eza)" ]]; then
-alias ls="eza --icons --git --long"
-alias ll="eza --icons --git --all --long"
-# else
-#   alias l="ls -lah ${colorflag}"
-#   alias ll="ls -lFh ${colorflag}"
-# fi
+# Update git submodules
+alias gsu='git submodule update --init --recursive'
 
-# alias lls="colorls"
-# alias lla="colorls -a"
-# alias lld="colors -l | grep ^d"
+# Upate Stow symlink
+alias unstow="stow -D ." # Unstow 
+alias addstow="stow ." # Add stow
+
 alias rmf="rm -rf"
 
 # Define aliases for various Git and directory-related tasks
@@ -67,3 +62,7 @@ alias K='clear'
 # Use tab for autocompletion
 bindkey '\t' end-of-line
 
+# use exa
+alias ls="eza"
+alias lls="eza --icons --git --long"
+alias ll="eza --icons --git --all --long"
