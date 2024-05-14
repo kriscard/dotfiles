@@ -41,7 +41,7 @@ export GIT_EDITOR=nvim
 ZSH_THEME="robbyrussell"
 
 # Specify which plugins to load for Oh My Zsh
-plugins=(git autojump npm zsh-autosuggestions)
+plugins=(git autojump npm zsh-autosuggestions zsh-syntax-highlighting)
 
 source "$HOME/zsh/aliases.zsh"
 source "$HOME/zsh/functions.zsh"
@@ -67,14 +67,14 @@ export STARSHIP_CONFIG="$HOME/.config/starship.toml"
 # eval "$(rbenv init - zsh)"
 #
 # pnpm
-export PNPM_HOME="/Users/kriscard/Library/pnpm"
+export PNPM_HOME="/Users/$USER/Library/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
 #
-export PATH=$PATH:/Users/kriscard/.spicetify
+export PATH=$PATH:/Users/$USER/.spicetify
 
 # GCC config
 export PATH="/usr/local/bin:$PATH"
@@ -90,3 +90,9 @@ fi
 ### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
 export PATH="/Users/chriscardoso/.rd/bin:$PATH"
 ### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
+#
+export FPATH="~/.config/eza/completions/zsh:$FPATH"
+
+eval "$(zoxide init zsh)"
+
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
