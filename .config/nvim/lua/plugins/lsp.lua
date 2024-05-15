@@ -7,6 +7,8 @@ return {
     -- Install neodev for better nvim configuration and plugin authoring via lsp configurations
     "folke/neodev.nvim",
     "nvimtools/none-ls.nvim",
+    "nvimtools/none-ls-extras.nvim",
+    'nvim-lua/plenary.nvim',
   },
   config = function()
     local mason = require("mason")
@@ -20,6 +22,14 @@ return {
     mason.setup({
       ui = {
         border = "rounded",
+      },
+    })
+
+    null_ls.setup({
+      sources = {
+        null_ls.builtins.formatting.stylua,
+        null_ls.builtins.completion.spell,
+        require("none-ls.diagnostics.eslint"),
       },
     })
 
