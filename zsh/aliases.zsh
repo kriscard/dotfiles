@@ -32,6 +32,14 @@ alias delete_all_branch='git branch | grep -v "master" | grep -v "main" | grep -
 # Update git submodules
 alias gsu='git submodule update --init --recursive'
 
+#git aliases
+alias ggl="git pull"
+alias ggp="git push"
+alias gst="git status"
+alias gd="git diff"
+alias gc="git commit -m"
+alias ga="git add"
+
 # Upate Stow symlink
 alias unstow="stow -D ." # Unstow
 alias addstow="stow ." # Add stow
