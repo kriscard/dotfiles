@@ -1,6 +1,7 @@
-local Util = require("kriscard.util")
-
-local map = Util.safe_keymap_set
+-- Keymaps are automatically loaded on the VeryLazy event
+-- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
+-- Add any additional keymaps here
+local map = vim.keymap.set
 
 -- Normal --
 -- Disable Space bar since it'll be used as the leader key
@@ -38,11 +39,11 @@ map("n", "<leader>cm", "<cmd>Mason<cr>", { desc = "Mason" })
 
 -- diagnostic
 local diagnostic_goto = function(next, severity)
-	local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
-	severity = severity and vim.diagnostic.severity[severity] or nil
-	return function()
-		go({ severity = severity })
-	end
+  local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
+  severity = severity and vim.diagnostic.severity[severity] or nil
+  return function()
+    go({ severity = severity })
+  end
 end
 map("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
 map("n", "]d", diagnostic_goto(true), { desc = "Next Diagnostic" })
@@ -63,7 +64,7 @@ map("n", "<leader>w|", "<C-W>v", { desc = "Split window right", remap = true })
 -- oil
 -- Map Oil to <leader>e
 map("n", "<leader>e", function()
-	require("oil").toggle_float()
+  require("oil").toggle_float()
 end, { desc = "Open Oil" })
 
 -- Center buffer while navigating
