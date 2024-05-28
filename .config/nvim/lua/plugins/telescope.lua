@@ -103,9 +103,9 @@ return {
     end
 
     -- File Pickers
-    vim.keymap.set("n", "<leader>ff", find_files_from_current_dir, { desc = "Find Files from current directory" })
+    vim.keymap.set("n", "<leader>f", find_files_from_current_dir, { desc = "Find Files from current directory" })
 
-    vim.keymap.set("n", "<leader>fF", find_files_from_root_dir, { desc = "Find Files from root directory" })
+    vim.keymap.set("n", "<leader>ff", find_files_from_root_dir, { desc = "Find Files from root directory" })
     vim.keymap.set("n", "<leader>fg", builtin.git_files, { desc = "Fuzzy search through the output of git ls-files" })
     vim.keymap.set(
       "n",
