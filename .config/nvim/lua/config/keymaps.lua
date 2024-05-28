@@ -85,3 +85,6 @@ map("n", "#", "#zz")
 -- Press 'H', 'L' to jump to start/end of a line (first/last char)
 map("v", "L", "$<left>")
 map("v", "H", "^")
+
+-- Toggle relative line numbers
+map("n", "<leader>nu", ":set relativenumber!<CR>", { noremap = true, silent = true, desc = "Toggle relative number" })

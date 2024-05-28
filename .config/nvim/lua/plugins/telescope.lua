@@ -73,7 +73,7 @@ return {
       },
       extensions = {
         fzf = {
-          case_mode = "respect_case", -- or "ignore_case" or "smart_case"
+          case_mode = "ignore_case", -- or "ignore_case" or "smart_case"
         },
         ["ui-select"] = {
           require("telescope.themes").get_dropdown({}),
