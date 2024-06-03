@@ -1,11 +1,10 @@
 {
   "extras": [
     "lazyvim.plugins.extras.coding.yanky",
-    "lazyvim.plugins.extras.editor.trouble-v3",
     "lazyvim.plugins.extras.lang.markdown"
   ],
   "news": {
-    "NEWS.md": "4964"
+    "NEWS.md": "5204"
   },
-  "version": 5
+  "version": 6
 }

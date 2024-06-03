@@ -27,6 +27,8 @@ setopt HIST_REDUCE_BLANKS        # remove superfluous blanks before recording en
 setopt SHARE_HISTORY             # share history between all sessions.
 setopt HIST_IGNORE_ALL_DUPS      # delete old recorded entry if new entry is a duplicate.
 
+
+
 # Set the path to include Homebrew binaries
 export PATH=/opt/homebrew/bin:$PATH
 
@@ -45,6 +47,7 @@ plugins=(git autojump npm zsh-autosuggestions zsh-syntax-highlighting)
 
 source "$HOME/zsh/aliases.zsh"
 source "$HOME/zsh/functions.zsh"
+source /opt/homebrew/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 
 # Set the default code editor to VS Code Insiders
 export EDITOR=nvim
