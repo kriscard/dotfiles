@@ -4,8 +4,6 @@ return {
   dependencies = {
     "williamboman/mason.nvim",
     "williamboman/mason-lspconfig.nvim",
-    -- Install neodev for better nvim configuration and plugin authoring via lsp configurations
-    "folke/neodev.nvim",
     "nvimtools/none-ls.nvim",
     "nvimtools/none-ls-extras.nvim",
     "nvim-lua/plenary.nvim",
@@ -35,20 +33,6 @@ return {
         null_ls.builtins.formatting.stylua,
         null_ls.builtins.formatting.markdownlint,
       },
-    })
-
-    -- Use neodev to configure lua_ls in nvim directories - must load before lspconfig
-    require("neodev").setup()
-    -- Lsp server list https://github.com/williamboman/mason-lspconfig.nvim#available-lsp-servers
-    --
-    lspconfig.eslint.setup({
-      --- ...
-      on_attach = function(client, bufnr)
-        vim.api.nvim_create_autocmd("BufWritePre", {
-          buffer = bufnr,
-          command = "EslintFixAll",
-        })
-      end,
     })
 
     local servers = {
@@ -82,6 +66,17 @@ return {
       yamlls = {},
     }
 
+    -- Lsp server list https://github.com/williamboman/mason-lspconfig.nvim#available-lsp-servers
+    --
+    lspconfig.eslint.setup({
+      --- ...
+      on_attach = function(_, bufnr)
+        vim.api.nvim_create_autocmd("BufWritePre", {
+          buffer = bufnr,
+          command = "EslintFixAll",
+        })
+      end,
+    })
     -- Default handlers for LSP
     local default_handlers = {
       ["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" }),
