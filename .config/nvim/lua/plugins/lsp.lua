@@ -127,6 +127,8 @@ return {
         local opts = { buffer = ev.buf }
         vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
         vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+        -- go to type definition
+        vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, opts)
         vim.keymap.set("n", "<space>wa", vim.lsp.buf.add_workspace_folder, opts)
         vim.keymap.set("n", "<space>wr", vim.lsp.buf.remove_workspace_folder, opts)
         vim.keymap.set("n", "<space>wl", function()
