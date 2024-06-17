@@ -78,3 +78,6 @@ alias lt="eza --icons --git --tree"
 alias la="eza --icons --git --all"
 alias l='eza -l --icons --group-directories-first'
 alias ll='eza -la --icons --group-directories-first'
+
+# Lazydocker alias 
+alias lzd='lazydocker'

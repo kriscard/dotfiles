@@ -53,6 +53,10 @@ map("n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev Error" })
 map("n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next Warning" })
 map("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" })
 
+--get all diagnostics using telescope
+map("n", "<leader>sd", require("telescope.builtin").diagnostics, { desc = "[S]earch [D]iagnostics" })
+-- map("n", "<leader>sd", require("telescope.builtin").git_files, { desc = "[S]earch [D]iagnostics" })
+
 -- lazygit
 map("n", "<leader>gg", "<cmd>LazyGit<cr>", { noremap = true })
 
@@ -87,4 +91,8 @@ map("v", "L", "$<left>")
 map("v", "H", "^")
 
 -- Toggle relative line numbers
-map("n", "<leader>nu", ":set relativenumber!<CR>", { noremap = true, silent = true, desc = "Toggle relative number" })
+map("n", "<leader>nn", ":set rnu<CR>", { noremap = true, silent = true, desc = "Turn on relative number" })
+map("n", "<leader>nx", ":set nornu<CR>", { noremap = true, silent = true, desc = "Turn off relative number" })
+
+-- reload lsp server
+map("n", "<leader>clr", "<cmd>LspRestart<cr>", { desc = "Reload LSP server" })
