@@ -43,4 +43,4 @@ ctrl + alt - k: yabai -m window --warp north
 ctrl + alt - l: yabai -m window --warp east
 
 # Sleep Computer
-lctrl - backspace : afplay /System/Library/Sounds/Blow.aiff && pmset displaysleepnow
+# lctrl - backspace : afplay /System/Library/Sounds/Blow.aiff && pmset displaysleepnow
