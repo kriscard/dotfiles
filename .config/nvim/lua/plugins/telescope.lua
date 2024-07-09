@@ -14,8 +14,7 @@ return {
     },
     {
       "nvim-telescope/telescope-fzf-native.nvim",
-      build = "make",
-      enabled = vim.fn.executable("make") == 1,
+      build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release",
     },
   },
   config = function()
@@ -73,17 +72,17 @@ return {
       },
       extensions = {
         fzf = {
-          case_mode = "ignore_case", -- or "ignore_case" or "smart_case"
+          case_mode = "smart_case", -- or "ignore_case" or "smart_case"
         },
         ["ui-select"] = {
           require("telescope.themes").get_dropdown({}),
         },
       },
     })
-    pcall(telescope.load_extension, "fzf")
-    pcall(telescope.load_extension, "file_browser")
-    pcall(telescope.load_extension, "ui-select")
-    pcall(telescope.load_extension, "live_grep_args")
+
+    telescope.load_extension("fzf")
+    telescope.load_extension("ui-select")
+    telescope.load_extension("live_grep_args")
 
     local builtin = require("telescope.builtin")
     local telescope_extensions = require("telescope").extensions
