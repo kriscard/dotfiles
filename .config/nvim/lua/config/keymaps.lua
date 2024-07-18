@@ -96,3 +96,12 @@ map("n", "<leader>nx", ":set nornu<CR>", { noremap = true, silent = true, desc =
 
 -- reload lsp server
 map("n", "<leader>clr", "<cmd>LspRestart<cr>", { desc = "Reload LSP server" })
+
+-- Obsidian
+map("n", "<leader>oo", "<cmd>ObsidianOpen<cr>", { desc = "Open note" })
+map("n", "<leader>on", "<cmd>ObsidianNew<cr>", { desc = "New note" })
+map("n", "<leader>ot", "<cmd>ObsidianToday<cr>", { desc = "New Daily Note" })
+map("n", "<leader>oT", "<cmd>ObsidianTemplate<cr>", { desc = "Templates list" })
+map("n", "<leader>ob", "<cmd>ObsidianBacklinks<cr>", { desc = "Backlinks" })
+map("n", "<leader>op", "<cmd>ObsidianPasteImg<cr>", { desc = "Paste image" })
+map("n", "<leader>os", "<cmd>ObsidianSearch<cr>", { desc = "Search" })

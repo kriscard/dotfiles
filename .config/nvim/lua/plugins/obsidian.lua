@@ -44,18 +44,8 @@ return {
 
       -- Create which-key mappings for common commands.
       local wk = require("which-key")
-
-      wk.register({
-        ["<leader>o"] = {
-          name = "Obsidian",
-          o = { "<cmd>ObsidianOpen<cr>", "Open note" },
-          n = { "<cmd>ObsidianNew<cr>", "New note" },
-          t = { "<cmd>ObsidianToday<cr>", "New Daily Note" },
-          T = { "<cmd>ObsidianTemplate<cr>", "Templates list" },
-          b = { "<cmd>ObsidianBacklinks<cr>", "Backlinks" },
-          p = { "<cmd>ObsidianPasteImg<cr>", "Paste image" },
-          s = { "<cmd>ObsidianSearch<cr>", "Search" },
-        },
+      wk.add({
+        { "<leader>o", group = "Obsisian" },
       })
     end,
     opts = {
