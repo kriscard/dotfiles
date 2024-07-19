@@ -24,6 +24,7 @@ require("lazy").setup({
 
     -- UI
     { import = "lazyvim.plugins.extras.ui.mini-animate" },
+    { import = "lazyvim.plugins.extras.ui.treesitter-context" },
 
     -- CODING
     { import = "lazyvim.plugins.extras.coding.copilot" },
