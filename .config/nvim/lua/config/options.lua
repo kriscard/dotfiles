@@ -65,6 +65,10 @@ opt.laststatus = 3 -- global statusline
 
 opt.conceallevel = 2 -- Config for Obsidian
 
+opt.cmdheight = 0 -- Height of command line
+
+vim.g.root_spec = { "cwd" } -- Set root to current working directory
+
 -- Set fold settings
 -- These options were reccommended by nvim-ufo
 -- See: https://github.com/kevinhwang91/nvim-ufo#minimal-configuration
