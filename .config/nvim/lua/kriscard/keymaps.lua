@@ -84,3 +84,10 @@ map("n", "#", "#zz")
 -- Press 'H', 'L' to jump to start/end of a line (first/last char)
 map("v", "L", "$<left>")
 map("v", "H", "^")
+
+-- Obsidian
+map("n", "<leader>oo", "<cmd>Obsidian<cr>", { desc = "Obsidian" })
+map("n", "<leader>ot", "<cmd>ObsidianToggle<cr>", { desc = "Obsidian Toggle" })
+map("n", "<leader>oc", "<cmd>ObsidianClose<cr>", { desc = "Obsidian Close" })
+map("n", "<leader>os", "<cmd>ObsidianSearch<cr>", { desc = "Obsidian Search" })
+map("n", "<leader>on", "<cmd>ObsidianNew<cr>", { desc = "Obsidian New" })
