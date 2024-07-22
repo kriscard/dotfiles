@@ -83,5 +83,4 @@ alias ll='eza -la --icons --group-directories-first'
 alias lzd='lazydocker'
 
 # fzf alias
-alias preview = 'fzf --preview "bat --color=always {}"'
-alias nvimf = 'nvim $(fzf --preview "bat --color=always {}")'
+alias preview="fzf --preview 'bat --color=always {}'"

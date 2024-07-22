@@ -72,8 +72,8 @@ map("n", "<leader>e", function()
 end, { desc = "Open Oil" })
 
 -- Center buffer while navigating
-map("n", "<C-u>", "<C-u>zz")
-map("n", "<C-d>", "<C-d>zz")
+-- map("n", "<C-u>", "<C-u>zz")
+-- map("n", "<C-d>", "<C-d>zz")
 map("n", "{", "{zz")
 map("n", "}", "}zz")
 map("n", "N", "Nzz")

@@ -1,7 +1,7 @@
 return {
   {
     "nvim-neotest/neotest",
-    dependencies = { "nvim-neotest/neotest-jest", "marilari88/neotest-vitest" },
+    dependencies = { "nvim-neotest/neotest-jest", "marilari88/neotest-vitest", "nvim-neotest/neotest-plenary" },
     keys = {
       {
         "<leader>tL",
@@ -29,6 +29,7 @@ return {
         })
       )
       table.insert(opts.adapters, require("neotest-vitest"))
+      table.insert(opts.adapters, require("neotest-plenary"))
     end,
   },
 }
