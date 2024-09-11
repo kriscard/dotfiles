@@ -42,12 +42,15 @@ export GIT_EDITOR=nvim
 # Set the default Oh My Zsh theme
 ZSH_THEME="robbyrussell"
 
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
 # Specify which plugins to load for Oh My Zsh
-plugins=(git autojump npm zsh-autosuggestions zsh-syntax-highlighting)
+plugins=(git autojump npm zsh-autosuggestions zsh-syntax-highlighting zsh-completions)
 
 source "$HOME/zsh/aliases.zsh"
 source "$HOME/zsh/functions.zsh"
-source /opt/homebrew/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+# source /opt/homebrew/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 
 # Set the default code editor to VS Code Insiders
 export EDITOR=nvim
@@ -90,13 +93,16 @@ if [[ $USER = 'kriscard' ]]; then
 . /opt/homebrew/opt/asdf/libexec/asdf.sh
 fi
 
+export BAT_THEME=catppuccin_macchiatto
+
 ### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
 export PATH="/Users/chriscardoso/.rd/bin:$PATH"
 ### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
 #
-export FPATH="~/.config/eza/completions/zsh:$FPATH"
+# export FPATH="~/.config/eza/completions/zsh:$FPATH"
+
+# thefuck alias
+eval $(thefuck --alias)
+eval $(thefuck --alias fk)
 
 eval "$(zoxide init zsh)"
-
-source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh

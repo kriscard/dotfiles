@@ -14,6 +14,7 @@ require("lazy").setup({
     -- import any extras modules here
     -- LANG
     { import = "lazyvim.plugins.extras.lang.typescript" },
+    { import = "lazyvim.plugins.extras.lang.astro" },
     { import = "lazyvim.plugins.extras.lang.json" },
     { import = "lazyvim.plugins.extras.lang.ruby" },
     { import = "lazyvim.plugins.extras.lang.docker" },
@@ -31,6 +32,7 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.coding.luasnip" },
     { import = "lazyvim.plugins.extras.coding.mini-surround" },
     { import = "lazyvim.plugins.extras.coding.copilot-chat" },
+    { import = "lazyvim.plugins.extras.coding.mini-comment" },
 
     -- TEST
     { import = "lazyvim.plugins.extras.dap.core" },
@@ -53,9 +55,6 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.util.startuptime" },
     { import = "lazyvim.plugins.extras.util.gitui" },
 
-    -- VSCODE
-    { import = "lazyvim.plugins.extras.vscode" },
-
     -- import/override with your plugins
     { import = "plugins" },
   },
@@ -70,6 +69,9 @@ require("lazy").setup({
   },
   install = { colorscheme = { "tokyonight", "habamax" } },
   checker = { enabled = true }, -- automatically check for plugin updates
+  plugins = {
+    ui = { border = "rounded" },
+  },
   performance = {
     rtp = {
       -- disable some rtp plugins

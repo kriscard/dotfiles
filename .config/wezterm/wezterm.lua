@@ -70,16 +70,17 @@ config.inactive_pane_hsb = {
 
 config.mouse_bindings = {
 	{
-		event = { Up = { streak = 1, button = "Left" } },
-		mods = "NONE",
-		action = act.CompleteSelection("PrimarySelection"),
-	},
-
-	{
+		-- Ctrl-click will open the link under the mouse cursor
 		event = { Up = { streak = 1, button = "Left" } },
 		mods = "CMD",
 		action = act.OpenLinkAtMouseCursor,
 	},
+
+	-- {
+	-- 	event = { Up = { streak = 1, button = "Left" } },
+	-- 	mods = "NONE",
+	-- 	action = act.CompleteSelection("PrimarySelection"),
+	-- },
 }
 
 return config

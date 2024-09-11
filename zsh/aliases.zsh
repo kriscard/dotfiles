@@ -71,13 +71,15 @@ alias K='clear'
 bindkey '\t' end-of-line
 
 # use exa
-alias ls="eza --icons --git"
+alias ls="eza --icons=always"
 alias lls="eza --icons --git --long"
 # alias ll="eza --icons --git --all --long"
 alias lt="eza --icons --git --tree"
 alias la="eza --icons --git --all"
 alias l='eza -l --icons --group-directories-first'
 alias ll='eza -la --icons --group-directories-first'
+
+alias cd="z"
 
 # Lazydocker alias 
 alias lzd='lazydocker'
