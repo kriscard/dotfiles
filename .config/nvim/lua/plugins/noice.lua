@@ -8,8 +8,8 @@ return {
     lsp = {
       hover = {
         -- Set not show a message if hover is not available
-        silent = false,
         enable = false,
+        silent = false,
       },
       override = {
         ["vim.lsp.util.convert_input_to_markdown_lines"] = true,

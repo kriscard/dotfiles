@@ -90,6 +90,7 @@ return {
     local function find_files_from_current_dir()
       local opts = {
         cwd = vim.fn.expand("%:p:h"), -- %:p:h gives the current file's directory
+        hidden = true,
       }
       require("telescope.builtin").find_files(opts)
     end
@@ -97,6 +98,7 @@ return {
     local function find_files_from_root_dir()
       local opts = {
         cwd = vim.fn.getcwd(),
+        hidden = true,
       }
       require("telescope.builtin").find_files(opts)
     end
