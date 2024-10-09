@@ -39,6 +39,9 @@ alias gst="git status"
 alias gd="git diff"
 alias gc="git commit -m"
 alias ga="git add"
+alias gco="git checkout"
+alias gb="git branch"
+alias gcm="git commit -m"
 
 # Upate Stow symlink
 alias unstow="stow -D ." # Unstow
@@ -83,6 +86,9 @@ alias cd="z"
 
 # Lazydocker alias 
 alias lzd='lazydocker'
+
+# alias for lazygit
+alias lg='lazygit'
 
 # fzf alias
 alias preview="fzf --preview 'bat --color=always {}'"
