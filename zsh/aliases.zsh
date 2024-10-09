@@ -42,6 +42,7 @@ alias ga="git add"
 alias gco="git checkout"
 alias gb="git branch"
 alias gcm="git commit -m"
+alias gf="git fetch"
 
 # Upate Stow symlink
 alias unstow="stow -D ." # Unstow
