@@ -106,3 +106,4 @@ eval $(thefuck --alias)
 eval $(thefuck --alias fk)
 
 eval "$(zoxide init zsh)"
+export EPSIO_TOKEN=6d9fbd7dbb914190bbbf6a381107ee2b

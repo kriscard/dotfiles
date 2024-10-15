@@ -156,6 +156,7 @@ return {
 				ts_ls = {},
 				yamlls = {},
 				eslint_d = {},
+				eslint = {},
 			}
 
 			-- Ensure the servers and tools above are installed
