@@ -6,6 +6,7 @@ return {
 		dependencies = "nvim-treesitter/nvim-treesitter",
 		event = "VeryLazy",
 		opts = {
+			ui = { enable = false },
 			markdown = {
 				headline_highlights = { "Headline1", "Headline2", "Headline3" },
 				bullet_highlights = { "Headline1", "Headline2", "Headline3" },
