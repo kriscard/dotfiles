@@ -1,52 +1,34 @@
 return {
-  {
-    "catppuccin/nvim",
-    lazy = true,
-    name = "catppuccin",
-    opts = {
-      integrations = {
-        aerial = true,
-        alpha = true,
-        cmp = true,
-        dashboard = true,
-        flash = true,
-        gitsigns = true,
-        headlines = true,
-        illuminate = true,
-        indent_blankline = { enabled = true },
-        leap = true,
-        lsp_trouble = true,
-        mason = true,
-        markdown = true,
-        mini = true,
-        native_lsp = {
-          enabled = true,
-          underlines = {
-            errors = { "undercurl" },
-            hints = { "undercurl" },
-            warnings = { "undercurl" },
-            information = { "undercurl" },
-          },
-        },
-        navic = { enabled = true, custom_bg = "lualine" },
-        neotest = true,
-        neotree = true,
-        noice = true,
-        notify = true,
-        semantic_tokens = true,
-        telescope = true,
-        treesitter = true,
-        treesitter_context = true,
-        which_key = true,
-      },
-    },
-  },
+	"catppuccin/nvim",
+	config = function()
+		require("catppuccin").setup({
+			integrations = {
+				cmp = true,
+				gitsigns = true,
+				harpoon = true,
+				illuminate = true,
+				indent_blankline = {
+					enabled = false,
+					scope_color = "sapphire",
+					colored_indent_levels = false,
+				},
+				mason = true,
+				native_lsp = { enabled = true },
+				notify = true,
+				nvimtree = true,
+				neotree = true,
+				symbols_outline = true,
+				telescope = true,
+				treesitter = true,
+				treesitter_context = true,
+			},
+		})
 
-  -- Configure LazyVim to load gruvbox
-  {
-    "LazyVim/LazyVim",
-    opts = {
-      colorscheme = "catppuccin-macchiato",
-    },
-  },
+		vim.cmd.colorscheme("catppuccin-macchiato")
+
+		-- Hide all semantic highlights until upstream issues are resolved (https://github.com/catppuccin/nvim/issues/480)
+		for _, group in ipairs(vim.fn.getcompletion("@lsp", "highlight")) do
+			vim.api.nvim_set_hl(0, group, {})
+		end
+	end,
 }

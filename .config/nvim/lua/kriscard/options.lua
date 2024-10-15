@@ -1,7 +1,3 @@
--- Options are automatically loaded before lazy.nvim startup
--- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
--- Add any additional options here
-
 vim.g.autoformat = true -- Enable auto format
 vim.g.mapleader = " " -- Set leader key to space
 vim.g.maplocalleader = " " -- Set leader key to space
@@ -33,7 +29,7 @@ opt.mouse = "a" -- Enable mouse mode
 opt.ignorecase = true -- Ignore case
 opt.smartcase = true -- Don't ignore case with capitals
 
-opt.updatetime = 200 -- Save changes to swap file every 200ms and trigger CursorHold
+opt.updatetime = 250 -- Save changes to swap file every 200ms and trigger CursorHold
 
 opt.completeopt = "menu,menuone,noselect" -- Customize completion menu behavior
 
@@ -43,11 +39,11 @@ opt.termguicolors = true -- True color support
 
 opt.signcolumn = "yes" -- Always show the signcolumn, otherwise it would shift the text each time
 
-opt.clipboard = "unnamed,unnamedplus" -- Sync with system clipboard
+-- opt.clipboard = "unnamed,unnamedplus" -- Sync with system clipboard
 
 opt.cursorline = true -- Enable highlighting of the current line
 
-opt.scrolloff = 8 -- Always keep 8 lines above/below cursor unless at start/end of file
+opt.scrolloff = 10 -- Always keep 8 lines above/below cursor unless at start/end of file
 
 opt.colorcolumn = "80" -- Highlight the 80th column in the window
 
@@ -65,10 +61,6 @@ opt.laststatus = 3 -- global statusline
 
 opt.conceallevel = 2 -- Config for Obsidian
 
-opt.cmdheight = 0 -- Height of command line
-
-vim.g.root_spec = { "cwd" } -- Set root to current working directory
-
 -- Set fold settings
 -- These options were reccommended by nvim-ufo
 -- See: https://github.com/kevinhwang91/nvim-ufo#minimal-configuration
@@ -76,3 +68,20 @@ opt.foldcolumn = "0"
 opt.foldlevel = 99
 opt.foldlevelstart = 99
 opt.foldenable = true
+
+-- Sync clipboard between OS and Neovim.
+--  Schedule the setting after `UiEnter` because it can increase startup-time.
+--  Remove this option if you want your OS clipboard to remain independent.
+--  See `:help 'clipboard'`
+vim.schedule(function()
+	opt.clipboard = "unnamedplus"
+end)
+
+opt.breakindent = true -- Enable break indent
+
+-- Decrease mapped sequence wait time
+-- Displays which-key popup sooner
+vim.opt.timeoutlen = 300
+
+-- Preview substitutions live, as you type!
+opt.inccommand = "split"
