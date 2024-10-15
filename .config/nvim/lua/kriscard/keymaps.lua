@@ -1,7 +1,6 @@
--- Keymaps are automatically loaded on the VeryLazy event
--- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
--- Add any additional keymaps here
-local map = vim.keymap.set
+local Util = require("kriscard.util")
+
+local map = Util.safe_keymap_set
 
 -- Normal --
 -- Disable Space bar since it'll be used as the leader key
@@ -39,11 +38,17 @@ map("n", "<leader>cm", "<cmd>Mason<cr>", { desc = "Mason" })
 
 -- diagnostic
 local diagnostic_goto = function(next, severity)
-  local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
-  severity = severity and vim.diagnostic.severity[severity] or nil
-  return function()
-    go({ severity = severity })
-  end
+	local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
+	severity = severity and vim.diagnostic.severity[severity] or nil
+	return function()
+		go({
+			severity = severity,
+			float = {
+				source = true,
+				border = "rounded",
+			},
+		})
+	end
 end
 map("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
 map("n", "]d", diagnostic_goto(true), { desc = "Next Diagnostic" })
@@ -52,11 +57,7 @@ map("n", "]e", diagnostic_goto(true, "ERROR"), { desc = "Next Error" })
 map("n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev Error" })
 map("n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next Warning" })
 map("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" })
-
---get all diagnostics using telescope
-map("n", "<leader>sd", require("telescope.builtin").diagnostics, { desc = "[S]earch [D]iagnostics" })
--- map("n", "<leader>sd", require("telescope.builtin").git_files, { desc = "[S]earch [D]iagnostics" })
-
+--
 -- lazygit
 map("n", "<leader>gg", "<cmd>LazyGit<cr>", { noremap = true })
 
@@ -68,12 +69,12 @@ map("n", "<leader>w|", "<C-W>v", { desc = "Split window right", remap = true })
 -- oil
 -- Map Oil to <leader>e
 map("n", "<leader>e", function()
-  require("oil").toggle_float()
+	require("oil").toggle_float()
 end, { desc = "Open Oil" })
 
 -- Center buffer while navigating
--- map("n", "<C-u>", "<C-u>zz")
--- map("n", "<C-d>", "<C-d>zz")
+map("n", "<C-u>", "<C-u>zz")
+map("n", "<C-d>", "<C-d>zz")
 map("n", "{", "{zz")
 map("n", "}", "}zz")
 map("n", "N", "Nzz")
@@ -87,21 +88,22 @@ map("n", "*", "*zz")
 map("n", "#", "#zz")
 
 -- Press 'H', 'L' to jump to start/end of a line (first/last char)
-map("v", "L", "$<left>")
-map("v", "H", "^")
+-- map("v", "L", "$<left>")
+-- map("v", "H", "^")
 
--- Toggle relative line numbers
-map("n", "<leader>nn", ":set rnu<CR>", { noremap = true, silent = true, desc = "Turn on relative number" })
-map("n", "<leader>nx", ":set nornu<CR>", { noremap = true, silent = true, desc = "Turn off relative number" })
+-- Diagnostic keymaps
+map("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
 
--- reload lsp server
-map("n", "<leader>clr", "<cmd>LspRestart<cr>", { desc = "Reload LSP server" })
+-- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
+-- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
+-- is not what someone will guess without a bit more experience.
+--
+-- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
+-- or just use <C-\><C-n> to exit terminal mode
+vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
--- Obsidian
-map("n", "<leader>oo", "<cmd>ObsidianOpen<cr>", { desc = "Open note" })
-map("n", "<leader>on", "<cmd>ObsidianNew<cr>", { desc = "New note" })
-map("n", "<leader>ot", "<cmd>ObsidianToday<cr>", { desc = "New Daily Note" })
-map("n", "<leader>oT", "<cmd>ObsidianTemplate<cr>", { desc = "Templates list" })
-map("n", "<leader>ob", "<cmd>ObsidianBacklinks<cr>", { desc = "Backlinks" })
-map("n", "<leader>op", "<cmd>ObsidianPasteImg<cr>", { desc = "Paste image" })
-map("n", "<leader>os", "<cmd>ObsidianSearch<cr>", { desc = "Search" })
+-- TIP: Disable arrow keys in normal mode
+map("n", "<left>", '<cmd>echo "Use h to move!!"<CR>')
+map("n", "<right>", '<cmd>echo "Use l to move!!"<CR>')
+map("n", "<up>", '<cmd>echo "Use k to move!!"<CR>')
+map("n", "<down>", '<cmd>echo "Use j to move!!"<CR>')
