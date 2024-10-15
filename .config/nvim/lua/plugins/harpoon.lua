@@ -1,6 +1,10 @@
 return {
 	"ThePrimeagen/harpoon",
 	branch = "harpoon2",
+	event = "VeryLazy",
+	dependencies = {
+		{ "nvim-lua/plenary.nvim" },
+	},
 	opts = {
 		menu = {
 			width = vim.api.nvim_win_get_width(0) - 4,
@@ -9,12 +13,14 @@ return {
 			save_on_toggle = true,
 		},
 	},
+
 	keys = function()
 		local keys = {
 			{
 				"<leader>H",
 				function()
-					require("harpoon"):list():add()
+					local harpoon = require("harpoon")
+					harpoon:list():add()
 				end,
 				desc = "Harpoon File",
 			},

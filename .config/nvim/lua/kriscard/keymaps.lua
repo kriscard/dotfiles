@@ -11,8 +11,8 @@ map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save file" })
 map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit all" })
 
 -- buffers
-map("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
-map("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next buffer" })
+vim.keymap.set("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
+vim.keymap.set("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next buffer" })
 
 -- move lines in visual mode
 map("v", "J", ":m '>+1<CR>gv=gv", { desc = "moves lines in visual mode" })
@@ -59,7 +59,7 @@ map("n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next Warning" })
 map("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" })
 --
 -- lazygit
-map("n", "<leader>gg", "<cmd>LazyGit<cr>", { noremap = true })
+map("n", "<leader>gg", "<cmd>LazyGit<cr>", { noremap = true, desc = "Lazygit (Root Dir)" })
 
 -- windows
 map("n", "<leader>wd", "<C-W>c", { desc = "Delete window", remap = true })

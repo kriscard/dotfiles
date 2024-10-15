@@ -285,6 +285,8 @@ return {
 			"onsails/lspkind.nvim", -- vs-code like pictograms
 			"windwp/nvim-ts-autotag",
 			"windwp/nvim-autopairs",
+			{ "petertriho/cmp-git", opts = {} },
+			{ "roobert/tailwindcss-colorizer-cmp.nvim", opts = {} },
 		},
 		config = function()
 			-- See `:help cmp`
@@ -371,13 +373,21 @@ return {
 			cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 
 			cmp.setup({
+
 				snippet = {
 					expand = function(args)
 						luasnip.lsp_expand(args.body)
 					end,
 				},
 				completion = { completeopt = "menu,menuone,noinsert" },
+				opts = function(_, opts)
+					local format_kinds = opts.formatting.format
 
+					opts.formatting.format = function(entry, item)
+						format_kinds(entry, item) -- add icons
+						return require("tailwindcss-colorizer-cmp").formatter(entry, item)
+					end
+				end,
 				-- For an understanding of why these mappings were
 				-- chosen, you will need to read `:help ins-completion`
 				--

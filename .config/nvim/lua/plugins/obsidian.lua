@@ -6,7 +6,6 @@ return {
 		dependencies = "nvim-treesitter/nvim-treesitter",
 		event = "VeryLazy",
 		opts = {
-			ui = { enable = false },
 			markdown = {
 				headline_highlights = { "Headline1", "Headline2", "Headline3" },
 				bullet_highlights = { "Headline1", "Headline2", "Headline3" },
@@ -60,6 +59,7 @@ return {
 				nvim_cmp = true,
 				min_chars = 2,
 			},
+			ui = { enable = false },
 			templates = {
 				subdir = "Templates",
 				date_format = "%Y-%m-%d-%a",
