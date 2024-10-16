@@ -34,6 +34,9 @@ return {
 						use_absolute_path = true,
 					},
 				},
+				config = function()
+					require("avante_lib").load()
+				end,
 			},
 			{
 				-- Make sure to set this up properly if you have lazy=true
