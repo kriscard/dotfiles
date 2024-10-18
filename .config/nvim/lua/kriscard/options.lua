@@ -1,7 +1,4 @@
 vim.g.autoformat = true -- Enable auto format
-vim.g.mapleader = " " -- Set leader key to space
-vim.g.maplocalleader = " " -- Set leader key to space
-
 local opt = vim.opt
 
 opt.relativenumber = true -- Relative line numbers
