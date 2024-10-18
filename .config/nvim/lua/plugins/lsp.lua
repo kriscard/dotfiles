@@ -150,11 +150,14 @@ return {
 				html = {},
 				jsonls = {},
 				marksman = {},
+				prettier = {},
+				prettierd = {},
 				prismals = {},
 				sqlls = {},
 				tailwindcss = {},
 				ts_ls = {},
 				yamlls = {},
+				eslint = {},
 				eslint_d = {
 					on_attach = function(_, bufnr)
 						vim.api.nvim_create_autocmd("BufWritePre", {
@@ -163,15 +166,6 @@ return {
 						})
 					end,
 				},
-				-- eslint = {
-				-- 	on_attach = function(_, bufnr)
-				-- 		vim.api.nvim_create_autocmd("BufWritePre", {
-				-- 			buffer = bufnr,
-				-- 			command = "EslintFixAll",
-				-- 		})
-				-- 	end,
-				-- },
-				prettier = {},
 			}
 
 			-- Ensure the servers and tools above are installed
@@ -215,7 +209,7 @@ return {
 		cmd = { "ConformInfo" },
 		keys = {
 			{
-				"<leader>cf",
+				"<leader>f",
 				function()
 					require("conform").format({ async = true, lsp_format = "fallback" })
 				end,
@@ -241,23 +235,29 @@ return {
 					lsp_format = lsp_format_opt,
 				}
 			end,
+			-- If this is set, Conform will run the formatter asynchronously after save.
+			-- It will pass the table to conform.format().
+			-- This can also be a function that returns the table.
+			format_after_save = {
+				lsp_fallback = true,
+			},
 			formatters_by_ft = {
 				lua = { "stylua" },
 				-- Conform can also run multiple formatters sequentially
 				-- You can use 'stop_after_first' to run the first available formatter from the list
-				javascript = { "eslint_d", "prettierd", "prettier", stop_after_first = true },
-				javascriptreact = { "eslint_d", "prettierd", "prettier", stop_after_first = true },
-				typescript = { "eslint_d", "prettierd", "prettier", stop_after_first = true },
-				typescriptreact = { "eslint_d", "prettierd", "prettier", stop_after_first = true },
-				svelte = { "eslint_d", "prettierd", "prettier", stop_after_first = true },
-				css = { "eslint_d", "prettierd", "prettier", stop_after_first = true },
-				html = { "eslint_d", "prettierd", "prettier", stop_after_first = true },
-				json = { "eslint_d", "prettierd", "prettier", stop_after_first = true },
-				yaml = { "eslint_d", "prettierd", "prettier", stop_after_first = true },
-				markdown = { "eslint_d", "prettierd", "prettier", stop_after_first = true },
-				mdx = { "eslint_d", "prettierd", "prettier", stop_after_first = true },
-				astro = { "eslint_d", "prettierd", "prettier", stop_after_first = true },
-				graphql = { "eslint_d", "prettierd", "prettier", stop_after_first = true },
+				javascript = { "prettierd", "prettier", stop_after_first = true },
+				javascriptreact = { "prettierd", "prettier", stop_after_first = true },
+				typescript = { "prettierd", "prettier", stop_after_first = true },
+				typescriptreact = { "prettierd", "prettier", stop_after_first = true },
+				svelte = { "prettierd", "prettier", stop_after_first = true },
+				css = { "prettierd", "prettier", stop_after_first = true },
+				html = { "prettierd", "prettier", stop_after_first = true },
+				json = { "prettierd", "prettier", stop_after_first = true },
+				yaml = { "prettierd", "prettier", stop_after_first = true },
+				markdown = { "prettierd", "prettier", stop_after_first = true },
+				mdx = { "prettierd", "prettier", stop_after_first = true },
+				astro = { "prettierd", "prettier", stop_after_first = true },
+				graphql = { "prettierd", "prettier", stop_after_first = true },
 				python = { "isort", "black" },
 				ruby = { "rubocop" },
 			},

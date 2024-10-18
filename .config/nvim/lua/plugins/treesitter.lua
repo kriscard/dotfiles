@@ -6,7 +6,7 @@ return {
 	-- [[ Configure Treesitter ]] See `:help nvim-treesitter`
 	dependencies = {
 		-- Additional text objects for treesitter
-		"nvim-treesitter/nvim-treesitter-textobjects",
+		-- "nvim-treesitter/nvim-treesitter-textobjects",
 	},
 	opts = {
 		ensure_installed = {
@@ -61,41 +61,41 @@ return {
 				node_decremental = "<c-backspace>",
 			},
 		},
-		textobjects = {
-			-- select = {
-			-- 	enable = true,
-			-- 	lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
-			-- 	keymaps = {
-			-- 		-- You can use the capture groups defined in textobjects.scm
-			-- 		["aa"] = "@parameter.outer",
-			-- 		["ia"] = "@parameter.inner",
-			-- 		["af"] = "@function.outer",
-			-- 		["if"] = "@function.inner",
-			-- 		["ac"] = "@class.outer",
-			-- 		["ic"] = "@class.inner",
-			-- 	},
-			-- },
-			move = {
-				enable = true,
-				set_jumps = true, -- whether to set jumps in the jumplist
-				goto_next_start = {
-					["]m"] = "@function.outer",
-					["]]"] = "@class.outer",
-				},
-				goto_next_end = {
-					["]M"] = "@function.outer",
-					["]["] = "@class.outer",
-				},
-				goto_previous_start = {
-					["[m"] = "@function.outer",
-					["[["] = "@class.outer",
-				},
-				goto_previous_end = {
-					["[M"] = "@function.outer",
-					["[]"] = "@class.outer",
-				},
-			},
-		},
+		-- textobjects = {
+		-- 	select = {
+		-- 		enable = true,
+		-- 		lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
+		-- 		keymaps = {
+		-- 			-- You can use the capture groups defined in textobjects.scm
+		-- 			["aa"] = "@parameter.outer",
+		-- 			["ia"] = "@parameter.inner",
+		-- 			["af"] = "@function.outer",
+		-- 			["if"] = "@function.inner",
+		-- 			["ac"] = "@class.outer",
+		-- 			["ic"] = "@class.inner",
+		-- 		},
+		-- 	},
+		-- 	move = {
+		-- 		enable = true,
+		-- 		set_jumps = true, -- whether to set jumps in the jumplist
+		-- 		goto_next_start = {
+		-- 			["]m"] = "@function.outer",
+		-- 			["]]"] = "@class.outer",
+		-- 		},
+		-- 		goto_next_end = {
+		-- 			["]M"] = "@function.outer",
+		-- 			["]["] = "@class.outer",
+		-- 		},
+		-- 		goto_previous_start = {
+		-- 			["[m"] = "@function.outer",
+		-- 			["[["] = "@class.outer",
+		-- 		},
+		-- 		goto_previous_end = {
+		-- 			["[M"] = "@function.outer",
+		-- 			["[]"] = "@class.outer",
+		-- 		},
+		-- 	},
+		-- },
 	},
 	-- There are additional nvim-treesitter modules that you can use to interact
 	-- with nvim-treesitter. You should go explore a few and see what interests you:
