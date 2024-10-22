@@ -1,0 +1,13 @@
+# /Users/chriscardoso/.config/tmuxinator/dotfiles.yml
+
+name: dotfiles
+root: ~/.dotfiles/
+
+startup_pane: 1
+
+windows:
+  - dotfiles:
+      layout: main-vertical
+      panes:
+        - nvim
+        - git pull

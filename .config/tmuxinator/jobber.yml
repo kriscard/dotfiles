@@ -1,0 +1,18 @@
+# /Users/chriscardoso/.config/tmuxinator/jobber.yml
+
+name: jobber
+root: ~/workspace/Jobber/
+
+windows:
+  - jobber-online:
+      layout: main-vertical
+      panes:
+        - nvim
+        - sleep 10 && dev up
+  - servers: 
+      panes:
+        - bin/jobber services down && bin/jobber services up
+        - sleep 5 && bin/rails server 
+        - sleep 5 && bin/jobber procfile
+        - sleep 5 && npm run webpack
+        - sleep 5 && npm run vite

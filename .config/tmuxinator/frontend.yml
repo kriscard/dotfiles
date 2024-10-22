@@ -1,0 +1,12 @@
+# /Users/chriscardoso/.config/tmuxinator/frontend.yml
+
+name: frontend
+root: ~/workspace/jobber-frontend/
+
+windows:
+  - jobber-frontend:
+      layout: main-vertical
+      panes:
+        - nvim
+        - ggl
+  - server: sleep 5 && cd apps/jobber-online && pnpm dev
