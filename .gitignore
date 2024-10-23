@@ -43,3 +43,6 @@ npm-debug.log
 # github-copilot
 .config/github-copilot/*
 
+# Raycast extensions
+.config/raycast/extensions/*
+
