@@ -1,6 +1,6 @@
 # Configuration for Alacritty terminal emulator
 import:
-  - ~/.config/alacritty/catppuccin/catppuccin-macchiato.toml
+  - ~/.config/alacritty/catppuccin-macchiato.toml
 
 env:
   TERM: xterm-256color
