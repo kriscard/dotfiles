@@ -44,6 +44,7 @@ github-copilot
 
 # Raycast extensions
 raycast
+.config/raycast/*
 
 .DS_Store
 tmux/plugins/
