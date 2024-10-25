@@ -22,6 +22,8 @@ local colors = {
 	highlight_high = "#cecacd",
 }
 
+config.term = "xterm-256color"
+
 config.font = wezterm.font("MonoLisa")
 config.font_size = 14.0
 
