@@ -1,7 +1,6 @@
 # tmux plugins manager
 .config/tmux/plugins/*
 
-.DS_Store
 /config/doom/*.html
 secrets.fish
 config/nvim/sessions
@@ -41,8 +40,12 @@ tscommand*.txt
 npm-debug.log
 
 # github-copilot
-.config/github-copilot/*
+github-copilot
 
 # Raycast extensions
-.config/raycast/extensions/*
+raycast
 
+.DS_Store
+tmux/plugins/
+fzf
+history.txt

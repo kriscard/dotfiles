@@ -28,6 +28,8 @@ setopt SHARE_HISTORY             # share history between all sessions.
 setopt HIST_IGNORE_ALL_DUPS      # delete old recorded entry if new entry is a duplicate.
 
 
+# config for TMUX
+export TERM=screen-256color
 
 # Set the path to include Homebrew binaries
 export PATH=/opt/homebrew/bin:$PATH
