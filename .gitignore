@@ -49,3 +49,7 @@ github-copilot
 tmux/plugins/
 fzf
 history.txt
+
+.config/dev/*
+.config/gh/*
+.config/op/*
