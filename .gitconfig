@@ -120,6 +120,7 @@
     pager = delta
     editor = vim
     whitespace = cr-at-eol
+	excludesfile = ~/.gitignore_global
 [delta]
     features = unobtrusive-line-numbers decorations
     whitespace-error-style = 22 reverse
