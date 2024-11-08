@@ -27,7 +27,7 @@ tmux/plugins/
 .config/op/*
 .config/fish/*
 .config/dev/*
-github-copilot
+.config/github-copilot/*
 .config/lazygit/*/*.patch
 
 # Doom Emacs
