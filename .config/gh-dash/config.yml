@@ -58,12 +58,6 @@ keybindings:
   prs: []
   branches: []
 repoPaths: {}
-# theme:
-#   ui:
-#     sectionsShowCount: true
-#     table:
-#       showSeparator: true
-#       compact: false
 theme:
   colors:
     text:
