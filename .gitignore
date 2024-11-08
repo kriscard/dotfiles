@@ -53,3 +53,4 @@ history.txt
 .config/dev/*
 .config/gh/*
 .config/op/*
+.config/fish/*
