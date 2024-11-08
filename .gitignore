@@ -1,56 +1,60 @@
-# tmux plugins manager
-.config/tmux/plugins/*
-
-/config/doom/*.html
-secrets.fish
-config/nvim/sessions
-foo.*
-result
-packer_compiled.vim
-packer_compiled.lua
-fish_variables
-*.session
-state.yml
-config/lazygit/*/*.patch
-*.log
-tt.*
-nvim/lua/config/env.lua
-config/environment.d/secrets.conf
+# System files
+.DS_Store
 Thumbs.db
 *~
 *.swp
 .AppleDouble
 .LSOverride
-
-# Thumbnails
-._*
-
-# Files that might appear on external disk
-.Spotlight-V100
+._*               # Thumbnails
+.Spotlight-V100   # Files that might appear on external disk
 .Trashes
 
-# project-specific vim configurations
+# Editor/IDE specific
 .vimrc.local
 .vim/coc-settings.json
-
-# typescript command garbage
 tscommand*.txt
+nvim/lua/config/env.lua
+*.session
+packer_compiled.vim
+packer_compiled.lua
+config/nvim/sessions
 
-# npm things
-npm-debug.log
-
-# github-copilot
-github-copilot
-
-# Raycast extensions
-.config/raycast/*
-
-.DS_Store
+# Application configs
+.config/tmux/plugins/*
 tmux/plugins/
-fzf
-history.txt
-
-.config/dev/*
+.config/raycast/*
 .config/gh/*
 .config/op/*
 .config/fish/*
+.config/dev/*
+github-copilot
+.config/lazygit/*/*.patch
+
+# Doom Emacs
+/config/doom/*.html
+
+# Logs and temporary files
+*.log
+foo.*
+result
+tt.*
+history.txt
+npm-debug.log
+
+# Secrets and sensitive data
+secrets.fish
+config/environment.d/secrets.conf
+state.yml
+
+# Other
+fzf
+fish_variables
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Local configuration
+.env
+.env.local
