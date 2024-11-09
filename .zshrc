@@ -13,6 +13,11 @@ if [[ $USER = 'chriscardoso' ]]; then
   source "$HOME/.dotfiles/work-config/config.zsh"
 fi
 
+## PERSONAL CONFIG SECRET ##
+if [[ $USER = 'kriscard' ]]; then
+  source "$HOME/.dotfiles/work-config/config-secret-personal.zsh"
+fi
+
 # display how long all tasks over 10 seconds take
 export REPORTTIME=10
 export KEYTIMEOUT=1              # 10ms delay for key sequences

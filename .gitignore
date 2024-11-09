@@ -60,3 +60,4 @@ fish_variables
 # Local configuration
 .env
 .env.local
+
