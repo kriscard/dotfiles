@@ -97,11 +97,4 @@ fi
 
 export BAT_THEME=catppuccin_macchiatto
 
-### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
-export PATH="/Users/chriscardoso/.rd/bin:$PATH"
-### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
-#
-# export FPATH="~/.config/eza/completions/zsh:$FPATH"
 
-eval "$(zoxide init zsh)"
-export EPSIO_TOKEN=6d9fbd7dbb914190bbbf6a381107ee2b
