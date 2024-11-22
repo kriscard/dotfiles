@@ -89,7 +89,7 @@ alias cd="z"
 alias lzd='lazydocker'
 
 # alias for lazygit
-alias lg='lazygit'
+alias lzg='lazygit'
 
 # fzf alias
 alias preview="fzf --preview 'bat --color=always {}'"
