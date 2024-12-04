@@ -29,6 +29,8 @@ tmux/plugins/
 .config/dev/*
 .config/github-copilot/*
 .config/lazygit/*/*.patch
+.config/spicetify/*
+.config/tmuxinator/*
 
 # Doom Emacs
 /config/doom/*.html
