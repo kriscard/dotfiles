@@ -13,6 +13,8 @@ opt.incsearch = true --Enable incremental searching
 
 opt.wrap = false -- Disable line wrap
 
+opt.list = false -- Show some invisible characters (tabs...)
+
 -- search settings
 opt.ignorecase = true -- ignore case when searching
 opt.smartcase = true -- if you include mixed case in your search, assumes you want case-sensitive
