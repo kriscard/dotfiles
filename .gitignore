@@ -30,7 +30,8 @@ tmux/plugins/
 .config/github-copilot/*
 .config/lazygit/*/*.patch
 .config/spicetify/*
-.config/tmuxinator/*
+.config/tmuxinator/*.yml
+
 
 # Doom Emacs
 /config/doom/*.html
