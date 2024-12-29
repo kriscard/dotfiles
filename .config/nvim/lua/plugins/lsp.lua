@@ -137,9 +137,8 @@ return {
 							},
 							diagnostics = {
 								globals = { "vim" },
+								disable = { "missing-fields" },
 							},
-							-- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-							-- diagnostics = { disable = { 'missing-fields' } },
 						},
 					},
 				},
@@ -155,10 +154,17 @@ return {
 				prismals = {},
 				sqlls = {},
 				tailwindcss = {},
-				ts_ls = {},
+				ts_ls = {
+					settings = {
+						maxTsServerMemory = 12288,
+					},
+				},
 				yamlls = {},
-				eslint = {},
-				eslint_d = {
+				eslint = {
+					cmd = { "vscode-eslint-language-server", "--stdio", "--max-old-space-size=12288" },
+					settings = {
+						format = false,
+					},
 					on_attach = function(_, bufnr)
 						vim.api.nvim_create_autocmd("BufWritePre", {
 							buffer = bufnr,
