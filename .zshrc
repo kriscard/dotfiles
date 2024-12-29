@@ -102,4 +102,6 @@ fi
 
 export BAT_THEME=catppuccin_macchiatto
 
+eval "$(zoxide init zsh)"
+
 
