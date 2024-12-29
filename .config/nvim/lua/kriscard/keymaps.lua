@@ -25,7 +25,7 @@ map("n", "<leader>S", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { 
 map("n", "<leader>nh", ":nohl<CR>", { desc = "clear search highlights" })
 
 -- close current buffer
--- map("n", "<C-x>", ":bd<CR>", { desc = "Close current buffer" })
+map("n", "<C-x>", ":bd<CR>", { desc = "Close current buffer" })
 
 -- lazy
 map("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy" })
