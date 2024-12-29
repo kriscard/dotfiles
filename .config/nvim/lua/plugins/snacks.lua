@@ -27,7 +27,6 @@ return {
 			gitbrowse = { enabled = true },
 			indent = { enabled = true },
 			input = { enabled = true },
-			lazygit = { enabled = true, configure = true },
 			notifier = {
 				enabled = true,
 				timeout = 3000,
@@ -158,13 +157,6 @@ return {
 					Snacks.lazygit.log_file()
 				end,
 				desc = "Lazygit Current File History",
-			},
-			{
-				"<leader>gg",
-				function()
-					Snacks.lazygit()
-				end,
-				desc = "Lazygit",
 			},
 			{
 				"<leader>gl",
