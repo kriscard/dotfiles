@@ -6,10 +6,6 @@ shell-integration = zsh
 
 # Font family
 font-family = MonoLisa
-font-style = Regular
-font-style-italic = Regular Italic
-font-style-bold = Bold
-font-style-bold-italic = Bold Italic
 
 # Font size
 font-size = 14
