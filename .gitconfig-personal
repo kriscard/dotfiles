@@ -1,0 +1,7 @@
+[user]
+    email = contact@christophercardoso.dev
+    name = Chris Cardoso
+    signingkey = /Users/kriscard/.ssh/id_ed25519
+    signingkey = /Users/kriscard/.ssh/id_ed25519
+[core]
+    sshCommand = ssh -i /Users/kriscard/.ssh/id_ed25519

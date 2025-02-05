@@ -1,0 +1,6 @@
+[user]
+    email = chris.ca@getjobber.com
+    name = Chris Cardoso
+    signingkey = /Users/chriscardoso/.ssh/id_ed25519
+[core]
+    sshCommand = ssh -i /Users/chriscardoso/.ssh/id_ed25519
