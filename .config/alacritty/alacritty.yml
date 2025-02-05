@@ -1,0 +1,92 @@
+# Configuration for Alacritty terminal emulator
+import:
+  - ~/.config/alacritty/catppuccin-macchiato.toml
+
+env:
+  TERM: xterm-256color
+
+shell:
+  program: /usr/bin/env
+  args:
+    - zsh
+
+window:
+  # window padding (change requires restart)
+  padding:
+    x: 2
+
+  # spread additional padding evenly around the terminal content
+  dynamic_padding: true
+  # window decoarations
+  # - full: borders and title bar
+  # - none: neither borders nor title bar
+  # - (macos) transparent: title bar, transparent background, and title bar buttons
+  # - (macos) buttonless: title bar transparent background, but no title bar buttons
+  decorations: buttonless
+  # dynamically set the window title
+  dynamic_title: true
+  # Startup mode
+  # - Windowed
+  # - Maximized
+  # - Fullscreen
+  # - SimpleFullscreen (macos only)
+  startup_mode: Windowed
+
+scrolling:
+  history: 10000
+  multiplier: 6
+
+# Font settings
+font:
+  normal:
+    family: FiraCode Nerd Font Mono
+    # family: 3270Medium Nerd Font
+    style: Regular
+  bold:
+    family: FiraCode Nerd Font Mono
+    style: Bold
+
+  italic:
+    family: FiraCode Nerd Font Mono
+    style: Bold Italic
+  # point size
+  size: 14.0
+  # extra space around each character.
+  # offset.y can be thought of as modifying the line spacing
+  # offset.x can be thought of as modifying the letter spacing
+  offset:
+    x: 0
+    y: 0
+  glyph_offset:
+    x: 0
+    y: 0
+  # thin stroke font rendering (macos)
+  # Thin strokes is suitable for retina displays. Set to false for non-retina
+  # draw bold text with bright color variants
+  draw_bold_text_with_bright_colors: true
+mouse:
+  # hide the cursor when typing
+  hide_when_typing: true
+  # save selected text to system clipboard
+  save_to_clipboard: true
+cursor:
+  # Cursor style
+  # - ▇ Block
+  # - _ Underline
+  # - | Beam
+  style: Block
+  # render the cursor as a hollow box when window is not focused
+  unfocused_hollow: true
+
+# automatically reload config upon change
+live_config_reload: true
+
+# set the backgeround opacity
+window_opacity: 0.97
+key_bindings:
+  - { key: V, mods: Control|Shift, action: Paste }
+  - { key: C, mods: Control|Shift, action: Copy }
+  - { key: Paste, action: Paste }
+  - { key: Copy, action: Copy }
+  - { key: Q, mods: Command, action: Quit }
+  - { key: W, mods: Command, action: Quit }

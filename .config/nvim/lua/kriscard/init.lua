@@ -1,0 +1,5 @@
+require("kriscard.lazy")
+require("kriscard.options")
+require("kriscard.keymaps")
+require("kriscard.util")
+require("kriscard.autocmds")
