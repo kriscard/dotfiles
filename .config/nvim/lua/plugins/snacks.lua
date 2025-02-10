@@ -12,7 +12,12 @@ return {
 		---@module 'snacks'
 		---@type snacks.Config
 		opts = {
-			bigfile = { enabled = true },
+			bigfile = {
+				notify = true,
+				-- notify = true, -- show notification when big file detected
+				size = 1.0 * 1024 * 1024, -- 1.0MB
+			},
+
 			dashboard = {
 				enabled = true, -- Add this to properly enable dashboard
 				layout = { -- Restructure the dashboard section
@@ -32,11 +37,26 @@ return {
 				enabled = true,
 				timeout = 3000,
 			},
+			picker = {},
 			quickfile = { enabled = true },
 			scope = { enabled = true },
-			statuscolumn = { enabled = true },
+			statuscolumn = {
+				-- your statuscolumn configuration comes here
+				-- or leave it empty to use the default settings
+				-- refer to the configuration section below
+				left = { "mark", "sign" }, -- priority of signs on the left (high to low)
+				right = { "fold", "git" }, -- priority of signs on the right (high to low)
+				folds = {
+					open = false, -- show open fold icons
+					git_hl = false, -- use Git Signs hl for fold icons
+				},
+				git = {
+					-- patterns to match Git signs
+					patterns = { "GitSign", "MiniDiffSign" },
+				},
+				refresh = 50, -- refresh at most every 50ms
+			},
 			styles = {
-				lazygit = {},
 				notification = {
 					wo = { wrap = true }, -- Wrap notifications
 				},
@@ -227,6 +247,28 @@ return {
 						},
 					})
 				end,
+			},
+			-- picker
+			{
+				"<leader>fc",
+				function()
+					Snacks.picker.files({ cwd = vim.fn.stdpath("config") })
+				end,
+				desc = "Find Config File",
+			},
+			{
+				"<leader>fp",
+				function()
+					Snacks.picker.projects()
+				end,
+				desc = "Projects",
+			},
+			{
+				"<leader>sq",
+				function()
+					Snacks.picker.qflist()
+				end,
+				desc = "Quickfix List",
 			},
 		},
 	},
