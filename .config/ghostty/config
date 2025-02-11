@@ -7,10 +7,6 @@ shell-integration = zsh
 # Font family
 font-family = MonoLisa
 
-# font-features
-font-feature=ss11
-font-feature=ss13
-
 # termm color
 term=xterm-256color
 
@@ -20,8 +16,6 @@ font-size = 14
 # Opacity of split windows
 unfocused-split-opacity = 0.97  
 
-# Set the background-opacity to be fully opaque
-background-opacity = 1.0
 
 # Cursor style
 cursor-style = block
@@ -35,19 +29,13 @@ copy-on-select = clipboard
 # macos options
 macos-option-as-alt = true
 macos-titlebar-proxy-icon = hidden
+macos-titlebar-style = tabs
 
-# Ghostty settings
-gtk-adwaita = false
-gtk-titlebar = false
 
 # Window settings
-window-width = 90
-window-height = 30
-window-colorspace = display-p3
-window-padding-color = background
-window-padding-balance = true
-window-padding-x = 0
 window-padding-y = 0
+window-inherit-working-directory = false
+working-directory = home
 
 # Mouse settings
 mouse-scroll-multiplier = 2
@@ -69,7 +57,4 @@ keybind = super+c=copy_to_clipboard
 keybind = super+v=paste_from_clipboard
 keybind = super+shift+c=copy_to_clipboard
 keybind = super+shift+v=paste_from_clipboard
-keybind = super+equal=increase_font_size:1
-keybind = super+minus=decrease_font_size:1
-keybind = super+zero=reset_font_size
 
