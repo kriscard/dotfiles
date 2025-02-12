@@ -7,9 +7,6 @@ shell-integration = zsh
 # Font family
 font-family = MonoLisa
 
-# termm color
-term=xterm-256color
-
 # Font size
 font-size = 14
 
