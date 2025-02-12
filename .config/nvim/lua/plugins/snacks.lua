@@ -19,7 +19,6 @@ return {
 			},
 
 			dashboard = {
-				enabled = true, -- Add this to properly enable dashboard
 				layout = { -- Restructure the dashboard section
 					sections = {
 						{ type = "header" },
@@ -28,18 +27,19 @@ return {
 					},
 				},
 			},
-			dim = { enabled = true },
-			git = { enabled = true },
-			gitbrowse = { enabled = true },
-			indent = { enabled = true },
-			input = { enabled = true },
+			dim = {},
+			git = {},
+			gitbrowse = {},
+			image = {},
+			indent = {},
+			input = {},
 			notifier = {
-				enabled = true,
 				timeout = 3000,
 			},
 			picker = {},
-			quickfile = { enabled = true },
-			scope = { enabled = true },
+			quickfile = {},
+			scope = {},
+			scroll = { enabled = false },
 			statuscolumn = {
 				-- your statuscolumn configuration comes here
 				-- or leave it empty to use the default settings
@@ -61,9 +61,11 @@ return {
 					wo = { wrap = true }, -- Wrap notifications
 				},
 			},
-			terminal = {},
-			words = { enabled = true },
-			zen = { enabled = true },
+			terminal = {
+				win = { style = "terminal", wo = { winbar = "" } },
+			},
+			words = {},
+			zen = {},
 		},
 		init = function()
 			vim.api.nvim_create_autocmd("User", {
