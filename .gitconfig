@@ -111,6 +111,7 @@
     # do not warn about missing whitespace at EOF
     whitespace = nowarn
 [core]
+	excludesfile = /Users/chriscardoso/.gitignore_global
 [delta]
     features = unobtrusive-line-numbers decorations
     whitespace-error-style = 22 reverse
