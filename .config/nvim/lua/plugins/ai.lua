@@ -9,6 +9,13 @@ return {
 			windows = {
 				width = 50, -- default % based on available width
 			},
+			provider = "claude",
+			copilot = {
+				model = "claude-3-5-sonnet-20241022",
+			},
+			file_selector = {
+				provider = "telescope",
+			},
 		},
 		-- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
 		build = "make",
