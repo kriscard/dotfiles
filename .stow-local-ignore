@@ -4,3 +4,5 @@
 ^/fish
 ^/op
 ^/.zshrc
+^/.config/raycast
+^/.config/tmux/plugins/tmux-resurrect
