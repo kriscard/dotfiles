@@ -14,10 +14,13 @@ return {
 				model = "claude-3-5-sonnet-20241022",
 			},
 			file_selector = {
-				provider = "telescope",
+				provider = "snacks",
 			},
 			web_search_engine = {
 				provider = "tavily", -- tavily, serpapi, searchapi, google or kagi
+			},
+			behaviour = {
+				enable_claude_text_editor_tool_mode = true,
 			},
 		},
 		-- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
