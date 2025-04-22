@@ -152,6 +152,12 @@ return {
 				solargraph = {},
 				bashls = {},
 				cssls = {},
+				harper_ls = {
+					linters = {
+						SentenceCapitalization = false,
+						SpellCheck = false,
+					},
+				},
 				graphql = {},
 				html = {},
 				jsonls = {},

@@ -1,6 +1,9 @@
 # reload zsh confihhhh
 alias reload!='RELOAD=1 source ~/.zshrc'
 
+#ai alias
+alias ai="claude"
+
 # Filesystem aliases
 alias ..='cd ..'
 alias ...='cd ../..'

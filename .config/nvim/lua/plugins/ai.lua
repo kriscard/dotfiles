@@ -6,21 +6,27 @@ return {
 		version = false, -- set this to "*" if you want to always pull the latest change, false to update on release
 		opts = {
 			-- add any opts here
-			windows = {
-				width = 50, -- default % based on available width
-			},
-			provider = "claude",
+			-- windows = {
+			-- 	width = 50, -- default % based on available width
+			-- },
+			-- provider = "claude",
+			-- copilot = {
+			-- 	model = "claude-3-5-sonnet-20241022",
+			-- },
+			provider = "copilot",
+			auto_suggestions_provider = "copilot",
 			copilot = {
-				model = "claude-3-5-sonnet-20241022",
+				model = "claude-3.5-sonnet",
+				temperature = 0,
+				max_tokens = 8192,
 			},
+			hints = { enabled = false },
 			file_selector = {
 				provider = "snacks",
+				provider_opts = {},
 			},
 			web_search_engine = {
 				provider = "tavily", -- tavily, serpapi, searchapi, google or kagi
-			},
-			behaviour = {
-				enable_claude_text_editor_tool_mode = true,
 			},
 		},
 		-- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
