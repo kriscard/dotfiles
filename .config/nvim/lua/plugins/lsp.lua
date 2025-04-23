@@ -151,7 +151,15 @@ return {
 				},
 				solargraph = {},
 				bashls = {},
-				cssls = {},
+				cssls = {
+					settings = {
+						css = {
+							lint = {
+								unknownAtRules = "ignore",
+							},
+						},
+					},
+				},
 				graphql = {},
 				html = {},
 				jsonls = {},

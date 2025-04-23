@@ -1,5 +1,13 @@
 return {
 	{
+		"NvChad/nvim-colorizer.lua",
+		opts = {
+			user_default_options = {
+				tailwind = true,
+			},
+		},
+	},
+	{
 		"brenoprata10/nvim-highlight-colors",
 		event = { "BufReadPre", "BufNewFile" },
 		opts = {
@@ -28,5 +36,23 @@ return {
 			---Highlight tailwind colors, e.g. 'bg-blue-500'
 			enable_tailwind = true,
 		},
+	},
+	-- TailwindCSS
+	{
+		"hrsh7th/nvim-cmp",
+		dependencies = {
+			{ "roobert/tailwindcss-colorizer-cmp.nvim", config = true },
+		},
+		opts = function()
+			require("cmp").config.formatting = {
+				format = require("tailwindcss-colorizer-cmp").formatter,
+			}
+			-- -- original LazyVim kind icon formatter
+			-- local format_kinds = opts.formatting.format
+			-- opts.formatting.format = function(entry, item)
+			-- 	format_kinds(entry, item) -- add icons
+			-- 	return require("tailwindcss-colorizer-cmp").formatter(entry, item)
+			-- end
+		end,
 	},
 }
