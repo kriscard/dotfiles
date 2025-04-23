@@ -152,12 +152,6 @@ return {
 				solargraph = {},
 				bashls = {},
 				cssls = {},
-				harper_ls = {
-					linters = {
-						SentenceCapitalization = false,
-						SpellCheck = false,
-					},
-				},
 				graphql = {},
 				html = {},
 				jsonls = {},
@@ -166,7 +160,9 @@ return {
 				prettierd = {},
 				prismals = {},
 				sqlls = {},
-				tailwindcss = {},
+				tailwindcss = {
+					filetypes = { "typescriptreact", "javascriptreact", "html", "svelte" },
+				},
 				-- ts_ls = {
 				-- 	settings = {
 				-- 		maxTsServerMemory = 12288,
@@ -457,6 +453,16 @@ return {
 					Variable = "󰀫 ",
 				},
 			})
+
+			-- Tailwindcss Colorizer
+			require("tailwindcss-colorizer-cmp").setup({
+
+				color_square_width = 2,
+			})
+
+			cmp.config.formatting = {
+				format = require("tailwindcss-colorizer-cmp").formatter,
+			}
 
 			require("nvim-autopairs").setup({})
 			-- If you want to automatically add `(` after selecting a function or method
