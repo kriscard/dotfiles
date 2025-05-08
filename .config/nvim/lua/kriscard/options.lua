@@ -1,4 +1,16 @@
 vim.g.autoformat = true -- Enable auto format
+
+-- Snacks animations
+-- Set to `false` to globally disable all snacks animations
+vim.g.snacks_animate = true
+
+-- Show the current document symbols location from Trouble in lualine
+-- You can disable this for a buffer by setting `vim.b.trouble_lualine = false`
+vim.g.trouble_lualine = true
+
+-- Fix markdown indentation settings
+vim.g.markdown_recommended_style = 0
+
 local opt = vim.opt
 
 opt.relativenumber = true -- Relative line numbers
@@ -25,20 +37,22 @@ opt.splitright = true -- Put new windows right of current
 
 opt.mouse = "a" -- Enable mouse mode
 
-opt.ignorecase = true -- Ignore case
-opt.smartcase = true -- Don't ignore case with capitals
-
-opt.updatetime = 250 -- Save changes to swap file every 200ms and trigger CursorHold
+opt.updatetime = 200 -- Save changes to swap file every 200ms and trigger CursorHold
 
 opt.completeopt = "menu,menuone,noselect" -- Customize completion menu behavior
 
 opt.undofile = true -- Enable persistent undo history
+opt.undolevels = 10000
 
 opt.termguicolors = true -- True color support
 
 opt.signcolumn = "yes" -- Always show the signcolumn, otherwise it would shift the text each time
 
 -- opt.clipboard = "unnamed,unnamedplus" -- Sync with system clipboard
+
+-- only set clipboard if not in ssh, to make sure the OSC 52
+-- integration works automatically. Requires Neovim >= 0.10.0
+opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus" -- Sync with system clipboard
 
 opt.cursorline = true -- Enable highlighting of the current line
 
@@ -80,7 +94,31 @@ opt.breakindent = true -- Enable break indent
 
 -- Decrease mapped sequence wait time
 -- Displays which-key popup sooner
-vim.opt.timeoutlen = 300
+opt.timeoutlen = vim.g.vscode and 1000 or 300 -- Lower than default (1000) to quickly trigger which-key
 
 -- Preview substitutions live, as you type!
 opt.inccommand = "split"
+
+opt.fillchars = {
+  foldopen = "",
+  foldclose = "",
+  fold = " ",
+  foldsep = " ",
+  diff = "╱",
+  eob = " ",
+}
+
+opt.jumpoptions = "view"
+opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" }
+opt.shiftround = true -- Round indent
+opt.shortmess:append({ W = true, I = true, c = true, C = true })
+opt.showmode = false -- Dont show mode since we have a statusline
+opt.sidescrolloff = 8 -- Columns of context
+opt.smartindent = true -- Insert indents automatically
+opt.spelllang = { "en" }
+opt.statuscolumn = [[%!v:lua.require'snacks.statuscolumn'.get()]]
+opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
+opt.wildmode = "longest:full,full" -- Command-line completion mode
+opt.winminwidth = 5 -- Minimum window width
+opt.foldmethod = "indent"
+opt.foldtext = "v:lua.require'snacks.fold'.get()"
