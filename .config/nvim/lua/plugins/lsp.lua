@@ -154,9 +154,9 @@ return {
 				-- 		inlayHints = ts_ls_inlay_hints,
 				-- 	},
 				-- },
-				-- ts_ls = {
-				-- 	enabled = false,
-				-- },
+				ts_ls = {
+					enabled = false,
+				},
 				vtsls = {
 					-- explicitly add default filetypes, so that we can extend
 					-- them in related extras
