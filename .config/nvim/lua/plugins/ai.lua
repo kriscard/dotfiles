@@ -9,19 +9,19 @@ return {
 			-- windows = {
 			-- 	width = 50, -- default % based on available width
 			-- },
-			-- provider = "claude",
-			-- copilot = {
-			-- 	model = "claude-3-5-sonnet-20241022",
-			-- },
-			provider = "copilot",
-			auto_suggestions_provider = "copilot",
+			provider = "claude",
 			copilot = {
-				model = "claude-3.5-sonnet",
-				temperature = 0,
-				max_tokens = 8192,
+				model = "claude-3-7-sonnet-20250219",
 			},
+			-- provider = "copilot",
+			auto_suggestions_provider = "copilot",
+			-- copilot = {
+			-- 	model = "claude-3.5-sonnet",
+			-- 	temperature = 0,
+			-- 	max_tokens = 8192,
+			-- },
 			hints = { enabled = false },
-			file_selector = {
+			selector = {
 				provider = "snacks",
 				provider_opts = {},
 			},
