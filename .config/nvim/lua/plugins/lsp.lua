@@ -61,6 +61,11 @@ return {
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
 			capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 
+			local handlers = {
+				["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" }),
+				["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" }),
+			}
+
 			local ts_ls_inlay_hints = {
 				includeInlayEnumMemberValueHints = true, -- Shows numeric values next to enum members (e.g., enum Color { Red /* = 0 */ })
 				includeInlayFunctionLikeReturnTypeHints = true, -- Displays return type hints for functions (e.g., function getData() /* : string */ {})
@@ -107,9 +112,11 @@ return {
 				tailwindcss = {
 					filetypes = { "typescriptreact", "javascriptreact", "html", "svelte" },
 				},
-				ts_ls = {
-					enabled = false,
-				},
+				rust_analyzer = {},
+				gopls = {},
+				dockerls = {},
+				docker_compose_language_service = {},
+				emmet_ls = {},
 				vtsls = {
 					-- explicitly add default filetypes, so that we can extend
 					-- them in related extras
@@ -185,7 +192,16 @@ return {
 			})
 
 			require("mason").setup({ ui = { border = "rounded" } })
-			require("mason-lspconfig").setup()
+			require("mason-lspconfig").setup({
+				handlers = {
+					function(server_name)
+						local server = servers[server_name] or {}
+						server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
+						server.handlers = handlers
+						require("lspconfig")[server_name].setup(server)
+					end,
+				},
+			})
 
 			-- Configure borders for LspInfo UI and diagnostics
 			require("lspconfig.ui.windows").default_options.border = "rounded"
@@ -390,15 +406,15 @@ return {
 				},
 			})
 
-			-- -- Tailwindcss Colorizer
-			-- require("tailwindcss-colorizer-cmp").setup({
-			--
-			-- 	color_square_width = 2,
-			-- })
-			--
-			-- cmp.config.formatting = {
-			-- 	format = require("tailwindcss-colorizer-cmp").formatter,
-			-- }
+			-- Tailwindcss Colorizer
+			require("tailwindcss-colorizer-cmp").setup({
+
+				color_square_width = 2,
+			})
+
+			cmp.config.formatting = {
+				format = require("tailwindcss-colorizer-cmp").formatter,
+			}
 
 			require("nvim-autopairs").setup({})
 			-- If you want to automatically add `(` after selecting a function or method

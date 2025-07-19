@@ -87,7 +87,7 @@ alias la="eza --icons --git --all"
 alias l='eza -l --icons --group-directories-first'
 alias ll='eza -la --icons --group-directories-first'
 
-alias cd="z"
+# alias cd="z" // was causing issue with Claude Code
 
 # Lazydocker alias 
 alias lzd='lazydocker'
