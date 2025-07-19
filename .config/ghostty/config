@@ -55,3 +55,4 @@ keybind = super+v=paste_from_clipboard
 keybind = super+shift+c=copy_to_clipboard
 keybind = super+shift+v=paste_from_clipboard
 
+keybind = shift+enter=text:\n

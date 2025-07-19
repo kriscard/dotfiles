@@ -45,6 +45,8 @@ startup_pane: 1
 # attach: false
 
 windows:
-  - editor: nvim
-  - console: npm run preview
-  - git:
+  - portfolio:
+      layout: main-vertical
+      panes:
+        - nvim
+        - git pull
