@@ -2,124 +2,131 @@
 return {
 	{
 		"folke/lazydev.nvim",
-		ft = "lua", -- only load on lua files
+		ft = "lua",
 		opts = {
 			library = {
-				-- See the configuration section for more details
-				-- Load luvit types when the `vim.uv` word is found
 				{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
 			},
 		},
 	},
 	{ "Bilal2453/luvit-meta", lazy = true },
+
+	-- ──────────────────────────────────────────────────────────────────────────────
+	-- LSP
+	-- ──────────────────────────────────────────────────────────────────────────────
 	{
-		-- Main LSP Configuration
 		"neovim/nvim-lspconfig",
 		dependencies = {
-			-- Automatically install LSPs and related tools to stdpath for Neovim
 			"mason.nvim",
 			"williamboman/mason-lspconfig.nvim",
 			"WhoIsSethDaniel/mason-tool-installer.nvim",
-
-			-- Useful status updates for LSP.
-			-- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
 			{ "j-hui/fidget.nvim", opts = {} },
-
-			-- Allows extra capabilities provided by nvim-cmp
-			"hrsh7th/cmp-nvim-lsp",
+			"saghen/blink.compat", -- capabilities shim for Blink
 		},
 		config = function()
+			-- Configure rounded borders for LSP floating windows
+			require("lspconfig.ui.windows").default_options.border = "rounded"
+
+			-- Helper: apply first returned code actions for a given context
+			local function apply_code_actions(bufnr, only, timeout_ms)
+				bufnr = bufnr or vim.api.nvim_get_current_buf()
+				local params = vim.lsp.util.make_range_params(0, "utf-8")
+				local context = { only = only, diagnostics = vim.diagnostic.get(bufnr) }
+				params = vim.tbl_extend("force", params, { context = context })
+				local results = vim.lsp.buf_request_sync(bufnr, "textDocument/codeAction", params, timeout_ms or 2000)
+				if not results then
+					return
+				end
+				for client_id, res in pairs(results) do
+					for _, action in ipairs(res.result or {}) do
+						if action.edit then
+							vim.lsp.util.apply_workspace_edit(action.edit, "utf-8")
+						end
+						if action.command then
+							local client = vim.lsp.get_client_by_id(client_id)
+							if client then
+								client.request(action.command, bufnr)
+							end
+						end
+					end
+				end
+			end
+
+			-- Organize imports: VTSLS organize → ESLint fix-all (simple-import-sort)
+			local function organize_imports_react(bufnr)
+				apply_code_actions(bufnr, { "source.organizeImports" }, 2000)  -- VTSLS
+				vim.defer_fn(function()
+					apply_code_actions(bufnr, { "source.fixAll.eslint" }, 3000)   -- ESLint (simple-import-sort)
+				end, 100)
+			end
+
+			-- Keymaps on LSP attach
 			vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
-
 				callback = function(event)
-					-- Map is a function that lets us more easily define mappings specific
-					-- for LSP related items. It sets the mode, buffer and description for us each time.
 					local map = function(keys, func, desc, mode)
 						mode = mode or "n"
 						vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
 					end
-
-					-- Rename the variable under your cursor.
-					--  Most Language Servers support renaming across files, etc.
 					map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
-
-					-- Execute a code action, usually your cursor needs to be on top of an error
-					-- or a suggestion from your LSP for this to activate.
 					map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction", { "n", "x" })
-
-					-- WARN: This is not Goto Definition, this is Goto Declaration.
-					--  For example, in C this would take you to the header.
+					map("<leader>oi", function()
+						organize_imports_react(event.buf)
+					end, "[O]rganize [I]mports")
+					map("<leader>rf", function()
+						vim.lsp.buf.code_action({ context = { only = { "refactor" }, diagnostics = {} } })
+					end, "[R]e[f]actor")
 					map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+					map("<leader>gsd", vim.lsp.buf.definition, "[G]o to [S]ource [D]efinition")
 				end,
 			})
 
-			-- LSP servers and clients are able to communicate to each other what features they support.
-			--  By default, Neovim doesn't support everything that is in the LSP specification.
-			--  When you add nvim-cmp, luasnip, etc. Neovim now has *more* capabilities.
-			--  So, we create new capabilities with nvim cmp, and then broadcast that to the servers.
+			-- Capabilities
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
-			capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
+			local ok, blink_capabilities = pcall(function()
+				return require("blink.compat").get_lsp_capabilities()
+			end)
+			if ok and blink_capabilities then
+				capabilities = vim.tbl_deep_extend("force", capabilities, blink_capabilities)
+			end
 
-			local handlers = {
-				["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" }),
-				["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" }),
-			}
-
+			-- TS inlay hints preset
 			local ts_ls_inlay_hints = {
-				includeInlayEnumMemberValueHints = true, -- Shows numeric values next to enum members (e.g., enum Color { Red /* = 0 */ })
-				includeInlayFunctionLikeReturnTypeHints = true, -- Displays return type hints for functions (e.g., function getData() /* : string */ {})
-				includeInlayFunctionParameterTypeHints = true, -- Shows parameter type hints in function declarations (e.g., function process(data /* : string */))
-				includeInlayParameterNameHints = "all", -- Displays parameter names at function call sites (e.g., calculate(/* amount: */ 100))
-				includeInlayParameterNameHintsWhenArgumentMatchesName = true, -- Shows parameter names even when they match argument names (e.g., process(/* data: */ data))
-				includeInlayPropertyDeclarationTypeHints = true, -- Displays type hints for property declarations (e.g., class User { name /* : string */ })
-				includeInlayVariableTypeHints = true, -- Shows type hints for variables (e.g., const user /* : User */ = getUser())
-				includeInlayVariableTypeHintsWhenTypeMatchesName = true, -- Displays type hints even when variable name matches type (e.g., const user /* : User */ = new User())
+				includeInlayEnumMemberValueHints = true,
+				includeInlayFunctionLikeReturnTypeHints = true,
+				includeInlayFunctionParameterTypeHints = true,
+				includeInlayParameterNameHints = "all",
+				includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+				includeInlayPropertyDeclarationTypeHints = true,
+				includeInlayVariableTypeHints = true,
+				includeInlayVariableTypeHintsWhenTypeMatchesName = true,
 			}
 
 			local servers = {
 				lua_ls = {
 					settings = {
 						Lua = {
-							completion = {
-								callSnippet = "Replace",
-							},
-							diagnostics = {
-								globals = { "vim" },
-								disable = { "missing-fields" },
-							},
+							completion = { callSnippet = "Replace" },
+							diagnostics = { globals = { "vim" }, disable = { "missing-fields" } },
 						},
 					},
 				},
 				bashls = {},
-				cssls = {
-					settings = {
-						css = {
-							lint = {
-								unknownAtRules = "ignore",
-							},
-						},
-					},
-				},
+				cssls = { settings = { css = { lint = { unknownAtRules = "ignore" } } } },
 				graphql = {},
 				html = {},
 				jsonls = {},
 				marksman = {},
-				prettier = {},
-				prettierd = {},
 				prismals = {},
 				sqlls = {},
-				tailwindcss = {
-					filetypes = { "typescriptreact", "javascriptreact", "html", "svelte" },
-				},
+				tailwindcss = { filetypes = { "typescriptreact", "javascriptreact", "html", "svelte" } },
 				rust_analyzer = {},
 				gopls = {},
 				dockerls = {},
 				docker_compose_language_service = {},
-				emmet_ls = {},
+				-- Keep Emmet out of TSX/JSX
+				emmet_ls = { filetypes = { "html", "css", "scss", "sass", "less" } },
 				vtsls = {
-					-- explicitly add default filetypes, so that we can extend
-					-- them in related extras
 					filetypes = {
 						"javascript",
 						"javascriptreact",
@@ -134,7 +141,9 @@ return {
 						"pnpm-lock.yaml",
 						"yarn.lock",
 						"package-lock.json",
-						"bun.lockb"
+						"bun.lockb",
+						"lerna.json",
+						"nx.json"
 					),
 					settings = {
 						complete_function_calls = true,
@@ -143,46 +152,97 @@ return {
 							autoUseWorkspaceTsdk = true,
 							experimental = {
 								maxInlayHintLength = 30,
-								completion = {
-									enableServerSideFuzzyMatch = true,
-								},
+								completion = { enableServerSideFuzzyMatch = true },
 							},
 						},
 						typescript = {
 							updateImportsOnFileMove = { enabled = "always" },
 							suggest = {
 								completeFunctionCalls = true,
+								includeCompletionsForModuleExports = true,
+								includeCompletionsForImportStatements = true,
 							},
 							inlayHints = ts_ls_inlay_hints,
+							preferences = {
+								importModuleSpecifierPreference = "non-relative",
+								includePackageJsonAutoImports = "auto",
+							},
 							maxTsServerMemory = 12288,
+							watchOptions = {
+								excludeDirectories = { "**/node_modules", "**/.git", "**/dist", "**/.next", "**/build" },
+							},
+						},
+						javascript = {
+							suggest = {
+								completeFunctionCalls = true,
+								includeCompletionsForModuleExports = true,
+								includeCompletionsForImportStatements = true,
+							},
+							preferences = {
+								importModuleSpecifierPreference = "non-relative",
+								includePackageJsonAutoImports = "auto",
+							},
 						},
 					},
 				},
+				mdx_analyzer = { filetypes = { "mdx" } }, -- optional; remove if unused
+				biome = {
+					filetypes = {
+						"javascript",
+						"javascriptreact",
+						"json",
+						"jsonc",
+						"typescript",
+						"typescriptreact",
+						"css",
+					},
+					single_file_support = false,
+					root_dir = require("lspconfig").util.root_pattern("biome.json", "biome.jsonc"),
+				},
 				yamlls = {},
-				stylua = {},
+				unocss = {
+					filetypes = {
+						"html",
+						"javascriptreact",
+						"rescript",
+						"typescriptreact",
+						"vue",
+						"svelte",
+						"astro",
+						"css",
+						"postcss",
+						"sass",
+						"scss",
+						"stylus",
+					},
+				},
+				stylelint_lsp = {
+					filetypes = { "css", "scss", "sass", "less", "postcss" },
+					settings = { stylelintplus = { autoFixOnSave = true, autoFixOnFormat = true } },
+				},
 				eslint = {
 					cmd = { "vscode-eslint-language-server", "--stdio", "--max-old-space-size=12288" },
 					settings = {
-						-- helps eslint find the eslintrc when it's placed in a subfolder instead of the cwd root
 						workingDirectories = { mode = "auto" },
 						format = true,
 					},
 					on_attach = function(_, bufnr)
-						vim.api.nvim_create_autocmd("BufWritePre", {
-							buffer = bufnr,
-							command = "EslintFixAll",
-						})
+						vim.api.nvim_create_autocmd("BufWritePre", { buffer = bufnr, command = "EslintFixAll" })
 					end,
 				},
 			}
 
-			-- You can add other tools here that you want Mason to install
-			-- for you, so that they are available from within Neovim.
-			local ensure_installed = vim.tbl_keys(servers or {})
+			local ensure_installed = vim.tbl_keys(servers)
 			vim.list_extend(ensure_installed, {
-				"stylua", -- Used to format Lua code
+				"stylua",
+				"prettier",
+				"prettierd",
+				"@unocss/language-server",
+				"stylelint-lsp",
+				"@biomejs/biome",
 			})
 
+			require("mason").setup({ ui = { border = "rounded" } })
 			require("mason-tool-installer").setup({
 				auto_update = true,
 				run_on_start = true,
@@ -191,32 +251,25 @@ return {
 				ensure_installed = ensure_installed,
 			})
 
-			require("mason").setup({ ui = { border = "rounded" } })
 			require("mason-lspconfig").setup({
 				handlers = {
 					function(server_name)
+						-- prefer vtsls over ts_ls to avoid conflicts
+						if server_name == "ts_ls" then
+							return
+						end
 						local server = servers[server_name] or {}
 						server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-						server.handlers = handlers
 						require("lspconfig")[server_name].setup(server)
 					end,
 				},
 			})
 
-			-- Configure borders for LspInfo UI and diagnostics
-			require("lspconfig.ui.windows").default_options.border = "rounded"
 			vim.diagnostic.config({
 				float = { border = "rounded" },
 				underline = true,
 				update_in_insert = false,
-				virtual_text = {
-					spacing = 4,
-					source = "if_many",
-					prefix = "●",
-					-- this will set set the prefix to a function that returns the diagnostics icon based on the severity
-					-- this only works on a recent 0.10.0 build. Will be set to "●" when not supported
-					-- prefix = "icons",
-				},
+				virtual_text = { spacing = 4, source = "if_many", prefix = "●" },
 				severity_sort = true,
 				signs = {
 					text = {
@@ -229,8 +282,9 @@ return {
 			})
 		end,
 	},
-
-	-- Autoformat
+	-- ──────────────────────────────────────────────────────────────────────────────
+	-- Autoformat (Prettier, Stylua)
+	-- ──────────────────────────────────────────────────────────────────────────────
 	{
 		"stevearc/conform.nvim",
 		event = { "BufWritePre" },
@@ -247,16 +301,8 @@ return {
 		},
 		opts = {
 			notify_on_error = false,
-			default_format_opts = {
-				async = true,
-				timeout_ms = 500,
-				lsp_format = "fallback",
-			},
-			format_after_save = {
-				async = true,
-				timeout_ms = 500,
-				lsp_format = "fallback",
-			},
+			default_format_opts = { async = true, timeout_ms = 500, lsp_format = "fallback" },
+			format_after_save = { async = true, timeout_ms = 500, lsp_format = "fallback" },
 			formatters_by_ft = {
 				javascript = { "prettierd", "prettier", stop_after_first = true },
 				typescript = { "prettierd", "prettier", stop_after_first = true },
@@ -274,251 +320,82 @@ return {
 		},
 	},
 
-	{ -- Autocompletion
-		"hrsh7th/nvim-cmp",
-		event = "InsertEnter",
+	-- ──────────────────────────────────────────────────────────────────────────────
+	-- Blink (snappy completion)
+	-- ──────────────────────────────────────────────────────────────────────────────
+	{
+		"saghen/blink.cmp",
+		version = "*",
 		dependencies = {
+			"L3MON4D3/LuaSnip",
+			"rafamadriz/friendly-snippets",
+			"saghen/blink.compat",
+			-- optional extra sources used below:
+			"moyiz/blink-emoji.nvim",
+			"Kaiser-Yang/blink-cmp-dictionary",
+			"Kaiser-Yang/blink-cmp-git",
+		},
+		opts = {
+			keymap = {
+				preset = "default",
+				["<CR>"] = { "accept", "fallback" }, -- no auto-select
+				["<C-Space>"] = { "show" },
+				["<C-n>"] = { "select_next" },
+				["<C-p>"] = { "select_prev" },
+				["<C-l>"] = { "snippet_forward" },
+				["<C-h>"] = { "snippet_backward" },
+			},
 
-			-- Snippet Engine & its associated nvim-cmp source
-			{
-				"L3MON4D3/LuaSnip",
-				build = (function()
-					-- Build Step is needed for regex support in snippets.
-					-- This step is not supported in many windows environments.
-					-- Remove the below condition to re-enable on windows.
-					if vim.fn.has("win32") == 1 or vim.fn.executable("make") == 0 then
-						return
-					end
-					return "make install_jsregexp"
-				end)(),
-				dependencies = {
-					-- `friendly-snippets` contains a variety of premade snippets.
-					--    See the README about individual language/framework/plugin snippets:
-					--    https://github.com/rafamadriz/friendly-snippets
-					{
-						"rafamadriz/friendly-snippets",
-						config = function()
-							require("luasnip.loaders.from_vscode").lazy_load()
-						end,
+			performance = { debounce = 40, throttle = 20, fetching_timeout = 200, max_view_entries = 40 },
+
+			completion = {
+				list = { selection = { preselect = false, auto_insert = false } },
+				accept = {
+					auto_brackets = {
+						enabled = true,
+						kind_resolution = { enabled = true }, -- ✅ must be a table
+						semantic_token_resolution = { enabled = true }, -- ✅ must be a table
+					},
+				},
+				documentation = { auto_show = true, auto_show_delay_ms = 400 },
+				ghost_text = { enabled = true, show_with_menu = false },
+				menu = {
+					draw = {
+						columns = { { "label", "label_description", gap = 1 }, { "kind_icon", "kind" } },
 					},
 				},
 			},
-			"hrsh7th/cmp-emoji",
-			"saadparwaiz1/cmp_luasnip",
-			-- Adds other completion capabilities.
-			--  nvim-cmp does not ship with all sources by default. They are split
-			--  into multiple repos for maintenance purposes.
-			"hrsh7th/cmp-nvim-lsp",
-			"hrsh7th/cmp-path",
-			"hrsh7th/cmp-buffer",
-			"onsails/lspkind.nvim", -- vs-code like pictograms
-			"windwp/nvim-ts-autotag",
-			"windwp/nvim-autopairs",
-			{ "petertriho/cmp-git", opts = {} },
-			{ "roobert/tailwindcss-colorizer-cmp.nvim", opts = {} },
-		},
-		opts = function(_, opts)
-			opts.sources = opts.sources or {}
-			table.insert(opts.sources, {
-				name = "lazydev",
-				group_index = 0, -- set group index to 0 to skip loading LuaLS completions
-			})
-			table.insert(opts.sources, { name = "emoji" })
-		end,
-		config = function()
-			-- See `:help cmp`
-			local cmp = require("cmp")
-			local luasnip = require("luasnip")
-			local lspkind = require("lspkind")
 
-			-- loads vscode style snippets from installed plugins (e.g. friendly-snippets)
-			require("luasnip.loaders.from_vscode").lazy_load()
-
-			cmp.event:on("menu_opened", function()
-				vim.b.copilot_suggestion_hidden = true
-			end)
-
-			cmp.event:on("menu_closed", function()
-				vim.b.copilot_suggestion_hidden = false
-			end)
-
-			luasnip.config.setup({})
-			luasnip.filetype_extend("ruby", { "rails" })
-			luasnip.filetype_extend("typescript", { "tsdoc" })
-			luasnip.filetype_extend("javascript", { "jsdoc" })
-			luasnip.filetype_extend("lua", { "luadoc" })
-			luasnip.filetype_extend("python", { "pydoc" })
-			luasnip.filetype_extend("rust", { "rustdoc" })
-			luasnip.filetype_extend("cs", { "csharpdoc" })
-			luasnip.filetype_extend("java", { "javadoc" })
-			luasnip.filetype_extend("c", { "cdoc" })
-			luasnip.filetype_extend("cpp", { "cppdoc" })
-			luasnip.filetype_extend("php", { "phpdoc" })
-			luasnip.filetype_extend("kotlin", { "kdoc" })
-			luasnip.filetype_extend("ruby", { "rdoc" })
-			luasnip.filetype_extend("sh", { "shelldoc" })
-
-			-- setup() is also available as an alias
-			-- Setup icons
-			lspkind.init({
-				mode = "symbol_text",
-				preset = "codicons",
-				symbol_map = {
-					Array = " ",
-					Boolean = "󰨙 ",
-					Class = " ",
-					Codeium = "󰘦 ",
-					Color = " ",
-					Control = " ",
-					Collapsed = " ",
-					Constant = "󰏿 ",
-					Constructor = " ",
-					Copilot = " ",
-					Enum = " ",
-					EnumMember = " ",
-					Event = " ",
-					Field = " ",
-					File = " ",
-					Folder = " ",
-					Function = "󰊕 ",
-					Interface = " ",
-					Key = " ",
-					Keyword = " ",
-					Method = "󰊕 ",
-					Module = " ",
-					Namespace = "󰦮 ",
-					Null = " ",
-					Number = "󰎠 ",
-					Object = " ",
-					Operator = " ",
-					Package = " ",
-					Property = " ",
-					Reference = " ",
-					Snippet = "",
-					String = " ",
-					Struct = "󰆼 ",
-					TabNine = "󰏚 ",
-					Text = " ",
-					TypeParameter = " ",
-					Unit = " ",
-					Value = " ",
-					Variable = "󰀫 ",
-				},
-			})
-
-			-- Tailwindcss Colorizer
-			require("tailwindcss-colorizer-cmp").setup({
-
-				color_square_width = 2,
-			})
-
-			cmp.config.formatting = {
-				format = require("tailwindcss-colorizer-cmp").formatter,
-			}
-
-			require("nvim-autopairs").setup({})
-			-- If you want to automatically add `(` after selecting a function or method
-			local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-			cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
-
-			cmp.setup({
-
-				snippet = {
-					expand = function(args)
-						luasnip.lsp_expand(args.body)
-					end,
-				},
-				completion = { completeopt = "menu,menuone,noinsert" },
-				opts = function(_, opts)
-					local format_kinds = opts.formatting.format
-
-					opts.formatting.format = function(entry, item)
-						format_kinds(entry, item) -- add icons
-						return require("tailwindcss-colorizer-cmp").formatter(entry, item)
-					end
-				end,
-				-- For an understanding of why these mappings were
-				-- chosen, you will need to read `:help ins-completion`
-				--
-				-- No, but seriously. Please read `:help ins-completion`, it is really good!
-				mapping = cmp.mapping.preset.insert({
-					-- Select the [n]ext item
-					["<C-n>"] = cmp.mapping.select_next_item(),
-
-					-- Select the [p]revious item
-					["<C-p>"] = cmp.mapping.select_prev_item(),
-
-					-- Scroll the documentation window [b]ack / [f]orward
-					["<C-b>"] = cmp.mapping.scroll_docs(-4),
-					["<C-f>"] = cmp.mapping.scroll_docs(4),
-
-					-- Accept ([y]es) the completion.
-					--  This will auto-import if your LSP supports it.
-					--  This will expand snippets if the LSP sent a snippet.
-					["<C-y>"] = cmp.mapping.confirm({ select = true }),
-
-					-- If you prefer more traditional completion keymaps,
-					-- you can uncomment the following lines
-					["<CR>"] = cmp.mapping.confirm({ select = true }),
-					-- ["<Tab>"] = cmp.mapping.select_next_item(),
-					-- ["<S-Tab>"] = cmp.mapping.select_prev_item(),
-
-					-- Manually trigger a completion from nvim-cmp.
-					--  Generally you don't need this, because nvim-cmp will display
-					--  completions whenever it has completion options available.
-					["<C-Space>"] = cmp.mapping.complete({}),
-
-					-- Think of <c-l> as moving to the right of your snippet expansion.
-					--  So if you have a snippet that's like:
-					--  function $name($args)
-					--    $body
-					--  end
-					--
-					-- <c-l> will move you to the right of each of the expansion locations.
-					-- <c-h> is similar, except moving you backwards.
-					["<C-l>"] = cmp.mapping(function()
-						if luasnip.expand_or_locally_jumpable() then
-							luasnip.expand_or_jump()
-						end
-					end, { "i", "s" }),
-					["<C-h>"] = cmp.mapping(function()
-						if luasnip.locally_jumpable(-1) then
-							luasnip.jump(-1)
-						end
-					end, { "i", "s" }),
-
-					-- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
-					--    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
-				}),
-				sources = {
-					{
-						name = "lazydev",
-						-- set group index to 0 to skip loading LuaLS completions as lazydev recommends it
-						group_index = 0,
+			sources = {
+				default = { "snippets", "lsp", "path", "buffer", "emoji", "git", "dictionary" },
+				per_filetype = { lua = { inherit_defaults = true, "lazydev" } },
+				providers = {
+					lazydev = { module = "lazydev.integrations.blink" },
+					emoji = { module = "blink-emoji" },
+					git = { module = "blink-cmp-git" },
+					dictionary = {
+						module = "blink-cmp-dictionary",
+						name = "Dict",
+						score_offset = 20,
+						max_items = 8,
+						min_keyword_length = 3,
+						opts = {
+							dictionary_directories = { vim.fn.expand("~/.config/nvim/dictionaries") },
+							dictionary_files = {
+								vim.fn.expand("~/.config/nvim/spell/en.utf-8.add"),
+								vim.fn.expand("~/.config/nvim/spell/es.utf-8.add"),
+							},
+						},
 					},
-					{ name = "nvim_lsp" },
-					{ name = "copilot" },
-					{ name = "luasnip" },
-					{ name = "buffer" },
-					{ name = "path" },
 				},
-				formatting = {
-					format = lspkind.cmp_format({
-						mode = "symbol_text", -- show only symbol annotations
-						maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
-						-- can also be a function to dynamically calculate max width such as
-						-- maxwidth = function() return math.floor(0.45 * vim.o.columns) end,
-						ellipsis_char = "...", -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
-						show_labelDetails = true, -- show labelDetails in menu. Disabled by default
+			},
 
-						-- The function below will be called before any actual modifications from lspkind
-						-- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
-						before = function(entry, vim_item)
-							return vim_item
-						end,
-					}),
-				},
-			})
+			snippets = { preset = "luasnip" },
+			appearance = { use_nvim_cmp_as_default = true },
+		},
+		config = function(_, opts)
+			require("blink.cmp").setup(opts)
+			require("luasnip.loaders.from_vscode").lazy_load({ exclude = { "html" } }) -- keep JSX clean
 		end,
 	},
 }
