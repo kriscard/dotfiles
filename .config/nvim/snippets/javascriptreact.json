@@ -1,0 +1,57 @@
+{
+  "React Functional Component (JS)": {
+    "prefix": "rfc",
+    "body": [
+      "import React from 'react'",
+      "",
+      "function ${1:ComponentName}({ ${2:props} }) {",
+      "  return (",
+      "    <div>",
+      "      ${0:// component content}",
+      "    </div>",
+      "  )",
+      "}",
+      "",
+      "export default ${1:ComponentName}"
+    ],
+    "description": "React Functional Component (JavaScript)"
+  },
+  "useState Hook (JS)": {
+    "prefix": "ust",
+    "body": [
+      "const [${1:state}, set${1/(.*)/${1:/capitalize}/}] = useState(${2:initialValue})"
+    ],
+    "description": "useState hook (JavaScript)"
+  },
+  "useEffect Hook (JS)": {
+    "prefix": "uef",
+    "body": [
+      "useEffect(() => {",
+      "  ${1:// effect logic}",
+      "  ${2:return () => {",
+      "    // cleanup",
+      "  \\}}",
+      "}, [${3:dependencies}])"
+    ],
+    "description": "useEffect hook with cleanup and dependencies (JavaScript)"
+  },
+  "React Client Component (JS)": {
+    "prefix": "rcc",
+    "body": [
+      "'use client'",
+      "",
+      "import React from 'react'",
+      "",
+      "function ${1:ComponentName}({ ${2:props} }) {",
+      "  return (",
+      "    <div>",
+      "      ${0:// component content}",
+      "    </div>",
+      "  )",
+      "}",
+      "",
+      "export default ${1:ComponentName}"
+    ],
+    "description": "Next.js Client Component with 'use client' directive (JavaScript)"
+  }
+}
