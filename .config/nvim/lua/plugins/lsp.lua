@@ -54,9 +54,9 @@ return {
 
 			-- Organize imports: VTSLS organize → ESLint fix-all (simple-import-sort)
 			local function organize_imports_react(bufnr)
-				apply_code_actions(bufnr, { "source.organizeImports" }, 2000)  -- VTSLS
+				apply_code_actions(bufnr, { "source.organizeImports" }, 2000) -- VTSLS
 				vim.defer_fn(function()
-					apply_code_actions(bufnr, { "source.fixAll.eslint" }, 3000)   -- ESLint (simple-import-sort)
+					apply_code_actions(bufnr, { "source.fixAll.eslint" }, 3000) -- ESLint (simple-import-sort)
 				end, 100)
 			end
 
@@ -321,14 +321,53 @@ return {
 	},
 
 	-- ──────────────────────────────────────────────────────────────────────────────
-	-- Blink (snappy completion)
+	-- Snippet Engine & Snippets
+	-- ──────────────────────────────────────────────────────────────────────────────
+	{
+		"L3MON4D3/LuaSnip",
+		lazy = true,
+		dependencies = {
+			{
+				"rafamadriz/friendly-snippets",
+				config = function()
+					local ls = require("luasnip")
+
+					-- Load friendly-snippets but exclude filetypes we want to override
+					require("luasnip.loaders.from_vscode").lazy_load({
+						exclude = { "typescriptreact", "typescript", "javascript", "javascriptreact" }
+					})
+
+					-- Load only custom snippets for the filetypes we want to override
+					require("luasnip.loaders.from_vscode").lazy_load({
+						paths = { vim.fn.stdpath("config") .. "/snippets" }
+					})
+
+					-- For any remaining conflicts, we can clear and reload specific filetypes
+					vim.api.nvim_create_autocmd("FileType", {
+						pattern = { "typescriptreact", "typescript", "javascript", "javascriptreact" },
+						callback = function()
+							-- Ensure custom snippets take priority by reloading them
+							require("luasnip.loaders.from_vscode").lazy_load({
+								paths = { vim.fn.stdpath("config") .. "/snippets" }
+							})
+						end
+					})
+				end,
+			},
+		},
+		opts = {
+			history = true,
+			delete_check_events = "TextChanged",
+		},
+	},
+
+	-- ──────────────────────────────────────────────────────────────────────────────
+	-- Completion UI (Blink)
 	-- ──────────────────────────────────────────────────────────────────────────────
 	{
 		"saghen/blink.cmp",
 		version = "*",
 		dependencies = {
-			"L3MON4D3/LuaSnip",
-			"rafamadriz/friendly-snippets",
 			"saghen/blink.compat",
 			-- optional extra sources used below:
 			"moyiz/blink-emoji.nvim",
@@ -339,6 +378,8 @@ return {
 			keymap = {
 				preset = "default",
 				["<CR>"] = { "accept", "fallback" }, -- no auto-select
+				["<Tab>"] = { "snippet_forward", "accept", "fallback" },
+				["<S-Tab>"] = { "snippet_backward", "fallback" },
 				["<C-Space>"] = { "show" },
 				["<C-n>"] = { "select_next" },
 				["<C-p>"] = { "select_prev" },
@@ -373,6 +414,9 @@ return {
 					lazydev = { module = "lazydev.integrations.blink" },
 					emoji = { module = "blink-emoji" },
 					git = { module = "blink-cmp-git" },
+					snippets = {
+						score_offset = 100, -- Higher score for custom snippets
+					},
 					dictionary = {
 						module = "blink-cmp-dictionary",
 						name = "Dict",
@@ -393,9 +437,5 @@ return {
 			snippets = { preset = "luasnip" },
 			appearance = { use_nvim_cmp_as_default = true },
 		},
-		config = function(_, opts)
-			require("blink.cmp").setup(opts)
-			require("luasnip.loaders.from_vscode").lazy_load({ exclude = { "html" } }) -- keep JSX clean
-		end,
 	},
 }

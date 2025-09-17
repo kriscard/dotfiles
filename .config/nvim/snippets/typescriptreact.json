@@ -1,0 +1,462 @@
+{
+  "React Functional Component": {
+    "prefix": "rfc",
+    "body": [
+      "import React from 'react'",
+      "",
+      "interface ${1:ComponentName}Props {",
+      "  ${2:// props}",
+      "}",
+      "",
+      "function ${1:ComponentName}({ ${3:props} }: ${1:ComponentName}Props) {",
+      "  return (",
+      "    <div>",
+      "      ${0:// component content}",
+      "    </div>",
+      "  )",
+      "}",
+      "",
+      "export default ${1:ComponentName}"
+    ],
+    "description": "React Functional Component with interface and default export"
+  },
+  "useState Hook": {
+    "prefix": "ust",
+    "body": [
+      "const [${1:state}, set${1/(.*)/${1:/capitalize}/}] = useState${2:<${3:type}>}(${4:initialValue})"
+    ],
+    "description": "useState hook with typed state"
+  },
+  "useEffect Hook": {
+    "prefix": "uef",
+    "body": [
+      "useEffect(() => {",
+      "  ${1:// effect logic}",
+      "  ${2:return () => {",
+      "    // cleanup",
+      "  \\}}",
+      "}, [${3:dependencies}])"
+    ],
+    "description": "useEffect hook with cleanup and dependencies"
+  },
+  "React Client Component": {
+    "prefix": "rcc",
+    "body": [
+      "'use client'",
+      "",
+      "import React from 'react'",
+      "",
+      "interface ${1:ComponentName}Props {",
+      "  ${2:// props}",
+      "}",
+      "",
+      "function ${1:ComponentName}({ ${3:props} }: ${1:ComponentName}Props) {",
+      "  return (",
+      "    <div>",
+      "      ${0:// component content}",
+      "    </div>",
+      "  )",
+      "}",
+      "",
+      "export default ${1:ComponentName}"
+    ],
+    "description": "Next.js Client Component with 'use client' directive"
+  },
+  "Next.js Page Component": {
+    "prefix": "page",
+    "body": [
+      "import React from 'react'",
+      "",
+      "interface ${1:PageName}Props {",
+      "  params: {",
+      "    ${2:slug}: string",
+      "  }",
+      "  searchParams: {",
+      "    ${3:[key: string]: string | string[] | undefined}",
+      "  }",
+      "}",
+      "",
+      "function ${1:PageName}({ params, searchParams }: ${1:PageName}Props) {",
+      "  return (",
+      "    <div>",
+      "      ${0:// page content}",
+      "    </div>",
+      "  )",
+      "}",
+      "",
+      "export default ${1:PageName}"
+    ],
+    "description": "Next.js App Router page component with params and searchParams"
+  },
+  "useCallback Hook": {
+    "prefix": "ucb",
+    "body": [
+      "const ${1:callbackName} = useCallback(${2:(${3:args}) => {",
+      "  ${4:// callback logic}",
+      "\\}}, [${5:dependencies}])"
+    ],
+    "description": "useCallback hook for memoized functions"
+  },
+  "Modern Form Component": {
+    "prefix": "form",
+    "body": [
+      "const [formData, setFormData] = useState({",
+      "  ${1:field}: '${2:}',",
+      "})",
+      "",
+      "const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {",
+      "  const { name, value } = e.target",
+      "  setFormData(prev => ({",
+      "    ...prev,",
+      "    [name]: value",
+      "  }))",
+      "}",
+      "",
+      "const handleSubmit = (e: React.FormEvent) => {",
+      "  e.preventDefault()",
+      "  ${3:// form submission logic}",
+      "}",
+      "",
+      "return (",
+      "  <form onSubmit={handleSubmit}>",
+      "    <input",
+      "      type=\"${4:text}\"",
+      "      name=\"${1:field}\"",
+      "      value={formData.${1:field}}",
+      "      onChange={handleChange}",
+      "      placeholder=\"${5:Enter ${1:field}}\"",
+      "    />",
+      "    <button type=\"submit\">${6:Submit}</button>",
+      "  </form>",
+      ")"
+    ],
+    "description": "Complete form component with state management"
+  },
+  "Next.js API Route": {
+    "prefix": "api",
+    "body": [
+      "import { NextRequest, NextResponse } from 'next/server'",
+      "",
+      "export async function ${1|GET,POST,PUT,DELETE,PATCH|}(request: NextRequest) {",
+      "  try {",
+      "    ${2:// API logic}",
+      "    ",
+      "    return NextResponse.json({ ${3:data} })",
+      "  } catch (error) {",
+      "    console.error('${4:Error in ${1} handler}:', error)",
+      "    return NextResponse.json(",
+      "      { error: '${5:Internal server error}' },",
+      "      { status: 500 }",
+      "    )",
+      "  }",
+      "}"
+    ],
+    "description": "Next.js API route handler with error handling"
+  },
+  "Async Fetch Pattern": {
+    "prefix": "fetch",
+    "body": [
+      "const [${1:data}, set${1/(.*)/${1:/capitalize}/}] = useState${2:<${3:DataType} | null>}(null)",
+      "const [loading, setLoading] = useState(false)",
+      "const [error, setError] = useState<string | null>(null)",
+      "",
+      "const fetch${1/(.*)/${1:/capitalize}/} = async () => {",
+      "  try {",
+      "    setLoading(true)",
+      "    setError(null)",
+      "    const response = await fetch('${4:api-endpoint}')",
+      "    ",
+      "    if (!response.ok) {",
+      "      throw new Error('Failed to fetch data')",
+      "    }",
+      "    ",
+      "    const result = await response.json()",
+      "    set${1/(.*)/${1:/capitalize}/}(result)",
+      "  } catch (err) {",
+      "    setError(err instanceof Error ? err.message : 'Unknown error')",
+      "  } finally {",
+      "    setLoading(false)",
+      "  }",
+      "}",
+      "",
+      "useEffect(() => {",
+      "  fetch${1/(.*)/${1:/capitalize}/}()",
+      "}, [])"
+    ],
+    "description": "Complete async fetch pattern with loading and error states"
+  },
+  "className with clsx": {
+    "prefix": "cn",
+    "body": [
+      "className={cn(${1:'base-classes'}, {",
+      "  ${2:'conditional-class'}: ${3:condition},",
+      "}, ${4:additionalClasses})}"
+    ],
+    "description": "Conditional className with clsx/cn utility"
+  },
+  "useReducer Hook": {
+    "prefix": "ured",
+    "body": [
+      "type ${1:State} = {",
+      "  ${2:property}: ${3:type}",
+      "}",
+      "",
+      "type ${4:Action} = ",
+      "  | { type: '${5:ACTION_TYPE}'; payload?: ${6:any} }",
+      "",
+      "const ${7:reducer} = (state: ${1:State}, action: ${4:Action}): ${1:State} => {",
+      "  switch (action.type) {",
+      "    case '${5:ACTION_TYPE}':",
+      "      return { ...state, ${8:// update logic} }",
+      "    default:",
+      "      return state",
+      "  }",
+      "}",
+      "",
+      "const [state, dispatch] = useReducer(${7:reducer}, ${9:initialState})"
+    ],
+    "description": "useReducer hook with typed state and actions"
+  },
+  "useMemo Hook": {
+    "prefix": "umemo",
+    "body": [
+      "const ${1:memoizedValue} = useMemo(() => {",
+      "  ${2:// expensive calculation}",
+      "  return ${3:computedValue}",
+      "}, [${4:dependencies}])"
+    ],
+    "description": "useMemo hook for expensive calculations"
+  },
+  "useRef Hook": {
+    "prefix": "uref",
+    "body": [
+      "const ${1:ref} = useRef<${2:HTMLDivElement}>(null)"
+    ],
+    "description": "useRef hook with TypeScript typing"
+  },
+  "Next.js Layout Component": {
+    "prefix": "layout",
+    "body": [
+      "import React from 'react'",
+      "import type { Metadata } from 'next'",
+      "",
+      "export const metadata: Metadata = {",
+      "  title: '${1:Page Title}',",
+      "  description: '${2:Page description}',",
+      "}",
+      "",
+      "interface ${3:LayoutName}Props {",
+      "  children: React.ReactNode",
+      "}",
+      "",
+      "function ${3:LayoutName}({ children }: ${3:LayoutName}Props) {",
+      "  return (",
+      "    <div>",
+      "      ${4:// layout content}",
+      "      {children}",
+      "    </div>",
+      "  )",
+      "}",
+      "",
+      "export default ${3:LayoutName}"
+    ],
+    "description": "Next.js layout component with metadata"
+  },
+  "Loading Component": {
+    "prefix": "loading",
+    "body": [
+      "import React from 'react'",
+      "",
+      "function Loading() {",
+      "  return (",
+      "    <div className=\"${1:flex items-center justify-center}\">",
+      "      <div className=\"${2:animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900}\"></div>",
+      "      <span className=\"${3:ml-2}\">${4:Loading...}</span>",
+      "    </div>",
+      "  )",
+      "}",
+      "",
+      "export default Loading"
+    ],
+    "description": "Next.js loading UI component"
+  },
+  "Error Component": {
+    "prefix": "error",
+    "body": [
+      "'use client'",
+      "",
+      "import React from 'react'",
+      "",
+      "interface ErrorProps {",
+      "  error: Error & { digest?: string }",
+      "  reset: () => void",
+      "}",
+      "",
+      "function Error({ error, reset }: ErrorProps) {",
+      "  React.useEffect(() => {",
+      "    console.error(error)",
+      "  }, [error])",
+      "",
+      "  return (",
+      "    <div className=\"${1:text-center py-10}\">",
+      "      <h2 className=\"${2:text-lg font-semibold}\">${3:Something went wrong!}</h2>",
+      "      <button",
+      "        className=\"${4:mt-4 px-4 py-2 bg-blue-500 text-white rounded}\"",
+      "        onClick={reset}",
+      "      >",
+      "        ${5:Try again}",
+      "      </button>",
+      "    </div>",
+      "  )",
+      "}",
+      "",
+      "export default Error"
+    ],
+    "description": "Next.js error boundary component"
+  },
+  "Not Found Component": {
+    "prefix": "notfound",
+    "body": [
+      "import React from 'react'",
+      "import Link from 'next/link'",
+      "",
+      "function NotFound() {",
+      "  return (",
+      "    <div className=\"${1:text-center py-10}\">",
+      "      <h2 className=\"${2:text-2xl font-bold}\">${3:Not Found}</h2>",
+      "      <p className=\"${4:mt-2 text-gray-600}\">${5:Could not find requested resource}</p>",
+      "      <Link href=\"${6:/}\" className=\"${7:mt-4 inline-block px-4 py-2 bg-blue-500 text-white rounded}\">",
+      "        ${8:Return Home}",
+      "      </Link>",
+      "    </div>",
+      "  )",
+      "}",
+      "",
+      "export default NotFound"
+    ],
+    "description": "Next.js not found page component"
+  },
+  "SWR Hook": {
+    "prefix": "uswr",
+    "body": [
+      "const { data: ${1:data}, error, isLoading, mutate } = useSWR<${2:DataType}>(",
+      "  '${3:api-key}',",
+      "  () => fetch('${4:api-endpoint}').then(res => res.json())",
+      ")"
+    ],
+    "description": "SWR hook for data fetching"
+  },
+  "React Query Hook": {
+    "prefix": "uquery",
+    "body": [
+      "const { data: ${1:data}, isLoading, error, refetch } = useQuery({",
+      "  queryKey: ['${2:query-key}'],",
+      "  queryFn: async () => {",
+      "    const response = await fetch('${3:api-endpoint}')",
+      "    if (!response.ok) throw new Error('Failed to fetch')",
+      "    return response.json() as ${4:DataType}",
+      "  },",
+      "  ${5:staleTime: 5 * 60 * 1000, // 5 minutes}",
+      "})"
+    ],
+    "description": "TanStack Query hook for data fetching"
+  },
+  "React.lazy Component": {
+    "prefix": "lazy",
+    "body": [
+      "const ${1:ComponentName} = React.lazy(() => import('${2:./ComponentPath}'))",
+      "",
+      "// Usage with Suspense:",
+      "// <Suspense fallback={<div>Loading...</div>}>",
+      "//   <${1:ComponentName} />",
+      "// </Suspense>"
+    ],
+    "description": "React.lazy for code splitting"
+  },
+  "React.memo Component": {
+    "prefix": "memo",
+    "body": [
+      "const ${1:ComponentName} = React.memo<${2:Props}>(({ ${3:props} }) => {",
+      "  return (",
+      "    <div>",
+      "      ${0:// component content}",
+      "    </div>",
+      "  )",
+      "})"
+    ],
+    "description": "React.memo for component optimization"
+  },
+  "React Portal": {
+    "prefix": "portal",
+    "body": [
+      "const ${1:PortalComponent} = ({ children }: { children: React.ReactNode }) => {",
+      "  const [mounted, setMounted] = useState(false)",
+      "",
+      "  useEffect(() => {",
+      "    setMounted(true)",
+      "    return () => setMounted(false)",
+      "  }, [])",
+      "",
+      "  if (!mounted) return null",
+      "",
+      "  return createPortal(",
+      "    children,",
+      "    document.getElementById('${2:portal-root}') || document.body",
+      "  )",
+      "}"
+    ],
+    "description": "React Portal component"
+  },
+  "Styled Component": {
+    "prefix": "styled",
+    "body": [
+      "const ${1:StyledComponent} = styled.${2:div}<{ ${3:prop}?: ${4:boolean} }>`",
+      "  ${5:/* styles */}",
+      "  ${6:color: \\${props => props.${3:prop} ? 'blue' : 'black'\\};}",
+      "`"
+    ],
+    "description": "Styled component with props"
+  },
+  "Framer Motion Component": {
+    "prefix": "motion",
+    "body": [
+      "<motion.${1:div}",
+      "  initial={{ ${2:opacity: 0} }}",
+      "  animate={{ ${3:opacity: 1} }}",
+      "  exit={{ ${4:opacity: 0} }}",
+      "  transition={{ ${5:duration: 0.3} }}",
+      "  ${6:className=\"${7:}\"}",
+      ">",
+      "  ${0:// content}",
+      "</motion.${1:div}>"
+    ],
+    "description": "Framer Motion animated component"
+  },
+  "React Test": {
+    "prefix": "test",
+    "body": [
+      "import { render, screen } from '@testing-library/react'",
+      "import { expect, test } from 'vitest'",
+      "import ${1:ComponentName} from './${2:ComponentPath}'",
+      "",
+      "test('${3:should render correctly}', () => {",
+      "  render(<${1:ComponentName} ${4:prop=\"value\"} />)",
+      "  ",
+      "  expect(screen.getByText('${5:expected text}')).toBeInTheDocument()",
+      "})"
+    ],
+    "description": "React Testing Library test"
+  },
+  "Mock Function": {
+    "prefix": "mock",
+    "body": [
+      "const ${1:mockFunction} = vi.fn(${2:() => ${3:'mocked value'}})",
+      "",
+      "// Mock module:",
+      "// vi.mock('${4:module-path}', () => ({",
+      "//   ${5:export}: ${1:mockFunction}",
+      "// }))"
+    ],
+    "description": "Vitest mock function"
+  }
+}

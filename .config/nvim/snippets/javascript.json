@@ -1,0 +1,55 @@
+{
+  "Async Function (JS)": {
+    "prefix": "afn",
+    "body": [
+      "const ${1:functionName} = async (${2:params}) => {",
+      "  ${0:// function body}",
+      "}"
+    ],
+    "description": "Async arrow function (JavaScript)"
+  },
+  "Try-Catch Block (JS)": {
+    "prefix": "tryc",
+    "body": [
+      "try {",
+      "  ${1:// try block}",
+      "} catch (error) {",
+      "  console.error('${2:Error message}:', error)",
+      "  ${3:// error handling}",
+      "}"
+    ],
+    "description": "Try-catch block with error logging (JavaScript)"
+  },
+  "Promise Chain": {
+    "prefix": "prom",
+    "body": [
+      "${1:promise}",
+      "  .then(${2:result} => {",
+      "    ${3:// success handling}",
+      "  })",
+      "  .catch(${4:error} => {",
+      "    console.error('${5:Error}:', ${4:error})",
+      "  })"
+    ],
+    "description": "Promise chain with then/catch"
+  },
+  "useState Hook": {
+    "prefix": "ust",
+    "body": [
+      "const [${1:state}, set${1/(.*)/${1:/capitalize}/}] = useState(${2:initialValue})"
+    ],
+    "description": "useState hook"
+  },
+  "useEffect Hook": {
+    "prefix": "uef",
+    "body": [
+      "useEffect(() => {",
+      "  ${1:// effect logic}",
+      "  ${2:return () => {",
+      "    // cleanup",
+      "  \\}}",
+      "}, [${3:dependencies}])"
+    ],
+    "description": "useEffect hook with cleanup and dependencies"
+  }
+}
