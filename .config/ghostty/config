@@ -1,5 +1,5 @@
 # Ghostty theme
-theme = catppuccin-macchiato
+theme = dark:Catppuccin Macchiato,light:Catppuccin Latte
 
 # Shell integrations
 shell-integration = zsh

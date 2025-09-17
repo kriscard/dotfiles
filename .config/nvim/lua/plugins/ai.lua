@@ -72,6 +72,7 @@ return {
 	{
 		"zbirenbaum/copilot.lua",
 		event = { "BufEnter" },
+		enabled = false,
 		config = function()
 			require("copilot").setup({
 				suggestion = {
@@ -83,6 +84,7 @@ return {
 	},
 	{
 		"zbirenbaum/copilot-cmp",
+		enabled = false,
 		event = { "BufEnter" },
 		dependencies = { "zbirenbaum/copilot.lua" },
 		config = function()

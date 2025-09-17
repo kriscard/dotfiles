@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/kriscard/.local/share/nvim/mason/bin/**)",
+      "Read(//Users/kriscard/projects/playground/secoda-editor/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
