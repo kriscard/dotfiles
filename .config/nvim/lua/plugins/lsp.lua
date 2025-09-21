@@ -52,15 +52,12 @@ return {
 				end
 			end
 
-			-- Organize imports: VTSLS organize → ESLint fix-all (simple-import-sort)
+			-- Organize imports: ESLint only (simple-import-sort)
 			local function organize_imports_react(bufnr)
-				apply_code_actions(bufnr, { "source.organizeImports" }, 2000) -- VTSLS
-				vim.defer_fn(function()
-					apply_code_actions(bufnr, { "source.fixAll.eslint" }, 3000) -- ESLint (simple-import-sort)
-				end, 100)
+				apply_code_actions(bufnr, { "source.fixAll.eslint" }, 3000) -- ESLint only
 			end
 
-			-- Keymaps on LSP attach
+			-- Keymaps on LSP attach - ONLY buffer-specific mappings
 			vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
 				callback = function(event)
@@ -68,16 +65,63 @@ return {
 						mode = mode or "n"
 						vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
 					end
-					map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
-					map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction", { "n", "x" })
+
+					-- ═══════════════════════════════════════════════════════════════════
+					-- BUFFER-SPECIFIC LSP MAPPINGS ONLY
+					-- ═══════════════════════════════════════════════════════════════════
+
+					-- React-specific organize imports (ESLint only)
 					map("<leader>oi", function()
 						organize_imports_react(event.buf)
-					end, "[O]rganize [I]mports")
+					end, "[O]rganize [I]mports (ESLint)")
+
+					-- Refactor actions (buffer-specific context)
 					map("<leader>rf", function()
 						vim.lsp.buf.code_action({ context = { only = { "refactor" }, diagnostics = {} } })
 					end, "[R]e[f]actor")
-					map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+
+					-- Source definition (specialized navigation)
 					map("<leader>gsd", vim.lsp.buf.definition, "[G]o to [S]ource [D]efinition")
+
+					-- Line diagnostics (buffer-specific context)
+					map("<leader>e", vim.diagnostic.open_float, "Lin[e] diagnostics")
+
+					-- ═══════════════════════════════════════════════════════════════════
+					-- BUFFER-SPECIFIC AUTOCOMMANDS
+					-- ═══════════════════════════════════════════════════════════════════
+
+					-- Highlight references when cursor holds on a symbol
+					local client = vim.lsp.get_client_by_id(event.data.client_id)
+					if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
+						local highlight_augroup =
+							vim.api.nvim_create_augroup("kickstart-lsp-highlight", { clear = false })
+						vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+							buffer = event.buf,
+							group = highlight_augroup,
+							callback = vim.lsp.buf.document_highlight,
+						})
+
+						vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
+							buffer = event.buf,
+							group = highlight_augroup,
+							callback = vim.lsp.buf.clear_references,
+						})
+
+						vim.api.nvim_create_autocmd("LspDetach", {
+							group = vim.api.nvim_create_augroup("kickstart-lsp-detach", { clear = true }),
+							callback = function(event2)
+								vim.lsp.buf.clear_references()
+								vim.api.nvim_clear_autocmds({ group = "kickstart-lsp-highlight", buffer = event2.buf })
+							end,
+						})
+					end
+
+					-- Enable inlay hints if supported
+					if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
+						map("<leader>th", function()
+							vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
+						end, "[T]oggle Inlay [H]ints")
+					end
 				end,
 			})
 
@@ -166,6 +210,13 @@ return {
 							preferences = {
 								importModuleSpecifierPreference = "non-relative",
 								includePackageJsonAutoImports = "auto",
+								-- Disable VTSLS import organization to avoid conflicts with ESLint
+								organizeImportsIgnoreCase = false,
+								organizeImportsCollation = "ordinal",
+								organizeImportsLocale = "en",
+								organizeImportsNumericCollation = false,
+								organizeImportsAccentCollation = false,
+								organizeImportsCaseFirst = "lower",
 							},
 							maxTsServerMemory = 12288,
 							watchOptions = {
@@ -273,10 +324,10 @@ return {
 				severity_sort = true,
 				signs = {
 					text = {
-						[vim.diagnostic.severity.ERROR] = " ",
-						[vim.diagnostic.severity.WARN] = " ",
-						[vim.diagnostic.severity.HINT] = " ",
-						[vim.diagnostic.severity.INFO] = " ",
+						[vim.diagnostic.severity.ERROR] = " ",
+						[vim.diagnostic.severity.WARN] = " ",
+						[vim.diagnostic.severity.HINT] = " ",
+						[vim.diagnostic.severity.INFO] = " ",
 					},
 				},
 			})
@@ -334,12 +385,12 @@ return {
 
 					-- Load friendly-snippets but exclude filetypes we want to override
 					require("luasnip.loaders.from_vscode").lazy_load({
-						exclude = { "typescriptreact", "typescript", "javascript", "javascriptreact" }
+						exclude = { "typescriptreact", "typescript", "javascript", "javascriptreact" },
 					})
 
 					-- Load only custom snippets for the filetypes we want to override
 					require("luasnip.loaders.from_vscode").lazy_load({
-						paths = { vim.fn.stdpath("config") .. "/snippets" }
+						paths = { vim.fn.stdpath("config") .. "/snippets" },
 					})
 
 					-- For any remaining conflicts, we can clear and reload specific filetypes
@@ -348,9 +399,9 @@ return {
 						callback = function()
 							-- Ensure custom snippets take priority by reloading them
 							require("luasnip.loaders.from_vscode").lazy_load({
-								paths = { vim.fn.stdpath("config") .. "/snippets" }
+								paths = { vim.fn.stdpath("config") .. "/snippets" },
 							})
-						end
+						end,
 					})
 				end,
 			},
@@ -377,7 +428,7 @@ return {
 		opts = {
 			keymap = {
 				preset = "default",
-				["<CR>"] = { "accept", "fallback" }, -- no auto-select
+				["<CR>"] = { "accept", "fallback" },
 				["<Tab>"] = { "snippet_forward", "accept", "fallback" },
 				["<S-Tab>"] = { "snippet_backward", "fallback" },
 				["<C-Space>"] = { "show" },
@@ -387,19 +438,23 @@ return {
 				["<C-h>"] = { "snippet_backward" },
 			},
 
-			performance = { debounce = 40, throttle = 20, fetching_timeout = 200, max_view_entries = 40 },
-
 			completion = {
-				list = { selection = { preselect = false, auto_insert = false } },
+				list = {
+					selection = { preselect = false, auto_insert = false },
+					max_items = 40,
+				},
 				accept = {
 					auto_brackets = {
 						enabled = true,
-						kind_resolution = { enabled = true }, -- ✅ must be a table
-						semantic_token_resolution = { enabled = true }, -- ✅ must be a table
+						kind_resolution = { enabled = true },
+						semantic_token_resolution = { enabled = true },
 					},
 				},
-				documentation = { auto_show = true, auto_show_delay_ms = 400 },
-				ghost_text = { enabled = true, show_with_menu = false },
+				documentation = {
+					auto_show = true,
+					auto_show_delay_ms = 400,
+				},
+				ghost_text = { enabled = true },
 				menu = {
 					draw = {
 						columns = { { "label", "label_description", gap = 1 }, { "kind_icon", "kind" } },
@@ -409,11 +464,21 @@ return {
 
 			sources = {
 				default = { "snippets", "lsp", "path", "buffer", "emoji", "git", "dictionary" },
-				per_filetype = { lua = { inherit_defaults = true, "lazydev" } },
+				per_filetype = { lua = { "lazydev", "snippets", "lsp", "path", "buffer" } },
 				providers = {
 					lazydev = { module = "lazydev.integrations.blink" },
-					emoji = { module = "blink-emoji" },
-					git = { module = "blink-cmp-git" },
+					emoji = {
+						module = "blink-emoji",
+						enabled = function()
+							return true
+						end, -- Enable emoji completions
+					},
+					git = {
+						module = "blink-cmp-git",
+						enabled = function()
+							return true
+						end, -- Enable git completions
+					},
 					snippets = {
 						score_offset = 100, -- Higher score for custom snippets
 					},
@@ -423,6 +488,9 @@ return {
 						score_offset = 20,
 						max_items = 8,
 						min_keyword_length = 3,
+						enabled = function()
+							return true
+						end, -- Enable dictionary completions
 						opts = {
 							dictionary_directories = { vim.fn.expand("~/.config/nvim/dictionaries") },
 							dictionary_files = {

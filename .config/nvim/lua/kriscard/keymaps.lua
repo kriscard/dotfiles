@@ -2,41 +2,69 @@ local Util = require("kriscard.util")
 
 local map = Util.safe_keymap_set
 
--- Normal --
+-- ══════════════════════════════════════════════════════════════════════════════
+-- BASIC KEYMAPS
+-- ══════════════════════════════════════════════════════════════════════════════
+
 -- Disable Space bar since it'll be used as the leader key
--- save file
+map("n", "<space>", "<nop>")
+
+-- Save file
 map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save file" })
 
--- quit
+-- Quit
 map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit all" })
 
--- buffers
-vim.keymap.set("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
-vim.keymap.set("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next buffer" })
+-- ══════════════════════════════════════════════════════════════════════════════
+-- BUFFER NAVIGATION
+-- ══════════════════════════════════════════════════════════════════════════════
 
--- move lines in visual mode
-map("v", "J", ":m '>+1<CR>gv=gv", { desc = "moves lines in visual mode" })
-map("v", "K", ":m '<-2<CR>gv=gv", { desc = "moves lines in visual mode" })
-
--- replace the highlited word
-map("n", "<leader>S", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "replace the highlited word" })
-
--- clear search highlights
-map("n", "<leader>nh", ":nohl<CR>", { desc = "clear search highlights" })
-
--- close current buffer
+-- Buffer navigation
+map("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
+map("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next buffer" })
 map("n", "<C-x>", ":bd<CR>", { desc = "Close current buffer" })
 
--- lazy
-map("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy" })
+-- ══════════════════════════════════════════════════════════════════════════════
+-- MOVEMENT & NAVIGATION
+-- ══════════════════════════════════════════════════════════════════════════════
 
--- code actions
-map({ "n", "v" }, "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", { desc = "Code action" })
+-- Move lines in visual mode
+map("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move lines down" })
+map("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move lines up" })
 
--- Mason
-map("n", "<leader>cm", "<cmd>Mason<cr>", { desc = "Mason" })
+-- Center buffer while navigating
+map("n", "<C-u>", "<C-u>zz", { desc = "Half page up (centered)" })
+map("n", "<C-d>", "<C-d>zz", { desc = "Half page down (centered)" })
+map("n", "{", "{zz", { desc = "Previous paragraph (centered)" })
+map("n", "}", "}zz", { desc = "Next paragraph (centered)" })
+map("n", "N", "Nzz", { desc = "Previous search (centered)" })
+map("n", "n", "nzz", { desc = "Next search (centered)" })
+map("n", "G", "Gzz", { desc = "Go to end (centered)" })
+map("n", "gg", "ggzz", { desc = "Go to start (centered)" })
+map("n", "<C-i>", "<C-i>zz", { desc = "Jump forward (centered)" })
+map("n", "<C-o>", "<C-o>zz", { desc = "Jump backward (centered)" })
+map("n", "%", "%zz", { desc = "Match bracket (centered)" })
+map("n", "*", "*zz", { desc = "Search word forward (centered)" })
+map("n", "#", "#zz", { desc = "Search word backward (centered)" })
 
--- diagnostic
+-- Exit terminal mode
+map("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- SEARCH & REPLACE
+-- ══════════════════════════════════════════════════════════════════════════════
+
+-- Clear search highlights
+map("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highlights" })
+
+-- Replace the highlighted word
+map("n", "<leader>S", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "Replace highlighted word" })
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- LSP & DIAGNOSTICS (Global mappings)
+-- ══════════════════════════════════════════════════════════════════════════════
+
+-- Diagnostic navigation (global)
 local diagnostic_goto = function(next, severity)
 	local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
 	severity = severity and vim.diagnostic.severity[severity] or nil
@@ -50,65 +78,93 @@ local diagnostic_goto = function(next, severity)
 		})
 	end
 end
-map("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
+
 map("n", "]d", diagnostic_goto(true), { desc = "Next Diagnostic" })
 map("n", "[d", diagnostic_goto(false), { desc = "Prev Diagnostic" })
 map("n", "]e", diagnostic_goto(true, "ERROR"), { desc = "Next Error" })
 map("n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev Error" })
 map("n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next Warning" })
 map("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" })
---
--- lazygit
-map("n", "<leader>gg", "<cmd>LazyGit<cr>", { noremap = true, desc = "Lazygit (Root Dir)" })
 
--- windows
+-- Diagnostic lists
+map("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
+
+-- Code actions (can work globally)
+map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code action" })
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- CORE LSP NAVIGATION (Global - work across all buffers)
+-- ══════════════════════════════════════════════════════════════════════════════
+
+-- Definition and navigation
+map("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
+map("n", "gD", vim.lsp.buf.declaration, { desc = "Go to declaration" })
+map("n", "gr", vim.lsp.buf.references, { desc = "Go to references" })
+map("n", "gi", vim.lsp.buf.implementation, { desc = "Go to implementation" })
+map("n", "gt", vim.lsp.buf.type_definition, { desc = "Go to type definition" })
+
+-- Documentation
+map("n", "K", vim.lsp.buf.hover, { desc = "Hover documentation" })
+map("n", "<C-k>", vim.lsp.buf.signature_help, { desc = "Signature help" })
+
+-- Renaming
+map("n", "<leader>rn", vim.lsp.buf.rename, { desc = "[R]e[n]ame" })
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- PLUGIN MANAGERS & TOOLS
+-- ══════════════════════════════════════════════════════════════════════════════
+
+-- Lazy package manager
+map("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy" })
+
+-- Mason LSP installer
+map("n", "<leader>cm", "<cmd>Mason<cr>", { desc = "Mason" })
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- FILE MANAGEMENT
+-- ══════════════════════════════════════════════════════════════════════════════
+
+-- Oil file explorer (changed from <leader>e to avoid conflict with diagnostics)
+map("n", "<leader>fe", function()
+	require("oil").toggle_float()
+end, { desc = "[F]ile [E]xplorer (Oil)" })
+
+-- Alternative oil mapping
+map("n", "<leader>-", function()
+	require("oil").toggle_float()
+end, { desc = "Open Oil" })
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- GIT INTEGRATION
+-- ══════════════════════════════════════════════════════════════════════════════
+
+-- LazyGit
+map("n", "<leader>gg", "<cmd>LazyGit<cr>", { desc = "Lazygit (Root Dir)" })
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- WINDOW MANAGEMENT
+-- ══════════════════════════════════════════════════════════════════════════════
+
 map("n", "<leader>wd", "<C-W>c", { desc = "Delete window", remap = true })
 map("n", "<leader>w-", "<C-W>s", { desc = "Split window below", remap = true })
 map("n", "<leader>w|", "<C-W>v", { desc = "Split window right", remap = true })
 
--- oil
--- Map Oil to <leader>e
-map("n", "<leader>e", function()
-	require("oil").toggle_float()
-end, { desc = "Open Oil" })
+-- Additional window navigation
+map("n", "<C-h>", "<C-w>h", { desc = "Go to left window" })
+map("n", "<C-j>", "<C-w>j", { desc = "Go to lower window" })
+map("n", "<C-k>", "<C-w>k", { desc = "Go to upper window" })
+map("n", "<C-l>", "<C-w>l", { desc = "Go to right window" })
 
--- Center buffer while navigating
-map("n", "<C-u>", "<C-u>zz")
-map("n", "<C-d>", "<C-d>zz")
-map("n", "{", "{zz")
-map("n", "}", "}zz")
-map("n", "N", "Nzz")
-map("n", "n", "nzz")
-map("n", "G", "Gzz")
-map("n", "gg", "ggzz")
-map("n", "<C-i>", "<C-i>zz")
-map("n", "<C-o>", "<C-o>zz")
-map("n", "%", "%zz")
-map("n", "*", "*zz")
-map("n", "#", "#zz")
+-- Window resizing
+map("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase window height" })
+map("n", "<C-Down>", "<cmd>resize -2<cr>", { desc = "Decrease window height" })
+map("n", "<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "Decrease window width" })
+map("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase window width" })
 
--- Press 'H', 'L' to jump to start/end of a line (first/last char)
--- map("v", "L", "$<left>")
--- map("v", "H", "^")
+-- ══════════════════════════════════════════════════════════════════════════════
+-- OBSIDIAN NOTES
+-- ══════════════════════════════════════════════════════════════════════════════
 
--- Diagnostic keymaps
-map("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
-
--- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
--- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
--- is not what someone will guess without a bit more experience.
---
--- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
--- or just use <C-\><C-n> to exit terminal mode
-vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
-
--- TIP: Disable arrow keys in normal mode
-map("n", "<left>", '<cmd>echo "Use h to move!!"<CR>')
-map("n", "<right>", '<cmd>echo "Use l to move!!"<CR>')
-map("n", "<up>", '<cmd>echo "Use k to move!!"<CR>')
-map("n", "<down>", '<cmd>echo "Use j to move!!"<CR>')
-
--- Obsidian
 map("n", "<leader>oo", "<cmd>ObsidianOpen<cr>", { desc = "Open note" })
 map("n", "<leader>on", "<cmd>ObsidianNew<cr>", { desc = "New note" })
 map("n", "<leader>ot", "<cmd>ObsidianToday<cr>", { desc = "New Daily Note" })
@@ -116,3 +172,57 @@ map("n", "<leader>oT", "<cmd>ObsidianTemplate<cr>", { desc = "Templates list" })
 map("n", "<leader>ob", "<cmd>ObsidianBacklinks<cr>", { desc = "Backlinks" })
 map("n", "<leader>op", "<cmd>ObsidianPasteImg<cr>", { desc = "Paste image" })
 map("n", "<leader>os", "<cmd>ObsidianSearch<cr>", { desc = "Search" })
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- EDUCATIONAL / HELPFUL REMINDERS
+-- ══════════════════════════════════════════════════════════════════════════════
+
+-- Disable arrow keys in normal mode (encourage hjkl usage)
+map("n", "<left>", '<cmd>echo "Use h to move!!"<CR>', { desc = "Disabled - use h" })
+map("n", "<right>", '<cmd>echo "Use l to move!!"<CR>', { desc = "Disabled - use l" })
+map("n", "<up>", '<cmd>echo "Use k to move!!"<CR>', { desc = "Disabled - use k" })
+map("n", "<down>", '<cmd>echo "Use j to move!!"<CR>', { desc = "Disabled - use j" })
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- REACT DEVELOPMENT SPECIFIC
+-- ══════════════════════════════════════════════════════════════════════════════
+
+-- Quick React patterns (these work globally)
+map("n", "<leader>rc", "o{/* */}<Esc>hhi", { desc = "[R]eact [C]omment" })
+map("n", "<leader>rl", "oconsole.log()<Esc>hi", { desc = "[R]eact [L]og" })
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- ADDITIONAL USEFUL MAPPINGS
+-- ══════════════════════════════════════════════════════════════════════════════
+
+-- Better indenting
+map("v", "<", "<gv", { desc = "Indent left and reselect" })
+map("v", ">", ">gv", { desc = "Indent right and reselect" })
+
+-- Stay in indent mode
+map("v", "<Tab>", ">gv", { desc = "Indent right" })
+map("v", "<S-Tab>", "<gv", { desc = "Indent left" })
+
+-- Paste without yanking in visual mode
+map("v", "p", '"_dP', { desc = "Paste without yanking" })
+
+-- Delete without yanking
+map({ "n", "v" }, "<leader>d", '"_d', { desc = "Delete without yanking" })
+
+-- Select all
+map("n", "<C-a>", "gg<S-v>G", { desc = "Select all" })
+
+-- Better join lines
+map("n", "J", "mzJ`z", { desc = "Join lines (keep cursor position)" })
+
+-- Quick fix list navigation
+map("n", "<leader>co", "<cmd>copen<cr>", { desc = "Open quickfix list" })
+map("n", "<leader>cc", "<cmd>cclose<cr>", { desc = "Close quickfix list" })
+map("n", "]q", "<cmd>cnext<cr>", { desc = "Next quickfix item" })
+map("n", "[q", "<cmd>cprev<cr>", { desc = "Previous quickfix item" })
+
+-- Location list navigation
+map("n", "<leader>lo", "<cmd>lopen<cr>", { desc = "Open location list" })
+map("n", "<leader>lc", "<cmd>lclose<cr>", { desc = "Close location list" })
+map("n", "]l", "<cmd>lnext<cr>", { desc = "Next location item" })
+map("n", "[l", "<cmd>lprev<cr>", { desc = "Previous location item" })
