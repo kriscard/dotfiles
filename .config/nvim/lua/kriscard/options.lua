@@ -37,7 +37,7 @@ opt.splitright = true -- Put new windows right of current
 
 opt.mouse = "a" -- Enable mouse mode
 
-opt.updatetime = 200 -- Save changes to swap file every 200ms and trigger CursorHold
+opt.updatetime = 250 -- Save changes to swap file every 250ms and trigger CursorHold
 
 opt.completeopt = "menu,menuone,noselect" -- Customize completion menu behavior
 
@@ -122,3 +122,12 @@ opt.wildmode = "longest:full,full" -- Command-line completion mode
 opt.winminwidth = 5 -- Minimum window width
 opt.foldmethod = "indent"
 opt.foldtext = "v:lua.require'snacks.fold'.get()"
+
+-- Performance optimizations for large React projects
+opt.maxmempattern = 20000 -- Increase memory for pattern matching
+opt.regexpengine = 0 -- Use automatic regexp engine selection
+opt.synmaxcol = 200 -- Only highlight first 200 columns for performance
+
+-- Better diff performance
+opt.diffopt:append("algorithm:patience")
+opt.diffopt:append("indent-heuristic")

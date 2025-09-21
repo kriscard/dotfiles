@@ -1,9 +1,12 @@
+-- Telescope disabled in favor of Snacks picker
+-- Keeping configuration for reference or future use
 return {
-	"nvim-telescope/telescope.nvim",
-	event = "VimEnter",
-	branch = "0.1.x",
-	enabled = false,
-	dependencies = {
+	{
+		"nvim-telescope/telescope.nvim",
+		event = "VimEnter",
+		branch = "0.1.x",
+		enabled = false,
+		dependencies = {
 		"nvim-lua/plenary.nvim",
 		{
 			"nvim-telescope/telescope-fzf-native.nvim",
@@ -146,4 +149,5 @@ return {
 			builtin.find_files({ cwd = vim.fn.stdpath("config") })
 		end, { desc = "[S]earch [N]eovim files" })
 	end,
+	},
 }
