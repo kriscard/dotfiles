@@ -218,9 +218,25 @@ return {
 								organizeImportsAccentCollation = false,
 								organizeImportsCaseFirst = "lower",
 							},
-							maxTsServerMemory = 12288,
+							maxTsServerMemory = 16384,
 							watchOptions = {
-								excludeDirectories = { "**/node_modules", "**/.git", "**/dist", "**/.next", "**/build" },
+								excludeDirectories = {
+									"**/node_modules",
+									"**/.git",
+									"**/dist",
+									"**/.next",
+									"**/build",
+									"**/coverage",
+									"**/out",
+									"**/.turbo",
+									"**/.cache",
+								},
+								excludeFiles = {
+									"**/.eslintrc.js",
+									"**/webpack.config.js",
+									"**/rollup.config.js",
+									"**/vite.config.js",
+								},
 							},
 						},
 						javascript = {

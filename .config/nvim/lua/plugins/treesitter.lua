@@ -6,13 +6,16 @@ return {
 	-- [[ Configure Treesitter ]] See `:help nvim-treesitter`
 	dependencies = {
 		-- Additional text objects for treesitter
-		-- "nvim-treesitter/nvim-treesitter-textobjects",
+		"nvim-treesitter/nvim-treesitter-textobjects",
+		"nvim-treesitter/nvim-treesitter-context",
+		"windwp/nvim-ts-autotag",
 	},
 	opts = {
 		ensure_installed = {
 			"bash",
 			"c",
 			"css",
+			"scss",
 			"diff",
 			"git_config",
 			"gitcommit",
@@ -22,19 +25,22 @@ return {
 			"gleam",
 			"graphql",
 			"html",
-			"html",
 			"javascript",
+			"jsdoc",
 			"json",
+			"jsonc",
 			"lua",
 			"luadoc",
 			"markdown",
 			"markdown_inline",
 			"prisma",
 			"query",
+			"regex",
 			"tsx",
 			"typescript",
 			"vim",
 			"vimdoc",
+			"yaml",
 		},
 		-- Autoinstall languages that are not installed
 		auto_install = true,
@@ -61,41 +67,68 @@ return {
 				node_decremental = "<c-backspace>",
 			},
 		},
-		-- textobjects = {
-		-- 	select = {
-		-- 		enable = true,
-		-- 		lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
-		-- 		keymaps = {
-		-- 			-- You can use the capture groups defined in textobjects.scm
-		-- 			["aa"] = "@parameter.outer",
-		-- 			["ia"] = "@parameter.inner",
-		-- 			["af"] = "@function.outer",
-		-- 			["if"] = "@function.inner",
-		-- 			["ac"] = "@class.outer",
-		-- 			["ic"] = "@class.inner",
-		-- 		},
-		-- 	},
-		-- 	move = {
-		-- 		enable = true,
-		-- 		set_jumps = true, -- whether to set jumps in the jumplist
-		-- 		goto_next_start = {
-		-- 			["]m"] = "@function.outer",
-		-- 			["]]"] = "@class.outer",
-		-- 		},
-		-- 		goto_next_end = {
-		-- 			["]M"] = "@function.outer",
-		-- 			["]["] = "@class.outer",
-		-- 		},
-		-- 		goto_previous_start = {
-		-- 			["[m"] = "@function.outer",
-		-- 			["[["] = "@class.outer",
-		-- 		},
-		-- 		goto_previous_end = {
-		-- 			["[M"] = "@function.outer",
-		-- 			["[]"] = "@class.outer",
-		-- 		},
-		-- 	},
-		-- },
+		textobjects = {
+			select = {
+				enable = true,
+				lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
+				keymaps = {
+					-- You can use the capture groups defined in textobjects.scm
+					["aa"] = "@parameter.outer",
+					["ia"] = "@parameter.inner",
+					["af"] = "@function.outer",
+					["if"] = "@function.inner",
+					["ac"] = "@class.outer",
+					["ic"] = "@class.inner",
+					["ao"] = "@block.outer",
+					["io"] = "@block.inner",
+					["al"] = "@loop.outer",
+					["il"] = "@loop.inner",
+					["ai"] = "@conditional.outer",
+					["ii"] = "@conditional.inner",
+					["as"] = "@statement.outer",
+					["is"] = "@statement.inner",
+					["ad"] = "@comment.outer",
+					["id"] = "@comment.inner",
+					["am"] = "@call.outer",
+					["im"] = "@call.inner",
+				},
+			},
+			move = {
+				enable = true,
+				set_jumps = true, -- whether to set jumps in the jumplist
+				goto_next_start = {
+					["]m"] = "@function.outer",
+					["]]"] = "@class.outer",
+					["]o"] = "@loop.*",
+					["]s"] = { query = "@statement.outer", desc = "Next statement" },
+					["]c"] = "@conditional.outer",
+				},
+				goto_next_end = {
+					["]M"] = "@function.outer",
+					["]["] = "@class.outer",
+				},
+				goto_previous_start = {
+					["[m"] = "@function.outer",
+					["[["] = "@class.outer",
+					["[o"] = "@loop.*",
+					["[s"] = { query = "@statement.outer", desc = "Previous statement" },
+					["[c"] = "@conditional.outer",
+				},
+				goto_previous_end = {
+					["[M"] = "@function.outer",
+					["[]"] = "@class.outer",
+				},
+			},
+			swap = {
+				enable = true,
+				swap_next = {
+					["<leader>a"] = "@parameter.inner",
+				},
+				swap_previous = {
+					["<leader>A"] = "@parameter.inner",
+				},
+			},
+		},
 	},
 	-- There are additional nvim-treesitter modules that you can use to interact
 	-- with nvim-treesitter. You should go explore a few and see what interests you:
