@@ -1,22 +1,21 @@
 # Dotfiles
 
-> Beautiful, fast, and efficient dotfiles for React/Node.js development
+> fast, and efficient dotfiles and focus for React/Node.js development
 
-A streamlined dotfiles configuration featuring modern tools, consistent theming, and an intuitive CLI for effortless environment management.
+This is my dotfiles configuration featuring modern tools, consistent theming (Catppuccin Macchiato), and some intuitive CLI commands.
 
 ![Neovim Development Environment](screenshots/neovim-react.png)
-_Neovim with React development setup_
+_Neovim_
 
 ![Tmux Workflow](screenshots/tmux-workflow.png)
-_Tmux session with multiple development workflows_
+_Tmux session with Tmuxinator_
 
 ## Highlights
 
-- **One-command setup** with intelligent CLI
-- **Lightning-fast startup** (90% faster than typical configs)
+- **One-command setup** with a simple CLI named **dotfiles**
+- **Lightning-fast startup** (always improving)
 - **Catppuccin theming** across all applications
-- **Modern CLI tools** (eza, bat, fd, ripgrep, zoxide)
-- **React/TypeScript optimized** Neovim configuration
+- **Some CLI tools I'm using** (eza, bat, fd, ripgrep, zoxide)
 
 ## Quick Start
 
@@ -50,10 +49,10 @@ dotfiles backup              # Safe backup
 
 ### Core Tools
 
-- **Neovim**: Lua config with React/TypeScript LSP
+- **Neovim**: Lua config mostly for Frontend/Full-Stack developer LSP
 - **Tmux**: Session management with vim keybindings
-- **Terminal**: Kitty/Ghostty with Catppuccin theme
-- **Shell**: Zsh with modern CLI tools
+- **Terminal**: Kitty/Ghostty with Catppuccin Macchiato theme
+- **Shell**: Zsh
 
 ### Modern CLI Tools
 
