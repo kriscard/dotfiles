@@ -1,5 +1,8 @@
 # Useful development functions for faster workflow
 
+# Add local bin to PATH for dotfiles CLI
+export PATH="$HOME/.local/bin:$PATH"
+
 # Quick directory creation and navigation
 mkcd() {
     mkdir -p "$1" && cd "$1"

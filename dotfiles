@@ -1,0 +1,737 @@
+#!/usr/bin/env bash
+
+# Dotfiles CLI - Modern dotfiles management tool
+# Inspired by dmmulroy's dot script
+# Usage: dotfiles <command> [options]
+
+set -e
+
+# Get the directory where this script is located
+DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Color definitions
+readonly COLOR_GRAY="\033[1;38;5;243m"
+readonly COLOR_BLUE="\033[1;34m"
+readonly COLOR_GREEN="\033[1;32m"
+readonly COLOR_RED="\033[1;31m"
+readonly COLOR_PURPLE="\033[1;35m"
+readonly COLOR_YELLOW="\033[1;33m"
+readonly COLOR_NONE="\033[0m"
+
+# Utility functions
+title() {
+    echo -e "\n${COLOR_PURPLE}$1${COLOR_NONE}"
+    echo -e "${COLOR_GRAY}==============================${COLOR_NONE}\n"
+}
+
+error() {
+    echo -e "${COLOR_RED}Error: ${COLOR_NONE}$1" >&2
+    exit 1
+}
+
+warning() {
+    echo -e "${COLOR_YELLOW}Warning: ${COLOR_NONE}$1"
+}
+
+info() {
+    echo -e "${COLOR_BLUE}Info: ${COLOR_NONE}$1"
+}
+
+success() {
+    echo -e "${COLOR_GREEN}✅ $1${COLOR_NONE}"
+}
+
+prompt() {
+    echo -e "${COLOR_BLUE}$1${COLOR_NONE}"
+}
+
+# Check if command exists
+command_exists() {
+    command -v "$1" >/dev/null 2>&1
+}
+
+# Confirmation prompt
+confirm() {
+    local message="$1"
+    local default="${2:-n}"
+
+    if [[ "$default" == "y" ]]; then
+        prompt "$message [Y/n]: "
+    else
+        prompt "$message [y/N]: "
+    fi
+
+    read -r response
+    response=${response:-$default}
+
+    case "$response" in
+        [yY][eE][sS]|[yY]) return 0 ;;
+        *) return 1 ;;
+    esac
+}
+
+# Version information
+show_version() {
+    echo "dotfiles v1.0.0"
+    echo "Modern dotfiles management tool"
+}
+
+# Help system
+show_help() {
+    cat << EOF
+dotfiles - Modern dotfiles management tool
+
+Usage: dotfiles <command> [options]
+
+Commands:
+    init        Full system setup (packages, configs, symlinks)
+    update      Update dotfiles and packages
+    backup      Backup existing configurations
+    restore     Restore from backup
+    doctor      Run system diagnostics
+    sync        Sync configuration files only
+    packages    Manage Homebrew packages only
+    macos       Apply macOS settings only
+    ds_store    Remove .DS_Store files from dotfiles
+
+    help        Show this help message
+    version     Show version information
+
+Options:
+    --dry-run   Show what would be done without making changes
+    --force     Skip confirmation prompts
+    --verbose   Show detailed output
+
+Examples:
+    dotfiles init           # Full system setup
+    dotfiles backup         # Backup current configs
+    dotfiles sync           # Sync configs only
+    dotfiles packages       # Install/update packages only
+    dotfiles doctor         # Check system health
+    dotfiles ds_store       # Remove .DS_Store files
+
+For more information, visit: https://github.com/kriscard/.dotfiles
+EOF
+}
+
+# Global options
+DRY_RUN=false
+FORCE=false
+VERBOSE=false
+
+# Parse global options
+parse_options() {
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            --dry-run)
+                DRY_RUN=true
+                shift
+                ;;
+            --force)
+                FORCE=true
+                shift
+                ;;
+            --verbose)
+                VERBOSE=true
+                shift
+                ;;
+            *)
+                break
+                ;;
+        esac
+    done
+}
+
+# Main command dispatcher
+main() {
+    # Parse global options first
+    parse_options "$@"
+
+    # Get the command (skip parsed options)
+    local cmd=""
+    for arg in "$@"; do
+        case $arg in
+            --dry-run|--force|--verbose)
+                continue
+                ;;
+            *)
+                cmd="$arg"
+                break
+                ;;
+        esac
+    done
+
+    # Handle no command or help
+    if [[ -z "$cmd" ]] || [[ "$cmd" == "help" ]] || [[ "$cmd" == "-h" ]] || [[ "$cmd" == "--help" ]]; then
+        show_help
+        exit 0
+    fi
+
+    # Handle version
+    if [[ "$cmd" == "version" ]] || [[ "$cmd" == "-v" ]] || [[ "$cmd" == "--version" ]]; then
+        show_version
+        exit 0
+    fi
+
+    # Dispatch to command functions
+    case "$cmd" in
+        init)
+            cmd_init
+            ;;
+        update)
+            cmd_update
+            ;;
+        backup)
+            cmd_backup
+            ;;
+        restore)
+            cmd_restore
+            ;;
+        doctor)
+            cmd_doctor
+            ;;
+        sync)
+            cmd_sync
+            ;;
+        packages)
+            cmd_packages
+            ;;
+        macos)
+            cmd_macos
+            ;;
+        ds_store)
+            cmd_ds_store
+            ;;
+        *)
+            error "Unknown command: $cmd\n       Run 'dotfiles help' for available commands."
+            ;;
+    esac
+}
+
+# Command implementations (to be filled in next)
+
+cmd_init() {
+    title "🚀 Initializing dotfiles setup"
+
+    if [[ "$FORCE" != true ]]; then
+        info "This will set up your entire development environment."
+        info "It will install packages, create symlinks, and apply configurations."
+        echo
+        if ! confirm "Continue with full initialization?"; then
+            info "Initialization cancelled."
+            exit 0
+        fi
+    fi
+
+    # Call individual setup functions
+    cmd_backup
+    cmd_packages
+    cmd_sync
+    cmd_macos
+
+    success "Dotfiles initialization complete! 🎉"
+    info "You may need to restart your terminal or reload your shell."
+}
+
+cmd_update() {
+    title "🔄 Updating dotfiles and packages"
+
+    info "Pulling latest dotfiles..."
+    if [[ "$DRY_RUN" == true ]]; then
+        echo "[DRY RUN] Would run: git pull origin main"
+    else
+        git pull origin main || warning "Could not pull latest changes"
+    fi
+
+    info "Updating Homebrew packages..."
+    cmd_packages
+
+    success "Update complete!"
+}
+
+cmd_backup() {
+    title "💾 Creating configuration backup"
+
+    local backup_dir="$HOME/dotfiles-backup-$(date +%Y%m%d-%H%M%S)"
+
+    if [[ "$DRY_RUN" == true ]]; then
+        echo "[DRY RUN] Would create backup directory: $backup_dir"
+    else
+        mkdir -p "$backup_dir"
+        info "Created backup directory: $backup_dir"
+    fi
+
+    local config_dirs=(
+        "$HOME/.config/nvim"
+        "$HOME/.config/tmux"
+        "$HOME/.config/kitty"
+        "$HOME/.config/ghostty"
+        "$HOME/.config/alacritty"
+        "$HOME/.config/skhd"
+        "$HOME/.config/yabai"
+        "$HOME/.config/karabiner"
+        "$HOME/.zshrc"
+        "$HOME/.gitconfig"
+    )
+
+    for config in "${config_dirs[@]}"; do
+        if [[ -e "$config" ]] && [[ ! -L "$config" ]]; then
+            if [[ "$DRY_RUN" == true ]]; then
+                echo "[DRY RUN] Would backup: $config"
+            else
+                cp -rf "$config" "$backup_dir/" 2>/dev/null || true
+                success "Backed up: $(basename "$config")"
+            fi
+        fi
+    done
+
+    if [[ "$DRY_RUN" != true ]]; then
+        success "Backup created at: $backup_dir"
+    fi
+}
+
+cmd_restore() {
+    title "🔄 Restoring from backup"
+    error "Restore functionality not yet implemented"
+    # TODO: Implement restore functionality
+}
+
+cmd_doctor() {
+    title "🔍 Running system diagnostics"
+
+    local issues=0
+
+    # Check required tools
+    info "Checking required tools..."
+
+    local required_tools=("git" "curl" "zsh")
+    for tool in "${required_tools[@]}"; do
+        if command_exists "$tool"; then
+            success "$tool is installed"
+        else
+            error "❌ $tool is not installed"
+            ((issues++))
+        fi
+    done
+
+    # Check Homebrew
+    if command_exists "brew"; then
+        success "Homebrew is installed"
+
+        if [[ "$VERBOSE" == true ]]; then
+            info "Homebrew version: $(brew --version | head -n1)"
+        fi
+
+        # Check for outdated packages
+        local outdated
+        outdated=$(brew outdated --quiet)
+        if [[ -n "$outdated" ]]; then
+            warning "Some packages are outdated:"
+            echo "$outdated" | sed 's/^/  /'
+        else
+            success "All packages are up to date"
+        fi
+    else
+        warning "Homebrew is not installed"
+        info "Run 'dotfiles packages' to install Homebrew"
+    fi
+
+    # Check shell
+    if [[ "$SHELL" == */zsh ]]; then
+        success "Using zsh shell"
+    else
+        warning "Not using zsh shell (current: $SHELL)"
+        info "Run 'dotfiles macos' to set zsh as default shell"
+    fi
+
+    # Summary
+    echo
+    if [[ $issues -eq 0 ]]; then
+        success "System health check passed! 🎉"
+    else
+        warning "Found $issues issue(s) that need attention"
+        info "Run 'dotfiles init' to fix these issues"
+    fi
+}
+
+# Placeholder implementations for remaining commands
+cmd_sync() {
+    title "🔗 Syncing configuration files"
+
+    info "Creating symlinks with GNU Stow..."
+
+    # Check if stow is installed
+    if ! command_exists "stow"; then
+        error "GNU Stow is not installed. Run 'dotfiles packages' first or install with: brew install stow"
+    fi
+
+    # Ensure we're in the dotfiles directory
+    cd "$DOTFILES_DIR" || error "Cannot access dotfiles directory"
+
+    if [[ "$DRY_RUN" == true ]]; then
+        echo "[DRY RUN] Would create directory: $HOME/.config"
+    else
+        mkdir -p "$HOME/.config"
+    fi
+
+    # Handle conflicting files/directories
+    local conflicting_paths=(
+        "$HOME/.config/nvim"
+        "$HOME/.config/tmux"
+        "$HOME/.config/kitty"
+        "$HOME/.config/ghostty"
+        "$HOME/.config/alacritty"
+        "$HOME/.config/yabai"
+        "$HOME/.config/skhd"
+        "$HOME/.config/karabiner"
+        "$HOME/.zshrc"
+    )
+
+    for path in "${conflicting_paths[@]}"; do
+        if [[ -e "$path" ]] && [[ ! -L "$path" ]]; then
+            local backup_name="${path}.backup.$(date +%Y%m%d_%H%M%S)"
+            if [[ "$DRY_RUN" == true ]]; then
+                echo "[DRY RUN] Would backup: $path -> $backup_name"
+            else
+                warning "Backing up existing configuration: $(basename "$path")"
+                mv "$path" "$backup_name"
+            fi
+        fi
+    done
+
+    # Stow packages
+    local packages=(".config" "zsh")
+
+    for package in "${packages[@]}"; do
+        if [[ -d "$package" ]]; then
+            if [[ "$DRY_RUN" == true ]]; then
+                echo "[DRY RUN] Would stow: $package"
+            else
+                info "Stowing $package..."
+                if stow -t "$HOME" "$package" 2>/dev/null; then
+                    success "Stowed $package"
+                else
+                    warning "Some symlinks for $package already exist. Restowing..."
+                    stow -R -t "$HOME" "$package"
+                    success "Restowed $package"
+                fi
+            fi
+        fi
+    done
+
+    if [[ "$DRY_RUN" != true ]]; then
+        success "Configuration files synced successfully!"
+        info "Use 'stow -D .config' to remove symlinks if needed"
+    fi
+}
+
+cmd_packages() {
+    title "📦 Managing Homebrew packages"
+
+    # Install Homebrew if not present
+    if ! command_exists "brew"; then
+        info "Homebrew not installed. Installing..."
+        if [[ "$DRY_RUN" == true ]]; then
+            echo "[DRY RUN] Would install Homebrew"
+        else
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        fi
+    else
+        success "Homebrew is already installed"
+    fi
+
+    # Setup Homebrew environment for Linux
+    if [[ "$(uname)" == "Linux" ]]; then
+        if [[ "$DRY_RUN" == true ]]; then
+            echo "[DRY RUN] Would setup Homebrew environment for Linux"
+        else
+            test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
+            test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+            test -r ~/.bash_profile && echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.bash_profile
+        fi
+    fi
+
+    # Install packages from Brewfile
+    if [[ -f "$DOTFILES_DIR/Brewfile" ]]; then
+        info "Installing packages from Brewfile..."
+        if [[ "$DRY_RUN" == true ]]; then
+            echo "[DRY RUN] Would run: brew bundle --file=$DOTFILES_DIR/Brewfile"
+        else
+            brew bundle --file="$DOTFILES_DIR/Brewfile"
+        fi
+    else
+        warning "Brewfile not found at $DOTFILES_DIR/Brewfile"
+    fi
+
+    # Install fzf key bindings
+    if command_exists "brew" && [[ -f "$(brew --prefix)/opt/fzf/install" ]]; then
+        info "Installing fzf key bindings..."
+        if [[ "$DRY_RUN" == true ]]; then
+            echo "[DRY RUN] Would install fzf key bindings"
+        else
+            "$(brew --prefix)"/opt/fzf/install --key-bindings --completion --no-update-rc --no-bash --no-fish
+        fi
+    fi
+
+    # Setup tmux TPM
+    if [[ ! -d "$HOME/.tmux/plugins/tpm" ]]; then
+        info "Installing TPM (Tmux Plugin Manager)..."
+        if [[ "$DRY_RUN" == true ]]; then
+            echo "[DRY RUN] Would clone TPM repository"
+        else
+            git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+        fi
+    fi
+
+    # Install tmux plugins if tmux is running
+    if pgrep -x "tmux" > /dev/null; then
+        info "Installing tmux plugins..."
+        if [[ "$DRY_RUN" == true ]]; then
+            echo "[DRY RUN] Would install tmux plugins"
+        else
+            ~/.tmux/plugins/tpm/bin/install_plugins
+        fi
+    else
+        info "Tmux is not running. Start tmux and press prefix + I to install plugins"
+    fi
+
+    # Fetch Catppuccin themes
+    info "Fetching Catppuccin themes..."
+    local theme_dir="$DOTFILES_DIR/.config/kitty/themes"
+    if [[ "$DRY_RUN" == true ]]; then
+        echo "[DRY RUN] Would create theme directory: $theme_dir"
+        echo "[DRY RUN] Would fetch Catppuccin themes"
+    else
+        mkdir -p "$theme_dir"
+        for palette in frappe latte macchiato mocha; do
+            curl -o "$theme_dir/catppuccin-$palette.conf" \
+                "https://raw.githubusercontent.com/catppuccin/kitty/main/$palette.conf" 2>/dev/null || true
+        done
+    fi
+
+    # Setup shell
+    local zsh_path
+    if command_exists "brew"; then
+        zsh_path="$(brew --prefix)/bin/zsh"
+    else
+        zsh_path="$(which zsh)"
+    fi
+
+    if ! grep -q "$zsh_path" /etc/shells 2>/dev/null; then
+        info "Adding $zsh_path to /etc/shells"
+        if [[ "$DRY_RUN" == true ]]; then
+            echo "[DRY RUN] Would add $zsh_path to /etc/shells"
+        else
+            echo "$zsh_path" | sudo tee -a /etc/shells >/dev/null
+        fi
+    fi
+
+    if [[ "$SHELL" != "$zsh_path" ]]; then
+        info "Changing default shell to $zsh_path"
+        if [[ "$DRY_RUN" == true ]]; then
+            echo "[DRY RUN] Would change shell to $zsh_path"
+        else
+            chsh -s "$zsh_path"
+        fi
+    fi
+
+    # Setup terminfo
+    info "Setting up terminfo..."
+    if [[ "$DRY_RUN" == true ]]; then
+        echo "[DRY RUN] Would install terminfo files"
+    else
+        tic -x "$DOTFILES_DIR/scripts/tmux.terminfo" 2>/dev/null || true
+        tic -x "$DOTFILES_DIR/scripts/xterm-256color-italic.terminfo" 2>/dev/null || true
+    fi
+
+    success "Package management complete!"
+}
+
+cmd_macos() {
+    title "🍎 Applying macOS settings"
+
+    if [[ "$(uname)" != "Darwin" ]]; then
+        warning "Not running on macOS. Skipping macOS-specific settings."
+        return 0
+    fi
+
+    if [[ "$FORCE" != true ]]; then
+        info "This will modify macOS system preferences."
+        info "Some changes may require a restart to take effect."
+        echo
+        if ! confirm "Apply macOS settings?"; then
+            info "macOS settings cancelled."
+            return 0
+        fi
+    fi
+
+    local settings=(
+        "Finder: show all filename extensions"
+        "defaults write NSGlobalDomain AppleShowAllExtensions -bool true"
+
+        "Show hidden files by default"
+        "defaults write com.apple.Finder AppleShowAllFiles -bool false"
+
+        "Only use UTF-8 in Terminal.app"
+        "defaults write com.apple.terminal StringEncodings -array 4"
+
+        "Expand save dialog by default"
+        "defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true"
+
+        "Show the ~/Library folder in Finder"
+        "chflags nohidden ~/Library"
+
+        "Enable full keyboard access for all controls"
+        "defaults write NSGlobalDomain AppleKeyboardUIMode -int 3"
+
+        "Enable subpixel font rendering on non-Apple LCDs"
+        "defaults write NSGlobalDomain AppleFontSmoothing -int 2"
+
+        "Use current directory as default search scope in Finder"
+        "defaults write com.apple.finder FXDefaultSearchScope -string SCcf"
+
+        "Show Path bar in Finder"
+        "defaults write com.apple.finder ShowPathbar -bool true"
+
+        "Show Status bar in Finder"
+        "defaults write com.apple.finder ShowStatusBar -bool true"
+
+        "Disable press-and-hold for keys in favor of key repeat"
+        "defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false"
+
+        "Set a blazingly fast keyboard repeat rate"
+        "defaults write NSGlobalDomain KeyRepeat -int 1"
+
+        "Set a shorter delay until key repeat"
+        "defaults write NSGlobalDomain InitialKeyRepeat -int 15"
+
+        "Enable tap to click (Trackpad)"
+        "defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true"
+    )
+
+    local i=0
+    while [[ $i -lt ${#settings[@]} ]]; do
+        local description="${settings[$i]}"
+        local command="${settings[$((i+1))]}"
+
+        info "$description"
+        if [[ "$DRY_RUN" == true ]]; then
+            echo "[DRY RUN] Would run: $command"
+        else
+            if [[ "$VERBOSE" == true ]]; then
+                echo "  Running: $command"
+            fi
+            eval "$command" 2>/dev/null || warning "Failed to apply: $description"
+        fi
+
+        i=$((i+2))
+    done
+
+    if [[ "$DRY_RUN" != true ]]; then
+        success "macOS settings applied successfully!"
+        info "Some changes may require a restart to take effect."
+        info "You may need to restart Finder: killall Finder"
+    fi
+}
+
+cmd_ds_store() {
+    title "🧹 Cleaning .DS_Store files from dotfiles"
+
+    # Find all .DS_Store files in the dotfiles directory
+    local ds_store_files
+    ds_store_files=$(find "$DOTFILES_DIR" -name ".DS_Store" -type f 2>/dev/null || true)
+
+    if [[ -z "$ds_store_files" ]]; then
+        success "No .DS_Store files found in dotfiles repository! 🎉"
+        info "Your dotfiles are already clean."
+        return 0
+    fi
+
+    # Count the files
+    local file_count
+    file_count=$(echo "$ds_store_files" | wc -l | tr -d ' ')
+
+    # Show found files
+    info "📍 Found $file_count .DS_Store file(s):"
+    echo
+    while IFS= read -r file; do
+        # Make path relative to dotfiles directory for cleaner display
+        local relative_path="${file#$DOTFILES_DIR/}"
+        if [[ "$relative_path" == "$file" ]]; then
+            # If path didn't change, file is in root, show just filename
+            relative_path="$(basename "$file")"
+        fi
+
+        if [[ "$VERBOSE" == true ]]; then
+            echo "  📄 $file"
+        else
+            echo "  📄 $relative_path"
+        fi
+    done <<< "$ds_store_files"
+
+    echo
+
+    # Ask for confirmation unless force mode or dry-run mode
+    if [[ "$FORCE" != true ]] && [[ "$DRY_RUN" != true ]]; then
+        if ! confirm "Remove $file_count .DS_Store file(s)?"; then
+            info "Cleanup cancelled."
+            return 0
+        fi
+        echo
+    fi
+
+    # Remove files
+    if [[ "$DRY_RUN" == true ]]; then
+        warning "[DRY RUN] Would remove $file_count .DS_Store file(s):"
+        while IFS= read -r file; do
+            local relative_path="${file#$DOTFILES_DIR/}"
+            if [[ "$relative_path" == "$file" ]]; then
+                relative_path="$(basename "$file")"
+            fi
+            echo "  🗑️  Would delete: $relative_path"
+        done <<< "$ds_store_files"
+    else
+        info "🗑️  Removing .DS_Store files..."
+        echo
+
+        local removed_count=0
+        while IFS= read -r file; do
+            local relative_path="${file#$DOTFILES_DIR/}"
+            if [[ "$relative_path" == "$file" ]]; then
+                relative_path="$(basename "$file")"
+            fi
+
+            if rm -f "$file" 2>/dev/null; then
+                success "Deleted: $relative_path"
+                ((removed_count++))
+            else
+                warning "Failed to delete: $relative_path"
+            fi
+        done <<< "$ds_store_files"
+
+        echo
+        if [[ $removed_count -eq $file_count ]]; then
+            success "Cleanup complete! Removed $removed_count .DS_Store file(s) 🎉"
+        else
+            warning "Removed $removed_count of $file_count .DS_Store file(s)"
+        fi
+    fi
+
+    # Check and suggest .gitignore update
+    if [[ -f "$DOTFILES_DIR/.gitignore" ]]; then
+        if ! grep -q "\.DS_Store" "$DOTFILES_DIR/.gitignore" 2>/dev/null; then
+            echo
+            info "💡 Tip: Add .DS_Store to .gitignore to prevent future occurrences:"
+            echo "       echo '.DS_Store' >> $DOTFILES_DIR/.gitignore"
+        fi
+    else
+        echo
+        info "💡 Tip: Create a .gitignore file to prevent future .DS_Store files:"
+        echo "       echo '.DS_Store' > $DOTFILES_DIR/.gitignore"
+    fi
+}
+
+# Script entry point
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    main "$@"
+fi

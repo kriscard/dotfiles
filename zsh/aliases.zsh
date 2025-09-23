@@ -1,8 +1,9 @@
 # reload zsh confihhhh
 alias reload!='RELOAD=1 source ~/.zshrc'
 
-#ai alias
+# AI and dotfiles management
 alias ai="claude"
+alias df-cli="~/.dotfiles/dotfiles"  # Dotfiles CLI shortcut
 
 # Filesystem aliases
 alias ..='cd ..'

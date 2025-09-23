@@ -1,0 +1,109 @@
+#!/usr/bin/env bash
+
+# Modern React/Node.js project setup script
+# Usage: project-setup <project-name> [template]
+
+set -e
+
+PROJECT_NAME="$1"
+TEMPLATE="${2:-react-ts}"
+
+if [ -z "$PROJECT_NAME" ]; then
+    echo "Usage: project-setup <project-name> [template]"
+    echo ""
+    echo "Available templates:"
+    echo "  react-ts    - React with TypeScript (default)"
+    echo "  react-js    - React with JavaScript"
+    echo "  next-ts     - Next.js with TypeScript"
+    echo "  next-js     - Next.js with JavaScript"
+    echo "  node-ts     - Node.js with TypeScript"
+    echo "  node-js     - Node.js with JavaScript"
+    exit 1
+fi
+
+echo "🚀 Setting up $PROJECT_NAME with $TEMPLATE template..."
+
+# Create project directory
+mkdir -p "$PROJECT_NAME"
+cd "$PROJECT_NAME"
+
+case "$TEMPLATE" in
+    "react-ts")
+        npm create vite@latest . -- --template react-ts
+        ;;
+    "react-js")
+        npm create vite@latest . -- --template react
+        ;;
+    "next-ts")
+        npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias "@/*"
+        ;;
+    "next-js")
+        npx create-next-app@latest . --javascript --tailwind --eslint --app --src-dir --import-alias "@/*"
+        ;;
+    "node-ts")
+        npm init -y
+        npm install -D typescript @types/node tsx nodemon
+        mkdir -p src
+        echo 'export const hello = () => console.log("Hello, TypeScript!");' > src/index.ts
+        ;;
+    "node-js")
+        npm init -y
+        mkdir -p src
+        echo 'const hello = () => console.log("Hello, JavaScript!");' > src/index.js
+        ;;
+    *)
+        echo "❌ Unknown template: $TEMPLATE"
+        exit 1
+        ;;
+esac
+
+# Add common development dependencies
+if [[ "$TEMPLATE" == *"react"* ]] || [[ "$TEMPLATE" == *"next"* ]]; then
+    echo "📦 Installing common React dependencies..."
+    npm install -D prettier eslint-config-prettier @types/react @types/react-dom
+fi
+
+# Create common configuration files
+echo "⚙️  Setting up configuration files..."
+
+# Prettier config
+cat > .prettierrc << EOF
+{
+  "semi": true,
+  "trailingComma": "es5",
+  "singleQuote": true,
+  "printWidth": 80,
+  "tabWidth": 2
+}
+EOF
+
+# VSCode settings
+mkdir -p .vscode
+cat > .vscode/settings.json << EOF
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "typescript.preferences.importModuleSpecifier": "relative"
+}
+EOF
+
+# Git setup
+git init
+echo "node_modules/" > .gitignore
+echo ".env" >> .gitignore
+echo ".DS_Store" >> .gitignore
+echo "dist/" >> .gitignore
+
+# Initial commit
+git add .
+git commit -m "Initial commit: $TEMPLATE project setup"
+
+echo "✅ Project $PROJECT_NAME set up successfully!"
+echo "📁 Location: $(pwd)"
+echo "🔧 Next steps:"
+echo "   cd $PROJECT_NAME"
+echo "   npm install"
+echo "   npm run dev"

@@ -13,7 +13,13 @@
       "Bash(nvim:*)",
       "Bash(npm install:*)",
       "Bash(./graphql-lsp --help)",
-      "WebFetch(domain:cmp.saghen.dev)"
+      "WebFetch(domain:cmp.saghen.dev)",
+      "Bash(./dotfiles ds_store:*)",
+      "Bash(./dotfiles:*)",
+      "Bash(screencapture:*)",
+      "Bash(tmux list-panes:*)",
+      "Bash(tmux send-keys:*)",
+      "Bash(tmux attach-session:*)"
     ],
     "deny": [],
     "ask": []

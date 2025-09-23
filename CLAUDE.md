@@ -4,12 +4,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Architecture Overview
 
-This is a personal dotfiles repository that manages development environment configurations using a modular approach. The main components are:
+This is a personal dotfiles repository that manages development environment configurations using a modern CLI approach. The main components are:
 
 - **Configuration Management**: All configs stored in `.config/` directory with application-specific subdirectories
-- **Installation System**: Modular `install.sh` script with separate functions for different components
+- **CLI Management System**: Modern `dotfiles` CLI tool with commands for installation, updates, diagnostics, and maintenance
 - **Package Management**: Homebrew via `Brewfile` for consistent package installation across machines
-- **Symlink Management**: Uses GNU Stow for creating symlinks (referenced but not implemented in current install.sh)
+- **Symlink Management**: GNU Stow integration for creating and managing configuration symlinks
 
 ## Key Configuration Areas
 
@@ -30,26 +30,34 @@ This is a personal dotfiles repository that manages development environment conf
 - **SKHD** (`.config/skhd/`): Hotkey daemon for macOS window management
 - **Karabiner** (`.config/karabiner/`): Keyboard customization
 
-### Terminal Applications
-- **Kitty/Ghostty/Alacritty**: Multiple terminal emulator configs
+### Terminal Applications & Tools
+- **Kitty/Ghostty**: Modern terminal emulator configurations with Catppuccin theming
 - **Spicetify** (`.config/spicetify/`): Spotify theming
 - **Lazygit** (`.config/lazygit/`): Git TUI configuration
+- **Starship** (`.config/starship.toml`): Cross-shell prompt configuration
+- **GH-Dash** (`.config/gh-dash/`): GitHub CLI dashboard for PRs and issues
+- **Sketchybar** (`.config/sketchybar/`): macOS menu bar customization
 
 ## Common Development Commands
 
 ### Initial Setup
 ```bash
 # Complete environment setup
-./install.sh all
+dotfiles init
 
 # Individual components
-./install.sh homebrew    # Install Homebrew and packages from Brewfile
-./install.sh shell       # Configure zsh as default shell
-./install.sh git         # Interactive git configuration setup
-./install.sh terminfo    # Install custom terminal info files
-./install.sh macos       # Apply macOS system preferences
-./install.sh catppuccin  # Download Catppuccin theme variants
-./install.sh backup      # Backup existing configs before installation
+dotfiles packages        # Install Homebrew and packages from Brewfile
+dotfiles sync           # Sync configuration files only
+dotfiles macos          # Apply macOS system preferences
+dotfiles backup         # Backup existing configs before installation
+
+# Diagnostics and maintenance
+dotfiles doctor         # Run system health check
+dotfiles doctor --verbose  # Detailed diagnostics
+dotfiles ds_store       # Clean .DS_Store files from dotfiles
+
+# Update system
+dotfiles update         # Update dotfiles and packages
 ```
 
 ### Tmux Management
@@ -79,7 +87,9 @@ tmux source-file ~/.config/tmux/tmux.conf
 - **Homebrew packages**: See `Brewfile` for complete list including neovim, tmux, fzf, ripgrep, bat, gh, etc.
 - **Languages**: Python (pyenv), Ruby (rbenv), Node.js, PHP, Java
 - **Development**: Docker, Android Studio, VS Code with extensive extensions
-- **CLI Tools**: fd, bat, ripgrep, fzf, jq, tldr, htop, autojump
+- **Modern CLI Tools**: eza (ls), bat (cat), fd (find), ripgrep (grep), zoxide (cd), fzf, jq, tldr, htop
+- **Git Tools**: lazygit, gh (GitHub CLI), gh-dash (GitHub dashboard)
+- **File Management**: Standard macOS Finder integration with shell navigation tools
 
 ## Configuration Patterns
 - Configs use XDG Base Directory specification (`.config/` directory)
