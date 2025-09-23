@@ -2,6 +2,7 @@ return {
 	-- React component extraction
 	{
 		"napmn/react-extract.nvim",
+		enabled = false, -- Temporarily disabled for debugging
 		ft = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
 		keys = {
 			{
@@ -31,6 +32,7 @@ return {
 	-- Enhanced JSX/React development
 	{
 		"neoclide/vim-jsx-improve",
+		enabled = false, -- Temporarily disabled for debugging
 		ft = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
 	},
 

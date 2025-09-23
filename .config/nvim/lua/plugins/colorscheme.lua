@@ -22,6 +22,10 @@ return {
 				treesitter = true,
 				treesitter_context = true,
 			},
+			float = {
+				transparent = false,
+				solid = false,
+			},
 		})
 
 		vim.cmd.colorscheme("catppuccin-macchiato")

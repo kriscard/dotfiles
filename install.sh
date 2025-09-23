@@ -130,6 +130,78 @@ function setup_terminfo() {
     tic -x "$DOTFILES/scripts/xterm-256color-italic.terminfo"
 }
 
+setup_tmux() {
+    title "Setting up tmux"
+
+    # Install TPM if it doesn't exist
+    if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
+        info "Installing TPM (Tmux Plugin Manager)"
+        git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+    fi
+
+    # Install plugins (if tmux is running, this will work)
+    if pgrep -x "tmux" > /dev/null; then
+        info "Installing tmux plugins"
+        ~/.tmux/plugins/tpm/bin/install_plugins
+    else
+        info "Tmux is not running. Start tmux and press prefix + I to install plugins"
+    fi
+
+    success "Tmux setup complete!"
+}
+
+setup_symlinks() {
+    title "Setting up symlinks with GNU Stow"
+
+    # Ensure we're in the dotfiles directory
+    cd "$DOTFILES" || error "Cannot access dotfiles directory"
+
+    # Check if stow is installed
+    if ! command -v stow &> /dev/null; then
+        error "GNU Stow is not installed. Please install it first with: brew install stow"
+    fi
+
+    # Create necessary directories
+    mkdir -p "$HOME/.config"
+
+    # Stow configurations using the .config directory structure
+    info "Stowing configuration files..."
+
+    # Handle conflicting files/directories
+    conflicting_paths=(
+        "$HOME/.config/nvim"
+        "$HOME/.config/tmux"
+        "$HOME/.config/kitty"
+        "$HOME/.config/ghostty"
+        "$HOME/.config/yabai"
+        "$HOME/.config/skhd"
+        "$HOME/.zshrc"
+    )
+
+    for path in "${conflicting_paths[@]}"; do
+        if [ -e "$path" ] && [ ! -L "$path" ]; then
+            warning "Backing up existing configuration: $path"
+            mv "$path" "${path}.backup.$(date +%Y%m%d_%H%M%S)"
+        fi
+    done
+
+    # Stow each package
+    packages=(".config" "zsh")
+
+    for package in "${packages[@]}"; do
+        if [ -d "$package" ]; then
+            info "Stowing $package..."
+            stow -t "$HOME" "$package" 2>/dev/null || {
+                warning "Some symlinks for $package already exist. Restowing..."
+                stow -R -t "$HOME" "$package"
+            }
+        fi
+    done
+
+    success "Symlinks created successfully!"
+    info "Use 'stow -D .config' to remove symlinks if needed"
+}
+
 setup_macos() {
     title "Configuring macOS"
     if [[ "$(uname)" == "Darwin" ]]; then
@@ -200,6 +272,9 @@ case "$1" in
     backup)
         backup
         ;;
+    link)
+        setup_symlinks
+        ;;
     git)
         setup_git
         ;;
@@ -212,6 +287,9 @@ case "$1" in
     terminfo)
         setup_terminfo
         ;;
+    tmux)
+        setup_tmux
+        ;;
     macos)
         setup_macos
         ;;
@@ -223,11 +301,12 @@ case "$1" in
         setup_terminfo
         setup_homebrew
         setup_shell
+        setup_tmux
         setup_git
         setup_macos
         ;;
     *)
-        echo -e $"\nUsage: $(basename "$0") {backup|link|git|homebrew|shell|terminfo|macos|all}\n"
+        echo -e $"\nUsage: $(basename "$0") {backup|link|git|homebrew|shell|terminfo|tmux|macos|catppuccin|all}\n"
         exit 1
         ;;
 esac

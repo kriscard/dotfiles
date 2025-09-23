@@ -1,120 +1,162 @@
+# Modern Brewfile - Optimized for Web Development
+# Organized by category for better maintainability
+
+# Homebrew Taps
 tap "fsouza/prettierd"
 tap "homebrew/bundle"
 tap "homebrew/cask"
 tap "homebrew/cask-fonts"
-tap "homebrew/cask-versions"
-tap "homebrew/core"
 tap "homebrew/services"
 tap "koekeishiya/formulae"
 tap "ngrok/ngrok"
-tap "romkatv/powerlevel10k"
-brew "apr-util"
-brew "python@3.10"
-brew "autojump"
-brew "python@3.11"
-brew "awscli"
-brew "bat"
-brew "bluetoothconnector"
-brew "libxrender"
-brew "harfbuzz"
-brew "openjdk"
-brew "bundletool"
-brew "circleci"
-brew "openldap"
-brew "curl"
-brew "folly"
-brew "edencommon"
-brew "fizz"
-brew "wangle"
-brew "fbthrift"
-brew "fb303"
-brew "freetds"
-brew "fzf"
-brew "gh"
+
+# =============================================================================
+# CORE SYSTEM TOOLS
+# =============================================================================
+
+# Essential CLI tools
 brew "git"
-brew "openssl@3"
-brew "git-crypt"
-brew "unbound"
-brew "gnutls"
-brew "gnupg"
-brew "htop"
-brew "jq"
-brew "libpq"
-brew "lua-language-server"
-brew "neovim"
-brew "php"
-brew "pyenv"
-brew "rbenv"
-brew "redis"
-brew "ripgrep"
-brew "starship"
-brew "stow"
-brew "tldr"
-brew "tmux"
-brew "watchman"
+brew "curl"
 brew "wget"
-brew "xclip"
+brew "jq"
+brew "htop"
+brew "tldr"
+
+# Modern command line tools (replacements for traditional tools)
+brew "bat"          # Better cat
+brew "eza"          # Modern ls replacement (instead of exa)
+brew "fd"           # Better find
+brew "ripgrep"      # Better grep
+brew "fzf"          # Fuzzy finder
+brew "zoxide"       # Smart cd command
+brew "stow"         # Symlink management
+
+# =============================================================================
+# TERMINAL & SHELL
+# =============================================================================
+
+brew "tmux"
+brew "starship"     # Fast shell prompt
+brew "zsh-autosuggestions"
+brew "zsh-syntax-highlighting"
+
+# =============================================================================
+# DEVELOPMENT TOOLS
+# =============================================================================
+
+# Text Editor
+brew "neovim"
+brew "lua-language-server"
+
+# Version Managers (modern alternatives)
+brew "fnm"          # Fast Node Manager (better than nvm)
+brew "pyenv"        # Python version management
+brew "rbenv"        # Ruby version management
+
+# Databases
+brew "redis"
+brew "libpq"        # PostgreSQL client
+
+# Build Tools
+brew "watchman"     # File watching
+
+# Code Quality & Formatting
 brew "fsouza/prettierd/prettierd"
+
+# =============================================================================
+# WEB DEVELOPMENT SPECIFIC
+# =============================================================================
+
+# Currently commented out - uncomment if needed
+# brew "php"
+
+# =============================================================================
+# MACOS TOOLS
+# =============================================================================
+
+# Window Management
 brew "koekeishiya/formulae/skhd"
 brew "koekeishiya/formulae/yabai"
-brew "romkatv/powerlevel10k/powerlevel10k"
-cask "android-commandlinetools"
-cask "android-studio"
-cask "discord"
-cask "docker"
-cask "font-hack-nerd-font"
+
+# =============================================================================
+# GUI APPLICATIONS
+# =============================================================================
+
+# Terminals (keeping both as requested)
 cask "kitty"
-cask "ngrok"
-cask "notion"
+cask "ghostty"
+
+# Development Tools
+cask "docker"
+cask "visual-studio-code"
+
+# Development Mobile
+cask "android-studio"
+cask "android-commandlinetools"
+cask "react-native-debugger"
+
+# Databases
 cask "popsql"
 cask "postico"
-cask "react-native-debugger"
+
+# Fonts
+cask "font-hack-nerd-font"
+cask "font-fira-code-nerd-font"
+
+# Productivity
+cask "notion"
 cask "todoist"
-cask "visual-studio-code"
+cask "discord"
+
+# Utilities
+cask "ngrok"
+
+# Java (if needed for Android development)
 cask "zulu11"
-vscode "aaron-bond.better-comments"
-vscode "asvetliakov.vscode-neovim"
-vscode "atlassian.atlascode"
-vscode "bierner.color-info"
-vscode "bradlc.vscode-tailwindcss"
-vscode "Catppuccin.catppuccin-vsc"
-vscode "Catppuccin.catppuccin-vsc-icons"
-vscode "christian-kohler.npm-intellisense"
-vscode "christian-kohler.path-intellisense"
-vscode "codezombiech.gitignore"
-vscode "dbaeumer.vscode-eslint"
-vscode "devadvice.serverlessconsole"
-vscode "donjayamanne.githistory"
-vscode "dsznajder.es7-react-js-snippets"
-vscode "eamodio.gitlens"
-vscode "emmanuelbeziat.vscode-great-icons"
-vscode "esbenp.prettier-vscode"
-vscode "firsttris.vscode-jest-runner"
-vscode "formulahendry.auto-rename-tag"
-vscode "formulahendry.code-runner"
+
+# =============================================================================
+# VS CODE EXTENSIONS (Essential Only)
+# =============================================================================
+
+# Core Extensions
 vscode "GitHub.copilot"
 vscode "GitHub.copilot-labs"
-vscode "GitHub.github-vscode-theme"
-vscode "GrapeCity.gc-excelviewer"
-vscode "GraphQL.vscode-graphql"
-vscode "GraphQL.vscode-graphql-syntax"
-vscode "Gruntfuggly.todo-tree"
-vscode "IBM.output-colorizer"
-vscode "jasonnutter.search-node-modules"
-vscode "mechatroner.rainbow-csv"
-vscode "mikestead.dotenv"
-vscode "mintlify.document"
-vscode "ms-vscode-remote.remote-wsl"
-vscode "ms-vsliveshare.vsliveshare"
-vscode "PKief.material-icon-theme"
-vscode "RamiroBerrelleza.bitbucket-pull-requests"
-vscode "redhat.vscode-yaml"
-vscode "sdras.night-owl"
-vscode "VisualStudioExptTeam.intellicode-api-usage-examples"
-vscode "VisualStudioExptTeam.vscodeintellicode"
-vscode "vscode-icons-team.vscode-icons"
-vscode "vscodevim.vim"
-vscode "xabikos.JavaScriptSnippets"
-vscode "xyz.plsql-language"
-vscode "zhuangtongfa.material-theme"
-vscode "Zignd.html-css-class-completion"
+vscode "esbenp.prettier-vscode"
+vscode "dbaeumer.vscode-eslint"
+
+# React/TypeScript Development
+vscode "bradlc.vscode-tailwindcss"
+vscode "dsznajder.es7-react-js-snippets"
+
+# Theme & Icons
+vscode "Catppuccin.catppuccin-vsc"
+vscode "Catppuccin.catppuccin-vsc-icons"
+
+# Git Integration
+vscode "eamodio.gitlens"
+
+# Utility Extensions
+vscode "asvetliakov.vscode-neovim"
+vscode "christian-kohler.npm-intellisense"
+vscode "christian-kohler.path-intellisense"
+vscode "formulahendry.auto-rename-tag"
+
+# =============================================================================
+# REMOVED PACKAGES (redundant or outdated)
+# =============================================================================
+
+# Removed:
+# - autojump (replaced with zoxide)
+# - python@3.10, python@3.11 (use pyenv instead)
+# - awscli (install only when needed)
+# - bluetoothconnector (rarely used)
+# - bundletool (Android-specific, install when needed)
+# - circleci (project-specific)
+# - openldap, freetds, folly, etc. (rarely used dependencies)
+# - gnupg (install when needed for security)
+# - xclip (Linux tool, not needed on macOS)
+# - romkatv/powerlevel10k (using starship instead)
+# - Multiple VSCode extensions (keeping only essential ones)
+
+# Note: If you need any of the removed packages, uncomment them above
+# or install them individually with: brew install package-name
