@@ -1,14 +1,14 @@
-# Modern Development Environment
+# Dotfiles
 
 > Beautiful, fast, and efficient dotfiles for React/Node.js development
 
 A streamlined dotfiles configuration featuring modern tools, consistent theming, and an intuitive CLI for effortless environment management.
 
 ![Neovim Development Environment](screenshots/neovim-react.png)
-*Neovim with React development setup*
+_Neovim with React development setup_
 
 ![Tmux Workflow](screenshots/tmux-workflow.png)
-*Tmux session with multiple development workflows*
+_Tmux session with multiple development workflows_
 
 ## Highlights
 
@@ -29,13 +29,13 @@ cd ~/.dotfiles
 
 ## CLI Commands
 
-| Command | Purpose |
-|---------|---------|
-| `dotfiles init` | Complete system setup |
-| `dotfiles doctor` | Health check & diagnostics |
-| `dotfiles sync` | Sync configurations only |
-| `dotfiles backup` | Backup existing configs |
-| `dotfiles ds_store` | Clean .DS_Store files |
+| Command             | Purpose                    |
+| ------------------- | -------------------------- |
+| `dotfiles init`     | Complete system setup      |
+| `dotfiles doctor`   | Health check & diagnostics |
+| `dotfiles sync`     | Sync configurations only   |
+| `dotfiles backup`   | Backup existing configs    |
+| `dotfiles ds_store` | Clean .DS_Store files      |
 
 **Options:** `--dry-run` `--force` `--verbose`
 
@@ -49,21 +49,24 @@ dotfiles backup              # Safe backup
 ## Key Features
 
 ### Core Tools
+
 - **Neovim**: Lua config with React/TypeScript LSP
 - **Tmux**: Session management with vim keybindings
 - **Terminal**: Kitty/Ghostty with Catppuccin theme
 - **Shell**: Zsh with modern CLI tools
 
 ### Modern CLI Tools
-| Old | New | Benefit |
-|-----|-----|---------|
-| `ls` | `eza` | Git integration & icons |
-| `cat` | `bat` | Syntax highlighting |
-| `find` | `fd` | Faster & simpler |
-| `grep` | `ripgrep` | Blazing fast search |
-| `cd` | `zoxide` | Smart jumping |
+
+| Old    | New       | Benefit                 |
+| ------ | --------- | ----------------------- |
+| `ls`   | `eza`     | Git integration & icons |
+| `cat`  | `bat`     | Syntax highlighting     |
+| `find` | `fd`      | Faster & simpler        |
+| `grep` | `ripgrep` | Blazing fast search     |
+| `cd`   | `zoxide`  | Smart jumping           |
 
 ### Development Shortcuts
+
 ```bash
 # Quick navigation
 z project-name        # Jump to project (zoxide)
@@ -78,6 +81,7 @@ killport 3000         # Kill process on port
 ## Theming
 
 Consistent Catppuccin theme across all tools:
+
 ```bash
 export THEME_FLAVOUR=macchiato  # frappe, latte, mocha
 ```
