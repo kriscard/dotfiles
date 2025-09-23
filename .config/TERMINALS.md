@@ -1,6 +1,6 @@
 # Terminal Configurations
 
-This dotfiles setup includes configurations for two modern terminals optimized for development workflows.
+This dotfiles setup includes configurations for two modern terminals optimized for development workflows: Kitty and Ghostty.
 
 ## Kitty Terminal
 
