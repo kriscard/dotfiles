@@ -1,7 +1,5 @@
 # Dotfiles
 
-> fast, and efficient dotfiles and focus for React/Node.js development
-
 This is my dotfiles configuration featuring modern tools, consistent theming (Catppuccin Macchiato), and some intuitive CLI commands.
 
 ![Neovim Development Environment](screenshots/neovim-react.png)
