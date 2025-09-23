@@ -54,13 +54,13 @@ dotfiles backup              # Safe backup
 
 ### Modern CLI Tools
 
-| Old    | New       | Benefit                 |
-| ------ | --------- | ----------------------- |
-| `ls`   | `eza`     | Git integration & icons |
-| `cat`  | `bat`     | Syntax highlighting     |
-| `find` | `fd`      | Faster & simpler        |
-| `grep` | `ripgrep` | Blazing fast search     |
-| `cd`   | `zoxide`  | Smart jumping           |
+| Traditional | Replacement | Benefit                 |
+| ----------- | ----------- | ----------------------- |
+| `ls`   | `eza`        | Git integration & icons |
+| `cat`  | `bat`        | Syntax highlighting     |
+| `find` | `fd`         | Faster & simpler        |
+| `grep` | `ripgrep`    | Blazing fast search     |
+| `cd`   | `zoxide`     | Smart jumping           |
 
 ### Development Shortcuts
 
