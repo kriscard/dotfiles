@@ -29,6 +29,15 @@ return {
       right_mouse_command = function(n) require("mini.bufremove").delete(n, false) end,
 			diagnostics = "nvim_lsp",
 			always_show_bufferline = false,
+			max_name_length = 30,
+			max_prefix_length = 30,
+			tab_size = 21,
+			show_buffer_icons = true,
+			show_buffer_close_icons = true,
+			show_close_icon = true,
+			show_tab_indicators = true,
+			persist_buffer_sort = true,
+			separator_style = "slant",
 			diagnostics_indicator = function(_, _, diag)
 				local icons = iconsList.diagnostics
 				local ret = (diag.error and icons.Error .. diag.error .. " " or "")
@@ -51,7 +60,7 @@ return {
 		vim.api.nvim_create_autocmd("BufAdd", {
 			callback = function()
 				vim.schedule(function()
-					pcall(nvim_bufferline)
+					pcall(vim.cmd.redraw)
 				end)
 			end,
 		})

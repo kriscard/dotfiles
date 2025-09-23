@@ -134,18 +134,6 @@ return {
 				capabilities = vim.tbl_deep_extend("force", capabilities, blink_capabilities)
 			end
 
-			-- TS inlay hints preset
-			local ts_ls_inlay_hints = {
-				includeInlayEnumMemberValueHints = true,
-				includeInlayFunctionLikeReturnTypeHints = true,
-				includeInlayFunctionParameterTypeHints = true,
-				includeInlayParameterNameHints = "all",
-				includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-				includeInlayPropertyDeclarationTypeHints = true,
-				includeInlayVariableTypeHints = true,
-				includeInlayVariableTypeHintsWhenTypeMatchesName = true,
-			}
-
 			local servers = {
 				lua_ls = {
 					settings = {
@@ -157,7 +145,7 @@ return {
 				},
 				bashls = {},
 				cssls = { settings = { css = { lint = { unknownAtRules = "ignore" } } } },
-				graphql = {},
+				graphql = { filetypes = { "graphql" } },
 				html = {},
 				jsonls = {},
 				marksman = {},
@@ -192,24 +180,33 @@ return {
 					settings = {
 						complete_function_calls = true,
 						vtsls = {
-							enableMoveToFileCodeAction = true,
+							enableMoveToFileCodeAction = false, -- Disable for performance
 							autoUseWorkspaceTsdk = true,
 							experimental = {
-								maxInlayHintLength = 30,
-								completion = { enableServerSideFuzzyMatch = true },
+								maxInlayHintLength = 10, -- Reduced for performance
+								completion = { enableServerSideFuzzyMatch = false }, -- Disable for performance
 							},
 						},
 						typescript = {
 							updateImportsOnFileMove = { enabled = "always" },
 							suggest = {
-								completeFunctionCalls = true,
-								includeCompletionsForModuleExports = true,
+								completeFunctionCalls = false, -- Reduce completion overhead
+								includeCompletionsForModuleExports = false, -- Performance improvement
 								includeCompletionsForImportStatements = true,
 							},
-							inlayHints = ts_ls_inlay_hints,
+							inlayHints = {
+								includeInlayEnumMemberValueHints = false,
+								includeInlayFunctionLikeReturnTypeHints = false,
+								includeInlayFunctionParameterTypeHints = false,
+								includeInlayParameterNameHints = "none", -- Disable for performance
+								includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+								includeInlayPropertyDeclarationTypeHints = false,
+								includeInlayVariableTypeHints = false,
+								includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+							},
 							preferences = {
 								importModuleSpecifierPreference = "non-relative",
-								includePackageJsonAutoImports = "auto",
+								includePackageJsonAutoImports = "off", -- Performance improvement
 								-- Disable VTSLS import organization to avoid conflicts with ESLint
 								organizeImportsIgnoreCase = false,
 								organizeImportsCollation = "ordinal",
@@ -218,7 +215,7 @@ return {
 								organizeImportsAccentCollation = false,
 								organizeImportsCaseFirst = "lower",
 							},
-							maxTsServerMemory = 16384,
+							maxTsServerMemory = 4096, -- Reduced from 16GB to 4GB
 							watchOptions = {
 								excludeDirectories = {
 									"**/node_modules",
@@ -241,13 +238,13 @@ return {
 						},
 						javascript = {
 							suggest = {
-								completeFunctionCalls = true,
-								includeCompletionsForModuleExports = true,
+								completeFunctionCalls = false, -- Performance improvement
+								includeCompletionsForModuleExports = false, -- Performance improvement
 								includeCompletionsForImportStatements = true,
 							},
 							preferences = {
 								importModuleSpecifierPreference = "non-relative",
-								includePackageJsonAutoImports = "auto",
+								includePackageJsonAutoImports = "off", -- Performance improvement
 							},
 						},
 					},
@@ -436,7 +433,6 @@ return {
 		version = "*",
 		dependencies = {
 			"saghen/blink.compat",
-			-- optional extra sources used below:
 			"moyiz/blink-emoji.nvim",
 			"Kaiser-Yang/blink-cmp-dictionary",
 			"Kaiser-Yang/blink-cmp-git",
@@ -447,73 +443,68 @@ return {
 				["<CR>"] = { "accept", "fallback" },
 				["<Tab>"] = { "snippet_forward", "accept", "fallback" },
 				["<S-Tab>"] = { "snippet_backward", "fallback" },
-				["<C-Space>"] = { "show" },
-				["<C-n>"] = { "select_next" },
-				["<C-p>"] = { "select_prev" },
-				["<C-l>"] = { "snippet_forward" },
-				["<C-h>"] = { "snippet_backward" },
+				["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
+				["<C-e>"] = { "hide" },
+				["<Up>"] = { "select_prev", "fallback" },
+				["<Down>"] = { "select_next", "fallback" },
+				["<C-p>"] = { "select_prev", "fallback" },
+				["<C-n>"] = { "select_next", "fallback" },
+				["<C-u>"] = { "scroll_documentation_up", "fallback" },
+				["<C-d>"] = { "scroll_documentation_down", "fallback" },
 			},
 
 			completion = {
 				list = {
 					selection = { preselect = false, auto_insert = false },
-					max_items = 40,
+					max_items = 200,
 				},
-				accept = {
-					auto_brackets = {
-						enabled = true,
-						kind_resolution = { enabled = true },
-						semantic_token_resolution = { enabled = true },
-					},
-				},
+				accept = { auto_brackets = { enabled = true } },
 				documentation = {
 					auto_show = true,
-					auto_show_delay_ms = 400,
+					auto_show_delay_ms = 200,
 				},
 				ghost_text = { enabled = true },
 				menu = {
+					auto_show = function(ctx)
+						return ctx.mode ~= "cmdline" or not vim.tbl_contains({ "/", "?" }, vim.fn.getcmdtype())
+					end,
 					draw = {
-						columns = { { "label", "label_description", gap = 1 }, { "kind_icon", "kind" } },
+						columns = { { "kind_icon" }, { "label", "label_description", gap = 1 } },
 					},
 				},
 			},
 
 			sources = {
-				default = { "snippets", "lsp", "path", "buffer", "emoji", "git", "dictionary" },
-				per_filetype = { lua = { "lazydev", "snippets", "lsp", "path", "buffer" } },
+				default = { "lsp", "path", "snippets", "buffer", "emoji" },
+				per_filetype = {
+					lua = { "lazydev", "lsp", "path", "snippets", "buffer" },
+					gitcommit = { "git", "buffer" },
+				},
 				providers = {
 					lazydev = { module = "lazydev.integrations.blink" },
 					emoji = {
 						module = "blink-emoji",
-						enabled = function()
-							return true
-						end, -- Enable emoji completions
+						name = "emoji",
+						score_offset = -15,
+						min_keyword_length = 2,
 					},
 					git = {
 						module = "blink-cmp-git",
+						name = "git",
+						score_offset = 10,
 						enabled = function()
-							return true
-						end, -- Enable git completions
-					},
-					snippets = {
-						score_offset = 100, -- Higher score for custom snippets
+							return vim.bo.filetype == "gitcommit"
+						end,
 					},
 					dictionary = {
 						module = "blink-cmp-dictionary",
-						name = "Dict",
-						score_offset = 20,
-						max_items = 8,
+						name = "dict",
+						score_offset = -10,
+						max_items = 5,
 						min_keyword_length = 3,
 						enabled = function()
-							return true
-						end, -- Enable dictionary completions
-						opts = {
-							dictionary_directories = { vim.fn.expand("~/.config/nvim/dictionaries") },
-							dictionary_files = {
-								vim.fn.expand("~/.config/nvim/spell/en.utf-8.add"),
-								vim.fn.expand("~/.config/nvim/spell/es.utf-8.add"),
-							},
-						},
+							return vim.tbl_contains({ "markdown", "text", "gitcommit" }, vim.bo.filetype)
+						end,
 					},
 				},
 			},

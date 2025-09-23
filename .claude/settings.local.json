@@ -2,7 +2,18 @@
   "permissions": {
     "allow": [
       "Read(//Users/kriscard/.local/share/nvim/mason/bin/**)",
-      "Read(//Users/kriscard/projects/playground/secoda-editor/**)"
+      "Read(//Users/kriscard/projects/playground/secoda-editor/**)",
+      "Bash(tree:*)",
+      "Bash(fd:*)",
+      "Read(//Users/kriscard/**)",
+      "Bash(chmod:*)",
+      "WebFetch(domain:ghostty.org)",
+      "WebFetch(domain:github.com)",
+      "Bash(./sessionx.tmux)",
+      "Bash(nvim:*)",
+      "Bash(npm install:*)",
+      "Bash(./graphql-lsp --help)",
+      "WebFetch(domain:cmp.saghen.dev)"
     ],
     "deny": [],
     "ask": []

@@ -41,11 +41,9 @@ alias ggp="git push"
 alias gst="git status"
 alias gd="git diff"
 alias gc="git commit"
-alias gcm="git commit -m"
 alias ga="git add"
 alias gco="git checkout"
 alias gb="git branch"
-alias gcm="git commit -m"
 alias gf="git fetch"
 
 # Upate Stow symlink
@@ -75,19 +73,18 @@ alias tx='tmuxinator'
 # clear terminal
 alias K='clear'
 
-# Use tab for autocompletion
-bindkey '\t' end-of-line
 
-# use exa
+# Modern command replacements
 alias ls="eza --icons=always"
 alias lls="eza --icons --git --long"
-# alias ll="eza --icons --git --all --long"
 alias lt="eza --icons --git --tree"
 alias la="eza --icons --git --all"
 alias l='eza -l --icons --group-directories-first'
 alias ll='eza -la --icons --group-directories-first'
 
-# alias cd="z" // was causing issue with Claude Code
+# Note: zoxide is initialized in completions.zsh and automatically replaces cd
+alias zi="zi"  # Interactive zoxide
+alias ccd="cd"  # Traditional cd with path completion for exploring new directories
 
 # Lazydocker alias 
 alias lzd='lazydocker'
@@ -95,5 +92,16 @@ alias lzd='lazydocker'
 # alias for lazygit
 alias lzg='lazygit'
 
-# fzf alias
+# Modern tool aliases
+alias cat="bat"           # Better cat with syntax highlighting
+alias find="fd"           # Better find
+alias grep="rg"           # Better grep
+
+# fzf previews
 alias preview="fzf --preview 'bat --color=always {}'"
+alias pf="fzf --preview 'bat --color=always {}'"  # Shorter version
+
+# Node version management with fnm
+alias node-use="fnm use"
+alias node-list="fnm list"
+alias node-install="fnm install"

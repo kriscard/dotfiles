@@ -6,13 +6,26 @@ return {
 			opts.spec = opts.spec or {}
 			opts.spec[#opts.spec + 1] = {
 				{ "<leader>r", group = "React" },
-				{ "<leader>re", desc = "Extract component to new file", mode = "v" },
-				{ "<leader>rc", desc = "Extract component to current file", mode = "v" },
 				{ "<leader>rf", desc = "Refactor", mode = "n" },
-				{ "<leader>rh", desc = "Convert to React Hook", mode = "v" },
-				{ "<leader>ri", desc = "Add import", mode = "n" },
-				{ "<leader>rp", desc = "Add prop-types", mode = "n" },
+				{ "<leader>ri", desc = "Add missing import", mode = "n" },
 			}
 		end,
+		keys = {
+			{
+				"<leader>ri",
+				function()
+					vim.lsp.buf.code_action({
+						filter = function(action)
+							return string.match(action.title, "Add import") or
+							       string.match(action.title, "Import") or
+							       string.match(action.title, "Update import")
+						end,
+						apply = true,
+					})
+				end,
+				desc = "Add missing import",
+				mode = "n",
+			},
+		},
 	},
 }
