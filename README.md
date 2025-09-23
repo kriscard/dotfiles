@@ -73,7 +73,7 @@ gcm "message"         # Git add + commit
 killport 3000         # Kill process on port
 
 # Tmux sessions
-<prefix> + o          # Session launcher
+<prefix> + e          # Session launcher with Tmux SessionX
 <prefix> + Ctrl-s     # Save session
 ```
 
