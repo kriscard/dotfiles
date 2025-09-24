@@ -19,9 +19,14 @@
       "Bash(screencapture:*)",
       "Bash(tmux list-panes:*)",
       "Bash(tmux send-keys:*)",
-      "Bash(tmux attach-session:*)"
+      "Bash(tmux attach-session:*)",
+      "Bash(npx -y @smithery/cli install mcp-obsidian --client claude)"
     ],
     "deny": [],
     "ask": []
-  }
+  },
+  "enabledMcpjsonServers": [
+    "obsidian"
+  ],
+  "enableAllProjectMcpServers": true
 }
