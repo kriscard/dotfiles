@@ -385,6 +385,7 @@ cmd_sync() {
         "$HOME/.config/skhd"
         "$HOME/.config/karabiner"
         "$HOME/.zshrc"
+        "$HOME/.claude"
     )
 
     for path in "${conflicting_paths[@]}"; do
@@ -400,7 +401,7 @@ cmd_sync() {
     done
 
     # Stow packages
-    local packages=(".config" "zsh")
+    local packages=(".config" "zsh" ".claude")
 
     for package in "${packages[@]}"; do
         if [[ -d "$package" ]]; then
