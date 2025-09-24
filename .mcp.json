@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "obsidian": {
+      "command": "bash",
+      "args": ["-c", "exec \"${DOTFILES:-$HOME/.dotfiles}/.claude/mcp-obsidian-wrapper.sh\""]
+    }
+  }
+}
