@@ -1,8 +1,10 @@
-- Do not include yourself as a co-author or advertise claud-code in commit messages or pr descriptions
-- I use fd instead of find for file searches
-- I use tree to explore repository structure
-- I use zoxide for navigation when appropriate
-- I don't add Claude Code advertising to commits/PRs
-- I leverage sed/awk for text processing
-- I use ast-grep (sg) for code searching when appropriate
-- always use browsermcp to navigate a webpage or do a search online
+- Use fd instead of find for file searches
+- Use tree for exploring repository structures
+- Use zoxide for directory navigation when appropriate
+- Use sed/awk for text processing tasks
+- Use ast-grep (sg) for semantic code searching when applicable
+- Always use browsermcp for web navigation and research
+- Never include yourself (Claude) as a co-author in commits
+- Don't add Claude Code advertising or attribution to commit messages or PR descriptions
+- Keep commit messages focused solely on the changes made
+
