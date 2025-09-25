@@ -1,19 +1,9 @@
 # Dotfiles
 
-This is my dotfiles configuration featuring modern tools, consistent theming (Catppuccin Macchiato), and some intuitive CLI commands.
+Modern development environment with one-command setup, Catppuccin Macchiato theming, and enhanced CLI tools.
 
 ![Neovim Development Environment](screenshots/neovim-react.png)
-_Neovim_
-
 ![Tmux Workflow](screenshots/tmux-workflow.png)
-_Tmux session with Tmuxinator_
-
-## Highlights
-
-- **One-command setup** with a simple CLI named **dotfiles**
-- **Lightning-fast startup** (always improving)
-- **Catppuccin theming** across all applications
-- **Some CLI tools I'm using** (eza, bat, fd, ripgrep, zoxide)
 
 ## Quick Start
 
@@ -43,7 +33,7 @@ dotfiles sync --dry-run      # Preview changes
 dotfiles backup              # Safe backup
 ```
 
-## Key Features
+## What's Included
 
 ### Core Tools
 
@@ -75,9 +65,9 @@ killport 3000         # Kill process on port
 <prefix> + Ctrl-s     # Save session
 ```
 
-## Theming
+### Theming
 
-Consistent Catppuccin theme across all tools:
+Consistent Catppuccin Macchiato theme across all tools:
 
 ```bash
 export THEME_FLAVOUR=macchiato  # frappe, latte, mocha
