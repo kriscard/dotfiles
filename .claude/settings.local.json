@@ -1,41 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "Read(//Users/kriscard/.local/share/nvim/mason/bin/**)",
-      "Read(//Users/kriscard/projects/playground/secoda-editor/**)",
-      "Bash(tree:*)",
-      "Bash(fd:*)",
-      "Read(//Users/kriscard/**)",
-      "Bash(chmod:*)",
-      "WebFetch(domain:ghostty.org)",
-      "WebFetch(domain:github.com)",
-      "Bash(./sessionx.tmux)",
-      "Bash(nvim:*)",
-      "Bash(npm install:*)",
-      "Bash(./graphql-lsp --help)",
-      "WebFetch(domain:cmp.saghen.dev)",
-      "Bash(./dotfiles ds_store:*)",
-      "Bash(./dotfiles:*)",
-      "Bash(screencapture:*)",
-      "Bash(tmux list-panes:*)",
-      "Bash(tmux send-keys:*)",
-      "Bash(tmux attach-session:*)",
-      "Bash(npx -y @smithery/cli install mcp-obsidian --client claude)",
-      "Bash(\"$DOTFILES:-$HOME/.dotfiles/.claude/mcp-github-wrapper.sh\")",
-      "Bash(source:*)",
-      "Bash(cat:*)",
-      "WebFetch(domain:developers.figma.com)"
+      "mcp__browsermcp__browser_navigate",
+      "mcp__browsermcp__browser_type",
+      "Bash(fd:*)"
     ],
     "deny": [],
     "ask": []
-  },
-  "enableAllProjectMcpServers": true,
-  "enabledMcpjsonServers": [
-    "github",
-    "figma",
-    "vercel",
-    "browsertools",
-    "filesystem",
-    "obsidian"
-  ]
+  }
 }

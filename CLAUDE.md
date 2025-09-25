@@ -91,79 +91,62 @@ tmux source-file ~/.config/tmux/tmux.conf
 - **Git Tools**: lazygit, gh (GitHub CLI), gh-dash (GitHub dashboard)
 - **File Management**: Standard macOS Finder integration with shell navigation tools
 
-## MCP (Model Context Protocol) Servers
+## MCP (Model Context Protocol) Integration
 
-This repository includes a comprehensive MCP server configuration for enhanced AI-powered development workflows.
+This dotfiles repository supports MCP server integration by providing environment variables for servers that require API keys. MCP servers themselves are configured in Claude Code's global configuration (`~/.claude.json`), not in the dotfiles.
 
-### Available MCP Servers
+### Architecture
 
-**Development & File Operations:**
-- **Obsidian**: Access personal knowledge base and notes
-- **Filesystem**: Secure file operations with configurable access controls
-- **Node.js Sandbox**: Isolated code execution in Docker containers
+**Claude Code MCP Configuration** (`~/.claude.json`):
+- Server connections and transport settings
+- Managed by Claude Code CLI: `claude mcp add/remove`
+- Global across all projects
 
-**Repository & Project Management:**
-- **GitHub**: Repository management, PRs, issues, and code review
-- **Linear**: Issue tracking and sprint management
-- **Buildkite**: CI/CD pipeline management and monitoring
+**Dotfiles Environment Support** (`.env`):
+- API keys and tokens for self-hosted MCP servers
+- Portable across machines via dotfiles sync
+- Used by MCP wrapper scripts (e.g., GitHub MCP server)
 
-**Testing & Browser Automation:**
-- **Playwright**: Browser automation and E2E testing
-- **BrowserStack**: Cross-browser testing platform integration
-- **Lighthouse**: Performance auditing and optimization
+### Supported MCP Servers
 
-**Productivity & Communication:**
-- **Notion**: Documentation and knowledge management
-- **Slack**: Team communication automation
-- **npm Registry**: Package information and management
+**Self-Hosted Servers (require API keys in `.env`):**
+- **GitHub**: Repository management via `mcp-github-wrapper.sh`
+- **Context7**: Library documentation (if configured)
 
-**Code Quality:**
-- **SonarQube**: Code quality analysis and technical debt tracking
+**Hosted Servers (OAuth handled externally):**
+- **Vercel**: `claude mcp add --transport http vercel https://mcp.vercel.com`
+- **Figma**: `claude mcp add --transport http figma https://mcp.figma.com`
+- **Playwright**: `claude mcp add playwright`
+- **Filesystem**: `claude mcp add filesystem`
 
-### MCP Setup & Configuration
+### Setup Instructions
 
-#### 1. Environment Variables Setup
+#### 1. Configure Environment Variables
 ```bash
-# Copy the example file and fill in your API keys
+# Copy example and add your API keys
 cp .env.example .env
-# Edit .env with your actual API tokens (never commit this file!)
+# Edit .env with actual tokens
 ```
 
-#### 2. Required API Keys (add to `.env` file):
-- `GITHUB_TOKEN`: GitHub personal access token
-- `LINEAR_API_KEY`: Linear API key (optional)
-- `NOTION_TOKEN`: Notion integration token (optional)
-- `SLACK_TOKEN`: Slack bot token (optional)
-- `BROWSERSTACK_USERNAME` & `BROWSERSTACK_ACCESS_KEY`: BrowserStack credentials (optional)
-- `BUILDKITE_TOKEN`: Buildkite API token (optional)
-- `SONAR_TOKEN` & `SONAR_HOST_URL`: SonarQube credentials (optional)
-
-#### 3. MCP Server Status
-Check server status with: `/mcp` (in Claude Code)
-
-#### 4. Usage Examples
+#### 2. Add MCP Servers to Claude Code
 ```bash
-# Search Obsidian notes
-"Find my notes about React testing"
+# Add hosted servers (no env vars needed)
+claude mcp add --transport http vercel https://mcp.vercel.com
+claude mcp add --transport http figma https://mcp.figma.com
 
-# GitHub operations
-"Create a PR for the current branch"
-
-# File operations
-"Read the package.json file and suggest optimizations"
-
-# Code execution
-"Test this JavaScript function in a sandbox"
-
-# Browser automation
-"Take a screenshot of this webpage and analyze its performance"
+# Check server status
+/mcp
 ```
+
+### GitHub MCP Server Wrapper
+
+The dotfiles include a wrapper script (`.claude/mcp-github-wrapper.sh`) that:
+- Loads `GITHUB_PERSONAL_ACCESS_TOKEN` from `.env`
+- Exports it as `GITHUB_TOKEN` for the MCP server
+- Provides portable GitHub MCP integration
 
 ### Security Notes
-- All API keys are stored in environment variables only
-- `.env` files are excluded from version control
-- Wrapper scripts handle secure token loading
-- Portable configuration works across different machines
+See `.env.example` for setting API keys for MCP servers.
 
 ## Configuration Patterns
 - Configs use XDG Base Directory specification (`.config/` directory)

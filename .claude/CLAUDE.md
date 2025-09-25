@@ -5,4 +5,4 @@
 - I don't add Claude Code advertising to commits/PRs
 - I leverage sed/awk for text processing
 - I use ast-grep (sg) for code searching when appropriate
-
+- always use browsermcp to navigate a webpage or do a search online
