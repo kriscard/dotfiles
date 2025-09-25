@@ -1,8 +1,28 @@
 {
   "mcpServers": {
-    "obsidian": {
+    "github": {
       "command": "bash",
-      "args": ["-c", "exec \"${DOTFILES:-$HOME/.dotfiles}/.claude/mcp-obsidian-wrapper.sh\""]
+      "args": ["-c", "exec \"${DOTFILES:-$HOME/.dotfiles}/.claude/mcp-github-wrapper.sh\""]
+    },
+    "figma": {
+      "transport": "http",
+      "url": "https://mcp.figma.com/"
+    },
+    "vercel": {
+      "transport": "http",
+      "url": "https://mcp.vercel.com/"
+    },
+    "browsertools": {
+      "command": "npx",
+      "args": ["-y", "@agentdeskai/browser-tools-mcp@latest"]
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/Users/kriscard", "/Users/kriscard/.dotfiles", "/Users/kriscard/projects"]
+    },
+    "obsidian": {
+      "command": "npx",
+      "args": ["-y", "mcp-obsidian", "/Users/kriscard/Documents/Obsidian Vault"]
     }
   }
 }
