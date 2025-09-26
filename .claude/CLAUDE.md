@@ -3,8 +3,9 @@
 - Use zoxide for directory navigation when appropriate
 - Use sed/awk for text processing tasks
 - Use ast-grep (sg) for semantic code searching when applicable
-- Always use browsermcp for web navigation and research
+- Always use browsermcp for web navigation and research and fetch website
 - Never include yourself (Claude) as a co-author in commits
 - Don't add Claude Code advertising or attribution to commit messages or PR descriptions
 - Keep commit messages focused solely on the changes made
+- When using Obsidian MCP server, only create or change the notes I requested never delete or update anything by yourself
 
