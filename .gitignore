@@ -48,6 +48,7 @@ npm-debug.log
 secrets.fish
 config/environment.d/secrets.conf
 state.yml
+work-config/config-secret-personal.zsh
 
 # Other
 fzf
@@ -62,5 +63,3 @@ fish_variables
 .env
 .env.local
 
-#zsh config
-.zshrc

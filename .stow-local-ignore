@@ -6,3 +6,4 @@
 ^/.zshrc
 ^/.config/raycast
 ^/.config/tmux/plugins/tmux-resurrect
+^/CLAUDE.md
