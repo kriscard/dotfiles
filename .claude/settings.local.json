@@ -1,9 +1,16 @@
 {
   "permissions": {
     "allow": [
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "mcp__context7__get-library-docs",
+      "mcp__browsermcp__browser_navigate",
+      "mcp__mcp-obsidian__obsidian_append_content",
+      "Bash(python3:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []
-  }
+  },
+  "outputStyle": "default"
 }
