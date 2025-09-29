@@ -3,5 +3,48 @@
   "model": "opus",
   "feedbackSurveyState": {
     "lastShownTime": 1754076483100
+  },
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ~/.dotfiles/.claude/hooks/macos_notification.py"
+          },
+          {
+            "type": "command",
+            "command": "python3 ~/.dotfiles/.claude/hooks/play_audio.py"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ~/.dotfiles/.claude/hooks/macos_notification.py"
+          },
+          {
+            "type": "command",
+            "command": "python3 ~/.dotfiles/.claude/hooks/play_audio.py"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run ~/.claude/hooks/ts_lint.py"
+          }
+        ]
+      }
+    ]
   }
 }
