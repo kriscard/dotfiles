@@ -11,7 +11,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ~/.dotfiles/.claude/hooks/notification.py"
+            "command": "uv run ~/.dotfiles/.claude/hooks/notification.py --topic=$NTFY_TOPIC"
           }
         ]
       }
