@@ -30,7 +30,22 @@
           },
           {
             "type": "command",
-            "command": "python3 ~/.dotfiles/.claude/hooks/play_audio.py"
+            "command": "python3 ~/.dotfiles/.claude/hooks/play_audio.py awaiting_instructions"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ~/.dotfiles/.claude/hooks/macos_notification.py"
+          },
+          {
+            "type": "command",
+            "command": "python3 ~/.dotfiles/.claude/hooks/play_audio.py awaiting_instructions"
           }
         ]
       }
