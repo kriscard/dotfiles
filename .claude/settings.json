@@ -5,6 +5,17 @@
     "lastShownTime": 1754076483100
   },
   "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run ~/.dotfiles/.claude/hooks/notification.py --topic=$NTFY_TOPIC"
+          }
+        ]
+      }
+    ],
     "Notification": [
       {
         "matcher": "",
