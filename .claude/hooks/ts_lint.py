@@ -12,7 +12,6 @@ def main():
         input_data = json.load(sys.stdin)
 
         tool_input = input_data.get("tool_input", {})
-        print(tool_input)
 
         # Get file path from tool input
         file_path = tool_input.get("file_path")
