@@ -6,6 +6,18 @@ import os
 import urllib.request
 import urllib.error
 import argparse
+from pathlib import Path
+
+def load_env():
+    """Load environment variables from .env file"""
+    env_file = Path.home() / ".dotfiles" / ".env"
+    if env_file.exists():
+        with open(env_file) as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith("#") and "=" in line:
+                    key, value = line.split("=", 1)
+                    os.environ[key] = value
 
 def send_notification(title, message, priority=3, tags=None, ntfy_topic=None):
     """Send a notification via ntfy.sh to both macOS and iPhone"""
@@ -48,12 +60,16 @@ def send_notification(title, message, priority=3, tags=None, ntfy_topic=None):
         print(f"Notification failed: {e}", file=sys.stderr)
 
 def main():
+    # Load environment variables from .env file
+    load_env()
+
     # Parse command-line arguments
     parser = argparse.ArgumentParser(description="Send ntfy.sh notifications")
     parser.add_argument("--topic", help="ntfy.sh topic to send to")
+    parser.add_argument("--hook", help="Hook type (stop or notification)")
     args = parser.parse_args()
 
-    print("Notification hook triggered!", file=sys.stderr)
+    print(f"Notification hook triggered! Hook type: {args.hook}", file=sys.stderr)
     try:
         input_data = json.load(sys.stdin)
         tool_name = input_data.get("tool_name")
@@ -62,6 +78,12 @@ def main():
         # Fallback if no JSON input (like from Stop hook)
         tool_name = None
         print("No JSON input received", file=sys.stderr)
+
+    # Skip notification from Notification hook if tool_name is None (avoid duplicates)
+    # Only Stop hook should send "Claude Code Ready" notification
+    if args.hook == "notification" and tool_name is None:
+        print("Skipping duplicate notification from Notification hook", file=sys.stderr)
+        return
 
     # Create notification title, message, priority, and tags based on tool name
     if tool_name == 'Bash':
