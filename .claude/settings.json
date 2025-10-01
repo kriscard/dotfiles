@@ -11,7 +11,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "uv run ~/.dotfiles/.claude/hooks/notification.py --hook=stop"
+            "command": "uv run ~/.dotfiles/.claude/hooks/notification.py"
           }
         ]
       }
@@ -22,7 +22,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "uv run ~/.dotfiles/.claude/hooks/notification.py --hook=notification"
+            "command": "uv run ~/.dotfiles/.claude/hooks/notification.py"
           }
         ]
       }
