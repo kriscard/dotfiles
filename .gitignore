@@ -63,3 +63,11 @@ fish_variables
 .env
 .env.local
 
+# Claude Code local files
+.claude/settings.local.json
+.claude/history.jsonl
+.claude/projects/
+.claude/shell-snapshots/
+.claude/statsig/
+.claude/todos/
+
