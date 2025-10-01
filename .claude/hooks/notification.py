@@ -6,6 +6,7 @@ import os
 import urllib.request
 import urllib.error
 import argparse
+import subprocess
 from pathlib import Path
 
 def load_env():
@@ -18,6 +19,36 @@ def load_env():
                 if line and not line.startswith("#") and "=" in line:
                     key, value = line.split("=", 1)
                     os.environ[key] = value
+
+def is_terminal_focused():
+    """Check if any terminal application has focus on macOS"""
+    try:
+        script = '''
+        tell application "System Events"
+            set frontApp to name of first application process whose frontmost is true
+            return frontApp
+        end tell
+        '''
+        result = subprocess.run(
+            ['osascript', '-e', script],
+            capture_output=True,
+            text=True,
+            timeout=2
+        )
+
+        if result.returncode == 0:
+            front_app = result.stdout.strip().lower()
+            terminal_apps = ['terminal', 'iterm', 'iterm2', 'kitty', 'ghostty', 'wezterm', 'alacritty']
+            is_focused = any(app in front_app for app in terminal_apps)
+            print(f"Front app: {front_app}, Terminal focused: {is_focused}", file=sys.stderr)
+            return is_focused
+
+        print(f"Could not detect front app: {result.stderr}", file=sys.stderr)
+        return False
+
+    except Exception as e:
+        print(f"Focus detection failed: {e}", file=sys.stderr)
+        return False
 
 def send_notification(title, message, priority=3, tags=None, ntfy_topic=None):
     """Send a notification via ntfy.sh to both macOS and iPhone"""
@@ -66,73 +97,53 @@ def main():
     # Parse command-line arguments
     parser = argparse.ArgumentParser(description="Send ntfy.sh notifications")
     parser.add_argument("--topic", help="ntfy.sh topic to send to")
-    parser.add_argument("--hook", help="Hook type (stop or notification)")
     args = parser.parse_args()
 
-    print(f"Notification hook triggered! Hook type: {args.hook}", file=sys.stderr)
-    try:
-        input_data = json.load(sys.stdin)
-        tool_name = input_data.get("tool_name")
-        print(f"Tool name: {tool_name}", file=sys.stderr)
-    except:
-        # Fallback if no JSON input (like from Stop hook)
-        tool_name = None
-        print("No JSON input received", file=sys.stderr)
-
-    # Skip notification from Notification hook if tool_name is None (avoid duplicates)
-    # Only Stop hook should send "Claude Code Ready" notification
-    if args.hook == "notification" and tool_name is None:
-        print("Skipping duplicate notification from Notification hook", file=sys.stderr)
+    # Check if terminal is focused - skip notification if it is
+    if is_terminal_focused():
+        print("Terminal is focused, skipping notification", file=sys.stderr)
         return
 
-    # Create notification title, message, priority, and tags based on tool name
-    if tool_name == 'Bash':
-        title = "Command Executed"
-        message = "Terminal command completed"
-        priority = 3
-        tags = ["computer", "terminal"]
-    elif tool_name == 'Edit':
-        title = "File Modified"
-        message = "File has been edited"
-        priority = 3
-        tags = ["pencil", "file"]
-    elif tool_name == 'Write':
-        title = "File Created"
-        message = "New file has been written"
-        priority = 3
-        tags = ["sparkles", "file"]
-    elif tool_name == 'Read':
-        title = "File Accessed"
-        message = "File has been read"
-        priority = 2
-        tags = ["books", "file"]
-    elif tool_name == 'Grep':
-        title = "Search Complete"
-        message = "Text search finished"
-        priority = 3
-        tags = ["mag", "search"]
-    elif tool_name == 'Glob':
-        title = "Pattern Match"
-        message = "File pattern search completed"
-        priority = 3
-        tags = ["mag", "file"]
-    elif tool_name == 'WebFetch':
-        title = "Web Request"
-        message = "Web content fetched"
-        priority = 3
-        tags = ["globe_with_meridians", "web"]
-    elif tool_name == 'Task':
-        title = "Task Complete"
-        message = "Background task finished"
-        priority = 4
-        tags = ["white_check_mark", "task"]
-    else:
-        # Check if this is from a UserPromptSubmit or Stop hook (awaiting input)
-        title = "Claude Code Ready"
-        message = "Awaiting your input"
-        priority = 3
-        tags = ["bell", "ready"]
+    try:
+        input_data = json.load(sys.stdin)
+        hook_event = input_data.get("hook_event_name", "")
+        notification_message = input_data.get("message", "")
 
-    send_notification(title, message, priority, tags, ntfy_topic=args.topic)
+        print(f"Hook event: {hook_event}", file=sys.stderr)
+        print(f"Input data: {json.dumps(input_data)}", file=sys.stderr)
+
+        # Handle Stop hook - operation finished
+        if hook_event == "Stop":
+            title = "Claude Code Complete"
+            message = "Operation finished - ready for next task"
+            priority = 3
+            tags = ["white_check_mark", "robot"]
+
+        # Handle Notification hook - awaiting response or permission
+        elif hook_event == "Notification":
+            # Check if this is an "awaiting response" notification
+            if "awaiting" in notification_message.lower() or "waiting" in notification_message.lower():
+                title = "Claude Code Awaiting Response"
+                message = notification_message or "Input needed"
+                priority = 4
+                tags = ["question", "bell"]
+            else:
+                # Other notifications (permissions, etc.)
+                title = "Claude Code Notification"
+                message = notification_message or "Notification from Claude Code"
+                priority = 3
+                tags = ["bell", "robot"]
+
+        else:
+            # Unknown hook type
+            print(f"Unknown hook event: {hook_event}", file=sys.stderr)
+            return
+
+        send_notification(title, message, priority, tags, ntfy_topic=args.topic)
+
+    except json.JSONDecodeError as e:
+        print(f"Failed to parse JSON input: {e}", file=sys.stderr)
+    except Exception as e:
+        print(f"Error processing hook: {e}", file=sys.stderr)
 
 main()
