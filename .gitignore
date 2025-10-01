@@ -70,4 +70,5 @@ fish_variables
 .claude/shell-snapshots/
 .claude/statsig/
 .claude/todos/
+.claude/file-history/
 
