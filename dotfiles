@@ -7,7 +7,14 @@
 set -e
 
 # Get the directory where this script is located
-DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Get the directory where this script is located, resolving symlinks
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+  DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+done
+DOTFILES_DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
 
 # Color definitions
 readonly COLOR_GRAY="\033[1;38;5;243m"
@@ -636,79 +643,84 @@ cmd_macos() {
 }
 
 cmd_ds_store() {
-    title "🧹 Cleaning .DS_Store files from dotfiles"
+    title "🧹 Cleaning .DS_Store files"
 
-    # Find all .DS_Store files in the dotfiles directory
+    info "Searching for .DS_Store files in dotfiles repository and linked directories..."
+
+    # Define search paths
+    local search_paths=(
+        "$DOTFILES_DIR"
+        "$HOME/.config"
+        # Add other relevant stowed directories if needed
+    )
+
+    # Find all .DS_Store files in the search paths
+    # Ignore errors for paths that don't exist
     local ds_store_files
-    ds_store_files=$(find "$DOTFILES_DIR" -name ".DS_Store" -type f 2>/dev/null || true)
+    ds_store_files=$(find "${search_paths[@]}" -name ".DS_Store" -type f 2>/dev/null)
 
     if [[ -z "$ds_store_files" ]]; then
-        success "No .DS_Store files found in dotfiles repository! 🎉"
-        info "Your dotfiles are already clean."
+        success "No .DS_Store files found! 🎉"
         return 0
     fi
 
+    # Read files into an array
+    mapfile -t files_to_process <<< "$ds_store_files"
+
     # Count the files
-    local file_count
-    file_count=$(echo "$ds_store_files" | wc -l | tr -d ' ')
+    local file_count=${#files_to_process[@]}
 
     # Show found files
     info "📍 Found $file_count .DS_Store file(s):"
     echo
-    while IFS= read -r file; do
-        # Make path relative to dotfiles directory for cleaner display
-        local relative_path="${file#$DOTFILES_DIR/}"
-        if [[ "$relative_path" == "$file" ]]; then
-            # If path didn't change, file is in root, show just filename
-            relative_path="$(basename "$file")"
+    for file in "${files_to_process[@]}"; do
+        local display_path="$file"
+        # Try to make path relative to HOME for cleaner display
+        if [[ "$file" == "$HOME/"* ]]; then
+            display_path="~/${file#$HOME/}"
         fi
-
-        if [[ "$VERBOSE" == true ]]; then
-            echo "  📄 $file"
-        else
-            echo "  📄 $relative_path"
-        fi
-    done <<< "$ds_store_files"
+        echo "  📄 $display_path"
+    done
 
     echo
 
-    # Ask for confirmation unless force mode or dry-run mode
+    # Ask for confirmation unless force mode
     if [[ "$FORCE" != true ]] && [[ "$DRY_RUN" != true ]]; then
+        echo
         if ! confirm "Remove $file_count .DS_Store file(s)?"; then
             info "Cleanup cancelled."
             return 0
         fi
-        echo
     fi
 
     # Remove files
     if [[ "$DRY_RUN" == true ]]; then
         warning "[DRY RUN] Would remove $file_count .DS_Store file(s):"
-        while IFS= read -r file; do
-            local relative_path="${file#$DOTFILES_DIR/}"
-            if [[ "$relative_path" == "$file" ]]; then
-                relative_path="$(basename "$file")"
+        for file in "${files_to_process[@]}"; do
+            local display_path="$file"
+            if [[ "$file" == "$HOME/"* ]]; then
+                display_path="~/${file#$HOME/}"
             fi
-            echo "  🗑️  Would delete: $relative_path"
-        done <<< "$ds_store_files"
+            echo "  🗑️  Would delete: $display_path"
+        done
     else
         info "🗑️  Removing .DS_Store files..."
         echo
 
         local removed_count=0
-        while IFS= read -r file; do
-            local relative_path="${file#$DOTFILES_DIR/}"
-            if [[ "$relative_path" == "$file" ]]; then
-                relative_path="$(basename "$file")"
+        for file in "${files_to_process[@]}"; do
+            local display_path="$file"
+            if [[ "$file" == "$HOME/"* ]]; then
+                display_path="~/${file#$HOME/}"
             fi
 
-            if rm -f "$file" 2>/dev/null; then
-                success "Deleted: $relative_path"
+            if rm -f "$file"; then
+                success "Deleted: $display_path"
                 ((removed_count++))
             else
-                warning "Failed to delete: $relative_path"
+                warning "Failed to delete: $display_path"
             fi
-        done <<< "$ds_store_files"
+        done
 
         echo
         if [[ $removed_count -eq $file_count ]]; then
@@ -718,17 +730,13 @@ cmd_ds_store() {
         fi
     fi
 
-    # Check and suggest .gitignore update
+    # Check and suggest .gitignore update (only for the main dotfiles repo)
     if [[ -f "$DOTFILES_DIR/.gitignore" ]]; then
         if ! grep -q "\.DS_Store" "$DOTFILES_DIR/.gitignore" 2>/dev/null; then
             echo
-            info "💡 Tip: Add .DS_Store to .gitignore to prevent future occurrences:"
+            info "💡 Tip: Add .DS_Store to your project's .gitignore to prevent future occurrences:"
             echo "       echo '.DS_Store' >> $DOTFILES_DIR/.gitignore"
         fi
-    else
-        echo
-        info "💡 Tip: Create a .gitignore file to prevent future .DS_Store files:"
-        echo "       echo '.DS_Store' > $DOTFILES_DIR/.gitignore"
     fi
 }
 
