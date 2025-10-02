@@ -290,9 +290,6 @@ return {
 						workingDirectories = { mode = "auto" },
 						format = true,
 					},
-					on_attach = function(_, bufnr)
-						vim.api.nvim_create_autocmd("BufWritePre", { buffer = bufnr, command = "EslintFixAll" })
-					end,
 				},
 			}
 
@@ -368,10 +365,12 @@ return {
 			default_format_opts = { async = true, timeout_ms = 500, lsp_format = "fallback" },
 			format_after_save = { async = true, timeout_ms = 500, lsp_format = "fallback" },
 			formatters_by_ft = {
-				javascript = { "prettierd", "prettier", stop_after_first = true },
-				typescript = { "prettierd", "prettier", stop_after_first = true },
-				typescriptreact = { "prettierd", "prettier", stop_after_first = true },
-				json = { "prettierd", "prettier", stop_after_first = true },
+				javascript = { "biome-check", "prettierd", "prettier", stop_after_first = true },
+				typescript = { "biome-check", "prettierd", "prettier", stop_after_first = true },
+				javascriptreact = { "biome-check", "prettierd", "prettier", stop_after_first = true },
+				typescriptreact = { "biome-check", "prettierd", "prettier", stop_after_first = true },
+				json = { "biome-check", "prettierd", "prettier", stop_after_first = true },
+				jsonc = { "biome-check", "prettierd", "prettier", stop_after_first = true },
 				graphql = { "prettierd", "prettier", stop_after_first = true },
 				lua = { "stylua" },
 				html = { "prettierd", "prettier", stop_after_first = true },
