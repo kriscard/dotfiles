@@ -30,6 +30,7 @@ brew "ripgrep"      # Better grep
 brew "fzf"          # Fuzzy finder
 brew "zoxide"       # Smart cd command
 brew "stow"         # Symlink management
+brew "tree"         # Directory visualization
 
 # =============================================================================
 # TERMINAL & SHELL
@@ -53,9 +54,7 @@ brew "fnm"          # Fast Node Manager (better than nvm)
 brew "pyenv"        # Python version management
 brew "rbenv"        # Ruby version management
 
-# Databases
-brew "redis"
-brew "libpq"        # PostgreSQL client
+# Databases (using Docker instead)
 
 # Build Tools
 brew "watchman"     # File watching
@@ -63,9 +62,25 @@ brew "watchman"     # File watching
 # Code Quality & Formatting
 brew "fsouza/prettierd/prettierd"
 
+# Git Tools
+brew "gh"           # GitHub CLI
+brew "lazygit"      # Git TUI
+brew "delta"        # Better git diffs
+
+# Development Utilities
+brew "ast-grep"     # Semantic code search
+brew "imagemagick"  # Image processing
+
 # =============================================================================
 # WEB DEVELOPMENT SPECIFIC
 # =============================================================================
+
+# Package Managers & Runtimes
+brew "pnpm"         # Fast package manager
+brew "bun"          # Modern JavaScript runtime
+
+# API Testing
+brew "httpie"       # Better HTTP client
 
 # Currently commented out - uncomment if needed
 # brew "php"
@@ -82,8 +97,7 @@ brew "koekeishiya/formulae/yabai"
 # GUI APPLICATIONS
 # =============================================================================
 
-# Terminals (keeping both as requested)
-cask "kitty"
+# Terminal
 cask "ghostty"
 
 # Development Tools
@@ -91,13 +105,17 @@ cask "docker"
 cask "visual-studio-code"
 
 # Development Mobile
-cask "android-studio"
-cask "android-commandlinetools"
 cask "react-native-debugger"
 
-# Databases
-cask "popsql"
-cask "postico"
+# Browsers
+cask "google-chrome"
+cask "firefox"
+
+# Design Tools
+cask "figma"
+
+# Music & Entertainment
+cask "spotify"
 
 # Fonts
 cask "font-hack-nerd-font"
@@ -105,14 +123,12 @@ cask "font-fira-code-nerd-font"
 
 # Productivity
 cask "notion"
-cask "todoist"
+cask "obsidian"
 cask "discord"
+cask "raycast"
 
 # Utilities
 cask "ngrok"
-
-# Java (if needed for Android development)
-cask "zulu11"
 
 # =============================================================================
 # VS CODE EXTENSIONS (Essential Only)
@@ -145,7 +161,7 @@ vscode "formulahendry.auto-rename-tag"
 # REMOVED PACKAGES (redundant or outdated)
 # =============================================================================
 
-# Removed:
+# Previously Removed:
 # - autojump (replaced with zoxide)
 # - python@3.10, python@3.11 (use pyenv instead)
 # - awscli (install only when needed)
@@ -157,6 +173,17 @@ vscode "formulahendry.auto-rename-tag"
 # - xclip (Linux tool, not needed on macOS)
 # - romkatv/powerlevel10k (using starship instead)
 # - Multiple VSCode extensions (keeping only essential ones)
+
+# Recently Removed (2025-10-15):
+# - kitty (using ghostty instead)
+# - android-studio (heavy IDE, not needed)
+# - android-commandlinetools (not needed)
+# - zulu11 (Java runtime, not needed)
+# - popsql (database GUI, using Docker)
+# - postico (database GUI, using Docker)
+# - redis (using Docker instead)
+# - libpq (PostgreSQL client, using Docker)
+# - todoist (using Obsidian/Notion instead)
 
 # Note: If you need any of the removed packages, uncomment them above
 # or install them individually with: brew install package-name
