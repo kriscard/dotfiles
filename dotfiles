@@ -615,6 +615,66 @@ cmd_macos() {
 
         "Enable tap to click (Trackpad)"
         "defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true"
+
+        "Move Dock to right side"
+        "defaults write com.apple.dock orientation -string right"
+
+        "Set Dock icon size"
+        "defaults write com.apple.dock tilesize -int 48"
+
+        "Enable Dock autohide"
+        "defaults write com.apple.dock autohide -bool true"
+
+        "Remove Dock autohide delay"
+        "defaults write com.apple.dock autohide-delay -float 0"
+
+        "Speed up Dock autohide animation"
+        "defaults write com.apple.dock autohide-time-modifier -float 0.5"
+
+        "Don't rearrange Spaces based on recent use"
+        "defaults write com.apple.dock mru-spaces -bool false"
+
+        "Speed up Mission Control animations"
+        "defaults write com.apple.dock expose-animation-duration -float 0.1"
+
+        "Disable Spotlight keyboard shortcut (for Raycast)"
+        "defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 '{enabled = 0; value = { parameters = (65535, 49, 1048576); type = standard; };}'"
+
+        "Save screenshots to Downloads folder"
+        "defaults write com.apple.screencapture location -string \"${HOME}/Downloads\""
+
+        "Save screenshots in PNG format"
+        "defaults write com.apple.screencapture type -string png"
+
+        "Disable screenshot shadow"
+        "defaults write com.apple.screencapture disable-shadow -bool true"
+
+        "Set trackpad tracking speed"
+        "defaults write NSGlobalDomain com.apple.trackpad.scaling -float 3"
+
+        "Enable three-finger drag"
+        "defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -bool true"
+
+        "Show battery percentage in menu bar"
+        "defaults write com.apple.menuextra.battery ShowPercent -string YES"
+
+        "Show date in menu bar"
+        "defaults write com.apple.menuextra.clock DateFormat -string 'EEE d MMM HH:mm'"
+
+        "Show POSIX path in Finder title"
+        "defaults write com.apple.finder _FXShowPosixPathInTitle -bool true"
+
+        "Disable .DS_Store on network drives"
+        "defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true"
+
+        "Disable .DS_Store on USB drives"
+        "defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true"
+
+        "Disable window animations"
+        "defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false"
+
+        "Speed up dialog boxes"
+        "defaults write NSGlobalDomain NSWindowResizeTime -float 0.001"
     )
 
     local i=0
@@ -637,8 +697,14 @@ cmd_macos() {
 
     if [[ "$DRY_RUN" != true ]]; then
         success "macOS settings applied successfully!"
-        info "Some changes may require a restart to take effect."
-        info "You may need to restart Finder: killall Finder"
+        echo
+        info "⚠️  Some changes require system restarts to take effect:"
+        info "   • Restart Finder: killall Finder"
+        info "   • Restart Dock: killall Dock"
+        info "   • Some settings may need a full system restart"
+        echo
+        info "💡 Note: Spotlight shortcut disable may need manual verification in:"
+        info "   System Settings → Keyboard → Keyboard Shortcuts → Spotlight"
     fi
 }
 
