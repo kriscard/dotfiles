@@ -93,6 +93,9 @@ brew "httpie"       # Better HTTP client
 brew "koekeishiya/formulae/skhd"
 brew "koekeishiya/formulae/yabai"
 
+# Keyboard Customization
+cask "karabiner-elements"
+
 # =============================================================================
 # GUI APPLICATIONS
 # =============================================================================
