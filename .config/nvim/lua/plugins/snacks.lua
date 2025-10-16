@@ -65,6 +65,9 @@ return {
 			},
 			terminal = {
 				win = { style = "terminal", wo = { winbar = "" } },
+				env = {
+					TERM = vim.env.TERM or "xterm-ghostty",
+				},
 			},
 			words = {},
 			zen = {},
