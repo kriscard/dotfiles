@@ -550,6 +550,14 @@ cmd_packages() {
     else
         tic -x "$DOTFILES_DIR/scripts/tmux.terminfo" 2>/dev/null || true
         tic -x "$DOTFILES_DIR/scripts/xterm-256color-italic.terminfo" 2>/dev/null || true
+
+        # Install Ghostty terminfo if Ghostty is installed
+        if command_exists "infocmp" && infocmp xterm-ghostty >/dev/null 2>&1; then
+            info "Installing Ghostty terminfo for tmux support..."
+            mkdir -p "$HOME/.terminfo"
+            infocmp -x xterm-ghostty | tic -x -o "$HOME/.terminfo" - 2>/dev/null || true
+            success "Ghostty terminfo installed"
+        fi
     fi
 
     success "Package management complete!"
