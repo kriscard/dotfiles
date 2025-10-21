@@ -4,6 +4,7 @@ return {
 		event = "InsertEnter",
 		config = function()
 			require("copilot").setup({
+				copilot_node_command = vim.fn.expand("$HOME") .. "/.asdf/installs/nodejs/22.20.0/bin/node", -- Hardcoded to v22 for copilot while projects can use different versions
 				suggestion = {
 					enabled = true,
 					auto_trigger = true,
