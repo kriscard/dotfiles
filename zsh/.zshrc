@@ -23,7 +23,7 @@ setopt HIST_IGNORE_ALL_DUPS      # delete old recorded entry if new entry is a d
 
 
 # config for TMUX
-# export TERM="xterm-256color"
+export TERM="xterm-ghostty"
 
 # Set the path to include Homebrew binaries
 export PATH=/opt/homebrew/bin:$PATH
@@ -93,20 +93,24 @@ export PATH="/usr/local/bin:$PATH"
 export PATH="/usr/local/opt/make/libexec/gnubin:$PATH"
 
 #PERSONAL CONFIG
-if [[ $USER = 'kriscard' ]]; then 
+if [[ $USER = 'kriscard' ]] || [[ $USER = 'christopher' ]]; then 
 . /opt/homebrew/opt/asdf/libexec/asdf.sh
 fi
 
 export BAT_THEME=catppuccin_macchiatto
 
-
-# Initialize fnm (fast node manager) - only if installed
-if command -v fnm &> /dev/null; then
-    eval "$(fnm env --use-on-cd)"
-fi
-
+# # Initialize fnm (fast node manager) - only if installed
+# if command -v fnm &> /dev/null; then
+#     eval "$(fnm env --use-on-cd)"
+# fi
+#
 # Load environment variables from dotfiles repo .env
 if [ -f "$HOME/.dotfiles/.env" ]; then
-  export $(grep -v '^#' "$HOME/.dotfiles/.env" | xargs)
+  # Use set -a to auto-export, source to load silently, set +a to disable
+  # This bypasses the grep→rg alias issue and produces no output
+  set -a
+  source <(/usr/bin/grep -v '^#' "$HOME/.dotfiles/.env" | /usr/bin/grep -v '^$')
+  set +a
 fi
+
 

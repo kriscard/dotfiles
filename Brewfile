@@ -49,10 +49,12 @@ brew "zsh-syntax-highlighting"
 brew "neovim"
 brew "lua-language-server"
 
-# Version Managers (modern alternatives)
-brew "fnm"          # Fast Node Manager (better than nvm)
-brew "pyenv"        # Python version management
-brew "rbenv"        # Ruby version management
+# Version Managers
+brew "asdf"         # Unified version manager for multiple languages
+# Individual version managers (alternative to asdf)
+# brew "fnm"          # Fast Node Manager (better than nvm)
+# brew "pyenv"        # Python version management
+# brew "rbenv"        # Ruby version management
 
 # Databases (using Docker instead)
 
