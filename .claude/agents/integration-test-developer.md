@@ -1,7 +1,6 @@
 ---
 name: integration-test-developer
 description: Expert integration and API testing specialist focused on service boundaries, data layer validation, and system integration testing. Handles API testing, database integration, contract testing, and service communication validation. Use when testing service interactions, API endpoints, database operations, or system integration points.
-model: opus
 color: green
 mcp_servers:
   - sequential-thinking

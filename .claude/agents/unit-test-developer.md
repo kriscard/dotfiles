@@ -1,7 +1,6 @@
 ---
 name: unit-test-developer
 description: Expert unit test generation and TDD specialist. Analyzes existing code to generate comprehensive unit tests with thorough coverage strategies. Focuses on component-level testing, test-driven development workflows, and developer productivity. Use when generating tests for functions, classes, components, or implementing TDD practices.
-model: opus
 color: green
 mcp_servers:
   - sequential-thinking
