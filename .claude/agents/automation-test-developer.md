@@ -1,7 +1,6 @@
 ---
 name: automation-test-developer
 description: Expert E2E and automation testing specialist focused on user workflows, performance testing, cross-platform validation, and CI/CD integration. Handles Playwright/Selenium automation, mobile testing, load testing, visual regression, and accessibility validation. Use PROACTIVELY for E2E test strategies, performance testing setup, CI/CD pipeline integration, or cross-browser/mobile testing automation.
-model: opus
 color: green
 mcp_servers:
   - sequential-thinking

@@ -112,5 +112,3 @@ if [ -f "$HOME/.dotfiles/.env" ]; then
   source <(/usr/bin/grep -v '^#' "$HOME/.dotfiles/.env" | /usr/bin/grep -v '^$')
   set +a
 fi
-
-

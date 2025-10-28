@@ -1,7 +1,6 @@
 ---
 name: frontend-developer
 description: Expert modern frontend developer specializing in React 19+, Vue 3, and cutting-edge web development. Masters component composition, performance optimization, and modern tooling (Vite, Vitest, Biome). Builds type-safe, accessible, performant applications using latest patterns. Use PROACTIVELY for UI development, SPA creation, or modern frontend architecture.
-model: sonnet
 color: cyan
 mcp_servers:
   - sequential-thinking

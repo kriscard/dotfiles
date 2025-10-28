@@ -1,7 +1,6 @@
 ---
 name: ruby-developer
 description: Expert Ruby developer specializing in idiomatic code, Rails patterns, metaprogramming, and performance optimization. Handles gem development, testing frameworks (RSpec/Minitest), and legacy code refactoring. Use PROACTIVELY for Ruby/Rails development, debugging, optimization, and architectural decisions.
-model: opus
 color: red
 mcp_servers:
   - sequential-thinking

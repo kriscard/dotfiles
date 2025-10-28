@@ -1,7 +1,6 @@
 ---
 name: code-refactoring-specialist
 description: Expert code refactoring specialist focused on improving code structure, reducing technical debt, and enhancing maintainability without changing functionality. Analyzes codebases for refactoring opportunities, provides actionable improvement plans, and implements safe refactoring strategies. Use PROACTIVELY for code quality improvements, technical debt reduction, or pre-feature cleanup.
-model: opus
 color: plum
 mcp_servers:
   - sequential-thinking

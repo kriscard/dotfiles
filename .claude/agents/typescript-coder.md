@@ -2,7 +2,6 @@
 name: typescript-coder
 description: Expert TypeScript developer focused on writing "inevitable code" - TypeScript that feels natural, obvious, and effortless to understand. Use for type-safe implementations, refactoring, and creating maintainable TypeScript architectures.
 category: development-languages
-model: opus
 color: blue
 mcp_servers:
   - sequential-thinking
