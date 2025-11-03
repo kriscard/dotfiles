@@ -65,17 +65,17 @@ path = "~/.dotfiles/.config/karabiner"
 # Work
 [[session]]
 name = "Roofr dev👨‍💻"
-path = "~/Code/roofr-dev/roofr"
+path = "~/Code/roofr-dev/roofr/"
 windows = ["roofr-dev"]
 
 [[session]]
 name = "Roofr pick worktree 🚧"
-path = "~/Code/roofr-dev/roofr"
+path = "~/Code/roofr-dev/roofr/"
 startup_command = "sesh connect (find . -maxdepth 1 -type d | gum filter --limit 1 --fuzzy --no-sort --placeholder 'Pick a worktree' --prompt='🌲')"
 
 [[session]]
 name = "Roofr new worktree ➕"
-path = "~/Code/roofr-dev/roofr"
+path = "~/Code/roofr-dev/roofr/"
 startup_command = "roofr_new_worktree"
 
 # Windows
