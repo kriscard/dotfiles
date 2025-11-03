@@ -46,11 +46,11 @@ dotfiles backup              # Safe backup
 
 | Traditional | Replacement | Benefit                 |
 | ----------- | ----------- | ----------------------- |
-| `ls`   | `eza`        | Git integration & icons |
-| `cat`  | `bat`        | Syntax highlighting     |
-| `find` | `fd`         | Faster & simpler        |
-| `grep` | `ripgrep`    | Blazing fast search     |
-| `cd`   | `zoxide`     | Smart jumping           |
+| `ls`        | `eza`       | Git integration & icons |
+| `cat`       | `bat`       | Syntax highlighting     |
+| `find`      | `fd`        | Faster & simpler        |
+| `grep`      | `ripgrep`   | Blazing fast search     |
+| `cd`        | `zoxide`    | Smart jumping           |
 
 ### Development Shortcuts
 
@@ -61,7 +61,7 @@ gcm "message"         # Git add + commit
 killport 3000         # Kill process on port
 
 # Tmux sessions
-<prefix> + e          # Session launcher with Tmux SessionX
+<prefix> + e          # Session launcher with Sesh Tmux Session Manager
 <prefix> + Ctrl-s     # Save session
 ```
 
