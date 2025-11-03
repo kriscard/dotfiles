@@ -8,6 +8,10 @@ startup_command = "nvim"
 preview_command = "eza --all --git --icons --color=always {}"
 
 [[session]]
+name = "Home 🏠"
+path = "~/"
+
+[[session]]
 name = "dotfiles 📁"
 path = "~/.dotfiles"
 windows = ["lazygit"]
