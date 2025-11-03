@@ -1,6 +1,5 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
-  "model": "claude-opus-4-20250514",
   "hooks": {
     "Stop": [
       {
@@ -36,8 +35,24 @@
       }
     ]
   },
-  "feedbackSurveyState": {
-    "lastShownTime": 1754076483100
+  "enabledMcpjsonServers": [
+    "mcp-obsidian",
+    "playwright",
+    "context7",
+    "sequential-thinking",
+    "browsermcp",
+    "shadcn"
+  ],
+  "enableAllProjectMcpServers": true,
+  "apiKeyHelper": "~/.roofr/scripts/claude-code-token.sh",
+  "permissions": {
+    "allow": [],
+    "deny": []
   },
-  "alwaysThinkingEnabled": false
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://litellm.roofr-dev.com",
+    "ANTHROPIC_MODEL": "us.anthropic.claude-sonnet-4-20250514-v1:0",
+    "ANTHROPIC_SMALL_FAST_MODEL": "us.anthropic.claude-3-5-haiku-20241022-v1:0"
+  }
 }
+
