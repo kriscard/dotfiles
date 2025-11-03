@@ -354,16 +354,23 @@ return {
 			{
 				"<leader>cf",
 				function()
-					require("conform").format({ async = true, lsp_format = "fallback" })
+					require("conform").format({ timeout_ms = 3000, lsp_format = "fallback" })
 				end,
 				mode = "",
 				desc = "[C]ode [F]ormat",
 			},
 		},
 		opts = {
-			notify_on_error = false,
-			default_format_opts = { async = true, timeout_ms = 500, lsp_format = "fallback" },
-			format_after_save = { async = true, timeout_ms = 500, lsp_format = "fallback" },
+			notify_on_error = true,
+			default_format_opts = { timeout_ms = 3000, lsp_format = "fallback" },
+			format_after_save = { timeout_ms = 3000, lsp_format = "fallback" },
+			formatters = {
+				stylua = {
+					command = vim.fn.stdpath("data") .. "/mason/bin/stylua",
+					args = { "--stdin-filepath", "$FILENAME", "-" },
+					stdin = true,
+				},
+			},
 			formatters_by_ft = {
 				javascript = { "prettierd", "prettier", stop_after_first = true },
 				typescript = { "prettierd", "prettier", stop_after_first = true },
