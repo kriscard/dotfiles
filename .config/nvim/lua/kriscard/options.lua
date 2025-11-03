@@ -11,6 +11,9 @@ vim.g.trouble_lualine = true
 -- Fix markdown indentation settings
 vim.g.markdown_recommended_style = 0
 
+-- Add Mason binaries to PATH for formatters/linters
+vim.env.PATH = vim.fn.stdpath("data") .. "/mason/bin:" .. vim.env.PATH
+
 local opt = vim.opt
 
 opt.relativenumber = true -- Relative line numbers
