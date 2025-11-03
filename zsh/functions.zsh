@@ -84,3 +84,30 @@ init-node() {
     esac
 }
 
+
+# Sesh functions
+
+# Sesh list with FZF
+unalias seshco 2>/dev/null  # Remove any existing alias
+seshco() {
+    sesh connect $(sesh list | fzf)
+}
+
+function sesh-sessions() {
+  {
+    exec </dev/tty
+    exec <&1
+    local session
+    session=$(sesh list -t -c | fzf --height 40% --reverse --border-label ' sesh ' --border --prompt '⚡  ')
+    zle reset-prompt > /dev/null 2>&1 || true
+    [[ -z "$session" ]] && return
+    sesh connect $session
+  }
+}
+
+zle     -N             sesh-sessions
+bindkey -M emacs '^g'  sesh-sessions
+bindkey -M vicmd '^g'  sesh-sessions
+bindkey -M viins '^g'  sesh-sessions
+
+

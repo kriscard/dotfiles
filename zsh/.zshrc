@@ -31,6 +31,9 @@ export PATH=/opt/homebrew/bin:$PATH
 # Set the path to DOTFILES folder
 export DOTFILES="$HOME/.dotfiles"
 
+# Add custom bin directory to PATH
+export PATH="$HOME/.config/bin:$PATH"
+
 # Set Nvim editor
 export EDITOR=nvim
 export GIT_EDITOR=nvim
