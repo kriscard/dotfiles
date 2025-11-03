@@ -1,3 +1,7 @@
+---
+description: Perform comprehensive repository analysis and create detailed documentation
+---
+
 Please perform a comprehensive analysis of this code repository and create detailed documentation written to REPO_ANALYSIS.MD covering the following aspects:
 
 ## 1. Repository Overview

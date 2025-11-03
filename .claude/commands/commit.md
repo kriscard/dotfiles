@@ -1,3 +1,7 @@
+---
+description: Create a conventional commit with all changes and push to remote
+---
+
 # Commit and Push Changes
 
 Create a conventional commit with all current changes and push to the remote repository.
