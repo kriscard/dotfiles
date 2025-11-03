@@ -53,6 +53,7 @@ work-config/config-secret-personal.zsh
 # Other
 fzf
 fish_variables
+.tool-versions
 
 # Backup files
 *.bak
@@ -64,7 +65,7 @@ fish_variables
 .env.local
 
 # Claude Code local files
-.claude/settings.local.json
+.claude/settings.json
 .claude/history.jsonl
 .claude/projects/
 .claude/shell-snapshots/
