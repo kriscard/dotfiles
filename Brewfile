@@ -37,6 +37,7 @@ brew "tree"         # Directory visualization
 # =============================================================================
 
 brew "tmux"
+brew "gitmux"
 brew "starship"     # Fast shell prompt
 brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
@@ -161,34 +162,3 @@ vscode "asvetliakov.vscode-neovim"
 vscode "christian-kohler.npm-intellisense"
 vscode "christian-kohler.path-intellisense"
 vscode "formulahendry.auto-rename-tag"
-
-# =============================================================================
-# REMOVED PACKAGES (redundant or outdated)
-# =============================================================================
-
-# Previously Removed:
-# - autojump (replaced with zoxide)
-# - python@3.10, python@3.11 (use pyenv instead)
-# - awscli (install only when needed)
-# - bluetoothconnector (rarely used)
-# - bundletool (Android-specific, install when needed)
-# - circleci (project-specific)
-# - openldap, freetds, folly, etc. (rarely used dependencies)
-# - gnupg (install when needed for security)
-# - xclip (Linux tool, not needed on macOS)
-# - romkatv/powerlevel10k (using starship instead)
-# - Multiple VSCode extensions (keeping only essential ones)
-
-# Recently Removed (2025-10-15):
-# - kitty (using ghostty instead)
-# - android-studio (heavy IDE, not needed)
-# - android-commandlinetools (not needed)
-# - zulu11 (Java runtime, not needed)
-# - popsql (database GUI, using Docker)
-# - postico (database GUI, using Docker)
-# - redis (using Docker instead)
-# - libpq (PostgreSQL client, using Docker)
-# - todoist (using Obsidian/Notion instead)
-
-# Note: If you need any of the removed packages, uncomment them above
-# or install them individually with: brew install package-name
