@@ -44,22 +44,6 @@ return {
 
 			scroll = { enabled = false },
 			statusColumn = { enabled = true },
-			-- statuscolumn = {
-			-- 	-- your statuscolumn configuration comes here
-			-- 	-- or leave it empty to use the default settings
-			-- 	-- refer to the configuration section below
-			-- 	left = { "mark", "sign" }, -- priority of signs on the left (high to low)
-			-- 	right = { "fold", "git" }, -- priority of signs on the right (high to low)
-			-- 	folds = {
-			-- 		open = false, -- show open fold icons
-			-- 		git_hl = false, -- use Git Signs hl for fold icons
-			-- 	},
-			-- 	git = {
-			-- 		-- patterns to match Git signs
-			-- 		patterns = { "GitSign", "MiniDiffSign" },
-			-- 	},
-			-- 	refresh = 50, -- refresh at most every 50ms
-			-- },
 			styles = {
 				notification = {
 					wo = { wrap = true }, -- Wrap notifications
@@ -67,10 +51,10 @@ return {
 			},
 			terminal = {
 				enabled = true,
-				win = { style = "terminal", wo = { winbar = "" } },
-				env = {
-					TERM = vim.env.TERM or "xterm-ghostty",
-				},
+				-- win = { style = "terminal", wo = { winbar = "" } },
+				-- env = {
+				-- 	TERM = vim.env.TERM or "xterm-ghostty",
+				-- },
 			},
 			words = {},
 			zen = {},
@@ -561,13 +545,6 @@ return {
 					Snacks.terminal.toggle()
 				end,
 				desc = "Toggle Terminal",
-			},
-			{
-				"<c-_>",
-				function()
-					Snacks.terminal.toggle()
-				end,
-				desc = "which_key_ignore",
 			},
 			{
 				"]]",
