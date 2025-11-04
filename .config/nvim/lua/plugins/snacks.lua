@@ -547,6 +547,13 @@ return {
 				desc = "Toggle Terminal",
 			},
 			{
+				"<c-_>",
+				function()
+					Snacks.terminal.toggle()
+				end,
+				desc = "Toggle Terminal",
+			},
+			{
 				"]]",
 				function()
 					Snacks.words.jump(vim.v.count1)
