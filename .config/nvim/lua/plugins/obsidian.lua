@@ -1,8 +1,6 @@
-local picker = "telescope.nvim"
-
 return {
 	{
-		"epwalsh/obsidian.nvim",
+		"obsidian-nvim/obsidian.nvim",
 		version = "*", -- recommended, use latest release instead of latest commit
 		event = "VeryLazy",
 		ft = "markdown",
@@ -10,7 +8,7 @@ return {
 			-- Required.
 			"nvim-lua/plenary.nvim",
 			"hrsh7th/nvim-cmp",
-			picker,
+			"folke/snacks.nvim", -- for	picker
 		},
 		config = function(_, opts)
 			-- Setup obsidian.nvim
@@ -23,6 +21,8 @@ return {
 			})
 		end,
 		opts = {
+			-- Disable legacy commands (use new command structure)
+			legacy_commands = false,
 			workspaces = {
 				{
 					name = "kriscard",
@@ -30,10 +30,10 @@ return {
 				},
 			},
 			completion = {
-				nvim_cmp = true,
+				nvim_cmp = false,
+				blink = true,
 				min_chars = 2,
 			},
-			ui = { enable = false },
 			templates = {
 				subdir = "Templates",
 				date_format = "%Y-%m-%d-%a",
@@ -51,7 +51,15 @@ return {
 			},
 
 			picker = {
-				name = picker,
+				name = "snacks.pick", -- Use 'snacks' picker
+				note_mappings = {
+					new = "<C-x>", -- Create new note from picker
+					insert_link = "<C-l>", -- Insert link to selected note
+				},
+				tag_mappings = {
+					tag_note = "<C-x>", -- Tag note in picker
+					insert_tag = "<C-l>", -- Insert selected tag
+				},
 			},
 			sort_by = "modified",
 			sort_reversed = true,
@@ -59,37 +67,11 @@ return {
 			log_level = vim.log.levels.INFO,
 			new_notes_location = "notes_subdir",
 
-			-- customize the default name or prefix when pasting images via `:ObsidianPasteImg`.
-			---@return string
-			image_name_func = function()
-				-- Prefix image names with timestamp.
-				return string.format("%s-", os.time())
-			end,
-
-			-- Optional, boolean or a function that takes a filename and returns a boolean.
-			-- `true` indicates that you don't want obsidian.nvim to manage frontmatter.
-			disable_frontmatter = false,
-
-			-- Optional, alternatively you can customize the frontmatter data.
-			---@return table
-			note_frontmatter_func = function(note)
-				-- Add the title of the note as an alias.
-				if note.title then
-					note:add_alias(note.title)
-				end
-
-				local out = { id = note.id, aliases = note.aliases, tags = note.tags }
-
-				-- `note.metadata` contains any manually added fields in the frontmatter.
-				-- So here we just make sure those fields are kept in the frontmatter.
-				if note.metadata ~= nil and not vim.tbl_isempty(note.metadata) then
-					for k, v in pairs(note.metadata) do
-						out[k] = v
-					end
-				end
-
-				return out
-			end,
+			-- Open configuration - for opening notes in Obsidian app
+			open = {
+				use_advanced_uri = true, -- Open files with line numbers in Obsidian app
+				func = vim.ui.open,
+			},
 		},
 	},
 }

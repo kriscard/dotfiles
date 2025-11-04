@@ -162,16 +162,28 @@ map("n", "<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "Decrease window wi
 map("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase window width" })
 
 -- ══════════════════════════════════════════════════════════════════════════════
--- OBSIDIAN NOTES
+-- OBSIDIAN NOTES (using new command format)
 -- ══════════════════════════════════════════════════════════════════════════════
 
-map("n", "<leader>oo", "<cmd>ObsidianOpen<cr>", { desc = "Open note" })
-map("n", "<leader>on", "<cmd>ObsidianNew<cr>", { desc = "New note" })
-map("n", "<leader>ot", "<cmd>ObsidianToday<cr>", { desc = "New Daily Note" })
-map("n", "<leader>oT", "<cmd>ObsidianTemplate<cr>", { desc = "Templates list" })
-map("n", "<leader>ob", "<cmd>ObsidianBacklinks<cr>", { desc = "Backlinks" })
-map("n", "<leader>op", "<cmd>ObsidianPasteImg<cr>", { desc = "Paste image" })
-map("n", "<leader>os", "<cmd>ObsidianSearch<cr>", { desc = "Search" })
+map("n", "<leader>oo", "<cmd>Obsidian open<cr>", { desc = "Open note in Obsidian app" })
+map("n", "<leader>on", "<cmd>Obsidian new<cr>", { desc = "New note" })
+map("n", "<leader>oq", "<cmd>Obsidian quick_switch<cr>", { desc = "Quick switch notes" })
+map("n", "<leader>ot", "<cmd>Obsidian today<cr>", { desc = "Today's daily note" })
+map("n", "<leader>oy", "<cmd>Obsidian yesterday<cr>", { desc = "Yesterday's daily note" })
+map("n", "<leader>om", "<cmd>Obsidian tomorrow<cr>", { desc = "Tomorrow's daily note" })
+map("n", "<leader>oT", "<cmd>Obsidian template<cr>", { desc = "Insert template" })
+map("n", "<leader>ob", "<cmd>Obsidian backlinks<cr>", { desc = "Show backlinks" })
+map("n", "<leader>ol", "<cmd>Obsidian links<cr>", { desc = "Show links in note" })
+map("n", "<leader>oc", "<cmd>Obsidian toc<cr>", { desc = "Table of contents" })
+map("n", "<leader>op", "<cmd>Obsidian paste_img<cr>", { desc = "Paste image" })
+map("n", "<leader>os", "<cmd>Obsidian search<cr>", { desc = "Search notes" })
+map("n", "<leader>or", "<cmd>Obsidian rename<cr>", { desc = "Rename note" })
+map("n", "<leader>of", "<cmd>Obsidian follow_link<cr>", { desc = "Follow link under cursor" })
+map("n", "<leader>otg", "<cmd>Obsidian tags<cr>", { desc = "Search by tags" })
+-- Visual mode mappings (use different keys to avoid confusion with normal mode)
+map("v", "<leader>oL", "<cmd>Obsidian link<cr>", { desc = "Link selected text to existing note" })
+map("v", "<leader>oN", "<cmd>Obsidian link_new<cr>", { desc = "Create new note from selection" })
+map("v", "<leader>oe", "<cmd>Obsidian extract_note<cr>", { desc = "Extract to new note" })
 
 -- ══════════════════════════════════════════════════════════════════════════════
 -- EDUCATIONAL / HELPFUL REMINDERS
