@@ -19,7 +19,7 @@ return {
 			-- Create which-key mappings for common commands.
 			local wk = require("which-key")
 			wk.add({
-				{ "<leader>o", group = "Obsisian" },
+				{ "<leader>o", group = "Obsidian" },
 			})
 		end,
 		opts = {
@@ -41,7 +41,7 @@ return {
 			},
 			daily_notes = {
 				-- Optional, if you keep daily notes in a separate directory.
-				folder = "Daily Notes",
+				folder = "1 - Notes/Daily Notes",
 				-- Optional, if you want to change the date format for the ID of daily notes.
 				date_format = "%Y-%m-%d",
 				-- Optional, if you want to change the date format of the default alias of daily notes.
