@@ -23,7 +23,7 @@ return {
 			},
 			sections = {
 				lualine_c = {
-					{ "filename", path = 0 },
+					{ "filename", path = 1 },
 				},
 				lualine_x = {
 					{
