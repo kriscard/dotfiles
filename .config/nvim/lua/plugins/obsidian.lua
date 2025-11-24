@@ -57,8 +57,10 @@ return {
 					insert_tag = "<C-l>", -- Insert selected tag
 				},
 			},
-			sort_by = "modified",
-			sort_reversed = true,
+			search = {
+				sort_by = "modified",
+				sort_reversed = true,
+			},
 			open_notes_in = "vsplit",
 			log_level = vim.log.levels.INFO,
 			new_notes_location = "notes_subdir",
