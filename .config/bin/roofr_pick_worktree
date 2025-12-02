@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+cd ~/Code/roofr-dev/roofr || exit 1
+
+WORKTREE=$(find worktrees -maxdepth 1 -mindepth 1 -type d | \
+  sed 's|worktrees/||' | \
+  gum filter --limit 1 --fuzzy --no-sort --placeholder 'Pick a worktree' --prompt='<2 ')
+
+if [[ -z "$WORKTREE" ]]; then
+  echo "L No worktree selected."
+  exit 1
+fi
+
+cd "worktrees/$WORKTREE" || exit 1
+sesh connect .

@@ -5,6 +5,7 @@ if [[ -z "$WORKTREE" ]]; then
   echo "Worktree name cannot be empty."
   exit 1
 fi
-git worktree add "$WORKTREE" -b "tmp_$WORKTREE" --no-track origin/main
-cd "$WORKTREE" || return
+git worktree add "worktrees/$WORKTREE" -b "$WORKTREE" --no-track origin/staging
+
+cd "worktrees/$WORKTREE" || return
 sesh connect --command "roofr_setup" .
