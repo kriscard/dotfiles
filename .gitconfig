@@ -158,4 +158,4 @@
 [user]
 	email = christopher.cardoso@roofr.com
 	name = Christopher Cardoso
-	signingkey = /Users/christopher/.ssh/id_ed25519.pub
+	signingkey = /Users/christopher/.ssh/id_ed25519
