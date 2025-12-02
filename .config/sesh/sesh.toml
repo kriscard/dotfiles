@@ -75,7 +75,7 @@ windows = ["roofr-dev"]
 [[session]]
 name = "Roofr pick worktree 🚧"
 path = "~/Code/roofr-dev/roofr/"
-startup_command = "sesh connect (find . -maxdepth 1 -type d | gum filter --limit 1 --fuzzy --no-sort --placeholder 'Pick a worktree' --prompt='🌲')"
+startup_command = "roofr_pick_worktree"
 
 [[session]]
 name = "Roofr new worktree ➕"
