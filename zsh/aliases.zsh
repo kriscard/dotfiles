@@ -31,7 +31,7 @@ alias cleanup="find . -name '*.DS_Store' -type f -ls -delete"
 alias clsym="find -L . -name . -o -type d -prune -o -type l -exec rm {} +"
 
 # Delete merged branches
-alias delete_all_branch='git branch | grep -v "master" | grep -v "main" | grep -v "dev" | grep -v "production" | xargs git branch -D'
+alias delete_all_branch='git branch | grep -v "master" | grep -v "main" | grep -v "dev" | grep -v "staging" | grep -v "production" | xargs git branch -D'
 
 # Update git submodules
 alias gsu='git submodule update --init --recursive'
