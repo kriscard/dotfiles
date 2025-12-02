@@ -76,3 +76,5 @@ fish_variables
 .claude/file-history/
 .claude/debug/
 .claude/statsig/
+.claude/plans/
+.claude/eslint_errors.json
