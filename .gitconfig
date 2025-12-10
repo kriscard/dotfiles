@@ -143,7 +143,7 @@
     instructionFormat = "[%an - %ar] %s"
     autoStash = true
 [commit]
-	gpgsign = true
+	gpgsign = false
 [gpg]
 	format = ssh
 [gpg "ssh"]
@@ -158,4 +158,4 @@
 [user]
 	email = christopher.cardoso@roofr.com
 	name = Christopher Cardoso
-	signingkey = /Users/christopher/.ssh/id_ed25519
+	signingkey = ~/.ssh/id_ed25519
