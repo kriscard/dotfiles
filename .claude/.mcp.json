@@ -1,46 +1,60 @@
 {
-	"mcpServers": {
-		"mcp-obsidian": {
-			"type": "stdio",
-			"command": "/opt/homebrew/bin/uvx",
-			"args": ["mcp-obsidian"],
-			"env": {
-				"OBSIDIAN_API_KEY": "${OBSIDIAN_API_KEY}",
-				"OBSIDIAN_HOST": "127.0.0.1",
-				"OBSIDIAN_PORT": "27124"
-			}
-		},
-		"playwright": {
-			"type": "stdio",
-			"command": "npx",
-			"args": ["@playwright/mcp@latest"],
-			"env": {}
-		},
-		"context7": {
-			"type": "stdio",
-			"command": "npx",
-			"args": ["@upstash/context7-mcp"],
-			"env": {
-				"CONTEXT7_API_KEY": "${CONTEXT7_API_KEY}"
-			}
-		},
-		"sequential-thinking": {
-			"type": "stdio",
-			"command": "npx",
-			"args": ["@modelcontextprotocol/server-sequential-thinking"],
-			"env": {}
-		},
-		"browsermcp": {
-			"type": "stdio",
-			"command": "npx",
-			"args": ["@browsermcp/mcp@latest"],
-			"env": {}
-		},
-		"shadcn": {
-			"type": "stdio",
-			"command": "npx",
-			"args": ["shadcn@latest", "mcp"],
-			"env": {}
-		}
-	}
+  "mcpServers": {
+    "mcp-obsidian": {
+      "type": "stdio",
+      "command": "/opt/homebrew/bin/uvx",
+      "args": ["mcp-obsidian"],
+      "env": {
+        "OBSIDIAN_API_KEY": "${OBSIDIAN_API_KEY}",
+        "OBSIDIAN_HOST": "127.0.0.1",
+        "OBSIDIAN_PORT": "27124"
+      }
+    },
+    "playwright": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"],
+      "env": {}
+    },
+    "context7": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["@upstash/context7-mcp"],
+      "env": {
+        "CONTEXT7_API_KEY": "${CONTEXT7_API_KEY}"
+      }
+    },
+    "sequential-thinking": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-sequential-thinking"],
+      "env": {}
+    },
+    "browsermcp": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["@browsermcp/mcp@latest"],
+      "env": {}
+    },
+    "shadcn": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["shadcn@latest", "mcp"],
+      "env": {}
+    },
+    "github": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "GITHUB_PERSONAL_ACCESS_TOKEN",
+        "ghcr.io/github/github-mcp-server"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
+      }
+    }
+  }
 }
