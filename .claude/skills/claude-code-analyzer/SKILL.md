@@ -2,7 +2,7 @@
 name: claude-code-analyzer
 description: Analyze Claude Code usage patterns, project structure, and discover community resources for workflow optimization
 tools: Read, Glob, Grep, Bash
-model: sonnet
+model: opus
 ---
 
 # Claude Code Analyzer
@@ -11,12 +11,12 @@ Optimize your Claude Code workflow by analyzing usage patterns, detecting projec
 
 ## Capabilities
 
-| Feature | Script | Purpose |
-|---------|--------|---------|
-| Usage Analysis | `analyze.sh` | Extract tool/model usage from history |
+| Feature           | Script                 | Purpose                                      |
+| ----------------- | ---------------------- | -------------------------------------------- |
+| Usage Analysis    | `analyze.sh`           | Extract tool/model usage from history        |
 | Project Detection | `analyze-claude-md.sh` | Detect stack, suggest CLAUDE.md improvements |
-| Feature Reference | `fetch-features.sh` | List Claude Code capabilities |
-| GitHub Discovery | `github-discovery.sh` | Find community skills/agents/commands |
+| Feature Reference | `fetch-features.sh`    | List Claude Code capabilities                |
+| GitHub Discovery  | `github-discovery.sh`  | Find community skills/agents/commands        |
 
 ## Workflow
 
@@ -29,6 +29,7 @@ bash scripts/analyze-claude-md.sh
 ```
 
 Interprets JSON output to identify:
+
 - Missing CLAUDE.md or incomplete sections
 - Undocumented commands or patterns
 - Framework-specific suggestions
@@ -48,6 +49,7 @@ bash scripts/analyze.sh
 ```
 
 Identifies:
+
 - Most-used tools (optimize auto-allow)
 - Model distribution (cost awareness)
 - Active projects
@@ -65,6 +67,7 @@ bash scripts/github-discovery.sh agents typescript
 ### 4. Generate Recommendations
 
 Based on analysis, provide actionable suggestions:
+
 - CLAUDE.md improvements (load `references/best-practices.md`)
 - Settings optimizations
 - New skills or agents to create
@@ -88,6 +91,7 @@ bash scripts/github-discovery.sh skills
 ## Output Interpretation
 
 ### Project Analysis Output
+
 ```json
 {
   "detected": {
@@ -104,10 +108,11 @@ bash scripts/github-discovery.sh skills
 ```
 
 ### Usage Analysis Output
+
 ```json
 {
-  "tool_usage": {"Read": 150, "Edit": 89, "Bash": 45},
-  "model_usage": {"claude-sonnet-4-20250514": 200},
+  "tool_usage": { "Read": 150, "Edit": 89, "Bash": 45 },
+  "model_usage": { "claude-sonnet-4-20250514": 200 },
   "auto_allowed_tools": ["Read", "Glob"]
 }
 ```
@@ -115,19 +120,24 @@ bash scripts/github-discovery.sh skills
 ## Recommendation Patterns
 
 ### No CLAUDE.md Detected
+
 1. Run `analyze-claude-md.sh` for stack detection
 2. Generate CLAUDE.md template from detected info
 3. Include commands from package.json scripts
 4. Add architecture notes based on directory structure
 
 ### Underutilized Features
+
 If analysis shows limited tool variety:
+
 - Suggest LSP for code navigation
 - Recommend Explore agents for searches
 - Propose skills for repeated workflows
 
 ### High Tool Usage Without Auto-Allow
+
 If frequently used tools aren't auto-allowed:
+
 - Suggest adding to `autoAllowedTools` in settings
 - Reference trust levels in best-practices.md
 
