@@ -153,4 +153,6 @@ confirm-close-surface = false
 
 # Theme environment for consistency with other tools
 env = THEME_FLAVOUR=macchiato
-keybind = shift+enter=text:\x1b\r
+# keybind = cmd+shift+enter=text:\x1b\r  # Disabled for Claude Code
+keybind = shift+enter=text:\\\n\r # Disabled for Claude Code
+
