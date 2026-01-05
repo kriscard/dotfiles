@@ -38,5 +38,7 @@ export STARSHIP_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/starship.toml"
 
 # asdf - load immediately for automatic version switching
 if [[ -f "/opt/homebrew/opt/asdf/libexec/asdf.sh" ]]; then
+  # Remove any existing alias to prevent conflict on reload
+  unalias asdf 2>/dev/null
   source "/opt/homebrew/opt/asdf/libexec/asdf.sh"
 fi

@@ -95,8 +95,7 @@ brew "httpie"       # Better HTTP client
 # MACOS TOOLS
 # =============================================================================
 
-# Window Management
-brew "koekeishiya/formulae/skhd"
+# Window Management (gaps only - Raycast handles window positioning)
 brew "koekeishiya/formulae/yabai"
 
 # Keyboard Customization

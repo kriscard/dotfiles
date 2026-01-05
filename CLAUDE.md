@@ -26,8 +26,7 @@ This is a personal dotfiles repository that manages development environment conf
 - Configuration loads themes dynamically based on `$THEME_FLAVOUR` environment variable
 
 ### Window Management
-- **Yabai** (`.config/yabai/`): Tiling window manager for macOS
-- **SKHD** (`.config/skhd/`): Hotkey daemon for macOS window management
+- **Yabai** (`.config/yabai/`): Window gaps only (Raycast handles window management)
 - **Karabiner** (`.config/karabiner/`): Keyboard customization
 
 ### Terminal Applications & Tools
@@ -36,7 +35,6 @@ This is a personal dotfiles repository that manages development environment conf
 - **Lazygit** (`.config/lazygit/`): Git TUI configuration
 - **Starship** (`.config/starship.toml`): Cross-shell prompt configuration
 - **GH-Dash** (`.config/gh-dash/`): GitHub CLI dashboard for PRs and issues
-- **Sketchybar** (`.config/sketchybar/`): macOS menu bar customization
 
 ## Common Development Commands
 

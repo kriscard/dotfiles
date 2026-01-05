@@ -85,14 +85,6 @@ opt.foldlevel = 99
 opt.foldlevelstart = 99
 opt.foldenable = true
 
--- Sync clipboard between OS and Neovim.
---  Schedule the setting after `UiEnter` because it can increase startup-time.
---  Remove this option if you want your OS clipboard to remain independent.
---  See `:help 'clipboard'`
-vim.schedule(function()
-	opt.clipboard = "unnamedplus"
-end)
-
 opt.breakindent = true -- Enable break indent
 
 -- Decrease mapped sequence wait time
