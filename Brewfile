@@ -3,10 +3,6 @@
 
 # Homebrew Taps
 tap "fsouza/prettierd"
-tap "homebrew/bundle"
-tap "homebrew/cask"
-tap "homebrew/cask-fonts"
-tap "homebrew/services"
 tap "koekeishiya/formulae"
 tap "ngrok/ngrok"
 
@@ -83,7 +79,6 @@ brew "imagemagick"  # Image processing
 
 # Package Managers & Runtimes
 brew "pnpm"         # Fast package manager
-brew "bun"          # Modern JavaScript runtime
 
 # API Testing
 brew "httpie"       # Better HTTP client
@@ -109,7 +104,7 @@ cask "karabiner-elements"
 cask "ghostty"
 
 # Development Tools
-cask "docker"
+cask "docker-desktop"
 cask "visual-studio-code"
 
 # Development Mobile
@@ -144,7 +139,6 @@ cask "ngrok"
 
 # Core Extensions
 vscode "GitHub.copilot"
-vscode "GitHub.copilot-labs"
 vscode "esbenp.prettier-vscode"
 vscode "dbaeumer.vscode-eslint"
 
