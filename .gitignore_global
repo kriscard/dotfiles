@@ -1,0 +1,6 @@
+# Global Git Ignore Patterns
+# This file is managed by dotfiles and symlinked to ~/.gitignore_global
+# Contains personal tool configuration that shouldn't be committed to projects
+
+# asdf version manager
+.tool-versions
