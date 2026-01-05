@@ -9,7 +9,109 @@ Create or update `.claude/settings.json` with the following configuration:
 ```json
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "model": "opus",
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
+  "permissions": {
+    "allow": [
+      "Bash(cat:*)",
+      "Bash(docker compose exec:*)",
+      "Bash(docker run:*)",
+      "Bash(find:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh run view:*)",
+      "Bash(git branch:*)",
+      "Bash(git checkout:*)",
+      "Bash(git fetch:*)",
+      "Bash(git rebase:*)",
+      "Bash(git stash:*)",
+      "Bash(git switch:*)",
+      "Bash(grep:*)",
+      "Bash(ls:*)",
+      "Bash(mkdir:*)",
+      "Bash(node:*)",
+      "Bash(npm run build:*)",
+      "Bash(rg:*)",
+      "ExitPlanMode(*)",
+      "Fetch(*)",
+      "Glob(*)",
+      "Grep(*)",
+      "LS(*)",
+      "Read(*)",
+      "Task(*)",
+      "TodoWrite(*)",
+      "WebFetch(domain:*)",
+      "WebSearch",
+      "mcp__*"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./secrets/**)",
+      "Read(./config/credentials.json)",
+      "Read(./build)",
+      "Edit(./.env)",
+      "Edit(./.env.*)",
+      "Edit(./package-lock.json)",
+      "Edit(./yarn.lock)",
+      "Edit(./pnpm-lock.yaml)",
+      "Bash( /dev/sda)",
+      "Bash(> /dev/sda)",
+      "Bash(dd if=/dev/zero of=/dev/sda)",
+      "Bash(diskutil apfs changePassphrase)",
+      "Bash(diskutil apfs decryptVolume)",
+      "Bash(diskutil apfs deleteContainer)",
+      "Bash(diskutil apfs deleteSnapshot)",
+      "Bash(diskutil apfs deleteVolume)",
+      "Bash(diskutil apfs deleteVolumeGroup)",
+      "Bash(diskutil apfs eraseVolume)",
+      "Bash(diskutil appleRAID)",
+      "Bash(diskutil coreStorage)",
+      "Bash(diskutil cs)",
+      "Bash(diskutil disableJournal)",
+      "Bash(diskutil disableOwnership)",
+      "Bash(diskutil eraseDisk)",
+      "Bash(diskutil eraseVolume)",
+      "Bash(diskutil partitionDisk)",
+      "Bash(diskutil randomDisk)",
+      "Bash(diskutil reformat)",
+      "Bash(diskutil resetFusion)",
+      "Bash(diskutil zeroDisk)",
+      "Bash(fork bomb)",
+      "Bash(mkfs.ext4 /dev/sda)",
+      "Bash(rm -rf $HOME)",
+      "Bash(rm -rf $PAI_DIR)",
+      "Bash(rm -rf $PAI_HOME)",
+      "Bash(rm -rf $DOTFILES)",
+      "Bash(rm -rf /)",
+      "Bash(rm -rf /*)",
+      "Bash(rm -rf ~)",
+      "Bash(sudo rm -rf /)",
+      "Bash(sudo rm -rf /*)"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "mcp-obsidian",
+    "playwright",
+    "context7",
+    "sequential-thinking",
+    "browsermcp",
+    "shadcn"
+  ],
   "hooks": {
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.dotfiles/bin/claude-status-hook PreToolUse"
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "matcher": "",
@@ -17,6 +119,24 @@ Create or update `.claude/settings.json` with the following configuration:
           {
             "type": "command",
             "command": "uv run ~/.dotfiles/.claude/hooks/notification.py"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.dotfiles/bin/claude-status-hook Stop"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.dotfiles/bin/claude-status-hook SubagentStop"
           }
         ]
       }
@@ -28,6 +148,14 @@ Create or update `.claude/settings.json` with the following configuration:
           {
             "type": "command",
             "command": "uv run ~/.dotfiles/.claude/hooks/notification.py"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.dotfiles/bin/claude-status-hook Notification"
           }
         ]
       }
@@ -44,15 +172,28 @@ Create or update `.claude/settings.json` with the following configuration:
       }
     ]
   },
-  "enabledMcpjsonServers": [
-    "mcp-obsidian",
-    "playwright",
-    "context7",
-    "sequential-thinking",
-    "browsermcp",
-    "shadcn"
-  ],
-  "enableAllProjectMcpServers": true
+  "statusLine": {
+    "type": "command",
+    "command": "claude-statusline"
+  },
+  "enabledPlugins": {
+    "essentials@kriscard": false,
+    "ideation@kriscard": true,
+    "content@kriscard": true,
+    "architecture@kriscard": true,
+    "ai-development@kriscard": true,
+    "developer-tools@kriscard": true,
+    "testing@kriscard": true
+  },
+  "extraKnownMarketplaces": {
+    "kriscard": {
+      "source": {
+        "source": "github",
+        "repo": "kriscard/kriscard-claude-plugins"
+      }
+    }
+  },
+  "alwaysThinkingEnabled": true
 }
 ```
 
