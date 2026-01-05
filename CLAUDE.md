@@ -35,7 +35,6 @@ This is a personal dotfiles repository that manages development environment conf
 - **Lazygit** (`.config/lazygit/`): Git TUI configuration
 - **Starship** (`.config/starship.toml`): Cross-shell prompt configuration
 - **GH-Dash** (`.config/gh-dash/`): GitHub CLI dashboard for PRs and issues
-- **Sketchybar** (`.config/sketchybar/`): macOS menu bar customization
 
 ## Common Development Commands
 
