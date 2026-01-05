@@ -22,6 +22,11 @@ path = "~/obsidian-vault-kriscard/"
 windows = ["lazygit"]
 
 [[session]]
+name = "Claude Plugins 🤖"
+path = "~/projects/kriscard-claude-plugins/"
+windows = ["lazygit"]
+
+[[session]]
 name = "Playground 🧪"
 path = "~/projects/playground/"
 
