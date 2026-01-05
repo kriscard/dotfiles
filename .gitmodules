@@ -1,4 +1,0 @@
-[submodule "work-config"]
-	path = work-config
-	url = git@github.com:kriscard/work-config.git
-	branch = main

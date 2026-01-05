@@ -177,7 +177,7 @@ Create or update `.claude/settings.json` with the following configuration:
     "command": "claude-statusline"
   },
   "enabledPlugins": {
-    "essentials@kriscard": false,
+    "essentials@kriscard": true,
     "ideation@kriscard": true,
     "content@kriscard": true,
     "architecture@kriscard": true,
