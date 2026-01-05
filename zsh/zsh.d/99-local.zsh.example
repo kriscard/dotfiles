@@ -1,0 +1,11 @@
+# Local machine-specific configuration
+# Copy to 99-local.zsh and customize (file is gitignored)
+
+# Example: Work-specific PATH additions
+# export PATH="$HOME/work/scripts:$PATH"
+
+# Example: Machine-specific aliases
+# alias deploy="./scripts/deploy-staging.sh"
+
+# Example: Override theme
+# export THEME_FLAVOUR=latte
