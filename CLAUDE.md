@@ -26,7 +26,7 @@ This is a personal dotfiles repository that manages development environment conf
 - Configuration loads themes dynamically based on `$THEME_FLAVOUR` environment variable
 
 ### Window Management
-- **AeroSpace** (`.config/aerospace/`): Modern Rust-based tiling window manager for macOS with window gaps
+- **Yabai** (`.config/yabai/`): Window gaps only (Raycast handles window management)
 - **Karabiner** (`.config/karabiner/`): Keyboard customization
 
 ### Terminal Applications & Tools

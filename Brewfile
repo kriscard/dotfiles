@@ -8,7 +8,6 @@ tap "homebrew/cask"
 tap "homebrew/cask-fonts"
 tap "homebrew/services"
 tap "koekeishiya/formulae"
-tap "nikitabobko/tap"
 tap "ngrok/ngrok"
 
 # =============================================================================
@@ -96,8 +95,8 @@ brew "httpie"       # Better HTTP client
 # MACOS TOOLS
 # =============================================================================
 
-# Window Management
-cask "nikitabobko/tap/aerospace"
+# Window Management (gaps only - Raycast handles window positioning)
+brew "koekeishiya/formulae/yabai"
 
 # Keyboard Customization
 cask "karabiner-elements"
