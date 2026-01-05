@@ -36,12 +36,7 @@ fi
 # Starship config location
 export STARSHIP_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/starship.toml"
 
-# asdf - on-demand loading (only loads when first called)
+# asdf - load immediately for automatic version switching
 if [[ -f "/opt/homebrew/opt/asdf/libexec/asdf.sh" ]]; then
-  _asdf_lazy() {
-    unfunction asdf 2>/dev/null
-    source "/opt/homebrew/opt/asdf/libexec/asdf.sh"
-    asdf "$@"
-  }
-  alias asdf='_asdf_lazy'
+  source "/opt/homebrew/opt/asdf/libexec/asdf.sh"
 fi
