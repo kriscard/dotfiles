@@ -40,6 +40,7 @@ tmux/plugins/
 
 # Logs and temporary files
 *.log
+logs/
 foo.*
 result
 tt.*
