@@ -2,6 +2,7 @@
 # cyberdream theme for lazygit
 gui:
   border: rounded
+  showCommandLog: false
   theme:
     activeBorderColor:
       - "#5ef1ff"
@@ -22,3 +23,6 @@ gui:
       - "#ffbd5e"
     defaultFgColor:
       - "#ffffff"
+git:
+  paging:
+    pager: delta --paging=never

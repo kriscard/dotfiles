@@ -96,6 +96,8 @@
 [push]
     # push will only do the current branch, not all branches
     default = current
+    # automatically set upstream when pushing new branches
+    autoSetupRemote = true
 [branch]
     # set up 'git pull' to rebase instead of merge
     autosetuprebase = always
@@ -137,6 +139,8 @@
 [grep]
     extendRegexp = true
     lineNumber = true
+[column]
+    ui = auto
 [credential]
     helper = osxkeychain
 [rebase]
