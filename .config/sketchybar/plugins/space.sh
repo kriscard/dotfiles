@@ -10,11 +10,14 @@ update() {
 }
 
 mouse_clicked() {
+	# Use macOS native space switching via keyboard shortcut simulation
+	# Note: Requires "Keyboard Shortcuts > Mission Control > Switch to Desktop X" enabled in System Settings
 	if [ "$BUTTON" = "right" ]; then
-		yabai -m space --destroy $SID
-		sketchybar --trigger space_change --trigger windows_on_spaces
+		# Open Mission Control for space management (no yabai delete)
+		open -a "Mission Control"
 	else
-		yabai -m space --focus $SID 2>/dev/null
+		# Focus space using AppleScript to simulate ctrl+number
+		osascript -e "tell application \"System Events\" to key code $((17 + SID)) using control down" 2>/dev/null || true
 	fi
 }
 

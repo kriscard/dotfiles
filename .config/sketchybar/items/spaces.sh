@@ -47,7 +47,8 @@ separator=(
 	padding_right=15
 	label.drawing=off
 	associated_display=active
-	click_script='yabai -m space --create && sketchybar --trigger space_change'
+	# Space creation handled by macOS Mission Control (ctrl+up, then + button)
+	click_script='open -a "Mission Control"'
 	icon.color=$WHITE
 )
 
