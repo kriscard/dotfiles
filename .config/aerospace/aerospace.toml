@@ -64,10 +64,10 @@ run = 'layout floating'
 alt-shift-r = 'reload-config'
 
 # Toggle between floating and tiling for current window
-alt-shift-space = 'layout floating tiling'
+alt-shift-f = 'layout floating tiling'
 
-# Toggle fullscreen
-alt-shift-f = 'fullscreen'
+# Toggle fullscreen (m for maximize)
+alt-shift-m = 'fullscreen'
 
 # Focus windows (vim-style)
 alt-h = 'focus left'
