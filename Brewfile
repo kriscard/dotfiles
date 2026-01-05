@@ -41,6 +41,9 @@ brew "gitmux"
 brew "starship"     # Fast shell prompt
 brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
+brew "zsh-history-substring-search"
+brew "atuin"        # Better shell history with sync
+brew "direnv"       # Directory-specific environments
 
 # =============================================================================
 # DEVELOPMENT TOOLS
