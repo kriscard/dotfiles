@@ -8,6 +8,7 @@ tap "homebrew/cask"
 tap "homebrew/cask-fonts"
 tap "homebrew/services"
 tap "koekeishiya/formulae"
+tap "nikitabobko/tap"
 tap "ngrok/ngrok"
 
 # =============================================================================
@@ -96,8 +97,7 @@ brew "httpie"       # Better HTTP client
 # =============================================================================
 
 # Window Management
-brew "koekeishiya/formulae/skhd"
-brew "koekeishiya/formulae/yabai"
+cask "nikitabobko/tap/aerospace"
 
 # Keyboard Customization
 cask "karabiner-elements"
