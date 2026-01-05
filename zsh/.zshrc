@@ -9,6 +9,3 @@ for config_file in "$ZSH/zsh.d"/*.zsh(N); do
   source "$config_file"
 done
 unset config_file
-
-# Machine-specific overrides (not in git)
-[[ -f "$ZSH/zsh.d/99-local.zsh" ]] && source "$ZSH/zsh.d/99-local.zsh"
