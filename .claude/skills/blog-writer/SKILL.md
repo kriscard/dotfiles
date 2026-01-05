@@ -2,7 +2,6 @@
 name: blog-writer
 description: Transform brain dumps into polished technical blog posts for christophercardoso.dev. Use when you have scattered ideas, talking points, or code examples that need organizing into a cohesive developer-focused post.
 tools: Read, Write, Edit
-model: opus
 ---
 
 # Developer Blog Writer

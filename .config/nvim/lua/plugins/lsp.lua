@@ -249,7 +249,14 @@ return {
 						},
 					},
 				},
-				mdx_analyzer = { filetypes = { "mdx" } }, -- optional; remove if unused
+				mdx_analyzer = {
+					filetypes = { "mdx" },
+					init_options = {
+						typescript = {
+							enabled = true,
+						},
+					},
+				}, -- optional; remove if unused
 				biome = {
 					filetypes = {
 						"javascript",
@@ -301,6 +308,7 @@ return {
 				"@unocss/language-server",
 				"stylelint-lsp",
 				"@biomejs/biome",
+				"mdx-analyzer",
 			})
 
 			require("mason").setup({ ui = { border = "rounded" } })
