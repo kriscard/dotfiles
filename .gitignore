@@ -66,6 +66,7 @@ fish_variables
 # Local configuration
 .env
 .env.local
+zsh/zsh.d/99-local.zsh
 
 # Claude Code local files
 .claude/settings.json
