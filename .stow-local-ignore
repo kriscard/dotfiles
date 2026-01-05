@@ -8,3 +8,17 @@
 ^/.config/tmux/plugins/tmux-resurrect
 ^/CLAUDE.md
 ^/.tool-versions
+
+# Claude Code runtime files (not config)
+^/\.claude/debug
+^/\.claude/projects
+^/\.claude/history\.jsonl
+^/\.claude/todos
+^/\.claude/file-history
+^/\.claude/shell-snapshots
+^/\.claude/statsig
+^/\.claude/plans
+^/\.claude/plugins
+^/\.claude/stats-cache\.json
+^/\.claude/eslint_errors\.json
+^/\.claude/settings\.json
