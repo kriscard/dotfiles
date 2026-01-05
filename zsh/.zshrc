@@ -34,6 +34,9 @@ export DOTFILES="$HOME/.dotfiles"
 # Add custom bin directory to PATH
 export PATH="$HOME/.config/bin:$PATH"
 
+# Add dotfiles bin to PATH
+export PATH="$HOME/.dotfiles/bin:$PATH"
+
 # Set Nvim editor
 export EDITOR=nvim
 export GIT_EDITOR=nvim
