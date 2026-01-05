@@ -44,7 +44,7 @@ path = "~/.dotfiles/.config/nvim"
 name = "sesh config"
 path = "~/.dotfiles/.config/sesh"
 startup_command = "nvim sesh.toml"
-preview_command = "bat --language=toml --style=snip --color=always ~/c/dotfiles/.config/sesh/sesh.toml"
+preview_command = "bat --language=toml --style=snip --color=always ~/.dotfiles/.config/sesh/sesh.toml"
 
 [[session]]
 name = "tmux config"
