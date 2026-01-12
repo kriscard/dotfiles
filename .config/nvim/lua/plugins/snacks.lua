@@ -2,7 +2,11 @@ local macchiato = require("catppuccin.palettes").get_palette("macchiato")
 
 vim.api.nvim_set_hl(0, "SnacksIndentScope", { fg = macchiato.mauve })
 
-local filtered_message = { "No information available" }
+local filtered_message = {
+	"No information available",
+	"[Copilot.lua] copilot is disabled",
+	"[Copilot.lua] Node.js version 22 or newer required but found 21.6.1",
+}
 
 return {
 	{
