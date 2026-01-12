@@ -158,8 +158,3 @@
 
 [includeIf "gitdir:/Users/chriscardoso/**"]
     path = ~/.gitconfig-work
-
-[user]
-	email = christopher.cardoso@roofr.com
-	name = Christopher Cardoso
-	signingkey = ~/.ssh/id_ed25519
