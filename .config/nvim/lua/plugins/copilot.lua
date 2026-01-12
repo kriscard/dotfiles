@@ -3,8 +3,17 @@ return {
 		"zbirenbaum/copilot.lua",
 		event = "InsertEnter",
 		config = function()
+			-- Dynamically find Node.js via asdf
+			local function get_node_path()
+				local asdf_node = vim.fn.expand("$HOME") .. "/.asdf/shims/node"
+				if vim.fn.executable(asdf_node) == 1 then
+					return asdf_node
+				end
+				return "node" -- Fallback to system node
+			end
+
 			require("copilot").setup({
-				copilot_node_command = vim.fn.expand("$HOME") .. "/.asdf/installs/nodejs/22.20.0/bin/node", -- Hardcoded to v22 for copilot while projects can use different versions
+				copilot_node_command = get_node_path(), -- Auto-detect Node.js version via asdf
 				suggestion = {
 					enabled = true,
 					auto_trigger = true,

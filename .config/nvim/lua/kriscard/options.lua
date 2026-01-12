@@ -126,3 +126,26 @@ opt.synmaxcol = 200 -- Only highlight first 200 columns for performance
 -- Better diff performance
 opt.diffopt:append("algorithm:patience")
 opt.diffopt:append("indent-heuristic")
+
+-- Semantic highlighting (Neovim 0.10+)
+-- Ensure LSP semantic tokens take priority over treesitter syntax highlighting
+vim.highlight.priorities.semantic_tokens = 95
+
+-- Enhanced diagnostic configuration (Neovim 0.10+)
+vim.diagnostic.config({
+	virtual_text = {
+		spacing = 4,
+		prefix = "●",
+		source = "if_many", -- Show source only when multiple diagnostics exist
+	},
+	float = {
+		source = "if_many", -- Show source in hover window when multiple diagnostics
+		border = "rounded",
+		header = "",
+		prefix = "",
+	},
+	signs = true,
+	underline = true,
+	update_in_insert = false, -- Don't update diagnostics while typing
+	severity_sort = true, -- Sort by severity (errors first)
+})
