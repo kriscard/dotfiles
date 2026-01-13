@@ -36,9 +36,19 @@ fi
 # Starship config location
 export STARSHIP_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/starship.toml"
 
-# asdf - load immediately for automatic version switching
-if [[ -f "/opt/homebrew/opt/asdf/libexec/asdf.sh" ]]; then
-  # Remove any existing alias to prevent conflict on reload
-  unalias asdf 2>/dev/null
-  source "/opt/homebrew/opt/asdf/libexec/asdf.sh"
+# asdf - lazy loaded for faster startup
+# Shims are added to PATH immediately so tools work, but full asdf.sh
+# is deferred until `asdf` command is actually used
+if [[ -d "/opt/homebrew/opt/asdf/libexec" ]]; then
+  # Add shims to PATH immediately (tools like node, npm work right away)
+  export ASDF_DIR="/opt/homebrew/opt/asdf/libexec"
+  export ASDF_DATA_DIR="${ASDF_DATA_DIR:-$HOME/.asdf}"
+  [[ -d "$ASDF_DATA_DIR/shims" ]] && path=("$ASDF_DATA_DIR/shims" $path)
+
+  # Lazy load: source full asdf.sh only when `asdf` command is used
+  asdf() {
+    unfunction asdf 2>/dev/null
+    source "$ASDF_DIR/asdf.sh"
+    asdf "$@"
+  }
 fi
