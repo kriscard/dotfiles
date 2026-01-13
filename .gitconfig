@@ -158,5 +158,5 @@
 [includeIf "gitdir:/Users/kriscard/**"]
     path = ~/.gitconfig-personal
 
-[includeIf "gitdir:/Users/chriscardoso/**"]
+[includeIf "gitdir:/Users/christopher/**"]
     path = ~/.gitconfig-work
