@@ -64,6 +64,8 @@ brew "watchman"     # File watching
 
 # Code Quality & Formatting
 brew "fsouza/prettierd/prettierd"
+brew "shellcheck"       # Shell script linter
+brew "pre-commit"       # Git hook framework
 
 # Git Tools
 brew "gh"           # GitHub CLI

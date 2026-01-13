@@ -15,7 +15,7 @@ This is a personal dotfiles repository that manages development environment conf
 
 ### Neovim (`.config/nvim/`)
 - Modern Lua-based configuration using Lazy.nvim plugin manager
-- Modular structure with plugins organized in `lua/plugins/` 
+- Modular structure with plugins organized in `lua/plugins/`
 - Main config entry point: `init.lua` → `require("kriscard")`
 - Plugin lock file: `lazy-lock.json` tracks exact plugin versions
 
