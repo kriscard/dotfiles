@@ -17,6 +17,9 @@ font-size = 14
 font-feature = +liga  # Enable ligatures
 font-feature = +calt  # Enable contextual alternates
 
+# Line height adjustment (MonoLisa benefits from slight increase)
+adjust-cell-height = 2
+
 # =============================================================================
 # SHELL INTEGRATION
 # =============================================================================
@@ -80,11 +83,10 @@ mouse-hide-while-typing = true
 # PERFORMANCE & BEHAVIOR
 # =============================================================================
 
-# Scrollback
-scrollback-limit = 10000
+# Scrollback (50k lines for development work)
+scrollback-limit = 50000
 
-# Performance
-gtk-single-instance = false
+# Performance (gtk-single-instance removed - Linux-only setting)
 
 # =============================================================================
 # KEYBOARD SHORTCUTS
@@ -92,6 +94,9 @@ gtk-single-instance = false
 
 # Configuration management
 keybind = super+r=reload_config
+
+# Quick terminal (quake-style dropdown - requires accessibility permission)
+keybind = global:super+backquote=toggle_quick_terminal
 
 # Window management
 keybind = super+t=new_tab
