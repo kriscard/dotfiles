@@ -33,7 +33,7 @@ tmux/plugins/
 .config/spicetify/*
 .config/tmuxinator/*
 .config/searxng
-
+.config/karabiner/automatic_backups/
 
 # Doom Emacs
 /config/doom/*.html
