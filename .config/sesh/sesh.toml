@@ -27,6 +27,11 @@ path = "~/projects/kriscard-claude-plugins/"
 windows = ["lazygit"]
 
 [[session]]
+name = "Claude Plugins Roofr 🤖"
+path = "~/Code/kriscard-claude-plugins/"
+windows = ["lazygit"]
+
+[[session]]
 name = "Playground 🧪"
 path = "~/projects/playground/"
 
