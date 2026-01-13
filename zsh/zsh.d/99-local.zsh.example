@@ -1,11 +1,49 @@
-# Local machine-specific configuration
-# Copy to 99-local.zsh and customize (file is gitignored)
+# Local ZSH Configuration
+# Copy this file to 99-local.zsh and customize for your machine
+# This file is gitignored to keep machine-specific settings private
 
-# Example: Work-specific PATH additions
-# export PATH="$HOME/work/scripts:$PATH"
+# =============================================================================
+# MACHINE-SPECIFIC ENVIRONMENT VARIABLES
+# =============================================================================
 
-# Example: Machine-specific aliases
-# alias deploy="./scripts/deploy-staging.sh"
+# Work-specific paths (uncomment and customize as needed)
+# export WORK_DIR="$HOME/work"
+# export PROJECT_ROOT="$HOME/projects"
 
-# Example: Override theme
-# export THEME_FLAVOUR=latte
+# Custom tool paths
+# export ANDROID_HOME="$HOME/Library/Android/sdk"
+# export JAVA_HOME="/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home"
+
+# =============================================================================
+# LOCAL ALIASES
+# =============================================================================
+
+# Project shortcuts (customize for your projects)
+# alias myproject="cd ~/projects/myproject && nvim"
+# alias work="cd ~/work"
+
+# Machine-specific tool aliases
+# alias python="python3"
+
+# =============================================================================
+# LOCAL FUNCTIONS
+# =============================================================================
+
+# Example: Quick project setup
+# mysetup() {
+#   cd ~/projects/myproject
+#   git pull
+#   pnpm install
+#   nvim
+# }
+
+# =============================================================================
+# LOCAL INTEGRATIONS
+# =============================================================================
+
+# Source additional local scripts
+# [[ -f "$HOME/.local/scripts/work.zsh" ]] && source "$HOME/.local/scripts/work.zsh"
+
+# Company VPN helpers (example)
+# vpn-connect() { ... }
+# vpn-disconnect() { ... }
