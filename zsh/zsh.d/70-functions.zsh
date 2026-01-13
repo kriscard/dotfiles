@@ -1,5 +1,31 @@
 # Utility Functions
 
+# Shell startup profiling - diagnose what's slowing down shell startup
+zsh-profile() {
+  echo "Profiling zsh startup time..."
+  echo ""
+
+  # Quick timing
+  local start end
+  start=$(gdate +%s%3N 2>/dev/null || date +%s)
+  zsh -i -c exit 2>/dev/null
+  end=$(gdate +%s%3N 2>/dev/null || date +%s)
+
+  if command -v gdate &>/dev/null; then
+    echo "Total startup time: $((end - start))ms"
+  else
+    echo "Total startup time: ~$((end - start))s (install coreutils for ms precision)"
+  fi
+  echo ""
+
+  # Detailed profiling with zprof
+  echo "Detailed breakdown (top 10):"
+  echo "─────────────────────────────────────────"
+  ZPROF=1 zsh -i -c 'zprof | head -15' 2>/dev/null
+  echo ""
+  echo "Tip: Add 'zmodload zsh/zprof' at top of .zshrc for more detail"
+}
+
 # Quick directory creation and navigation
 mkcd() {
   mkdir -p "$1" && cd "$1"
@@ -78,13 +104,4 @@ init-node() {
 # Sesh list with fzf
 seshco() {
   sesh connect $(sesh list | fzf)
-}
-
-# Tree visualization (using eza if available)
-tree() {
-  if (( $+commands[eza] )); then
-    eza --tree --icons "$@"
-  else
-    command find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'
-  fi
 }
