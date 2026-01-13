@@ -1,94 +1,51 @@
 return {
 	"mfussenegger/nvim-dap",
 	dependencies = {
-		-- Creates a beautiful debugger UI
 		"rcarriga/nvim-dap-ui",
-
-		-- Required dependency for nvim-dap-ui
 		"nvim-neotest/nvim-nio",
-
-		-- Installs the debug adapters for you
 		"williamboman/mason.nvim",
 		"jay-babu/mason-nvim-dap.nvim",
-
-		-- Add your own debuggers here
 		"mxsdev/nvim-dap-vscode-js",
 	},
-	keys = function(_, keys)
-		local dap = require("dap")
-		local dapui = require("dapui")
-		return {
-			-- Standard debug commands with more intuitive keys
-			{ "<F5>", dap.continue, desc = "Debug: Start/Continue" },
-			{ "<F9>", dap.toggle_breakpoint, desc = "Debug: Toggle Breakpoint" },
-			{ "<F10>", dap.step_over, desc = "Debug: Step Over" },
-			{ "<F11>", dap.step_into, desc = "Debug: Step Into" },
-			{ "<F12>", dap.step_out, desc = "Debug: Step Out" },
+	keys = {
+		-- Standard debug commands with function keys
+		{ "<F5>", function() require("dap").continue() end, desc = "Debug: Start/Continue" },
+		{ "<F9>", function() require("dap").toggle_breakpoint() end, desc = "Debug: Toggle Breakpoint" },
+		{ "<F10>", function() require("dap").step_over() end, desc = "Debug: Step Over" },
+		{ "<F11>", function() require("dap").step_into() end, desc = "Debug: Step Into" },
+		{ "<F12>", function() require("dap").step_out() end, desc = "Debug: Step Out" },
 
-			-- Additional useful commands with leader key
-			{ "<leader>db", dap.toggle_breakpoint, desc = "Debug: Toggle Breakpoint" },
-			{
-				"<leader>dB",
-				function()
-					dap.set_breakpoint(vim.fn.input("Breakpoint condition: "))
-				end,
-				desc = "Debug: Set Conditional Breakpoint",
-			},
-			{
-				"<leader>dl",
-				function()
-					dap.set_breakpoint(nil, nil, vim.fn.input("Log point message: "))
-				end,
-				desc = "Debug: Set Log Point",
-			},
-			{ "<leader>dr", dap.repl.open, desc = "Debug: Open REPL" },
-			{ "<leader>dt", dapui.toggle, desc = "Debug: Toggle UI" },
-
-			-- Session management
-			{ "<leader>ds", dap.continue, desc = "Debug: Start/Continue" },
-			{ "<leader>dq", dap.close, desc = "Debug: Quit Session" },
-			{ "<leader>dR", dap.run_last, desc = "Debug: Run Last Session" },
-			{
-				"<leader>dp",
-				function()
-					dap.set_breakpoint(nil, nil, vim.fn.input("Log point message: "))
-				end,
-				desc = "Debug: Set Log Point",
-			},
-
-			-- Workspace management
-			{
-				"<leader>dw",
-				function()
-					require("dap.ui.widgets").hover()
-				end,
-				desc = "Debug: Hover Variables",
-			},
-			{
-				"<leader>df",
-				function()
-					local widgets = require("dap.ui.widgets")
-					widgets.centered_float(widgets.frames)
-				end,
-				desc = "Debug: Show Frames",
-			},
-			{
-				"<leader>ds",
-				function()
-					local widgets = require("dap.ui.widgets")
-					widgets.centered_float(widgets.scopes)
-				end,
-				desc = "Debug: Show Scopes",
-			},
-
-			unpack(keys),
-		}
-	end,
+		-- Leader key mappings
+		{ "<leader>db", function() require("dap").toggle_breakpoint() end, desc = "Toggle Breakpoint" },
+		{ "<leader>dB", function() require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: ")) end, desc = "Conditional Breakpoint" },
+		{ "<leader>dl", function() require("dap").set_breakpoint(nil, nil, vim.fn.input("Log point message: ")) end, desc = "Log Point" },
+		{ "<leader>dr", function() require("dap").repl.open() end, desc = "Open REPL" },
+		{ "<leader>dt", function() require("dapui").toggle() end, desc = "Toggle UI" },
+		{ "<leader>ds", function() require("dap").continue() end, desc = "Start/Continue" },
+		{ "<leader>dq", function() require("dap").close() end, desc = "Quit Session" },
+		{ "<leader>dR", function() require("dap").run_last() end, desc = "Run Last Session" },
+		{ "<leader>dw", function() require("dap.ui.widgets").hover() end, desc = "Hover Variables" },
+		{
+			"<leader>df",
+			function()
+				local widgets = require("dap.ui.widgets")
+				widgets.centered_float(widgets.frames)
+			end,
+			desc = "Show Frames",
+		},
+		{
+			"<leader>dS",
+			function()
+				local widgets = require("dap.ui.widgets")
+				widgets.centered_float(widgets.scopes)
+			end,
+			desc = "Show Scopes",
+		},
+	},
 	config = function()
 		local dap = require("dap")
 		local dapui = require("dapui")
 
-		-- Setup mason-nvim-dap
 		require("mason-nvim-dap").setup({
 			ensure_installed = { "node2" },
 			automatic_installation = true,
@@ -99,7 +56,6 @@ return {
 			},
 		})
 
-		-- Setup dap-vscode-js
 		require("dap-vscode-js").setup({
 			node_path = "node",
 			debugger_path = vim.fn.expand("~/.local/share/nvim/vscode-js-debug"),
@@ -110,9 +66,8 @@ return {
 			log_console_level = vim.log.levels.ERROR,
 		})
 
-		-- Configure language specific settings
 		for _, language in ipairs({ "typescript", "javascript" }) do
-			require("dap").configurations[language] = {
+			dap.configurations[language] = {
 				{
 					type = "pwa-node",
 					request = "launch",
@@ -132,10 +87,7 @@ return {
 					request = "launch",
 					name = "Debug Jest Tests",
 					runtimeExecutable = "node",
-					runtimeArgs = {
-						"./node_modules/jest/bin/jest.js",
-						"--runInBand",
-					},
+					runtimeArgs = { "./node_modules/jest/bin/jest.js", "--runInBand" },
 					rootPath = "${workspaceFolder}",
 					cwd = "${workspaceFolder}",
 					console = "integratedTerminal",
@@ -144,7 +96,6 @@ return {
 			}
 		end
 
-		-- Dap UI setup
 		dapui.setup({
 			icons = { expanded = "▾", collapsed = "▸", current_frame = "*" },
 			controls = {
@@ -162,12 +113,10 @@ return {
 			},
 		})
 
-		-- Set up DAP UI listeners
 		dap.listeners.after.event_initialized["dapui_config"] = dapui.open
 		dap.listeners.before.event_terminated["dapui_config"] = dapui.close
 		dap.listeners.before.event_exited["dapui_config"] = dapui.close
 
-		-- Add error handling
 		dap.listeners.after.event_error["error_handler"] = function(_, body)
 			vim.notify("DAP Error: " .. vim.inspect(body), vim.log.levels.ERROR)
 		end

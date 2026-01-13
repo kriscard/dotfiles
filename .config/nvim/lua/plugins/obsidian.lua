@@ -2,7 +2,6 @@ return {
 	{
 		"obsidian-nvim/obsidian.nvim",
 		version = "*", -- recommended, use latest release instead of latest commit
-		event = "VeryLazy",
 		ft = "markdown",
 		dependencies = {
 			-- Required.

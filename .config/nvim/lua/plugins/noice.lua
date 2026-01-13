@@ -1,11 +1,42 @@
 return {
 	"folke/noice.nvim",
 	event = "VeryLazy",
-	enabled = false,
+	enabled = true,
 	dependencies = {
 		"MunifTanjim/nui.nvim",
 	},
 	opts = {
+		views = {
+			cmdline_popup = {
+				position = {
+					row = "50%",
+					col = "50%",
+				},
+				size = {
+					width = 60,
+					height = "auto",
+				},
+				border = {
+					style = "rounded",
+					padding = { 0, 1 },
+				},
+			},
+			popupmenu = {
+				relative = "editor",
+				position = {
+					row = "55%",
+					col = "50%",
+				},
+				size = {
+					width = 60,
+					height = 10,
+				},
+				border = {
+					style = "rounded",
+					padding = { 0, 1 },
+				},
+			},
+		},
 		lsp = {
 			hover = {
 				-- Set not show a message if hover is not available

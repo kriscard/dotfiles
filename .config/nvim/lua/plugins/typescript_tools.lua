@@ -1,7 +1,7 @@
 return {
 	{
 		"vuki656/package-info.nvim",
-		event = "BufReadPre",
+		ft = "json",
 		config = function()
 			require("package-info").setup()
 		end,
