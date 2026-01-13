@@ -2,7 +2,8 @@ return {
 	"nvim-lualine/lualine.nvim",
 	event = "VeryLazy",
 	config = function()
-		local lazy_status = require("lazy.status") -- to configure lazy pending updates count
+		local lazy_status = require("lazy.status")
+		local macchiato = require("catppuccin.palettes").get_palette("macchiato")
 
 		-- Display a status when recording a macro
 		local function macro_recording()
@@ -29,11 +30,11 @@ return {
 					{
 						lazy_status.updates,
 						cond = lazy_status.has_updates,
-						color = { fg = "#ff9e64" },
+						color = { fg = macchiato.peach },
 					},
 					{
 						macro_recording,
-						color = { fg = "#ff9e64" }, -- Optional: customize the color
+						color = { fg = macchiato.red },
 					},
 					{ "encoding" },
 					{ "fileformat" },

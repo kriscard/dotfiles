@@ -1,6 +1,17 @@
 local macchiato = require("catppuccin.palettes").get_palette("macchiato")
 
+-- Snacks highlight groups using Catppuccin Macchiato palette
 vim.api.nvim_set_hl(0, "SnacksIndentScope", { fg = macchiato.mauve })
+vim.api.nvim_set_hl(0, "SnacksLazygitActiveBorder", { fg = macchiato.mauve, bold = true })
+vim.api.nvim_set_hl(0, "SnacksLazygitInactiveBorder", { fg = macchiato.overlay1 })
+vim.api.nvim_set_hl(0, "SnacksLazygitOptions", { fg = macchiato.blue })
+vim.api.nvim_set_hl(0, "SnacksLazygitSearch", { fg = macchiato.yellow, bold = true })
+vim.api.nvim_set_hl(0, "SnacksLazygitSelected", { bg = macchiato.surface0 })
+vim.api.nvim_set_hl(0, "SnacksLazygitUnstaged", { fg = macchiato.red })
+vim.api.nvim_set_hl(0, "SnacksLazygitCherryBg", { fg = macchiato.surface1 })
+vim.api.nvim_set_hl(0, "SnacksLazygitCherryFg", { fg = macchiato.mauve })
+vim.api.nvim_set_hl(0, "SnacksLazygitDefault", { fg = macchiato.text })
+vim.api.nvim_set_hl(0, "SnacksLazygitSpecial", { fg = macchiato.lavender })
 
 local filtered_message = {
 	"No information available",
@@ -36,6 +47,22 @@ return {
 			},
 			git = { enabled = true },
 			gitbrowse = { enabled = true },
+			lazygit = {
+				enabled = true,
+				configure = true,
+				theme = {
+					[241] = { fg = "SnacksLazygitSpecial" },
+					activeBorderColor = { fg = "SnacksLazygitActiveBorder", bold = true },
+					cherryPickedCommitBgColor = { fg = "SnacksLazygitCherryBg" },
+					cherryPickedCommitFgColor = { fg = "SnacksLazygitCherryFg" },
+					defaultFgColor = { fg = "SnacksLazygitDefault" },
+					inactiveBorderColor = { fg = "SnacksLazygitInactiveBorder" },
+					optionsTextColor = { fg = "SnacksLazygitOptions" },
+					searchingActiveBorderColor = { fg = "SnacksLazygitSearch", bold = true },
+					selectedLineBgColor = { bg = "SnacksLazygitSelected" },
+					unstagedChangesColor = { fg = "SnacksLazygitUnstaged" },
+				},
+			},
 			image = { enabled = true },
 			indent = { enabled = true },
 			input = { enabled = true },

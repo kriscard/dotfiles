@@ -37,7 +37,7 @@ return {
 			show_close_icon = true,
 			show_tab_indicators = true,
 			persist_buffer_sort = true,
-			separator_style = "slant",
+			separator_style = "thin",
 			diagnostics_indicator = function(_, _, diag)
 				local icons = iconsList.diagnostics
 				local ret = (diag.error and icons.Error .. diag.error .. " " or "")

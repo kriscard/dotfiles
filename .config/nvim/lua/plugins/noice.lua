@@ -1,7 +1,7 @@
 return {
 	"folke/noice.nvim",
 	event = "VeryLazy",
-	enable = false,
+	enabled = false,
 	dependencies = {
 		"MunifTanjim/nui.nvim",
 	},
