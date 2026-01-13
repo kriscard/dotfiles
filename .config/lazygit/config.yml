@@ -1,28 +1,30 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/jesseduffield/lazygit/master/schema/config.json
-# cyberdream theme for lazygit
+# Catppuccin Macchiato theme for lazygit
 gui:
   border: rounded
   showCommandLog: false
+  nerdFontsVersion: "3"
   theme:
     activeBorderColor:
-      - "#5ef1ff"
+      - "#8aadf4"  # blue
       - bold
     inactiveBorderColor:
-      - "#7b8496"
+      - "#6e738d"  # overlay0
     searchingActiveBorderColor:
-      - "#ff5ef1"
+      - "#eed49f"  # yellow
+      - bold
     optionsTextColor:
-      - "#ffffff"
+      - "#8aadf4"  # blue
     selectedLineBgColor:
-      - "#3c4048"
+      - "#363a4f"  # surface0
     cherryPickedCommitBgColor:
-      - "#3c4048"
+      - "#494d64"  # surface1
     cherryPickedCommitFgColor:
-      - "#ff5ea0"
+      - "#f5bde6"  # pink
     unstagedChangesColor:
-      - "#ffbd5e"
+      - "#ed8796"  # red
     defaultFgColor:
-      - "#ffffff"
+      - "#cad3f5"  # text
 git:
   paging:
     pager: delta --paging=never
