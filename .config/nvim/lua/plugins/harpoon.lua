@@ -19,35 +19,50 @@ return {
 
 		local keys = {
 			{
-				"<leader>H",
+				"<leader>ha",
 				function()
 					harpoon:list():add()
 				end,
-				desc = "[H]arpoon File",
+				desc = "Add file",
 			},
 			{
-				"<leader>h",
+				"<leader>hh",
 				function()
 					harpoon.ui:toggle_quick_menu(harpoon:list())
 				end,
-				desc = "[H]arpoon Quick Menu",
+				desc = "Quick menu",
 			},
 			{
 				"<leader>hc",
 				function()
 					harpoon:list():clear()
 				end,
-				desc = "[H]arpoon Quick Menu",
+				desc = "Clear list",
+			},
+			{
+				"<leader>hp",
+				function()
+					harpoon:list():prev()
+				end,
+				desc = "Previous file",
+			},
+			{
+				"<leader>hn",
+				function()
+					harpoon:list():next()
+				end,
+				desc = "Next file",
 			},
 		}
 
+		-- File slots 1-5 under harpoon submenu
 		for i = 1, 5 do
 			table.insert(keys, {
-				"<leader>" .. i,
+				"<leader>h" .. i,
 				function()
 					require("harpoon"):list():select(i)
 				end,
-				desc = "[H]arpoon to File " .. i,
+				desc = "File " .. i,
 			})
 		end
 		return keys

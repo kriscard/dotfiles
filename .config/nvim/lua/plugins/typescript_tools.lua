@@ -7,18 +7,18 @@ return {
 		end,
 		keys = {
 			-- Show dependency versions
-			{ "<leader>Ns", "<cmd>lua require('package-info').show()<CR>", desc = "Show dependency versions" },
-			{ "<leader>Nc", "<cmd>lua require('package-info').hide()<CR>", desc = "Hide dependency versions" },
-			{ "<leader>NT", "<cmd>lua require('package-info').toggle()<CR>", desc = "Toggle dependency versions" },
-			{ "<leader>Nu", "<cmd>lua require('package-info').update()<CR>", desc = "Update dependency on the line" },
-			{ "<leader>Nd", "<cmd>lua require('package-info').delete()<CR>", desc = "Delete dependency on the line" },
-			{ "<leader>Ni", "<cmd>lua require('package-info').install()<CR>", desc = "Install a new dependency" },
+			{ "<leader>Ps", "<cmd>lua require('package-info').show()<CR>", desc = "Show dependency versions" },
+			{ "<leader>Pc", "<cmd>lua require('package-info').hide()<CR>", desc = "Hide dependency versions" },
+			{ "<leader>Pt", "<cmd>lua require('package-info').toggle()<CR>", desc = "Toggle dependency versions" },
+			{ "<leader>Pu", "<cmd>lua require('package-info').update()<CR>", desc = "Update dependency on the line" },
+			{ "<leader>Pd", "<cmd>lua require('package-info').delete()<CR>", desc = "Delete dependency on the line" },
+			{ "<leader>Pi", "<cmd>lua require('package-info').install()<CR>", desc = "Install a new dependency" },
 			{
-				"<leader>Np",
+				"<leader>Pv",
 				"<cmd>lua require('package-info').change_version()<CR>",
-				desc = "Install a different dependency version",
+				desc = "Change dependency version",
 			},
-			{ "<leader>Nt", ":Telescope package_info<CR>", desc = "Telescope package info" },
+			{ "<leader>Pf", ":Telescope package_info<CR>", desc = "Find in packages" },
 		},
 	},
 }
