@@ -173,7 +173,7 @@ h1 {
 	border-radius: 8px;
 }
 
-/* Making index column wider so that lighter background that 
+/* Making index column wider so that lighter background that
 highlights selected song contains multi-digit song numbers */
 /* It looks good up to 4 digits, I figured that no one has playlists with more music than that ;) */
 .main-trackList-trackList.main-trackList-indexable .main-trackList-trackListRowGrid {
@@ -195,7 +195,7 @@ highlights selected song contains multi-digit song numbers */
 .encore-dark-theme .encore-bright-accent-set:hover {
 	--background-base: var(--spice-button-active);
 	--background-highlight: var(--spice-player);
-	--background-press: var(--spice-player);	
+	--background-press: var(--spice-player);
 }
 
 /* Volume bar margins */

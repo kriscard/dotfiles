@@ -76,7 +76,7 @@ waitForElement(['.Root__top-container'], ([topContainer]) => {
 
     resizeObserver.observe(rightbar);
   });
-  
+
   waitForElement(['[data-encore-id="buttonPrimary"]'], ([targetElement]) => {
     // start or stop spinning animation based on whether something is playing
     const playObserver = new MutationObserver((mutationsList) => {
@@ -89,7 +89,7 @@ waitForElement(['.Root__top-container'], ([topContainer]) => {
         }
       }
     });
-  
+
     const playConfig = { attributes: true, attributeFilter: ['aria-label'] };
     playObserver.observe(targetElement, playConfig);
   });

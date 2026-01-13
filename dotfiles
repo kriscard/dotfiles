@@ -259,7 +259,8 @@ cmd_update() {
 cmd_backup() {
     title "💾 Creating configuration backup"
 
-    local backup_dir="$HOME/dotfiles-backup-$(date +%Y%m%d-%H%M%S)"
+    local backup_dir
+    backup_dir="$HOME/dotfiles-backup-$(date +%Y%m%d-%H%M%S)"
 
     if [[ "$DRY_RUN" == true ]]; then
         echo "[DRY RUN] Would create backup directory: $backup_dir"
@@ -395,7 +396,8 @@ cmd_sync() {
 
     for path in "${conflicting_paths[@]}"; do
         if [[ -e "$path" ]] && [[ ! -L "$path" ]]; then
-            local backup_name="${path}.backup.$(date +%Y%m%d_%H%M%S)"
+            local backup_name
+            backup_name="${path}.backup.$(date +%Y%m%d_%H%M%S)"
             if [[ "$DRY_RUN" == true ]]; then
                 echo "[DRY RUN] Would backup: $path -> $backup_name"
             else
@@ -749,6 +751,7 @@ cmd_ds_store() {
         local display_path="$file"
         # Try to make path relative to HOME for cleaner display
         if [[ "$file" == "$HOME/"* ]]; then
+            # shellcheck disable=SC2088  # Tilde intentional for display
             display_path="~/${file#$HOME/}"
         fi
         echo "  📄 $display_path"
@@ -771,6 +774,7 @@ cmd_ds_store() {
         for file in "${files_to_process[@]}"; do
             local display_path="$file"
             if [[ "$file" == "$HOME/"* ]]; then
+                # shellcheck disable=SC2088  # Tilde intentional for display
                 display_path="~/${file#$HOME/}"
             fi
             echo "  🗑️  Would delete: $display_path"
@@ -783,6 +787,7 @@ cmd_ds_store() {
         for file in "${files_to_process[@]}"; do
             local display_path="$file"
             if [[ "$file" == "$HOME/"* ]]; then
+                # shellcheck disable=SC2088  # Tilde intentional for display
                 display_path="~/${file#$HOME/}"
             fi
 

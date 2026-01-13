@@ -232,7 +232,7 @@ window.addEventListener("load", rotateTurntable = () => {
       document.body.append(adModalStyle);
       return;
     }
-    
+
     const billboard = document.querySelector("#view-billboard-ad");
 
     billboard?.closest(".ReactModalPortal").remove();

@@ -213,7 +213,7 @@ h1 {
   width: 4px;
 }
 
-/* Making index column wider so that lighter background that 
+/* Making index column wider so that lighter background that
 highlights selected song contains multi-digit song numbers */
 /* It looks good up to 4 digits, I figured that no one has playlists with more music than that ;) */
 .main-trackList-trackList.main-trackList-indexable

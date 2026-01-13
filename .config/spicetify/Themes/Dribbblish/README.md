@@ -36,19 +36,19 @@
 ##  Features
 ### Resizable sidebar
 
-<img src="https://i.imgur.com/1zomkmd.png" alt="img" align="center" width="500px"> 
+<img src="https://i.imgur.com/1zomkmd.png" alt="img" align="center" width="500px">
 
 ### Customizable sidebar
 Rearrange icons positions, stick icons to header or hide unnecessary to save space.
 Turn on "Sidebar config" mode in Profile menu and hover on icon to show control buttons.
 After you finish customizing, turn off Config mode in Profile menu to save.
 
-<img src="https://i.imgur.com/86gqPe8.png" alt="img" align="center" width="500px"> 
+<img src="https://i.imgur.com/86gqPe8.png" alt="img" align="center" width="500px">
 
 ### Playlist Folder image
 Right click at folder and choose images for your playlist folder. Every image formats supported by Chrome can be used, but do keep image size small and in compressed format.
 
-<img src="https://i.imgur.com/WGQ7Bev.gif" alt="img" align="center" width="500px"> 
+<img src="https://i.imgur.com/WGQ7Bev.gif" alt="img" align="center" width="500px">
 
 ### Left/Right expanded cover
 In profile menu, toggle option "Right expanded cover" to change expaned current track cover image to left or right side, whereever you prefer.
@@ -95,14 +95,14 @@ spicetify config color_scheme <scheme name>
 spicetify apply
 ```
 
-## Auto-uninstall 
+## Auto-uninstall
 ### Windows
 ```powershell
 Invoke-WebRequest -UseBasicParsing "https://raw.githubusercontent.com/spicetify/spicetify-themes/v2/Dribbblish/uninstall.ps1" | Invoke-Expression
 ```
 
-## Manual uninstall 
-Remove the dribbblish theme with the following commands 
+## Manual uninstall
+Remove the dribbblish theme with the following commands
 
 ```
 spicetify config current_theme " " color_scheme " "

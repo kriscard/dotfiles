@@ -32,4 +32,3 @@ Head to the [wiki](https://github.com/spicetify/spicetify-marketplace/wiki) to g
 - [Contributions](https://github.com/spicetify/spicetify-marketplace/wiki/Contributions)
 - [Development](https://github.com/spicetify/spicetify-marketplace/wiki/Development)
 - [Translating/Localizing Marketplace](https://github.com/spicetify/spicetify-marketplace/wiki/Localizing-Marketplace)
-

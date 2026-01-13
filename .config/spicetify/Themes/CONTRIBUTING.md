@@ -42,7 +42,7 @@ If you want to add your theme:
     ```markdown
     ## THEME_NAME
 
-    #### COLOR_SCHEME1_NAME 
+    #### COLOR_SCHEME1_NAME
 
     [A single image of the theme using the color scheme]
 
