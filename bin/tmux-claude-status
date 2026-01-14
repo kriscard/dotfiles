@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+# Displays Claude Code status for current tmux session
+# Used in tmux status bar
+
+STATUS_DIR="$HOME/.cache/claude-status"
+SESSION_NAME=$(tmux display-message -p '#{session_name}' 2>/dev/null)
+
+if [ -z "$SESSION_NAME" ]; then
+  exit 0
+fi
+
+STATUS_FILE="$STATUS_DIR/${SESSION_NAME}.status"
+
+if [ -f "$STATUS_FILE" ]; then
+  STATUS=$(cat "$STATUS_FILE" 2>/dev/null)
+
+  # Check if file is stale (older than 5 minutes = no active Claude session)
+  if [ "$(uname)" = "Darwin" ]; then
+    FILE_AGE=$(( $(date +%s) - $(stat -f %m "$STATUS_FILE") ))
+  else
+    FILE_AGE=$(( $(date +%s) - $(stat -c %Y "$STATUS_FILE") ))
+  fi
+
+  # If file is older than 5 minutes, assume no active session
+  if [ "$FILE_AGE" -gt 300 ]; then
+    exit 0
+  fi
+
+  case "$STATUS" in
+    working)
+      echo "🤖 Claude Working "
+      ;;
+    done)
+      echo "✅ Claude Ready "
+      ;;
+    *)
+      exit 0
+      ;;
+  esac
+fi
