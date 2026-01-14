@@ -62,6 +62,16 @@ return {
 					selectedLineBgColor = { bg = "SnacksLazygitSelected" },
 					unstagedChangesColor = { fg = "SnacksLazygitUnstaged" },
 				},
+				-- Disable Snacks' tmux navigation (uses TmuxNavigate commands that don't work in terminal)
+				-- Navigation is handled by lazygit config with proper tmux commands
+				win = {
+					keys = {
+						nav_h = false,
+						nav_j = false,
+						nav_k = false,
+						nav_l = false,
+					},
+				},
 			},
 			image = { enabled = true },
 			indent = { enabled = true },

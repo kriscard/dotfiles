@@ -28,3 +28,27 @@ gui:
 git:
   paging:
     pager: delta --paging=never
+os:
+  editPreset: "nvim"
+keybinding:
+  universal:
+    # Tmux pane navigation (use actual tmux commands, not Neovim commands)
+    prevBlock-alt: "<c-h>"
+    nextBlock-alt: "<c-l>"
+customCommands:
+  - key: "<c-h>"
+    command: "tmux select-pane -L"
+    context: "global"
+    subprocess: true
+  - key: "<c-l>"
+    command: "tmux select-pane -R"
+    context: "global"
+    subprocess: true
+  - key: "<c-j>"
+    command: "tmux select-pane -D"
+    context: "global"
+    subprocess: true
+  - key: "<c-k>"
+    command: "tmux select-pane -U"
+    context: "global"
+    subprocess: true
