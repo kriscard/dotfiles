@@ -53,3 +53,45 @@ api.nvim_create_autocmd("BufWritePre", {
 		end
 	end,
 })
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- Markdown & Obsidian specific autocommands
+-- ══════════════════════════════════════════════════════════════════════════════
+local markdown_grp = api.nvim_create_augroup("MarkdownSettings", { clear = true })
+
+-- Enable spell checking and line wrapping for markdown files
+api.nvim_create_autocmd("FileType", {
+	group = markdown_grp,
+	pattern = { "markdown", "mdx", "text", "gitcommit" },
+	callback = function()
+		vim.opt_local.wrap = true -- Enable line wrapping
+		vim.opt_local.linebreak = true -- Break at word boundaries
+		vim.opt_local.spell = true -- Enable spell checking
+		vim.opt_local.spelllang = "en_us" -- Set spell language
+		vim.opt_local.textwidth = 80 -- Wrap at 80 characters
+		vim.opt_local.colorcolumn = "" -- Disable color column in markdown
+	end,
+	desc = "Enable spell check and wrap for markdown files",
+})
+
+-- Auto-save for Obsidian vault files (no confirmation needed)
+api.nvim_create_autocmd({ "FocusLost", "BufLeave" }, {
+	group = markdown_grp,
+	pattern = "*/obsidian-vault-kriscard/*",
+	callback = function()
+		if vim.bo.modified and vim.bo.buftype == "" then
+			vim.cmd("silent! write")
+		end
+	end,
+	desc = "Auto-save Obsidian notes on focus lost",
+})
+
+-- Set conceal level for markdown files (for wiki links, etc.)
+api.nvim_create_autocmd("FileType", {
+	group = markdown_grp,
+	pattern = { "markdown" },
+	callback = function()
+		vim.opt_local.conceallevel = 2
+	end,
+	desc = "Set conceallevel for markdown",
+})

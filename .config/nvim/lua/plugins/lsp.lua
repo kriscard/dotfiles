@@ -148,7 +148,44 @@ return {
 				graphql = { filetypes = { "graphql" } },
 				html = {},
 				jsonls = {},
-				marksman = {},
+				marksman = {}, -- Markdown LSP for links, headings, etc.
+
+			-- LTeX for grammar and spell checking in markdown
+			ltex = {
+				filetypes = { "markdown", "text", "gitcommit" },
+				settings = {
+					ltex = {
+						language = "en-US",
+						-- Disable spell checking (use Neovim's native spell for that)
+						checkFrequency = "save",
+						-- Additional dictionary entries
+						dictionary = {
+							["en-US"] = {
+								"Neovim",
+								"LSP",
+								"treesitter",
+								"dotfiles",
+								"keymaps",
+								"lua",
+								"obsidian",
+								"tmux",
+								"nvim",
+								"config",
+							},
+						},
+						-- Disable specific rules that are too noisy
+						disabledRules = {
+							["en-US"] = {
+								"MORFOLOGIK_RULE_EN_US", -- Disable spell check (use vim spell)
+								"WHITESPACE_RULE", -- Trailing whitespace
+								"EN_QUOTES", -- Smart quotes
+							},
+						},
+						-- Hide false positives
+						hiddenFalsePositives = {},
+					},
+				},
+			},
 				prismals = {},
 				sqlls = {},
 				tailwindcss = { filetypes = { "typescriptreact", "javascriptreact", "html", "svelte" } },
@@ -309,6 +346,7 @@ return {
 				"stylelint-lsp",
 				"@biomejs/biome",
 				"mdx-analyzer",
+				"ltex-ls", -- Grammar checking for markdown
 			})
 
 			require("mason").setup({ ui = { border = "rounded" } })
@@ -493,6 +531,7 @@ return {
 				per_filetype = {
 					lua = { "lazydev", "lsp", "path", "snippets", "buffer" },
 					gitcommit = { "git", "buffer" },
+					markdown = { "obsidian", "lsp", "path", "snippets", "buffer", "dictionary", "emoji" },
 				},
 				providers = {
 					lazydev = { module = "lazydev.integrations.blink" },
