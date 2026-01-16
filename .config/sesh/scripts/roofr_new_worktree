@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Create a new Roofr worktree and connect to it
+# Called from sesh session startup_command
+
+cd ~/Code/roofr-dev/roofr || exit 1
+
+# Get branch name interactively
+BRANCH=$(gum input --placeholder "branch-name (e.g., feat/my-feature)" --prompt "🌱 New branch: ")
+
+if [ -n "$BRANCH" ]; then
+    # Create worktree with new branch from main
+    git fetch origin main
+    git worktree add "$BRANCH" -b "$BRANCH" origin/main
+
+    # Connect to the new worktree session
+    sesh connect "$BRANCH"
+fi

@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Pick an existing Roofr worktree and connect to it
+# Called from sesh session startup_command
+
+cd ~/Code/roofr-dev/roofr || exit 1
+
+# List worktrees (directories) and pick with fuzzy finder
+WORKTREE=$(find . -maxdepth 1 -type d -not -name "." | sed 's|./||' | gum filter --limit 1 --fuzzy --no-sort --placeholder "Pick a worktree" --prompt "🌲 ")
+
+if [ -n "$WORKTREE" ]; then
+    sesh connect "$WORKTREE"
+fi

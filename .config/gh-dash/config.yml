@@ -1,13 +1,10 @@
 prSections:
   - title: My Pull Requests
     filters: is:open author:@me
-    type: null
   - title: Needs My Review
     filters: is:open review-requested:@me
-    type: null
   - title: Involved
     filters: is:open involves:@me -author:@me
-    type: null
 issuesSections:
   - title: My Issues
     filters: is:open author:@me
@@ -15,22 +12,19 @@ issuesSections:
     filters: is:open assignee:@me
   - title: Involved
     filters: is:open involves:@me -author:@me
-repo:
-  branchesRefetchIntervalSeconds: 30
-  prsRefetchIntervalSeconds: 60
 defaults:
   preview:
     open: true
-    width: 50
+    width: 100
   prsLimit: 20
   issuesLimit: 20
   view: prs
   layout:
     prs:
       updatedAt:
-        width: 5
+        width: 7
       repo:
-        width: 20
+        width: 15
       author:
         width: 15
       assignees:
@@ -40,10 +34,10 @@ defaults:
         width: 15
         hidden: true
       lines:
-        width: 15
+        width: 16
     issues:
       updatedAt:
-        width: 5
+        width: 7
       repo:
         width: 15
       creator:
@@ -54,11 +48,30 @@ defaults:
   refetchIntervalMinutes: 30
 keybindings:
   universal: []
-  issues: []
-  prs: []
   branches: []
-repoPaths: {}
+  issues:
+    # Edit issue in Neovim with Octo.nvim
+    - key: e
+      command: >
+        tmux new-window -c {{.RepoPath}} 'nvim -c ":silent Octo issue edit {{.IssueNumber}}"'
+    # Create new issue in Neovim
+    - key: i
+      command: >
+        tmux display-popup -d {{.RepoPath}} -w 80% -h 90% -E 'nvim -c ":silent Octo issue create"'
+  prs:
+    # Edit PR in Neovim with Octo.nvim
+    - key: O
+      command: >
+        tmux new-window -c {{.RepoPath}} 'nvim -c ":silent Octo pr edit {{.PrNumber}}"'
+# Map GitHub repos to local directories for quick navigation
+repoPaths:
+  kriscard/dotfiles: ~/.dotfiles
+  kriscard/*: ~/projects/*
 theme:
+  ui:
+    table:
+      showSeparator: true
+      compact: false
   colors:
     text:
       primary: "#cad3f5"
@@ -75,5 +88,5 @@ theme:
       secondary: "#494d64"
       faint: "#363a4f"
 pager:
-  diff: ""
+  diff: delta
 confirmQuit: false

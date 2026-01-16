@@ -8,6 +8,25 @@ palette = "catppuccin_macchiato"
 # Don't print a new line at the start of the prompt
 add_newline = false
 command_timeout = 10000
+scan_timeout = 30       # Stop scanning after 30ms for faster prompt
+
+# Explicit format for faster module detection (only checks listed modules)
+format = """
+$directory\
+$git_branch\
+$git_status\
+$git_metrics\
+$git_state\
+$git_commit\
+$nodejs\
+$rust\
+$ruby\
+$lua\
+$docker_context\
+$battery\
+$cmd_duration\
+$status\
+$character"""
 
 # makes prompt a single line
 [line_break]
@@ -51,7 +70,6 @@ detect_files = ["Cargo.toml"]
 [ruby]
 symbol = ''
 format = 'via [  $version](bold mauve) '
-
 
 [lua]
 symbol = "🌙 "
