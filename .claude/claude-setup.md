@@ -141,13 +141,20 @@ Create or update `.claude/settings.json` with the following configuration:
     "command": "~/.dotfiles/bin/claude-statusline"
   },
   "enabledPlugins": {
+    "ai-development@kriscard": true,
+    "architecture@kriscard": true,
+    "content@kriscard": true,
+    "developer-tools@kriscard": true,
     "essentials@kriscard": true,
     "ideation@kriscard": true,
-    "content@kriscard": true,
-    "architecture@kriscard": true,
-    "ai-development@kriscard": true,
-    "developer-tools@kriscard": true,
-    "testing@kriscard": true
+    "testing@kriscard": true,
+    "lua-lsp@claude-plugins-official": true,
+    "assistant@kriscard": true,
+    "neovim-advisor@kriscard": true,
+    "dotfiles-optimizer@kriscard": true,
+    "obsidian-second-brain@kriscard": true,
+    "chromedev-tools@kriscard": true
+
   },
   "extraKnownMarketplaces": {
     "kriscard": {
