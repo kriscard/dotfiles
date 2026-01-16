@@ -70,7 +70,7 @@ fish_variables
 zsh/zsh.d/99-local.zsh
 
 # Claude Code local files
-.claude/settings.json
+.claude/settings.local.json
 .claude/history.jsonl
 .claude/projects/
 .claude/shell-snapshots/
