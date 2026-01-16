@@ -96,7 +96,9 @@ Commands:
     backup      Backup existing configurations
     restore     Restore from backup
     doctor      Run system diagnostics
-    sync        Sync configuration files only
+    sync        Sync configuration files only (with conflict handling)
+    stow        Create symlinks (quick stow)
+    unstow      Remove symlinks (quick unstow)
     packages    Manage Homebrew packages only
     macos       Apply macOS settings only
     ds_store    Remove .DS_Store files from dotfiles
@@ -112,7 +114,9 @@ Options:
 Examples:
     dotfiles init           # Full system setup
     dotfiles backup         # Backup current configs
-    dotfiles sync           # Sync configs only
+    dotfiles sync           # Sync configs only (handles conflicts)
+    dotfiles stow           # Quick symlink creation
+    dotfiles unstow         # Remove all symlinks
     dotfiles packages       # Install/update packages only
     dotfiles doctor         # Check system health
     dotfiles ds_store       # Remove .DS_Store files
@@ -199,6 +203,12 @@ main() {
             ;;
         sync)
             cmd_sync
+            ;;
+        stow)
+            cmd_stow
+            ;;
+        unstow)
+            cmd_unstow
             ;;
         packages)
             cmd_packages
@@ -429,7 +439,64 @@ cmd_sync() {
 
     if [[ "$DRY_RUN" != true ]]; then
         success "Configuration files synced successfully!"
-        info "Use 'stow -D .config' to remove symlinks if needed"
+        info "Use 'dotfiles unstow' to remove symlinks if needed"
+    fi
+}
+
+cmd_stow() {
+    title "🔗 Creating symlinks"
+
+    # Check if stow is installed
+    if ! command_exists "stow"; then
+        error "GNU Stow is not installed. Run 'brew install stow' first."
+    fi
+
+    cd "$DOTFILES_DIR" || error "Cannot access dotfiles directory"
+
+    if [[ "$DRY_RUN" == true ]]; then
+        info "Dry run - showing what would be symlinked:"
+        stow -n -v -t "$HOME" . 2>&1
+    else
+        if [[ "$VERBOSE" == true ]]; then
+            stow -v -t "$HOME" . 2>&1
+        else
+            stow -t "$HOME" . 2>&1
+        fi
+        success "Symlinks created!"
+    fi
+}
+
+cmd_unstow() {
+    title "🔓 Removing symlinks"
+
+    # Check if stow is installed
+    if ! command_exists "stow"; then
+        error "GNU Stow is not installed. Run 'brew install stow' first."
+    fi
+
+    cd "$DOTFILES_DIR" || error "Cannot access dotfiles directory"
+
+    if [[ "$FORCE" != true ]]; then
+        warning "This will remove all dotfiles symlinks from your home directory."
+        echo
+        if ! confirm "Remove all symlinks?"; then
+            info "Unstow cancelled."
+            return 0
+        fi
+    fi
+
+    if [[ "$DRY_RUN" == true ]]; then
+        info "Dry run - showing what would be removed:"
+        stow -n -v -D -t "$HOME" . 2>&1
+    else
+        if [[ "$VERBOSE" == true ]]; then
+            stow -v -D -t "$HOME" . 2>&1
+        else
+            stow -D -t "$HOME" . 2>&1
+        fi
+        success "Symlinks removed!"
+        info "Your home directory no longer links to dotfiles."
+        info "Run 'dotfiles stow' to recreate symlinks."
     fi
 }
 
