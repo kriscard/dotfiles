@@ -453,14 +453,23 @@ cmd_stow() {
 
     cd "$DOTFILES_DIR" || error "Cannot access dotfiles directory"
 
+    if [[ "$FORCE" != true ]]; then
+        info "This will create symlinks from dotfiles to your home directory."
+        echo
+        if ! confirm "Create symlinks?"; then
+            info "Stow cancelled."
+            return 0
+        fi
+    fi
+
     if [[ "$DRY_RUN" == true ]]; then
         info "Dry run - showing what would be symlinked:"
-        stow -n -v -t "$HOME" . 2>&1
+        stow -n -v .
     else
         if [[ "$VERBOSE" == true ]]; then
-            stow -v -t "$HOME" . 2>&1
+            stow -v .
         else
-            stow -t "$HOME" . 2>&1
+            stow .
         fi
         success "Symlinks created!"
     fi
@@ -487,12 +496,12 @@ cmd_unstow() {
 
     if [[ "$DRY_RUN" == true ]]; then
         info "Dry run - showing what would be removed:"
-        stow -n -v -D -t "$HOME" . 2>&1
+        stow -n -v -D .
     else
         if [[ "$VERBOSE" == true ]]; then
-            stow -v -D -t "$HOME" . 2>&1
+            stow -v -D .
         else
-            stow -D -t "$HOME" . 2>&1
+            stow -D .
         fi
         success "Symlinks removed!"
         info "Your home directory no longer links to dotfiles."

@@ -91,30 +91,48 @@
     "PreToolUse": [
       {
         "hooks": [
-          { "type": "command", "command": "~/.dotfiles/bin/claude-status-hook PreToolUse" }
+          {
+            "type": "command",
+            "command": "~/.dotfiles/bin/claude-status-hook PreToolUse"
+          }
         ]
       }
     ],
     "Stop": [
       {
         "hooks": [
-          { "type": "command", "command": "uv run ~/.dotfiles/.claude/hooks/notification.py" },
-          { "type": "command", "command": "~/.dotfiles/bin/claude-status-hook Stop" }
+          {
+            "type": "command",
+            "command": "uv run ~/.dotfiles/.claude/hooks/notification.py"
+          },
+          {
+            "type": "command",
+            "command": "~/.dotfiles/bin/claude-status-hook Stop"
+          }
         ]
       }
     ],
     "SubagentStop": [
       {
         "hooks": [
-          { "type": "command", "command": "~/.dotfiles/bin/claude-status-hook SubagentStop" }
+          {
+            "type": "command",
+            "command": "~/.dotfiles/bin/claude-status-hook SubagentStop"
+          }
         ]
       }
     ],
     "Notification": [
       {
         "hooks": [
-          { "type": "command", "command": "uv run ~/.dotfiles/.claude/hooks/notification.py" },
-          { "type": "command", "command": "~/.dotfiles/bin/claude-status-hook Notification" }
+          {
+            "type": "command",
+            "command": "uv run ~/.dotfiles/.claude/hooks/notification.py"
+          },
+          {
+            "type": "command",
+            "command": "~/.dotfiles/bin/claude-status-hook Notification"
+          }
         ]
       }
     ],
@@ -122,7 +140,10 @@
       {
         "matcher": "Write|Edit|MultiEdit",
         "hooks": [
-          { "type": "command", "command": "uv run ~/.dotfiles/.claude/hooks/ts_lint.py" }
+          {
+            "type": "command",
+            "command": "uv run ~/.dotfiles/.claude/hooks/ts_lint.py"
+          }
         ]
       }
     ]
