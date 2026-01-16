@@ -25,6 +25,7 @@ tmux/plugins/
 .config/raycast/*
 !.config/raycast/scripts/
 .config/gh/*
+!.config/gh/config.yml
 .config/op/*
 .config/fish/*
 .config/dev/*
