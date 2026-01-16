@@ -6,20 +6,17 @@ This guide explains how to configure Claude Code with custom hooks and MCP serve
 
 Create or update `.claude/settings.json` with the following configuration:
 
-```json
+````json
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
-  "model": "opus",
   "attribution": {
     "commit": "",
     "pr": ""
   },
   "permissions": {
     "allow": [
-      "Bash(cat:*)",
       "Bash(docker compose exec:*)",
       "Bash(docker run:*)",
-      "Bash(find:*)",
       "Bash(gh pr view:*)",
       "Bash(gh run view:*)",
       "Bash(git branch:*)",
@@ -28,12 +25,9 @@ Create or update `.claude/settings.json` with the following configuration:
       "Bash(git rebase:*)",
       "Bash(git stash:*)",
       "Bash(git switch:*)",
-      "Bash(grep:*)",
-      "Bash(ls:*)",
       "Bash(mkdir:*)",
       "Bash(node:*)",
       "Bash(npm run build:*)",
-      "Bash(rg:*)",
       "ExitPlanMode(*)",
       "Fetch(*)",
       "Glob(*)",
@@ -92,6 +86,7 @@ Create or update `.claude/settings.json` with the following configuration:
       "Bash(sudo rm -rf /*)"
     ]
   },
+  "model": "opus",
   "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "mcp-obsidian",
@@ -105,58 +100,30 @@ Create or update `.claude/settings.json` with the following configuration:
     "PreToolUse": [
       {
         "hooks": [
-          {
-            "type": "command",
-            "command": "~/.dotfiles/bin/claude-status-hook PreToolUse"
-          }
+          { "type": "command", "command": "~/.dotfiles/bin/claude-status-hook PreToolUse" }
         ]
       }
     ],
     "Stop": [
       {
-        "matcher": "",
         "hooks": [
-          {
-            "type": "command",
-            "command": "uv run ~/.dotfiles/.claude/hooks/notification.py"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.dotfiles/bin/claude-status-hook Stop"
-          }
+          { "type": "command", "command": "uv run ~/.dotfiles/.claude/hooks/notification.py" },
+          { "type": "command", "command": "~/.dotfiles/bin/claude-status-hook Stop" }
         ]
       }
     ],
     "SubagentStop": [
       {
         "hooks": [
-          {
-            "type": "command",
-            "command": "~/.dotfiles/bin/claude-status-hook SubagentStop"
-          }
+          { "type": "command", "command": "~/.dotfiles/bin/claude-status-hook SubagentStop" }
         ]
       }
     ],
     "Notification": [
       {
-        "matcher": "",
         "hooks": [
-          {
-            "type": "command",
-            "command": "uv run ~/.dotfiles/.claude/hooks/notification.py"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.dotfiles/bin/claude-status-hook Notification"
-          }
+          { "type": "command", "command": "uv run ~/.dotfiles/.claude/hooks/notification.py" },
+          { "type": "command", "command": "~/.dotfiles/bin/claude-status-hook Notification" }
         ]
       }
     ],
@@ -164,17 +131,14 @@ Create or update `.claude/settings.json` with the following configuration:
       {
         "matcher": "Write|Edit|MultiEdit",
         "hooks": [
-          {
-            "type": "command",
-            "command": "uv run ~/.dotfiles/.claude/hooks/ts_lint.py"
-          }
+          { "type": "command", "command": "uv run ~/.dotfiles/.claude/hooks/ts_lint.py" }
         ]
       }
     ]
   },
   "statusLine": {
     "type": "command",
-    "command": "claude-statusline"
+    "command": "~/.dotfiles/bin/claude-statusline"
   },
   "enabledPlugins": {
     "essentials@kriscard": true,
@@ -194,8 +158,7 @@ Create or update `.claude/settings.json` with the following configuration:
     }
   },
   "alwaysThinkingEnabled": true
-}
-```
+}```
 
 ## Configuration Sections
 
@@ -241,3 +204,4 @@ After creating the configuration file:
 1. Restart Claude Code or reload the configuration
 2. Test hooks by performing file edits (should trigger TypeScript linting)
 3. Verify MCP servers are available using the `/mcp` command in Claude Code
+````
