@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Create a worktree for PR review and checkout the PR branch
+# Called from sesh session startup_command
+
+ROOFR_DIR="$HOME/Code/roofr-dev/roofr"
+cd "$ROOFR_DIR" || exit 1
+
+# Fetch latest and list open PRs needing review
+git fetch origin
+
+# Use gh to pick a PR (shows PRs needing your review first)
+PR_NUMBER=$(gh pr list --search "review-requested:@me" --json number,title,headRefName --template '{{range .}}{{.number}}	{{.title}} ({{.headRefName}}){{"\n"}}{{end}}' | \
+    gum filter --limit 1 --fuzzy --placeholder "Pick a PR to review" --prompt "👀 " | \
+    cut -f1)
+
+if [ -z "$PR_NUMBER" ]; then
+    echo "No PR selected, opening gh dash instead..."
+    gh dash
+    exit 0
+fi
+
+# Get PR branch name
+BRANCH=$(gh pr view "$PR_NUMBER" --json headRefName --jq '.headRefName')
+
+if [ -z "$BRANCH" ]; then
+    echo "Could not get branch name for PR #$PR_NUMBER"
+    exit 1
+fi
+
+# Check if worktree already exists
+if [ -d "$ROOFR_DIR/$BRANCH" ]; then
+    echo "Worktree already exists, connecting..."
+    sesh connect "$BRANCH"
+else
+    # Create worktree from the PR branch
+    echo "Creating worktree for PR #$PR_NUMBER ($BRANCH)..."
+    git fetch origin "$BRANCH"
+    git worktree add "$BRANCH" "origin/$BRANCH"
+    sesh connect "$BRANCH"
+fi
