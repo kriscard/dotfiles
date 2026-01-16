@@ -67,6 +67,7 @@ keybindings:
 repoPaths:
   kriscard/dotfiles: ~/.dotfiles
   kriscard/*: ~/projects/*
+  roofr/roofr: ~/Code/roofr-dev/roofr
 theme:
   ui:
     table:
