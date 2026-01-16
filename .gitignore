@@ -23,7 +23,7 @@ config/nvim/sessions
 .config/tmux/plugins/*
 tmux/plugins/
 .config/raycast/*
-!.config/raycast/dismiss-notifications.applescript
+!.config/raycast/scripts/
 .config/gh/*
 .config/op/*
 .config/fish/*

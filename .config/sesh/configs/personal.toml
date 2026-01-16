@@ -1,0 +1,30 @@
+# Personal Sessions
+
+[[session]]
+name = "Home 🏠"
+path = "~/"
+disable_startup_command = true
+
+[[session]]
+name = "Obsidian 🧠"
+path = "~/obsidian-vault-kriscard/"
+windows = ["lazygit"]
+
+[[session]]
+name = "Claude Plugins 🤖"
+path = "~/projects/kriscard-claude-plugins/"
+windows = ["lazygit"]
+
+[[session]]
+name = "Claude Plugins Roofr 🤖"
+path = "~/Code/kriscard-claude-plugins/"
+windows = ["lazygit"]
+
+[[session]]
+name = "Playground 🧪"
+path = "~/projects/playground/"
+
+[[session]]
+name = "Chris blog ✍️"
+path = "~/projects/christophercardoso.dev/"
+windows = ["lazygit"]

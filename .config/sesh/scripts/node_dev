@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Creates split layout: nvim on top, dev server on bottom
+# Usage: startup_script in sesh window config
+
+# Bottom pane runs dev server (10 lines tall)
+tmux split-window -v -l 10 'yarn dev'
+
+# Switch back to top pane and open nvim with file picker
+tmux select-pane -t :.+
+tmux send-keys "nvim +GoToFile" Enter

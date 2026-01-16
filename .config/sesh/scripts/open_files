@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Simple script to open nvim with file picker
+# Usage: startup_script in sesh window config
+tmux send-keys "nvim +GoToFile" Enter

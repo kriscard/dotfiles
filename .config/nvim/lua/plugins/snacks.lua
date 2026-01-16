@@ -139,6 +139,11 @@ return {
 					Snacks.toggle.inlay_hints():map("<leader>uh")
 					Snacks.toggle.indent():map("<leader>ug")
 					Snacks.toggle.dim():map("<leader>uD")
+
+					-- User commands for sesh integration
+					vim.api.nvim_create_user_command("GoToFile", function()
+						Snacks.picker.smart()
+					end, { desc = "Smart file picker (for sesh startup)" })
 				end,
 			})
 		end,
