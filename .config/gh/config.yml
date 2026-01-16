@@ -1,16 +1,31 @@
 # What protocol to use when performing git operations. Supported values: ssh, https
 git_protocol: https
-# What editor gh should run when creating issues, pull requests, etc. If blank, will refer to environment.
-editor:
-# When to interactively prompt. This is a global config that cannot be overridden by hostname. Supported values: enabled, disabled
+# What editor gh should run when creating issues, pull requests, etc.
+editor: nvim
+# When to interactively prompt. Supported values: enabled, disabled
 prompt: enabled
-# A pager program to send command output to, e.g. "less". Set the value to "cat" to disable the pager.
-pager:
+# Preference for editor-based interactive prompting
+prefer_editor_prompt: disabled
+# A pager program to send command output to
+pager: delta
 # Aliases allow you to create nicknames for gh commands
 aliases:
     co: pr checkout
-# The path to a unix socket through which send HTTP connections. If blank, HTTP traffic will be handled by net/http.DefaultTransport.
-http_unix_socket:
-# What web browser gh should use when opening URLs. If blank, will refer to environment.
+    pv: pr view
+    pc: pr create
+    prs: pr list --author @me
+    prr: pr list --search "review-requested:@me"
+    rv: repo view --web
+    ic: issue create
+    iv: issue view
+# What web browser gh should use when opening URLs
 browser: open -a Arc
+# Display labels using RGB hex colors in truecolor terminals
+color_labels: enabled
+# Use 4-bit accessible colors
+accessible_colors: disabled
+# Use accessible prompter
+accessible_prompter: disabled
+# Use animated spinner as progress indicator
+spinner: enabled
 version: "1"
