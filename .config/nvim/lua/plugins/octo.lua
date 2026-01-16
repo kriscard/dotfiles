@@ -6,39 +6,55 @@ return {
 		"nvim-telescope/telescope.nvim",
 		"nvim-tree/nvim-web-devicons",
 	},
-	opts = {
-		enable_builtin = true,
-		default_merge_method = "squash",
-		picker = "telescope",
-	},
 	config = function()
 		require("octo").setup({
 			enable_builtin = true,
+			default_merge_method = "squash",
+			picker = "telescope",
 			file_panel = { use_icons = true },
 			mappings = {
 				review_diff = {
-					select_next_entry = { lhs = "<C-j>", desc = "move to previous changed file" },
-					select_prev_entry = { lhs = "<C-k>", desc = "move to next changed file" },
+					select_next_entry = { lhs = "<C-j>", desc = "move to next changed file" },
+					select_prev_entry = { lhs = "<C-k>", desc = "move to previous changed file" },
 				},
 			},
 		})
 		vim.treesitter.language.register("markdown", "octo")
 	end,
 	keys = {
-		{ "<leader>ii", "<cmd>Octo issue list<CR>", desc = "List Issues (Octo)" },
-		{ "<leader>iI", "<cmd>Octo issue search<CR>", desc = "Search Issues (Octo)" },
-		{ "<leader>pr", "<cmd>Octo pr list<CR>", desc = "List PRs (Octo)" },
-		{ "<leader>pR", "<cmd>Octo pr search<CR>", desc = "Search PRs (Octo)" },
-		{ "<leader>cr", "<cmd>Octo repo list<CR>", desc = "List Repos (Octo)" },
-		-- { "<leader>cS", "<cmd>Octo search<CR>", desc = "Search (Octo)" },
+		-- Global keybindings (work anywhere)
+		{ "<leader>pl", "<cmd>Octo pr list<CR>", desc = "List PRs" },
+		{ "<leader>ps", "<cmd>Octo pr search<CR>", desc = "Search PRs" },
+		{ "<leader>il", "<cmd>Octo issue list<CR>", desc = "List Issues" },
+		{ "<leader>is", "<cmd>Octo issue search<CR>", desc = "Search Issues" },
 
-		{ "<leader>a", "", desc = "+assignee (Octo)", ft = "octo" },
-		{ "<leader>c", "", desc = "+comment/code (Octo)", ft = "octo" },
-		{ "<leader>l", "", desc = "+label (Octo)", ft = "octo" },
-		{ "<leader>i", "", desc = "+issue (Octo)", ft = "octo" },
-		{ "<leader>r", "", desc = "+react (Octo)", ft = "octo" },
+		-- PR actions (in octo buffer)
+		{ "<leader>po", "<cmd>Octo pr checkout<CR>", desc = "Checkout PR", ft = "octo" },
+		{ "<leader>pd", "<cmd>Octo pr diff<CR>", desc = "View diff", ft = "octo" },
+		{ "<leader>pf", "<cmd>Octo pr changes<CR>", desc = "View changed files", ft = "octo" },
+		{ "<leader>pm", "<cmd>Octo pr merge squash<CR>", desc = "Merge (squash)", ft = "octo" },
+		{ "<leader>px", "<cmd>Octo pr close<CR>", desc = "Close PR", ft = "octo" },
+		{ "<leader>pb", "<cmd>Octo pr browser<CR>", desc = "Open in browser", ft = "octo" },
+
+		-- Comments
+		{ "<leader>ca", "<cmd>Octo comment add<CR>", desc = "Add comment", ft = "octo" },
+		{ "<leader>cd", "<cmd>Octo comment delete<CR>", desc = "Delete comment", ft = "octo" },
+
+		-- Review workflow
+		{ "<leader>rs", "<cmd>Octo review start<CR>", desc = "Start review", ft = "octo" },
+		{ "<leader>rr", "<cmd>Octo review resume<CR>", desc = "Resume review", ft = "octo" },
+		{ "<leader>rd", "<cmd>Octo review discard<CR>", desc = "Discard review", ft = "octo" },
+		{ "<leader>ra", "<cmd>Octo review submit approve<CR>", desc = "Approve", ft = "octo" },
+		{ "<leader>rc", "<cmd>Octo review submit comment<CR>", desc = "Comment only", ft = "octo" },
+		{ "<leader>rx", "<cmd>Octo review submit request_changes<CR>", desc = "Request changes", ft = "octo" },
+
+		-- Which-key groups
 		{ "<leader>p", "", desc = "+pr (Octo)", ft = "octo" },
-		{ "<leader>v", "", desc = "+review (Octo)", ft = "octo" },
+		{ "<leader>c", "", desc = "+comment (Octo)", ft = "octo" },
+		{ "<leader>r", "", desc = "+review (Octo)", ft = "octo" },
+		{ "<leader>i", "", desc = "+issue (Octo)", ft = "octo" },
+
+		-- Auto-complete in insert mode
 		{ "@", "@<C-x><C-o>", mode = "i", ft = "octo", silent = true },
 		{ "#", "#<C-x><C-o>", mode = "i", ft = "octo", silent = true },
 	},
