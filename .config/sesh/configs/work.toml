@@ -7,9 +7,9 @@ windows = ["roofr-dev"]
 
 [[session]]
 name = "Roofr reviews 👀"
-path = "~/Code/roofr-dev/roofr/review"
-startup_command = "gh dash"
-preview_command = "git log --oneline -10"
+path = "~/Code/roofr-dev/roofr"
+startup_command = "~/.config/sesh/scripts/roofr_pr_review"
+preview_command = "gh pr list --search 'review-requested:@me' --limit 5"
 
 [[session]]
 name = "Roofr pick worktree 🌲"
