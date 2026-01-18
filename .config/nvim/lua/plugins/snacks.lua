@@ -140,9 +140,11 @@ return {
 					Snacks.toggle.indent():map("<leader>ug")
 					Snacks.toggle.dim():map("<leader>uD")
 
-					-- User commands for sesh integration
+					-- User commands for sesh integration (defer to ensure plugins loaded)
 					vim.api.nvim_create_user_command("GoToFile", function()
-						Snacks.picker.smart()
+						vim.defer_fn(function()
+							Snacks.picker.smart()
+						end, 100)
 					end, { desc = "Smart file picker (for sesh startup)" })
 				end,
 			})
