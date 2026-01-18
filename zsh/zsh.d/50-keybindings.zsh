@@ -9,6 +9,10 @@ bindkey -e
 # fzf integration
 if [[ -f "$HOMEBREW_PREFIX/opt/fzf/shell/key-bindings.zsh" ]]; then
   source "$HOMEBREW_PREFIX/opt/fzf/shell/key-bindings.zsh"
+  # Override fzf's Alt+C (conflicts with Raycast)
+  # Rebind directory changer to Ctrl+F
+  bindkey -r '\ec'              # Unbind Alt+C
+  bindkey '^F' fzf-cd-widget    # Bind Ctrl+F to directory changer
 fi
 
 if [[ -f "$HOMEBREW_PREFIX/opt/fzf/shell/completion.zsh" ]]; then
