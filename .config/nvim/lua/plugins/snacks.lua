@@ -92,10 +92,16 @@ return {
 			},
 			terminal = {
 				enabled = true,
-				-- win = { style = "terminal", wo = { winbar = "" } },
-				-- env = {
-				-- 	TERM = vim.env.TERM or "xterm-ghostty",
-				-- },
+				-- Disable Snacks' tmux navigation (uses TmuxNavigate commands that don't work in terminal mode)
+				-- Navigation is handled by tmux directly when in terminal
+				win = {
+					keys = {
+						nav_h = false,
+						nav_j = false,
+						nav_k = false,
+						nav_l = false,
+					},
+				},
 			},
 			words = {},
 			zen = {},
