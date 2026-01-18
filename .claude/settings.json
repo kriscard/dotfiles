@@ -160,23 +160,18 @@
     "ai-development@kriscard": true,
     "developer-tools@kriscard": true,
     "testing@kriscard": true,
-    "frontend-design@anthropic": true,
-    "ralph-loop@anthropic": true,
-    "agent-sdk-dev@anthropic": true,
-    "hookify@anthropic": true,
-    "superpowers@anthropic": true,
-    "plugin-dev@anthropic": true,
-    "explanatory-output-style@anthropic": true,
-    "learning-output-style@anthropic": true,
-    "lua-lsp@anthropic": true,
-    "explanatory-output-style@claude-plugins-official": true,
+    "assistant@kriscard": true,
+    "studio-startup@kriscard": true,
+    "neovim-advisor@kriscard": true,
+    "dotfiles-optimizer@kriscard": true,
+    "obsidian-second-brain@kriscard": true,
+    "chromedev-tools@kriscard": true,
     "feature-dev@claude-plugins-official": true,
     "agent-sdk-dev@claude-plugins-official": true,
     "hookify@claude-plugins-official": true,
+    "explanatory-output-style@claude-plugins-official": true,
     "learning-output-style@claude-plugins-official": true,
-    "lua-lsp@claude-plugins-official": true,
-    "assistant@kriscard": true,
-    "studio-startup@kriscard": true
+    "lua-lsp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "kriscard": {
@@ -185,11 +180,10 @@
         "repo": "kriscard/kriscard-claude-plugins"
       }
     },
-    "anthropic": {
+    "claude-plugins-official": {
       "source": {
         "source": "github",
-        "repo": "anthropics/claude-code",
-        "path": "plugins"
+        "repo": "anthropics/claude-plugins-official"
       }
     }
   },

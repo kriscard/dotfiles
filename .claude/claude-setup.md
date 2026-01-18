@@ -6,7 +6,7 @@ This guide explains how to configure Claude Code with custom hooks and MCP serve
 
 Create or update `.claude/settings.json` with the following configuration:
 
-````json
+```json
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "attribution": {
@@ -100,30 +100,48 @@ Create or update `.claude/settings.json` with the following configuration:
     "PreToolUse": [
       {
         "hooks": [
-          { "type": "command", "command": "~/.dotfiles/bin/claude-status-hook PreToolUse" }
+          {
+            "type": "command",
+            "command": "~/.dotfiles/bin/claude-status-hook PreToolUse"
+          }
         ]
       }
     ],
     "Stop": [
       {
         "hooks": [
-          { "type": "command", "command": "uv run ~/.dotfiles/.claude/hooks/notification.py" },
-          { "type": "command", "command": "~/.dotfiles/bin/claude-status-hook Stop" }
+          {
+            "type": "command",
+            "command": "uv run ~/.dotfiles/.claude/hooks/notification.py"
+          },
+          {
+            "type": "command",
+            "command": "~/.dotfiles/bin/claude-status-hook Stop"
+          }
         ]
       }
     ],
     "SubagentStop": [
       {
         "hooks": [
-          { "type": "command", "command": "~/.dotfiles/bin/claude-status-hook SubagentStop" }
+          {
+            "type": "command",
+            "command": "~/.dotfiles/bin/claude-status-hook SubagentStop"
+          }
         ]
       }
     ],
     "Notification": [
       {
         "hooks": [
-          { "type": "command", "command": "uv run ~/.dotfiles/.claude/hooks/notification.py" },
-          { "type": "command", "command": "~/.dotfiles/bin/claude-status-hook Notification" }
+          {
+            "type": "command",
+            "command": "uv run ~/.dotfiles/.claude/hooks/notification.py"
+          },
+          {
+            "type": "command",
+            "command": "~/.dotfiles/bin/claude-status-hook Notification"
+          }
         ]
       }
     ],
@@ -131,7 +149,10 @@ Create or update `.claude/settings.json` with the following configuration:
       {
         "matcher": "Write|Edit|MultiEdit",
         "hooks": [
-          { "type": "command", "command": "uv run ~/.dotfiles/.claude/hooks/ts_lint.py" }
+          {
+            "type": "command",
+            "command": "uv run ~/.dotfiles/.claude/hooks/ts_lint.py"
+          }
         ]
       }
     ]
@@ -148,23 +169,18 @@ Create or update `.claude/settings.json` with the following configuration:
     "ai-development@kriscard": true,
     "developer-tools@kriscard": true,
     "testing@kriscard": true,
-    "frontend-design@anthropic": true,
-    "ralph-loop@anthropic": true,
-    "agent-sdk-dev@anthropic": true,
-    "hookify@anthropic": true,
-    "superpowers@anthropic": true,
-    "plugin-dev@anthropic": true,
-    "explanatory-output-style@anthropic": true,
-    "learning-output-style@anthropic": true,
-    "lua-lsp@anthropic": true,
-    "explanatory-output-style@claude-plugins-official": true,
+    "assistant@kriscard": true,
+    "studio-startup@kriscard": true,
+    "neovim-advisor@kriscard": true,
+    "dotfiles-optimizer@kriscard": true,
+    "obsidian-second-brain@kriscard": true,
+    "chromedev-tools@kriscard": true,
     "feature-dev@claude-plugins-official": true,
     "agent-sdk-dev@claude-plugins-official": true,
     "hookify@claude-plugins-official": true,
+    "explanatory-output-style@claude-plugins-official": true,
     "learning-output-style@claude-plugins-official": true,
-    "lua-lsp@claude-plugins-official": true,
-    "assistant@kriscard": true,
-    "studio-startup@kriscard": true
+    "lua-lsp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "kriscard": {
@@ -172,11 +188,17 @@ Create or update `.claude/settings.json` with the following configuration:
         "source": "github",
         "repo": "kriscard/kriscard-claude-plugins"
       }
+    },
+    "claude-plugins-official": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-official"
+      }
     }
   },
   "alwaysThinkingEnabled": true
 }
-````
+```
 
 ## Configuration Sections
 
@@ -228,26 +250,30 @@ claude plugin marketplace add anthropics/claude-plugins-official
 #### From kriscard Marketplace (Personal Workflow Tools)
 
 ```bash
-claude plugin install essentials@kriscard           # Core workflow tools (commit, PR, search)
+claude plugin install essentials@kriscard           # Core workflow tools
 claude plugin install assistant@kriscard            # Staff Engineer workflow assistant
-claude plugin install ideation@kriscard             # Brain dumps → structured specs
-claude plugin install content@kriscard              # Blog posts & conference talks
-claude plugin install architecture@kriscard         # System design & CTO advisor
-claude plugin install ai-development@kriscard       # LLM/RAG & prompt engineering
-claude plugin install developer-tools@kriscard      # Coding, debugging, frontend agents
-claude plugin install testing@kriscard              # Unit, integration, E2E specialists
-claude plugin install studio-startup@kriscard       # Project/startup orchestration
+claude plugin install ideation@kriscard             # Brain dumps → specs
+claude plugin install content@kriscard              # Blog posts & talks
+claude plugin install architecture@kriscard         # System design
+claude plugin install ai-development@kriscard       # LLM/RAG tools
+claude plugin install developer-tools@kriscard      # Coding agents
+claude plugin install testing@kriscard              # Test specialists
+claude plugin install neovim-advisor@kriscard       # Neovim optimization
+claude plugin install dotfiles-optimizer@kriscard   # Dotfiles analysis
+claude plugin install obsidian-second-brain@kriscard # Knowledge management
+claude plugin install chromedev-tools@kriscard      # Chrome DevTools integration
+claude plugin install studio-startup@kriscard       # Project startup orchestration
 ```
 
 #### From claude-plugins-official Marketplace
 
 ```bash
-claude plugin install feature-dev@claude-plugins-official           # Feature development workflow
-claude plugin install agent-sdk-dev@claude-plugins-official         # Agent SDK tools
-claude plugin install hookify@claude-plugins-official               # Hook creation & management
+claude plugin install feature-dev@claude-plugins-official               # Feature development workflow
+claude plugin install agent-sdk-dev@claude-plugins-official             # Agent SDK tools
+claude plugin install hookify@claude-plugins-official                   # Hook creation & management
 claude plugin install explanatory-output-style@claude-plugins-official  # Educational explanations
 claude plugin install learning-output-style@claude-plugins-official     # Interactive learning mode
-claude plugin install lua-lsp@claude-plugins-official               # Lua LSP integration
+claude plugin install lua-lsp@claude-plugins-official                   # Lua LSP integration
 ```
 
 ### Verifying Installed Plugins
@@ -262,15 +288,15 @@ claude plugin list
 
 ### Plugin Categories Overview
 
-| Category | Plugins | Purpose |
-|----------|---------|---------|
-| **Core Workflow** | essentials, assistant | Git commits, PRs, task management |
-| **Content Creation** | ideation, content | Specs, blog posts, talks |
-| **Architecture** | architecture | System design, ADRs, C4 diagrams |
-| **Development** | developer-tools, ai-development | Coding agents, LLM tools |
-| **Testing** | testing | Unit, integration, E2E testing |
-| **Output Styles** | explanatory, learning | Educational explanations |
-| **Specialized** | hookify, studio-startup, feature-dev | Hooks, project setup, workflows |
+| Category             | Plugins                              | Purpose                           |
+| -------------------- | ------------------------------------ | --------------------------------- |
+| **Core Workflow**    | essentials, assistant                | Git commits, PRs, task management |
+| **Content Creation** | ideation, content                    | Specs, blog posts, talks          |
+| **Architecture**     | architecture                         | System design, ADRs, C4 diagrams  |
+| **Development**      | developer-tools, ai-development      | Coding agents, LLM tools          |
+| **Testing**          | testing                              | Unit, integration, E2E testing    |
+| **Output Styles**    | explanatory, learning                | Educational explanations          |
+| **Specialized**      | hookify, studio-startup, feature-dev | Hooks, project setup, workflows   |
 
 ## Requirements
 
@@ -287,4 +313,7 @@ After creating the configuration file:
 1. Restart Claude Code or reload the configuration
 2. Test hooks by performing file edits (should trigger TypeScript linting)
 3. Verify MCP servers are available using the `/mcp` command in Claude Code
-````
+
+```
+
+```
