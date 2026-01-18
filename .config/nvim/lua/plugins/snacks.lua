@@ -107,6 +107,14 @@ return {
 			zen = {},
 		},
 		init = function()
+			-- Create GoToFile command early for sesh integration
+			-- Command is available immediately, but defers picker until Snacks loads
+			vim.api.nvim_create_user_command("GoToFile", function()
+				vim.defer_fn(function()
+					Snacks.picker.smart()
+				end, 100)
+			end, { desc = "Smart file picker (for sesh startup)" })
+
 			vim.api.nvim_create_autocmd("User", {
 				pattern = "VeryLazy",
 				callback = function()
@@ -145,13 +153,6 @@ return {
 					Snacks.toggle.inlay_hints():map("<leader>uh")
 					Snacks.toggle.indent():map("<leader>ug")
 					Snacks.toggle.dim():map("<leader>uD")
-
-					-- User commands for sesh integration (defer to ensure plugins loaded)
-					vim.api.nvim_create_user_command("GoToFile", function()
-						vim.defer_fn(function()
-							Snacks.picker.smart()
-						end, 100)
-					end, { desc = "Smart file picker (for sesh startup)" })
 				end,
 			})
 		end,
