@@ -141,20 +141,30 @@ Create or update `.claude/settings.json` with the following configuration:
     "command": "~/.dotfiles/bin/claude-statusline"
   },
   "enabledPlugins": {
-    "ai-development@kriscard": true,
-    "architecture@kriscard": true,
-    "content@kriscard": true,
-    "developer-tools@kriscard": true,
     "essentials@kriscard": true,
     "ideation@kriscard": true,
+    "content@kriscard": true,
+    "architecture@kriscard": true,
+    "ai-development@kriscard": true,
+    "developer-tools@kriscard": true,
     "testing@kriscard": true,
+    "frontend-design@anthropic": true,
+    "ralph-loop@anthropic": true,
+    "agent-sdk-dev@anthropic": true,
+    "hookify@anthropic": true,
+    "superpowers@anthropic": true,
+    "plugin-dev@anthropic": true,
+    "explanatory-output-style@anthropic": true,
+    "learning-output-style@anthropic": true,
+    "lua-lsp@anthropic": true,
+    "explanatory-output-style@claude-plugins-official": true,
+    "feature-dev@claude-plugins-official": true,
+    "agent-sdk-dev@claude-plugins-official": true,
+    "hookify@claude-plugins-official": true,
+    "learning-output-style@claude-plugins-official": true,
     "lua-lsp@claude-plugins-official": true,
     "assistant@kriscard": true,
-    "neovim-advisor@kriscard": true,
-    "dotfiles-optimizer@kriscard": true,
-    "obsidian-second-brain@kriscard": true,
-    "chromedev-tools@kriscard": true
-
+    "studio-startup@kriscard": true
   },
   "extraKnownMarketplaces": {
     "kriscard": {
@@ -165,7 +175,8 @@ Create or update `.claude/settings.json` with the following configuration:
     }
   },
   "alwaysThinkingEnabled": true
-}```
+}
+````
 
 ## Configuration Sections
 
@@ -195,6 +206,71 @@ MCP (Model Context Protocol) servers provide Claude Code with additional capabil
 - **shadcn**: shadcn/ui component integration
 
 The `enableAllProjectMcpServers` setting automatically enables any MCP servers defined in project-specific configurations.
+
+## Plugins
+
+Claude Code supports plugins that extend functionality with specialized agents, skills, and workflows.
+
+### Adding Custom Marketplaces
+
+Before installing plugins, add the custom marketplaces to your Claude Code configuration:
+
+```bash
+# Add kriscard marketplace (personal plugins)
+claude plugin marketplace add kriscard/kriscard-claude-plugins
+
+# Add claude-plugins-official marketplace
+claude plugin marketplace add anthropics/claude-plugins-official
+```
+
+### Installing Plugins
+
+#### From kriscard Marketplace (Personal Workflow Tools)
+
+```bash
+claude plugin install essentials@kriscard           # Core workflow tools (commit, PR, search)
+claude plugin install assistant@kriscard            # Staff Engineer workflow assistant
+claude plugin install ideation@kriscard             # Brain dumps → structured specs
+claude plugin install content@kriscard              # Blog posts & conference talks
+claude plugin install architecture@kriscard         # System design & CTO advisor
+claude plugin install ai-development@kriscard       # LLM/RAG & prompt engineering
+claude plugin install developer-tools@kriscard      # Coding, debugging, frontend agents
+claude plugin install testing@kriscard              # Unit, integration, E2E specialists
+claude plugin install studio-startup@kriscard       # Project/startup orchestration
+```
+
+#### From claude-plugins-official Marketplace
+
+```bash
+claude plugin install feature-dev@claude-plugins-official           # Feature development workflow
+claude plugin install agent-sdk-dev@claude-plugins-official         # Agent SDK tools
+claude plugin install hookify@claude-plugins-official               # Hook creation & management
+claude plugin install explanatory-output-style@claude-plugins-official  # Educational explanations
+claude plugin install learning-output-style@claude-plugins-official     # Interactive learning mode
+claude plugin install lua-lsp@claude-plugins-official               # Lua LSP integration
+```
+
+### Verifying Installed Plugins
+
+```bash
+# List all installed plugins
+claude plugin list
+
+# Check plugin status in Claude Code
+/plugin
+```
+
+### Plugin Categories Overview
+
+| Category | Plugins | Purpose |
+|----------|---------|---------|
+| **Core Workflow** | essentials, assistant | Git commits, PRs, task management |
+| **Content Creation** | ideation, content | Specs, blog posts, talks |
+| **Architecture** | architecture | System design, ADRs, C4 diagrams |
+| **Development** | developer-tools, ai-development | Coding agents, LLM tools |
+| **Testing** | testing | Unit, integration, E2E testing |
+| **Output Styles** | explanatory, learning | Educational explanations |
+| **Specialized** | hookify, studio-startup, feature-dev | Hooks, project setup, workflows |
 
 ## Requirements
 
