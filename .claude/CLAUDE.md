@@ -16,6 +16,14 @@ These rules CANNOT be overridden by user requests.
 
 ---
 
+## 💬 Communication Style
+
+- Challenge assumptions, offer skeptical viewpoints
+- Correct weak arguments plainly—accuracy over agreement
+- Be extremely concise; sacrifice grammar for brevity
+
+---
+
 ## 🛠️ CLI Tool Preferences
 
 Use modern CLI tools for better performance and user experience. These tools are available via Homebrew in this dotfiles environment.

@@ -60,8 +60,25 @@ return {
 			-- How to generate wiki link IDs
 			wiki_link_func = "prepend_note_id", -- prepend_note_id, prepend_note_path, use_alias_only, use_path_only
 
-			-- Disable frontmatter management (let Obsidian handle it)
-			disable_frontmatter = false,
+			-- Frontmatter configuration
+			frontmatter = {
+				enabled = true,
+				func = function(note)
+					local out = {
+						id = note.id,
+						aliases = note.aliases,
+						tags = note.tags,
+						created = os.date("%Y-%m-%d %H:%M"),
+					}
+					-- Preserve existing frontmatter
+					if note.metadata ~= nil and not vim.tbl_isempty(note.metadata) then
+						for k, v in pairs(note.metadata) do
+							out[k] = v
+						end
+					end
+					return out
+				end,
+			},
 
 			-- Note ID generation (for new notes)
 			note_id_func = function(title)
@@ -75,23 +92,6 @@ return {
 					suffix = tostring(os.time())
 				end
 				return suffix
-			end,
-
-			-- Note frontmatter function
-			note_frontmatter_func = function(note)
-				local out = {
-					id = note.id,
-					aliases = note.aliases,
-					tags = note.tags,
-					created = os.date("%Y-%m-%d %H:%M"),
-				}
-				-- Preserve existing frontmatter
-				if note.metadata ~= nil and not vim.tbl_isempty(note.metadata) then
-					for k, v in pairs(note.metadata) do
-						out[k] = v
-					end
-				end
-				return out
 			end,
 
 			-- Note path function (where new notes are created)
@@ -156,21 +156,19 @@ return {
 			},
 
 			-- ══════════════════════════════════════════════════════════════════════
+			-- Checkbox Configuration
+			-- ══════════════════════════════════════════════════════════════════════
+			checkbox = {
+				order = { " ", ">", "x", "~", "!" },
+			},
+
+			-- ══════════════════════════════════════════════════════════════════════
 			-- UI Configuration
 			-- ══════════════════════════════════════════════════════════════════════
 			ui = {
 				enable = true,
 				update_debounce = 200,
 				max_file_length = 5000, -- Disable UI for large files
-
-				-- Checkboxes
-				checkboxes = {
-					[" "] = { char = "󰄱", hl_group = "ObsidianTodo" },
-					["x"] = { char = "", hl_group = "ObsidianDone" },
-					[">"] = { char = "", hl_group = "ObsidianRightArrow" },
-					["~"] = { char = "󰰱", hl_group = "ObsidianTilde" },
-					["!"] = { char = "", hl_group = "ObsidianImportant" },
-				},
 				bullets = { char = "•", hl_group = "ObsidianBullet" },
 				external_link_icon = { char = "", hl_group = "ObsidianExtLinkIcon" },
 				reference_text = { hl_group = "ObsidianRefText" },
@@ -196,7 +194,7 @@ return {
 			-- Attachments (images, files)
 			-- ══════════════════════════════════════════════════════════════════════
 			attachments = {
-				img_folder = "Attachments",
+				folder = "Attachments",
 				-- Image naming function
 				img_name_func = function()
 					return string.format("img-%s", os.date("%Y%m%d%H%M%S"))
@@ -228,11 +226,6 @@ return {
 				use_advanced_uri = true,
 				func = vim.ui.open,
 			},
-
-			-- ══════════════════════════════════════════════════════════════════════
-			-- Follow URLs
-			-- ══════════════════════════════════════════════════════════════════════
-			follow_url_func = vim.ui.open,
 
 			-- Logging
 			log_level = vim.log.levels.INFO,

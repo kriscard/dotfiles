@@ -171,7 +171,9 @@
     "hookify@claude-plugins-official": true,
     "explanatory-output-style@claude-plugins-official": true,
     "learning-output-style@claude-plugins-official": true,
-    "lua-lsp@claude-plugins-official": true
+    "lua-lsp@claude-plugins-official": true,
+    "plugin-dev@claude-plugins-official": true,
+    "linear@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "kriscard": {
