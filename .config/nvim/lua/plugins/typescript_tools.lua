@@ -18,7 +18,13 @@ return {
 				"<cmd>lua require('package-info').change_version()<CR>",
 				desc = "Change dependency version",
 			},
-			{ "<leader>Pf", ":Telescope package_info<CR>", desc = "Find in packages" },
+			{
+				"<leader>Pf",
+				function()
+					Snacks.picker.grep({ glob = "package.json" })
+				end,
+				desc = "Find in package.json",
+			},
 		},
 	},
 }

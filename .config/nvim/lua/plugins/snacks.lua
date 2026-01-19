@@ -177,7 +177,20 @@ return {
 				function()
 					Snacks.picker.grep()
 				end,
-				desc = "Grep",
+				desc = "Grep (live)",
+			},
+			{
+				"<leader>?",
+				function()
+					vim.ui.input({ prompt = "File glob (e.g. *.lua, *.{ts,tsx}): " }, function(glob)
+						if glob and glob ~= "" then
+							Snacks.picker.grep({ glob = glob })
+						else
+							Snacks.picker.grep()
+						end
+					end)
+				end,
+				desc = "Grep (with file filter)",
 			},
 			{
 				"<leader>:",

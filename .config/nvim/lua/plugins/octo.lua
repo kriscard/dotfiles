@@ -3,14 +3,14 @@ return {
 	cmd = "Octo",
 	dependencies = {
 		"nvim-lua/plenary.nvim",
-		"nvim-telescope/telescope.nvim",
+		"folke/snacks.nvim",
 		"nvim-tree/nvim-web-devicons",
 	},
 	config = function()
 		require("octo").setup({
 			enable_builtin = true,
 			default_merge_method = "squash",
-			picker = "telescope",
+			picker = "snacks",
 			file_panel = { use_icons = true },
 			mappings = {
 				review_diff = {
