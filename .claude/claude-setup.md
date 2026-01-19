@@ -268,7 +268,7 @@ claude plugin install studio-startup@kriscard       # Project startup orchestrat
 #### From claude-plugins-official Marketplace
 
 ```bash
-claude plugin install feature-dev@claude-plugins-official               # Feature development workflow
+claude plugin install plugin-dev@claude-plugins-official               # Feature development workflow
 claude plugin install agent-sdk-dev@claude-plugins-official             # Agent SDK tools
 claude plugin install hookify@claude-plugins-official                   # Hook creation & management
 claude plugin install explanatory-output-style@claude-plugins-official  # Educational explanations
