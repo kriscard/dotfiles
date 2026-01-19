@@ -8,10 +8,12 @@ cd ~/Code/roofr-dev/roofr || exit 1
 BRANCH=$(gum input --placeholder "branch-name (e.g., feat/my-feature)" --prompt "🌱 New branch: ")
 
 if [ -n "$BRANCH" ]; then
-    # Create worktree with new branch from main
-    git fetch origin main
-    git worktree add "$BRANCH" -b "$BRANCH" origin/main
+    # Fetch latest and select source branch (default: staging)
+    git fetch origin --prune
+    SOURCE=$(git branch -r --format='%(refname:short)' | sed 's|origin/||' | grep -v HEAD | gum filter --header "📌 Base branch (PR target):" --value "staging")
 
-    # Connect to the new worktree session
-    sesh connect "$BRANCH"
+    if [ -n "$SOURCE" ]; then
+        git worktree add "$BRANCH" -b "$BRANCH" "origin/$SOURCE"
+        sesh connect "$BRANCH"
+    fi
 fi
