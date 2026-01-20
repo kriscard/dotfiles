@@ -22,3 +22,5 @@
 ^/\.claude/stats-cache\.json
 ^/\.claude/eslint_errors\.json
 ^/\.claude/settings.local.json
+
+^/node_modules
