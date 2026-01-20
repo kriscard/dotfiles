@@ -16,6 +16,12 @@ return {
 				review_diff = {
 					select_next_entry = { lhs = "<C-j>", desc = "move to next changed file" },
 					select_prev_entry = { lhs = "<C-k>", desc = "move to previous changed file" },
+					add_review_comment = { lhs = "<leader>ca", desc = "add review comment", mode = { "n", "x" } },
+					add_review_suggestion = { lhs = "<leader>sa", desc = "add suggestion", mode = { "n", "x" } },
+					submit_review = { lhs = "<leader>rs", desc = "submit review" },
+					discard_review = { lhs = "<leader>rd", desc = "discard review" },
+					focus_files = { lhs = "<leader>e", desc = "focus file panel" },
+					toggle_files = { lhs = "<leader>b", desc = "toggle file panel" },
 				},
 			},
 		})
