@@ -92,10 +92,10 @@ return {
 			},
 			terminal = {
 				enabled = true,
-				-- Disable Snacks' tmux navigation (uses TmuxNavigate commands that don't work in terminal mode)
-				-- Navigation is handled by tmux directly when in terminal
 				win = {
 					keys = {
+						-- Disable Snacks' built-in nav (uses TmuxNavigate commands that don't work in terminal)
+						-- Setting to false lets keys passthrough to terminal -> tmux handles navigation
 						nav_h = false,
 						nav_j = false,
 						nav_k = false,
