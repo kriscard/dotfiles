@@ -34,10 +34,8 @@ if [ ! -d "$ROOFR_DIR/$BRANCH" ]; then
     git worktree add "$BRANCH" "origin/$BRANCH"
 fi
 
-# cd into worktree and open gh-dash
-# User can open Octo from gh-dash or run: nvim -c "Octo pr edit $PR_NUMBER"
+# cd into worktree and open Octo with the PR
 cd "$ROOFR_DIR/$BRANCH" || exit 1
 echo "Worktree ready at $ROOFR_DIR/$BRANCH"
-echo "Opening gh-dash for PR #$PR_NUMBER..."
-echo "Tip: Use 'nvim -c \"Octo pr edit $PR_NUMBER\"' to review in Octo"
-gh dash
+echo "Opening PR #$PR_NUMBER in Octo..."
+nvim -c "Octo pr edit $PR_NUMBER"
