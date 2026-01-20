@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# Create a worktree for PR review and checkout the PR branch
+# Create a worktree for PR review and open gh-dash
 # Called from sesh session startup_command
 
 ROOFR_DIR="$HOME/Code/roofr-dev/roofr"
 cd "$ROOFR_DIR" || exit 1
 
-# Fetch latest and list open PRs needing review
+# Fetch latest and list open PRs
 git fetch origin
 
 # Use gh to pick a PR (shows all open PRs with base branch)
@@ -27,14 +27,17 @@ if [ -z "$BRANCH" ]; then
     exit 1
 fi
 
-# Check if worktree already exists
-if [ -d "$ROOFR_DIR/$BRANCH" ]; then
-    echo "Worktree already exists, connecting..."
-    sesh connect "$BRANCH"
-else
-    # Create worktree from the PR branch
+# Create worktree if it doesn't exist
+if [ ! -d "$ROOFR_DIR/$BRANCH" ]; then
     echo "Creating worktree for PR #$PR_NUMBER ($BRANCH)..."
     git fetch origin "$BRANCH"
     git worktree add "$BRANCH" "origin/$BRANCH"
-    sesh connect "$BRANCH"
 fi
+
+# cd into worktree and open gh-dash
+# User can open Octo from gh-dash or run: nvim -c "Octo pr edit $PR_NUMBER"
+cd "$ROOFR_DIR/$BRANCH" || exit 1
+echo "Worktree ready at $ROOFR_DIR/$BRANCH"
+echo "Opening gh-dash for PR #$PR_NUMBER..."
+echo "Tip: Use 'nvim -c \"Octo pr edit $PR_NUMBER\"' to review in Octo"
+gh dash
