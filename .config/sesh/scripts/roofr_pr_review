@@ -8,8 +8,8 @@ cd "$ROOFR_DIR" || exit 1
 # Fetch latest and list open PRs needing review
 git fetch origin
 
-# Use gh to pick a PR (shows PRs needing your review first)
-PR_NUMBER=$(gh pr list --search "review-requested:@me" --json number,title,headRefName --template '{{range .}}{{.number}}	{{.title}} ({{.headRefName}}){{"\n"}}{{end}}' | \
+# Use gh to pick a PR (shows all open PRs with base branch)
+PR_NUMBER=$(gh pr list --json number,title,headRefName,baseRefName --template '{{range .}}{{.number}}	[{{.baseRefName}}] {{.title}} ({{.headRefName}}){{"\n"}}{{end}}' | \
     gum filter --limit 1 --fuzzy --placeholder "Pick a PR to review" --prompt "👀 " | \
     cut -f1)
 
