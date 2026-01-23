@@ -6,6 +6,8 @@ return {
 		opts = {
 			library = {
 				{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
+				-- Load luvit types when vim.uv is used
+				"luvit-meta/library",
 			},
 		},
 	},
@@ -139,7 +141,15 @@ return {
 					settings = {
 						Lua = {
 							completion = { callSnippet = "Replace" },
-							diagnostics = { globals = { "vim" }, disable = { "missing-fields" } },
+							runtime = { version = "LuaJIT" },
+							diagnostics = {
+								globals = { "vim" },
+								disable = { "missing-fields" },
+							},
+							workspace = {
+								checkThirdParty = false,
+								library = { vim.env.VIMRUNTIME },
+							},
 						},
 					},
 				},
@@ -342,9 +352,9 @@ return {
 				"stylua",
 				"prettier",
 				"prettierd",
-				"@unocss/language-server",
+				"unocss-language-server",
 				"stylelint-lsp",
-				"@biomejs/biome",
+				"biome",
 				"mdx-analyzer",
 				"ltex-ls", -- Grammar checking for markdown
 			})
