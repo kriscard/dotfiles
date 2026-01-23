@@ -13,6 +13,9 @@ return {
 			picker = "snacks",
 			file_panel = { use_icons = true },
 			mappings = {
+				pull_request = {
+					approve_pr = { lhs = "<leader>pa", desc = "approve PR" },
+				},
 				review_diff = {
 					select_next_entry = { lhs = "<C-j>", desc = "move to next changed file" },
 					select_prev_entry = { lhs = "<C-k>", desc = "move to previous changed file" },
