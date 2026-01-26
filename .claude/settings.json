@@ -1,5 +1,9 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
   "permissions": {
     "allow": [
       "Bash(docker compose exec:*)",
@@ -169,7 +173,8 @@
     "learning-output-style@claude-plugins-official": true,
     "lua-lsp@claude-plugins-official": true,
     "plugin-dev@claude-plugins-official": true,
-    "linear@claude-plugins-official": true
+    "linear@claude-plugins-official": true,
+    "til@kriscard": true
   },
   "extraKnownMarketplaces": {
     "kriscard": {
@@ -185,9 +190,5 @@
       }
     }
   },
-  "alwaysThinkingEnabled": true,
-  "attribution": {
-    "commit": "",
-    "pr": ""
-  }
+  "alwaysThinkingEnabled": true
 }
