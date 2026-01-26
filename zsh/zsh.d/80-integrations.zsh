@@ -11,3 +11,8 @@ if [[ -f "$DOTFILES/.env" ]]; then
   source <(/usr/bin/grep -v '^#' "$DOTFILES/.env" | /usr/bin/grep -v '^$')
   set +a
 fi
+
+# Claude Code - auto-update plugin marketplace on shell start
+if (( $+commands[claude] )); then
+  claude plugin marketplace update kriscard/kriscard-claude-plugins &>/dev/null &
+fi
