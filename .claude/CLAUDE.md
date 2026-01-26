@@ -183,6 +183,76 @@ This will affect N notes. Reply 'yes' to proceed or 'no' to cancel.
 
 ---
 
+## 📚 TIL (Today I Learned) Documentation
+
+At the end of every project session, create a detailed TIL note in Obsidian.
+
+### File Location & Naming
+
+- **Path:** `1 - Notes/TIL/til-YYYY-MM-DD.md` (use today's date)
+- **Example:** `1 - Notes/TIL/til-2024-03-15.md`
+
+### Required Content
+
+The TIL note should explain the project in plain, engaging language. Include:
+
+1. **Technical Architecture**
+   - How the system is designed
+   - Why this architecture was chosen over alternatives
+   - Use analogies to make complex concepts memorable
+
+2. **Codebase Structure**
+   - Directory layout and organization
+   - How the various parts connect and communicate
+   - Data flow through the system
+
+3. **Technology Choices**
+   - What technologies/frameworks/libraries are used
+   - Why these were selected (trade-offs considered)
+   - How they integrate together
+
+4. **Lessons Learned**
+   - Bugs encountered and how they were fixed
+   - Potential pitfalls and how to avoid them
+   - New technologies or patterns discovered
+   - Engineering best practices demonstrated
+   - "Aha moments" and key insights
+
+### Writing Style
+
+- **Engaging, not boring** - Write like you're telling a story to a friend
+- **Use analogies** - Compare technical concepts to everyday things
+- **Include anecdotes** - "We tried X, it broke spectacularly because..."
+- **Be specific** - Real file names, real error messages, real solutions
+- **Teach the reader** - Explain WHY, not just WHAT
+
+### Example Structure
+
+```markdown
+# TIL: Building [Project Name]
+
+## The Big Picture
+[One paragraph explaining what we built and why it matters]
+
+## Architecture Deep Dive
+[Technical architecture with analogies]
+
+## The Journey
+[Narrative of what we did, including mistakes and fixes]
+
+## Key Takeaways
+- [Lesson 1]
+- [Lesson 2]
+
+## Things That Broke (And How We Fixed Them)
+[Specific bugs and solutions]
+
+## What I'd Do Differently
+[Hindsight insights]
+```
+
+---
+
 ## 🤔 Decision Framework
 
 When instructions conflict or ambiguity exists, use this priority order:
