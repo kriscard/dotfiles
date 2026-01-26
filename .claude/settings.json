@@ -174,7 +174,8 @@
     "lua-lsp@claude-plugins-official": true,
     "plugin-dev@claude-plugins-official": true,
     "linear@claude-plugins-official": true,
-    "til@kriscard": true
+    "til@kriscard": true,
+    "interactive-learning@kriscard": true
   },
   "extraKnownMarketplaces": {
     "kriscard": {
