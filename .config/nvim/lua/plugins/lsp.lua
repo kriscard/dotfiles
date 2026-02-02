@@ -159,43 +159,38 @@ return {
 				html = {},
 				jsonls = {},
 				marksman = {}, -- Markdown LSP for links, headings, etc.
-
-			-- LTeX for grammar and spell checking in markdown
-			ltex = {
-				filetypes = { "markdown", "text", "gitcommit" },
-				settings = {
-					ltex = {
-						language = "en-US",
-						-- Disable spell checking (use Neovim's native spell for that)
-						checkFrequency = "save",
-						-- Additional dictionary entries
-						dictionary = {
-							["en-US"] = {
-								"Neovim",
-								"LSP",
-								"treesitter",
-								"dotfiles",
-								"keymaps",
-								"lua",
-								"obsidian",
-								"tmux",
-								"nvim",
-								"config",
+				-- LTeX for grammar and spell checking in markdown
+				ltex = {
+					filetypes = { "markdown", "text", "gitcommit" },
+					settings = {
+						ltex = {
+							language = "en-US",
+							checkFrequency = "save",
+							dictionary = {
+								["en-US"] = {
+									"Neovim",
+									"LSP",
+									"treesitter",
+									"dotfiles",
+									"keymaps",
+									"lua",
+									"obsidian",
+									"tmux",
+									"nvim",
+									"config",
+								},
 							},
-						},
-						-- Disable specific rules that are too noisy
-						disabledRules = {
-							["en-US"] = {
-								"MORFOLOGIK_RULE_EN_US", -- Disable spell check (use vim spell)
-								"WHITESPACE_RULE", -- Trailing whitespace
-								"EN_QUOTES", -- Smart quotes
+							disabledRules = {
+								["en-US"] = {
+									"MORFOLOGIK_RULE_EN_US",
+									"WHITESPACE_RULE",
+									"EN_QUOTES",
+								},
 							},
+							hiddenFalsePositives = {},
 						},
-						-- Hide false positives
-						hiddenFalsePositives = {},
 					},
 				},
-			},
 				prismals = {},
 				sqlls = {},
 				tailwindcss = { filetypes = { "typescriptreact", "javascriptreact", "html", "svelte" } },
