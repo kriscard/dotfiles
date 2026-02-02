@@ -75,9 +75,9 @@ return {
 		{ "<leader>rc", "<cmd>Octo review submit comment<CR>", desc = "Comment only" },
 		{ "<leader>rx", "<cmd>Octo review submit request_changes<CR>", desc = "Request changes" },
 
-		-- Comment actions (works from any buffer)
-		{ "<leader>ca", "<cmd>Octo comment add<CR>", desc = "Add comment" },
-		{ "<leader>cd", "<cmd>Octo comment delete<CR>", desc = "Delete comment" },
+		-- Comment actions (octo buffers only to avoid LSP code_action conflict)
+		{ "<leader>ca", "<cmd>Octo comment add<CR>", ft = "octo", desc = "Add comment" },
+		{ "<leader>cd", "<cmd>Octo comment delete<CR>", ft = "octo", desc = "Delete comment" },
 
 		-- PR actions (works from any buffer)
 		{ "<leader>pm", "<cmd>Octo pr merge squash<CR>", desc = "Merge (squash)" },
