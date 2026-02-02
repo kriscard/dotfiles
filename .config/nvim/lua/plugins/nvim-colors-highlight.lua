@@ -38,4 +38,16 @@ return {
 			enable_tailwind = true,
 		},
 	},
+	-- TailwindCSS color preview in completion menu
+	{
+		"hrsh7th/nvim-cmp",
+		dependencies = {
+			{ "roobert/tailwindcss-colorizer-cmp.nvim", config = true },
+		},
+		opts = function()
+			require("cmp").config.formatting = {
+				format = require("tailwindcss-colorizer-cmp").formatter,
+			}
+		end,
+	},
 }
