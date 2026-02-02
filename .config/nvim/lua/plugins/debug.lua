@@ -58,7 +58,7 @@ return {
 
 		require("dap-vscode-js").setup({
 			node_path = "node",
-			debugger_path = vim.fn.expand("~/.local/share/nvim/vscode-js-debug"),
+			debugger_path = vim.fn.stdpath("data") .. "/vscode-js-debug",
 			debugger_cmd = { "js-debug-adapter" },
 			adapters = { "pwa-node", "pwa-chrome", "pwa-msedge", "node-terminal", "pwa-extensionHost" },
 			log_file_path = vim.fn.stdpath("cache") .. "/dap_vscode_js.log",
