@@ -38,22 +38,4 @@ return {
 			enable_tailwind = true,
 		},
 	},
-	-- TailwindCSS
-	{
-		"hrsh7th/nvim-cmp",
-		dependencies = {
-			{ "roobert/tailwindcss-colorizer-cmp.nvim", config = true },
-		},
-		opts = function()
-			require("cmp").config.formatting = {
-				format = require("tailwindcss-colorizer-cmp").formatter,
-			}
-			-- -- original LazyVim kind icon formatter
-			-- local format_kinds = opts.formatting.format
-			-- opts.formatting.format = function(entry, item)
-			-- 	format_kinds(entry, item) -- add icons
-			-- 	return require("tailwindcss-colorizer-cmp").formatter(entry, item)
-			-- end
-		end,
-	},
 }

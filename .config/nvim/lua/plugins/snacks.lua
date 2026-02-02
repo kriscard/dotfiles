@@ -1,24 +1,3 @@
-local macchiato = require("catppuccin.palettes").get_palette("macchiato")
-
--- Snacks highlight groups using Catppuccin Macchiato palette
-vim.api.nvim_set_hl(0, "SnacksIndentScope", { fg = macchiato.mauve })
-vim.api.nvim_set_hl(0, "SnacksLazygitActiveBorder", { fg = macchiato.mauve, bold = true })
-vim.api.nvim_set_hl(0, "SnacksLazygitInactiveBorder", { fg = macchiato.overlay1 })
-vim.api.nvim_set_hl(0, "SnacksLazygitOptions", { fg = macchiato.blue })
-vim.api.nvim_set_hl(0, "SnacksLazygitSearch", { fg = macchiato.yellow, bold = true })
-vim.api.nvim_set_hl(0, "SnacksLazygitSelected", { bg = macchiato.surface0 })
-vim.api.nvim_set_hl(0, "SnacksLazygitUnstaged", { fg = macchiato.red })
-vim.api.nvim_set_hl(0, "SnacksLazygitCherryBg", { fg = macchiato.surface1 })
-vim.api.nvim_set_hl(0, "SnacksLazygitCherryFg", { fg = macchiato.mauve })
-vim.api.nvim_set_hl(0, "SnacksLazygitDefault", { fg = macchiato.text })
-vim.api.nvim_set_hl(0, "SnacksLazygitSpecial", { fg = macchiato.lavender })
-
-local filtered_message = {
-	"No information available",
-	"[Copilot.lua] copilot is disabled",
-	"[Copilot.lua] Node.js version 22 or newer required but found 21.6.1",
-}
-
 return {
 	{
 		"folke/snacks.nvim",
@@ -107,6 +86,20 @@ return {
 			zen = {},
 		},
 		init = function()
+			-- Snacks highlight groups using Catppuccin Macchiato palette
+			local macchiato = require("catppuccin.palettes").get_palette("macchiato")
+			vim.api.nvim_set_hl(0, "SnacksIndentScope", { fg = macchiato.mauve })
+			vim.api.nvim_set_hl(0, "SnacksLazygitActiveBorder", { fg = macchiato.mauve, bold = true })
+			vim.api.nvim_set_hl(0, "SnacksLazygitInactiveBorder", { fg = macchiato.overlay1 })
+			vim.api.nvim_set_hl(0, "SnacksLazygitOptions", { fg = macchiato.blue })
+			vim.api.nvim_set_hl(0, "SnacksLazygitSearch", { fg = macchiato.yellow, bold = true })
+			vim.api.nvim_set_hl(0, "SnacksLazygitSelected", { bg = macchiato.surface0 })
+			vim.api.nvim_set_hl(0, "SnacksLazygitUnstaged", { fg = macchiato.red })
+			vim.api.nvim_set_hl(0, "SnacksLazygitCherryBg", { fg = macchiato.surface1 })
+			vim.api.nvim_set_hl(0, "SnacksLazygitCherryFg", { fg = macchiato.mauve })
+			vim.api.nvim_set_hl(0, "SnacksLazygitDefault", { fg = macchiato.text })
+			vim.api.nvim_set_hl(0, "SnacksLazygitSpecial", { fg = macchiato.lavender })
+
 			-- Create GoToFile command early for sesh integration
 			-- Command is available immediately, but defers picker until Snacks loads
 			vim.api.nvim_create_user_command("GoToFile", function()
@@ -119,6 +112,11 @@ return {
 				pattern = "VeryLazy",
 				callback = function()
 					-- Filter out nil messages
+					local filtered_message = {
+						"No information available",
+						"[Copilot.lua] copilot is disabled",
+						"[Copilot.lua] Node.js version 22 or newer required but found 21.6.1",
+					}
 					local notify = Snacks.notifier.notify
 					Snacks.notifier.notify = function(message, level, opts)
 						for _, msg in ipairs(filtered_message) do
