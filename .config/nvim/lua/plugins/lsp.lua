@@ -2,28 +2,28 @@
 return {
 	{
 		"folke/lazydev.nvim",
-		ft = "lua",
+		ft = "lua", -- only load on lua files
 		opts = {
 			library = {
+				-- Load luvit types when the `vim.uv` word is found
 				{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
-				-- Load luvit types when vim.uv is used
-				"luvit-meta/library",
 			},
 		},
 	},
-	{ "Bilal2453/luvit-meta", lazy = true },
 
 	-- ──────────────────────────────────────────────────────────────────────────────
 	-- LSP
 	-- ──────────────────────────────────────────────────────────────────────────────
 	{
 		"neovim/nvim-lspconfig",
+		event = { "BufReadPre", "BufNewFile" },
 		dependencies = {
 			"mason.nvim",
 			"williamboman/mason-lspconfig.nvim",
 			"WhoIsSethDaniel/mason-tool-installer.nvim",
 			{ "j-hui/fidget.nvim", opts = {} },
 			"saghen/blink.compat", -- capabilities shim for Blink
+			"folke/lazydev.nvim", -- must load before lua_ls attaches
 		},
 		config = function()
 			-- Configure rounded borders for LSP floating windows
@@ -143,13 +143,14 @@ return {
 							completion = { callSnippet = "Replace" },
 							runtime = { version = "LuaJIT" },
 							diagnostics = {
-								globals = { "vim" },
+								globals = { "vim", "Snacks" },
 								disable = { "missing-fields" },
 							},
 							workspace = {
 								checkThirdParty = false,
-								library = { vim.env.VIMRUNTIME },
+								library = vim.api.nvim_get_runtime_file("", true),
 							},
+							telemetry = { enable = false },
 						},
 					},
 				},
@@ -532,14 +533,17 @@ return {
 			},
 
 			sources = {
-				default = { "lsp", "path", "snippets", "buffer", "emoji" },
+				default = { "lazydev", "lsp", "path", "snippets", "buffer", "emoji" },
 				per_filetype = {
-					lua = { "lazydev", "lsp", "path", "snippets", "buffer" },
 					gitcommit = { "git", "buffer" },
 					markdown = { "obsidian", "lsp", "path", "snippets", "buffer", "dictionary", "emoji" },
 				},
 				providers = {
-					lazydev = { module = "lazydev.integrations.blink" },
+					lazydev = {
+						name = "LazyDev",
+						module = "lazydev.integrations.blink",
+						score_offset = 100, -- show at top of suggestions
+					},
 					emoji = {
 						module = "blink-emoji",
 						name = "emoji",
