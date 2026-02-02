@@ -55,5 +55,8 @@ return {
 		-- Auto-complete in insert mode
 		{ "@", "@<C-x><C-o>", mode = "i", ft = "octo", silent = true },
 		{ "#", "#<C-x><C-o>", mode = "i", ft = "octo", silent = true },
+
+		-- Image preview (uses Snacks.image with markdown treesitter)
+		{ "<leader>pi", function() Snacks.image.hover() end, ft = "octo", desc = "Preview image" },
 	},
 }
