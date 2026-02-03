@@ -67,7 +67,14 @@ return {
 					},
 				},
 			},
-			image = { enabled = true },
+			image = {
+				enabled = true,
+				-- max dimensions for images in documents (markdown, etc.)
+				doc = {
+					max_width = 120, -- increase from default 80
+					max_height = 60, -- increase from default 40
+				},
+			},
 			indent = { enabled = true },
 			input = { enabled = true },
 			notifier = { enabled = true },
