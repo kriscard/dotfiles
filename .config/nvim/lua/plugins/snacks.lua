@@ -259,9 +259,9 @@ return {
 			{
 				"<leader>gb",
 				function()
-					Snacks.picker.git_branches()
+					Snacks.git.blame_line()
 				end,
-				desc = "Git Branches",
+				desc = "Git Blame Line",
 			},
 			{
 				"<leader>gL",
