@@ -4,3 +4,5 @@
 
 # asdf version manager
 .tool-versions
+.spec.md
+.SPEC.md
