@@ -29,7 +29,7 @@ adjust-cell-height = 2
 # =============================================================================
 
 shell-integration = zsh
-shell-integration-features = cursor,sudo,title
+shell-integration-features = cursor,sudo,title,command-status
 
 # =============================================================================
 # CURSOR CONFIGURATION
@@ -89,6 +89,9 @@ mouse-hide-while-typing = true
 
 # Scrollback (50k lines for development work)
 scrollback-limit = 50000
+
+# GPU-accelerated background blur (macOS, zero CPU cost)
+background-blur = 20
 
 # Performance (gtk-single-instance removed - Linux-only setting)
 
