@@ -36,8 +36,7 @@ return {
 			},
 			hooks = {
 				view_opened = function()
-					---@diagnostic disable-next-line: undefined-field
-					local stdout = vim.loop.new_tty(1, false)
+					local stdout = vim.uv.new_tty(1, false)
 					if stdout ~= nil then
 						stdout:write(
 							("\x1bPtmux;\x1b\x1b]1337;SetUserVar=%s=%s\b\x1b\\"):format(
@@ -49,8 +48,7 @@ return {
 					end
 				end,
 				view_closed = function()
-					---@diagnostic disable-next-line: undefined-field
-					local stdout = vim.loop.new_tty(1, false)
+					local stdout = vim.uv.new_tty(1, false)
 					if stdout ~= nil then
 						stdout:write(
 							("\x1bPtmux;\x1b\x1b]1337;SetUserVar=%s=%s\b\x1b\\"):format(

@@ -59,7 +59,7 @@ opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus" -- Sync with system clip
 
 opt.cursorline = true -- Enable highlighting of the current line
 
-opt.scrolloff = 10 -- Always keep 8 lines above/below cursor unless at start/end of file
+opt.scrolloff = 10 -- Always keep 10 lines above/below cursor unless at start/end of file
 
 opt.colorcolumn = "80" -- Highlight the 80th column in the window
 
@@ -67,7 +67,7 @@ opt.autowrite = true -- Automatically saves the current buffer when it becomes i
 
 opt.confirm = true -- Enables confirmation prompts for destructive operations like quitting without saving
 
-opt.formatoptions = "jcroqlnt" -- Configures automatic formatting and text wrapping behavior
+opt.formatoptions = "jqlnt" -- Configures automatic formatting (cro removed; autocmd enforces no auto-comment)
 
 opt.grepformat = "%f:%l:%c:%m" -- Format of grep search results (filename:line:column:text)
 
@@ -131,21 +131,4 @@ opt.diffopt:append("indent-heuristic")
 -- Ensure LSP semantic tokens take priority over treesitter syntax highlighting
 vim.highlight.priorities.semantic_tokens = 95
 
--- Enhanced diagnostic configuration (Neovim 0.10+)
-vim.diagnostic.config({
-	virtual_text = {
-		spacing = 4,
-		prefix = "●",
-		source = "if_many", -- Show source only when multiple diagnostics exist
-	},
-	float = {
-		source = "if_many", -- Show source in hover window when multiple diagnostics
-		border = "rounded",
-		header = "",
-		prefix = "",
-	},
-	signs = true,
-	underline = true,
-	update_in_insert = false, -- Don't update diagnostics while typing
-	severity_sort = true, -- Sort by severity (errors first)
-})
+-- Diagnostic config is set authoritatively in lsp.lua (includes sign icons)

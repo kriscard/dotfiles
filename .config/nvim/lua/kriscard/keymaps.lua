@@ -58,7 +58,7 @@ map("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 map("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highlights" })
 
 -- Replace the highlighted word
-map("n", "<leader>S", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "Replace highlighted word" })
+map("n", "<leader>sr", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "Search & Replace word" })
 
 -- ══════════════════════════════════════════════════════════════════════════════
 -- LSP & DIAGNOSTICS (Global mappings)
@@ -93,15 +93,9 @@ map("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]ui
 map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code action" })
 
 -- ══════════════════════════════════════════════════════════════════════════════
--- CORE LSP NAVIGATION (Global - work across all buffers)
+-- LSP DOCUMENTATION & REFACTORING (Global)
+-- Note: gd/gD/gr/gI/gy navigation handled by Snacks picker (snacks.lua)
 -- ══════════════════════════════════════════════════════════════════════════════
-
--- Definition and navigation
-map("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
-map("n", "gD", vim.lsp.buf.declaration, { desc = "Go to declaration" })
-map("n", "gr", vim.lsp.buf.references, { desc = "Go to references" })
-map("n", "gi", vim.lsp.buf.implementation, { desc = "Go to implementation" })
-map("n", "gt", vim.lsp.buf.type_definition, { desc = "Go to type definition" })
 
 -- Documentation
 map("n", "K", vim.lsp.buf.hover, { desc = "Hover documentation" })
@@ -133,13 +127,6 @@ end, { desc = "[F]ile [E]xplorer (Oil)" })
 map("n", "<leader>-", function()
 	require("oil").toggle_float()
 end, { desc = "Open Oil" })
-
--- ══════════════════════════════════════════════════════════════════════════════
--- GIT INTEGRATION
--- ══════════════════════════════════════════════════════════════════════════════
-
--- LazyGit
-map("n", "<leader>gg", "<cmd>LazyGit<cr>", { desc = "Lazygit (Root Dir)" })
 
 -- ══════════════════════════════════════════════════════════════════════════════
 -- WINDOW MANAGEMENT
