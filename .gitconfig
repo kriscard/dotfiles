@@ -6,7 +6,7 @@
     la = "!git config -l | grep alias | cut -c 7-"
     # lazygit TUI
     lg = "!lazygit"
-    delete-merged-branches = "!f() { git checkout --quiet master && git branch --merged | grep --invert-match '\\*' | xargs -n 1 git branch --delete; git checkout --quiet @{-1}; }; f"
+    delete-merged-branches = "!f() { git checkout --quiet main && git branch --merged | grep --invert-match '\\*' | xargs -n 1 git branch --delete; git checkout --quiet @{-1}; }; f"
     # diff = diff --ignore-space-at-eol -b -w --ignore-blank-lines
     d = "!git diff --ignore-space-at-eol -b -w --ignore-blank-lines -- ':!**/package-lock.json' ':!**/yarn.lock'"
 
@@ -71,7 +71,7 @@
     # add all
     aa = !git ls-files -d | xargs git rm && git ls-files -m -o --exclude-standard | xargs git add
     # remove grep - Remove found files that are NOT under version control
-    rg = "!sh -c 'git ls-files --others --exclude-standard | grep $1 | xargs rm' -"
+    remove-untracked = "!sh -c 'git ls-files --others --exclude-standard | grep $1 | xargs rm' -"
 
     remotes = remote -v
 [color]

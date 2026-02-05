@@ -1,8 +1,6 @@
 # ZSH Plugins
 # Direct sourcing without plugin manager for maximum speed
 
-HOMEBREW_PREFIX="/opt/homebrew"
-
 # Autosuggestions
 [[ -f "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]] && \
   source "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"

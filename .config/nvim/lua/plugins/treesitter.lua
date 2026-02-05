@@ -41,6 +41,13 @@ return {
 			"vim",
 			"vimdoc",
 			"yaml",
+			"python",
+			"rust",
+			"go",
+			"gomod",
+			"gosum",
+			"toml",
+			"dockerfile",
 		},
 		-- Autoinstall languages that are not installed
 		auto_install = true,

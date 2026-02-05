@@ -34,13 +34,15 @@ brew "tree"         # Directory visualization
 # =============================================================================
 
 brew "tmux"
-brew "gitmux"
+# gitmux removed - not using git status in tmux bar
 brew "starship"     # Fast shell prompt
 brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
 brew "zsh-history-substring-search"
 brew "atuin"        # Better shell history with sync
 brew "direnv"       # Directory-specific environments
+brew "sesh"         # Terminal session manager (used in tmux + zsh)
+brew "gum"          # Interactive CLI prompts (used in roofr scripts)
 
 # =============================================================================
 # DEVELOPMENT TOOLS
@@ -123,7 +125,7 @@ cask "figma"
 # Music & Entertainment
 cask "spotify"
 
-# Fonts
+# Fonts (MonoLisa is purchased separately - install manually)
 cask "font-hack-nerd-font"
 cask "font-fira-code-nerd-font"
 
