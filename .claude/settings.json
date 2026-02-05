@@ -175,7 +175,8 @@
     "chromedev-tools@kriscard": true,
     "studio-startup@kriscard": true,
     "til@kriscard": true,
-    "interactive-learning@kriscard": true
+    "interactive-learning@kriscard": true,
+    "obsidian@obsidian-skills": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
