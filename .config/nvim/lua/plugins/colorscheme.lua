@@ -5,6 +5,7 @@ return {
 	config = function()
 		require("catppuccin").setup({
 			integrations = {
+				blink_cmp = true,
 				bufferline = true,
 				cmp = true,
 				copilot_vim = true,
@@ -28,10 +29,18 @@ return {
 				trouble = true,
 				which_key = true,
 			},
-			float = {
-				transparent = false,
-				solid = false,
-			},
+		custom_highlights = function(colors)
+				return {
+					-- Blink completion: match editor bg so rounded border corners blend
+					BlinkCmpMenu = { bg = colors.base },
+					BlinkCmpMenuBorder = { fg = colors.surface1, bg = colors.base },
+					BlinkCmpMenuSelection = { bg = colors.surface0 },
+					BlinkCmpDoc = { bg = colors.base },
+					BlinkCmpDocBorder = { fg = colors.surface1, bg = colors.base },
+					BlinkCmpSignatureHelp = { bg = colors.base },
+					BlinkCmpSignatureHelpBorder = { fg = colors.surface1, bg = colors.base },
+				}
+			end,
 		})
 
 		vim.cmd.colorscheme("catppuccin-macchiato")

@@ -26,7 +26,6 @@ return {
 			"folke/lazydev.nvim", -- must load before lua_ls attaches
 		},
 		config = function()
-			-- Configure rounded borders for LSP floating windows
 			require("lspconfig.ui.windows").default_options.border = "rounded"
 
 			-- Helper: apply first returned code actions for a given context
@@ -520,9 +519,12 @@ return {
 				documentation = {
 					auto_show = true,
 					auto_show_delay_ms = 200,
+					window = { border = "rounded" },
 				},
 				ghost_text = { enabled = true },
 				menu = {
+					border = "rounded",
+					scrollbar = false,
 					auto_show = function(ctx)
 						return ctx.mode ~= "cmdline" or not vim.tbl_contains({ "/", "?" }, vim.fn.getcmdtype())
 					end,
@@ -571,6 +573,10 @@ return {
 				},
 			},
 
+			signature = {
+				enabled = true,
+				window = { border = "rounded" },
+			},
 			snippets = { preset = "luasnip" },
 			appearance = { use_nvim_cmp_as_default = true },
 		},
