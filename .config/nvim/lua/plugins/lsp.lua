@@ -47,7 +47,7 @@ return {
 						if action.command then
 							local client = vim.lsp.get_client_by_id(client_id)
 							if client then
-								client.request(action.command, bufnr)
+								vim.lsp.buf.execute_command(action.command)
 							end
 						end
 					end
@@ -143,7 +143,7 @@ return {
 							completion = { callSnippet = "Replace" },
 							runtime = { version = "LuaJIT" },
 							diagnostics = {
-								globals = { "vim", "Snacks" },
+								globals = { "vim", "Snacks", "require" },
 								disable = { "missing-fields" },
 							},
 							workspace = {
