@@ -29,7 +29,7 @@ adjust-cell-height = 2
 # =============================================================================
 
 shell-integration = zsh
-shell-integration-features = cursor,sudo,title,command-status
+shell-integration-features = cursor,sudo,title
 
 # =============================================================================
 # CURSOR CONFIGURATION
