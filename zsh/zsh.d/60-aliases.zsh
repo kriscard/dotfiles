@@ -84,7 +84,7 @@ alias lzg='lazygit'
 alias preview="fzf --preview 'bat --color=always {}'"
 alias pf="fzf --preview 'bat --color=always {}'"
 
-# Node version management
-alias node-use="fnm use"
-alias node-list="fnm list"
-alias node-install="fnm install"
+# Node version management (via asdf)
+alias node-use="asdf shell nodejs"
+alias node-list="asdf list nodejs"
+alias node-install="asdf install nodejs"

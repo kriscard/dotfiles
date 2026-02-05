@@ -1,8 +1,6 @@
 # Key Bindings
 # fzf, history search, and custom bindings
 
-HOMEBREW_PREFIX="/opt/homebrew"
-
 # Use emacs key bindings
 bindkey -e
 
