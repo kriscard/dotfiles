@@ -512,7 +512,7 @@ return {
 
 			completion = {
 				list = {
-					selection = { preselect = false, auto_insert = false },
+					selection = { preselect = true, auto_insert = true },
 					max_items = 200,
 				},
 				accept = { auto_brackets = { enabled = true } },
@@ -525,10 +525,8 @@ return {
 				menu = {
 					border = "rounded",
 					scrollbar = false,
-					auto_show = function(ctx)
-						return ctx.mode ~= "cmdline" or not vim.tbl_contains({ "/", "?" }, vim.fn.getcmdtype())
-					end,
 					draw = {
+						treesitter = { "lsp" },
 						columns = { { "kind_icon" }, { "label", "label_description", gap = 1 } },
 					},
 				},
@@ -577,8 +575,10 @@ return {
 				enabled = true,
 				window = { border = "rounded" },
 			},
+			fuzzy = { sorts = { "exact", "score", "sort_text" } },
+			cmdline = { enabled = true },
 			snippets = { preset = "luasnip" },
-			appearance = { use_nvim_cmp_as_default = true },
+			appearance = { nerd_font_variant = "mono" },
 		},
 	},
 }
