@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# Claude Code environment-aware launcher
+# Switches settings based on CLAUDE_ENV variable
+#
+# Usage:
+#   export CLAUDE_ENV=work  # in your work shell profile
+#   export CLAUDE_ENV=home  # in your home shell profile
+#   claude-env [args...]    # launches claude with correct settings
+#
+# Or use aliases: cw (claude work), ch (claude home)
+
+set -euo pipefail
+
+SETTINGS_DIR="$HOME/.claude"
+DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
+PROFILES_DIR="$DOTFILES/.claude/profiles"
+
+# Default to home if not set
+PROFILE="${CLAUDE_ENV:-home}"
+
+# Validate profile exists
+if [[ ! -f "$PROFILES_DIR/settings-${PROFILE}.json" ]]; then
+  echo "Error: Unknown CLAUDE_ENV='$PROFILE'" >&2
+  echo "Available profiles:" >&2
+  ls -1 "$PROFILES_DIR"/settings-*.json 2>/dev/null | sed 's/.*settings-//;s/\.json$//' | sed 's/^/  - /' >&2
+  exit 1
+fi
+
+# Ensure settings directory exists
+mkdir -p "$SETTINGS_DIR"
+
+# Copy profile settings (only if different to avoid unnecessary writes)
+if ! cmp -s "$PROFILES_DIR/settings-${PROFILE}.json" "$SETTINGS_DIR/settings.json" 2>/dev/null; then
+  cp "$PROFILES_DIR/settings-${PROFILE}.json" "$SETTINGS_DIR/settings.json"
+  echo "Loaded Claude profile: $PROFILE" >&2
+fi
+
+# Launch claude with all arguments
+exec claude "$@"

@@ -7,6 +7,12 @@ alias reload!='RELOAD=1 source ~/.zshrc'
 alias ai="claude"
 alias df-cli="$DOTFILES/dotfiles"
 
+# Claude Code with environment-aware settings
+# Usage: cw (claude work), ch (claude home), or just 'ai' with CLAUDE_ENV set
+alias cw='CLAUDE_ENV=work claude-env'   # Force work profile (token-optimized)
+alias ch='CLAUDE_ENV=home claude-env'   # Force home profile (full features)
+alias claude-profile='echo "Current: ${CLAUDE_ENV:-home}"'  # Show active profile
+
 # Navigation
 alias ..='cd ..'
 alias ...='cd ../..'

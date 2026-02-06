@@ -6,6 +6,11 @@
 # MACHINE-SPECIFIC ENVIRONMENT VARIABLES
 # =============================================================================
 
+# Claude Code environment (affects settings profile loaded by claude-env)
+# Options: "work" (token-optimized) or "home" (full features)
+# See: ~/.dotfiles/.claude/work-settings.md for details
+# export CLAUDE_ENV="work"  # Uncomment on work machines
+
 # Work-specific paths (uncomment and customize as needed)
 # export WORK_DIR="$HOME/work"
 # export PROJECT_ROOT="$HOME/projects"

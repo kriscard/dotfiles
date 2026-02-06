@@ -1,0 +1,190 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
+  "permissions": {
+    "allow": [
+      "Bash(docker compose exec:*)",
+      "Bash(docker run:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh run view:*)",
+      "Bash(git branch:*)",
+      "Bash(git checkout:*)",
+      "Bash(git fetch:*)",
+      "Bash(git rebase:*)",
+      "Bash(git stash:*)",
+      "Bash(git switch:*)",
+      "Bash(mkdir:*)",
+      "Bash(node:*)",
+      "Bash(npm run build:*)",
+      "ExitPlanMode(*)",
+      "Fetch(*)",
+      "Glob(*)",
+      "Grep(*)",
+      "LS(*)",
+      "Read(*)",
+      "Task(*)",
+      "TodoWrite(*)",
+      "WebFetch(domain:*)",
+      "WebSearch",
+      "mcp__*"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./secrets/**)",
+      "Read(./config/credentials.json)",
+      "Read(./build)",
+      "Edit(./.env)",
+      "Edit(./.env.*)",
+      "Edit(./package-lock.json)",
+      "Edit(./yarn.lock)",
+      "Edit(./pnpm-lock.yaml)",
+      "Bash( /dev/sda)",
+      "Bash(> /dev/sda)",
+      "Bash(dd if=/dev/zero of=/dev/sda)",
+      "Bash(diskutil apfs changePassphrase)",
+      "Bash(diskutil apfs decryptVolume)",
+      "Bash(diskutil apfs deleteContainer)",
+      "Bash(diskutil apfs deleteSnapshot)",
+      "Bash(diskutil apfs deleteVolume)",
+      "Bash(diskutil apfs deleteVolumeGroup)",
+      "Bash(diskutil apfs eraseVolume)",
+      "Bash(diskutil appleRAID)",
+      "Bash(diskutil coreStorage)",
+      "Bash(diskutil cs)",
+      "Bash(diskutil disableJournal)",
+      "Bash(diskutil disableOwnership)",
+      "Bash(diskutil eraseDisk)",
+      "Bash(diskutil eraseVolume)",
+      "Bash(diskutil partitionDisk)",
+      "Bash(diskutil randomDisk)",
+      "Bash(diskutil reformat)",
+      "Bash(diskutil resetFusion)",
+      "Bash(diskutil zeroDisk)",
+      "Bash(fork bomb)",
+      "Bash(mkfs.ext4 /dev/sda)",
+      "Bash(rm -rf $HOME)",
+      "Bash(rm -rf $PAI_DIR)",
+      "Bash(rm -rf $PAI_HOME)",
+      "Bash(rm -rf $DOTFILES)",
+      "Bash(rm -rf /)",
+      "Bash(rm -rf /*)",
+      "Bash(rm -rf ~)",
+      "Bash(sudo rm -rf /)",
+      "Bash(sudo rm -rf /*)"
+    ]
+  },
+  "model": "opus",
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "mcp-obsidian",
+    "playwright",
+    "context7",
+    "sequential-thinking",
+    "browsermcp",
+    "shadcn"
+  ],
+  "hooks": {
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.dotfiles/bin/claude-status-hook PreToolUse"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run ~/.dotfiles/.claude/hooks/notification.py"
+          },
+          {
+            "type": "command",
+            "command": "~/.dotfiles/bin/claude-status-hook Stop"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.dotfiles/bin/claude-status-hook SubagentStop"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run ~/.dotfiles/.claude/hooks/notification.py"
+          },
+          {
+            "type": "command",
+            "command": "~/.dotfiles/bin/claude-status-hook Notification"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run ~/.dotfiles/.claude/hooks/ts_lint.py"
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "~/.dotfiles/bin/claude-statusline"
+  },
+  "enabledPlugins": {
+    "feature-dev@claude-plugins-official": true,
+    "agent-sdk-dev@claude-plugins-official": true,
+    "hookify@claude-plugins-official": true,
+    "explanatory-output-style@claude-plugins-official": true,
+    "learning-output-style@claude-plugins-official": true,
+    "lua-lsp@claude-plugins-official": true,
+    "plugin-dev@claude-plugins-official": true,
+    "linear@claude-plugins-official": true,
+    "essentials@kriscard": true,
+    "assistant@kriscard": true,
+    "ideation@kriscard": true,
+    "content@kriscard": true,
+    "architecture@kriscard": true,
+    "ai-development@kriscard": true,
+    "developer-tools@kriscard": true,
+    "testing@kriscard": true,
+    "neovim-advisor@kriscard": true,
+    "dotfiles-optimizer@kriscard": true,
+    "obsidian-second-brain@kriscard": true,
+    "chromedev-tools@kriscard": true,
+    "studio-startup@kriscard": true,
+    "til@kriscard": true,
+    "interactive-learning@kriscard": true,
+    "obsidian@obsidian-skills": true
+  },
+  "extraKnownMarketplaces": {
+    "claude-plugins-official": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-official"
+      }
+    }
+  },
+  "alwaysThinkingEnabled": true
+}
