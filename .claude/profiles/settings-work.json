@@ -91,6 +91,10 @@
   "enabledPlugins": {
     "essentials@kriscard": true,
     "developer-tools@kriscard": true,
-    "testing@kriscard": true
+    "testing@kriscard": true,
+    "assistant@kriscard": true,
+    "chromedev-tools@kriscard": true,
+    "til@kriscard": true,
+    "architecture@kriscard": true
   }
 }
