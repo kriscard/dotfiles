@@ -189,8 +189,8 @@ At the end of every project session, create a detailed TIL note in Obsidian.
 
 ### File Location & Naming
 
-- **Path:** `1 - Notes/TIL/til-YYYY-MM-DD.md` (use today's date)
-- **Example:** `1 - Notes/TIL/til-2024-03-15.md`
+- **Path:** `3 - Resources/TIL/til-YYYY-MM-DD.md` (use today's date)
+- **Example:** `3 - Resources/TIL/til-2024-03-15.md`
 
 ### Required Content
 
