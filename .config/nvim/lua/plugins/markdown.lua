@@ -246,54 +246,19 @@ return {
 				above = 0,
 				below = 0,
 			},
-		},
-	},
 
-	-- ══════════════════════════════════════════════════════════════════════════════
-	-- Headlines - Visual distinction for markdown headers
-	-- ══════════════════════════════════════════════════════════════════════════════
-	{
-		"lukas-reineke/headlines.nvim",
-		ft = { "markdown", "norg", "rmd", "org" },
-		dependencies = "nvim-treesitter/nvim-treesitter",
-		opts = {
-			markdown = {
-				headline_highlights = {
-					"Headline1",
-					"Headline2",
-					"Headline3",
-					"Headline4",
-					"Headline5",
-					"Headline6",
-				},
-				bullet_highlights = {
-					"@text.title.1.markdown",
-					"@text.title.2.markdown",
-					"@text.title.3.markdown",
-					"@text.title.4.markdown",
-					"@text.title.5.markdown",
-					"@text.title.6.markdown",
-				},
-				codeblock_highlight = "CodeBlock",
-				dash_highlight = "Dash",
-				quote_highlight = "Quote",
-				fat_headlines = false, -- Disable fat headlines to avoid conflicts with render-markdown
+			-- Inline image rendering via Snacks.image (Ghostty/Kitty protocol)
+			image = {
+				enabled = true,
+				render = function(ctx)
+					return require("snacks.image").render({
+						buf = ctx.buf,
+						src = ctx.src,
+						pos = { ctx.row, ctx.col },
+					})
+				end,
 			},
 		},
-		config = function(_, opts)
-			-- Define highlight groups with Catppuccin colors
-			vim.api.nvim_set_hl(0, "Headline1", { bg = "#363a4f", fg = "#c6a0f6", bold = true })
-			vim.api.nvim_set_hl(0, "Headline2", { bg = "#363a4f", fg = "#8bd5ca", bold = true })
-			vim.api.nvim_set_hl(0, "Headline3", { bg = "#363a4f", fg = "#f5a97f", bold = true })
-			vim.api.nvim_set_hl(0, "Headline4", { bg = "#363a4f", fg = "#a6da95", bold = true })
-			vim.api.nvim_set_hl(0, "Headline5", { bg = "#363a4f", fg = "#8aadf4", bold = true })
-			vim.api.nvim_set_hl(0, "Headline6", { bg = "#363a4f", fg = "#f0c6c6", bold = true })
-			vim.api.nvim_set_hl(0, "CodeBlock", { bg = "#1e2030" })
-			vim.api.nvim_set_hl(0, "Dash", { fg = "#8087a2", bold = true })
-			vim.api.nvim_set_hl(0, "Quote", { fg = "#a5adcb", italic = true })
-
-			require("headlines").setup(opts)
-		end,
 	},
 
 	-- ══════════════════════════════════════════════════════════════════════════════

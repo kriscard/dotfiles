@@ -1,19 +1,19 @@
--- LSP Plugins
+-- ══════════════════════════════════════════════════════════════════════════════
+-- LSP Configuration
+-- ══════════════════════════════════════════════════════════════════════════════
 return {
+	-- Lua development support (must load before lua_ls attaches)
 	{
 		"folke/lazydev.nvim",
-		ft = "lua", -- only load on lua files
+		ft = "lua",
 		opts = {
 			library = {
-				-- Load luvit types when the `vim.uv` word is found
 				{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
 			},
 		},
 	},
 
-	-- ──────────────────────────────────────────────────────────────────────────────
-	-- LSP
-	-- ──────────────────────────────────────────────────────────────────────────────
+	-- LSP Config
 	{
 		"neovim/nvim-lspconfig",
 		event = { "BufReadPre", "BufNewFile" },
@@ -22,13 +22,16 @@ return {
 			"williamboman/mason-lspconfig.nvim",
 			"WhoIsSethDaniel/mason-tool-installer.nvim",
 			{ "j-hui/fidget.nvim", opts = {} },
-			"saghen/blink.compat", -- capabilities shim for Blink
-			"folke/lazydev.nvim", -- must load before lua_ls attaches
+			"saghen/blink.compat",
+			"folke/lazydev.nvim",
 		},
 		config = function()
 			require("lspconfig.ui.windows").default_options.border = "rounded"
 
-			-- Helper: apply first returned code actions for a given context
+			-- ═══════════════════════════════════════════════════════════════════
+			-- Helper Functions
+			-- ═══════════════════════════════════════════════════════════════════
+
 			local function apply_code_actions(bufnr, only, timeout_ms)
 				bufnr = bufnr or vim.api.nvim_get_current_buf()
 				local params = vim.lsp.util.make_range_params(0, "utf-8")
@@ -53,12 +56,14 @@ return {
 				end
 			end
 
-			-- Organize imports: ESLint only (simple-import-sort)
 			local function organize_imports_react(bufnr)
-				apply_code_actions(bufnr, { "source.fixAll.eslint" }, 3000) -- ESLint only
+				apply_code_actions(bufnr, { "source.fixAll.eslint" }, 3000)
 			end
 
-			-- Keymaps on LSP attach - ONLY buffer-specific mappings
+			-- ═══════════════════════════════════════════════════════════════════
+			-- LspAttach Autocmd
+			-- ═══════════════════════════════════════════════════════════════════
+
 			vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
 				callback = function(event)
@@ -67,47 +72,32 @@ return {
 						vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
 					end
 
-					-- ═══════════════════════════════════════════════════════════════════
-					-- BUFFER-SPECIFIC LSP MAPPINGS ONLY
-					-- ═══════════════════════════════════════════════════════════════════
-
-					-- React-specific organize imports (ESLint only)
+					-- Buffer-specific LSP mappings
 					map("<leader>oi", function()
 						organize_imports_react(event.buf)
 					end, "[O]rganize [I]mports (ESLint)")
 
-					-- Refactor actions (buffer-specific context)
 					map("<leader>rf", function()
 						vim.lsp.buf.code_action({ context = { only = { "refactor" }, diagnostics = {} } })
 					end, "[R]e[f]actor")
 
-					-- Source definition (specialized navigation)
 					map("<leader>gsd", vim.lsp.buf.definition, "[G]o to [S]ource [D]efinition")
-
-					-- Line diagnostics (buffer-specific context)
 					map("<leader>e", vim.diagnostic.open_float, "Lin[e] diagnostics")
 
-					-- ═══════════════════════════════════════════════════════════════════
-					-- BUFFER-SPECIFIC AUTOCOMMANDS
-					-- ═══════════════════════════════════════════════════════════════════
-
-					-- Highlight references when cursor holds on a symbol
+					-- Highlight references on cursor hold
 					local client = vim.lsp.get_client_by_id(event.data.client_id)
 					if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
-						local highlight_augroup =
-							vim.api.nvim_create_augroup("kickstart-lsp-highlight", { clear = false })
+						local highlight_augroup = vim.api.nvim_create_augroup("kickstart-lsp-highlight", { clear = false })
 						vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
 							buffer = event.buf,
 							group = highlight_augroup,
 							callback = vim.lsp.buf.document_highlight,
 						})
-
 						vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
 							buffer = event.buf,
 							group = highlight_augroup,
 							callback = vim.lsp.buf.clear_references,
 						})
-
 						vim.api.nvim_create_autocmd("LspDetach", {
 							group = vim.api.nvim_create_augroup("kickstart-lsp-detach", { clear = true }),
 							callback = function(event2)
@@ -117,7 +107,7 @@ return {
 						})
 					end
 
-					-- Enable inlay hints if supported
+					-- Toggle inlay hints
 					if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
 						map("<leader>th", function()
 							vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
@@ -126,7 +116,10 @@ return {
 				end,
 			})
 
+			-- ═══════════════════════════════════════════════════════════════════
 			-- Capabilities
+			-- ═══════════════════════════════════════════════════════════════════
+
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
 			local ok, blink_capabilities = pcall(function()
 				return require("blink.compat").get_lsp_capabilities()
@@ -135,7 +128,12 @@ return {
 				capabilities = vim.tbl_deep_extend("force", capabilities, blink_capabilities)
 			end
 
+			-- ═══════════════════════════════════════════════════════════════════
+			-- Server Configurations
+			-- ═══════════════════════════════════════════════════════════════════
+
 			local servers = {
+				-- Lua
 				lua_ls = {
 					settings = {
 						Lua = {
@@ -145,102 +143,38 @@ return {
 								globals = { "vim", "Snacks", "require" },
 								disable = { "missing-fields" },
 							},
-							workspace = {
-								checkThirdParty = false,
-								-- library handled lazily by lazydev.nvim
-							},
+							workspace = { checkThirdParty = false },
 							telemetry = { enable = false },
 						},
 					},
 				},
-				bashls = {},
-				cssls = { settings = { css = { lint = { unknownAtRules = "ignore" } } } },
-				graphql = { filetypes = { "graphql" } },
-				html = {},
-				jsonls = {},
-				marksman = {}, -- Markdown LSP for links, headings, etc.
-				-- LTeX for grammar and spell checking in markdown
-				ltex = {
-					filetypes = { "markdown", "text", "gitcommit" },
-					settings = {
-						ltex = {
-							language = "en-US",
-							checkFrequency = "save",
-							dictionary = {
-								["en-US"] = {
-									"Neovim",
-									"LSP",
-									"treesitter",
-									"dotfiles",
-									"keymaps",
-									"lua",
-									"obsidian",
-									"tmux",
-									"nvim",
-									"config",
-								},
-							},
-							disabledRules = {
-								["en-US"] = {
-									"MORFOLOGIK_RULE_EN_US",
-									"WHITESPACE_RULE",
-									"EN_QUOTES",
-								},
-							},
-							hiddenFalsePositives = {},
-						},
-					},
-				},
-				prismals = {},
-				sqlls = {},
-				tailwindcss = { filetypes = { "typescriptreact", "javascriptreact", "html", "svelte" } },
-				rust_analyzer = {},
-				gopls = {},
-				dockerls = {},
-				docker_compose_language_service = {},
-				-- Keep Emmet out of TSX/JSX
-				emmet_ls = { filetypes = { "html", "css", "scss", "sass", "less" } },
+
+				-- Web Development
 				vtsls = {
-					filetypes = {
-						"javascript",
-						"javascriptreact",
-						"javascript.jsx",
-						"typescript",
-						"typescriptreact",
-						"typescript.tsx",
-					},
-					root_dir = require("lspconfig").util.root_pattern(
-						".git",
-						"pnpm-workspace.yaml",
-						"pnpm-lock.yaml",
-						"yarn.lock",
-						"package-lock.json",
-						"bun.lockb",
-						"lerna.json",
-						"nx.json"
-					),
+					filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" },
+					root_dir = require("lspconfig").util.root_pattern(".git", "pnpm-workspace.yaml", "pnpm-lock.yaml", "yarn.lock", "package-lock.json", "bun.lockb", "lerna.json", "nx.json"),
 					settings = {
 						complete_function_calls = true,
 						vtsls = {
-							enableMoveToFileCodeAction = false, -- Disable for performance
+							enableMoveToFileCodeAction = false,
 							autoUseWorkspaceTsdk = true,
 							experimental = {
-								maxInlayHintLength = 10, -- Reduced for performance
-								completion = { enableServerSideFuzzyMatch = false }, -- Disable for performance
+								maxInlayHintLength = 10,
+								completion = { enableServerSideFuzzyMatch = false },
 							},
 						},
 						typescript = {
 							updateImportsOnFileMove = { enabled = "always" },
 							suggest = {
-								completeFunctionCalls = false, -- Reduce completion overhead
-								includeCompletionsForModuleExports = false, -- Performance improvement
+								completeFunctionCalls = false,
+								includeCompletionsForModuleExports = false,
 								includeCompletionsForImportStatements = true,
 							},
 							inlayHints = {
 								includeInlayEnumMemberValueHints = false,
 								includeInlayFunctionLikeReturnTypeHints = false,
 								includeInlayFunctionParameterTypeHints = false,
-								includeInlayParameterNameHints = "none", -- Disable for performance
+								includeInlayParameterNameHints = "none",
 								includeInlayParameterNameHintsWhenArgumentMatchesName = false,
 								includeInlayPropertyDeclarationTypeHints = false,
 								includeInlayVariableTypeHints = false,
@@ -248,8 +182,7 @@ return {
 							},
 							preferences = {
 								importModuleSpecifierPreference = "non-relative",
-								includePackageJsonAutoImports = "off", -- Performance improvement
-								-- Disable VTSLS import organization to avoid conflicts with ESLint
+								includePackageJsonAutoImports = "off",
 								organizeImportsIgnoreCase = false,
 								organizeImportsCollation = "ordinal",
 								organizeImportsLocale = "en",
@@ -257,82 +190,26 @@ return {
 								organizeImportsAccentCollation = false,
 								organizeImportsCaseFirst = "lower",
 							},
-							maxTsServerMemory = 4096, -- Reduced from 16GB to 4GB
+							maxTsServerMemory = 4096,
 							watchOptions = {
-								excludeDirectories = {
-									"**/node_modules",
-									"**/.git",
-									"**/dist",
-									"**/.next",
-									"**/build",
-									"**/coverage",
-									"**/out",
-									"**/.turbo",
-									"**/.cache",
-								},
-								excludeFiles = {
-									"**/.eslintrc.js",
-									"**/webpack.config.js",
-									"**/rollup.config.js",
-									"**/vite.config.js",
-								},
+								excludeDirectories = { "**/node_modules", "**/.git", "**/dist", "**/.next", "**/build", "**/coverage", "**/out", "**/.turbo", "**/.cache" },
+								excludeFiles = { "**/.eslintrc.js", "**/webpack.config.js", "**/rollup.config.js", "**/vite.config.js" },
 							},
 						},
 						javascript = {
 							suggest = {
-								completeFunctionCalls = false, -- Performance improvement
-								includeCompletionsForModuleExports = false, -- Performance improvement
+								completeFunctionCalls = false,
+								includeCompletionsForModuleExports = false,
 								includeCompletionsForImportStatements = true,
 							},
 							preferences = {
 								importModuleSpecifierPreference = "non-relative",
-								includePackageJsonAutoImports = "off", -- Performance improvement
+								includePackageJsonAutoImports = "off",
 							},
 						},
 					},
 				},
-				mdx_analyzer = {
-					filetypes = { "mdx" },
-					init_options = {
-						typescript = {
-							enabled = true,
-						},
-					},
-				}, -- optional; remove if unused
-				biome = {
-					filetypes = {
-						"javascript",
-						"javascriptreact",
-						"json",
-						"jsonc",
-						"typescript",
-						"typescriptreact",
-						"css",
-					},
-					single_file_support = false,
-					root_dir = require("lspconfig").util.root_pattern("biome.json", "biome.jsonc"),
-				},
-				yamlls = {},
-				unocss = {
-					filetypes = {
-						"html",
-						"javascriptreact",
-						"rescript",
-						"typescriptreact",
-						"vue",
-						"svelte",
-						"astro",
-						"css",
-						"postcss",
-						"sass",
-						"scss",
-						"stylus",
-					},
-				},
-				stylelint_lsp = {
-					filetypes = { "css", "scss", "sass", "less", "postcss" },
-					settings = { stylelintplus = { autoFixOnSave = true, autoFixOnFormat = true } },
-				},
+
 				eslint = {
 					cmd = { "vscode-eslint-language-server", "--stdio", "--max-old-space-size=12288" },
 					settings = {
@@ -340,7 +217,64 @@ return {
 						format = true,
 					},
 				},
+
+				biome = {
+					filetypes = { "javascript", "javascriptreact", "json", "jsonc", "typescript", "typescriptreact", "css" },
+					single_file_support = false,
+					root_dir = require("lspconfig").util.root_pattern("biome.json", "biome.jsonc"),
+				},
+
+				-- CSS/Styling
+				cssls = { settings = { css = { lint = { unknownAtRules = "ignore" } } } },
+				tailwindcss = { filetypes = { "typescriptreact", "javascriptreact", "html", "svelte" } },
+				unocss = { filetypes = { "html", "javascriptreact", "rescript", "typescriptreact", "vue", "svelte", "astro", "css", "postcss", "sass", "scss", "stylus" } },
+				stylelint_lsp = {
+					filetypes = { "css", "scss", "sass", "less", "postcss" },
+					settings = { stylelintplus = { autoFixOnSave = true, autoFixOnFormat = true } },
+				},
+				emmet_ls = { filetypes = { "html", "css", "scss", "sass", "less" } },
+
+				-- Markup/Data
+				html = {},
+				jsonls = {},
+				yamlls = {},
+				graphql = { filetypes = { "graphql" } },
+
+				-- Markdown
+				marksman = {},
+				ltex = {
+					filetypes = { "markdown", "text", "gitcommit" },
+					settings = {
+						ltex = {
+							language = "en-US",
+							checkFrequency = "save",
+							dictionary = {
+								["en-US"] = { "Neovim", "LSP", "treesitter", "dotfiles", "keymaps", "lua", "obsidian", "tmux", "nvim", "config" },
+							},
+							disabledRules = {
+								["en-US"] = { "MORFOLOGIK_RULE_EN_US", "WHITESPACE_RULE", "EN_QUOTES" },
+							},
+						},
+					},
+				},
+				mdx_analyzer = {
+					filetypes = { "mdx" },
+					init_options = { typescript = { enabled = true } },
+				},
+
+				-- Backend/Infra
+				bashls = {},
+				prismals = {},
+				sqlls = {},
+				rust_analyzer = {},
+				gopls = {},
+				dockerls = {},
+				docker_compose_language_service = {},
 			}
+
+			-- ═══════════════════════════════════════════════════════════════════
+			-- Mason Setup
+			-- ═══════════════════════════════════════════════════════════════════
 
 			local ensure_installed = vim.tbl_keys(servers)
 			vim.list_extend(ensure_installed, {
@@ -351,7 +285,7 @@ return {
 				"stylelint-lsp",
 				"biome",
 				"mdx-analyzer",
-				"ltex-ls", -- Grammar checking for markdown
+				"ltex-ls",
 			})
 
 			require("mason").setup({ ui = { border = "rounded" } })
@@ -366,9 +300,8 @@ return {
 			require("mason-lspconfig").setup({
 				handlers = {
 					function(server_name)
-						-- prefer vtsls over ts_ls to avoid conflicts
 						if server_name == "ts_ls" then
-							return
+							return -- Use vtsls instead
 						end
 						local server = servers[server_name] or {}
 						server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
@@ -376,6 +309,10 @@ return {
 					end,
 				},
 			})
+
+			-- ═══════════════════════════════════════════════════════════════════
+			-- Diagnostics
+			-- ═══════════════════════════════════════════════════════════════════
 
 			vim.diagnostic.config({
 				float = { border = "rounded" },
@@ -393,192 +330,5 @@ return {
 				},
 			})
 		end,
-	},
-	-- ──────────────────────────────────────────────────────────────────────────────
-	-- Autoformat (Prettier, Stylua)
-	-- ──────────────────────────────────────────────────────────────────────────────
-	{
-		"stevearc/conform.nvim",
-		event = { "BufWritePre" },
-		cmd = { "ConformInfo" },
-		keys = {
-			{
-				"<leader>cf",
-				function()
-					require("conform").format({ timeout_ms = 3000, lsp_format = "fallback" })
-				end,
-				mode = "",
-				desc = "[C]ode [F]ormat",
-			},
-		},
-		opts = {
-			notify_on_error = true,
-			default_format_opts = { timeout_ms = 3000, lsp_format = "fallback" },
-			format_after_save = { timeout_ms = 3000, lsp_format = "fallback" },
-			formatters = {
-				stylua = {
-					command = vim.fn.stdpath("data") .. "/mason/bin/stylua",
-					args = { "--stdin-filepath", "$FILENAME", "-" },
-					stdin = true,
-				},
-			},
-			formatters_by_ft = {
-				javascript = { "prettierd", "prettier", stop_after_first = true },
-				typescript = { "prettierd", "prettier", stop_after_first = true },
-				javascriptreact = { "prettierd", "prettier", stop_after_first = true },
-				typescriptreact = { "prettierd", "prettier", stop_after_first = true },
-				json = { "prettierd", "prettier", stop_after_first = true },
-				jsonc = { "prettierd", "prettier", stop_after_first = true },
-				graphql = { "prettierd", "prettier", stop_after_first = true },
-				lua = { "stylua" },
-				html = { "prettierd", "prettier", stop_after_first = true },
-				yaml = { "prettierd", "prettier", stop_after_first = true },
-				markdown = { "prettierd", "prettier", stop_after_first = true },
-				mdx = { "prettierd", "prettier", stop_after_first = true },
-				astro = { "prettierd", "prettier", stop_after_first = true },
-				ruby = { "prettierd", "prettier", stop_after_first = true },
-			},
-		},
-	},
-
-	-- ──────────────────────────────────────────────────────────────────────────────
-	-- Snippet Engine & Snippets
-	-- ──────────────────────────────────────────────────────────────────────────────
-	{
-		"L3MON4D3/LuaSnip",
-		lazy = true,
-		dependencies = {
-			{
-				"rafamadriz/friendly-snippets",
-				config = function()
-					local ls = require("luasnip")
-
-					-- Load friendly-snippets but exclude filetypes we want to override
-					require("luasnip.loaders.from_vscode").lazy_load({
-						exclude = { "typescriptreact", "typescript", "javascript", "javascriptreact" },
-					})
-
-					-- Load only custom snippets for the filetypes we want to override
-					require("luasnip.loaders.from_vscode").lazy_load({
-						paths = { vim.fn.stdpath("config") .. "/snippets" },
-					})
-
-					-- For any remaining conflicts, we can clear and reload specific filetypes
-					vim.api.nvim_create_autocmd("FileType", {
-						pattern = { "typescriptreact", "typescript", "javascript", "javascriptreact" },
-						callback = function()
-							-- Ensure custom snippets take priority by reloading them
-							require("luasnip.loaders.from_vscode").lazy_load({
-								paths = { vim.fn.stdpath("config") .. "/snippets" },
-							})
-						end,
-					})
-				end,
-			},
-		},
-		opts = {
-			history = true,
-			delete_check_events = "TextChanged",
-		},
-	},
-
-	-- ──────────────────────────────────────────────────────────────────────────────
-	-- Completion UI (Blink)
-	-- ──────────────────────────────────────────────────────────────────────────────
-	{
-		"saghen/blink.cmp",
-		version = "*",
-		dependencies = {
-			"saghen/blink.compat",
-			"moyiz/blink-emoji.nvim",
-			"Kaiser-Yang/blink-cmp-dictionary",
-			"Kaiser-Yang/blink-cmp-git",
-		},
-		opts = {
-			keymap = {
-				preset = "default",
-				["<CR>"] = { "accept", "fallback" },
-				["<Tab>"] = { "snippet_forward", "accept", "fallback" },
-				["<S-Tab>"] = { "snippet_backward", "fallback" },
-				["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
-				["<C-e>"] = { "hide" },
-				["<Up>"] = { "select_prev", "fallback" },
-				["<Down>"] = { "select_next", "fallback" },
-				["<C-p>"] = { "select_prev", "fallback" },
-				["<C-n>"] = { "select_next", "fallback" },
-				["<C-u>"] = { "scroll_documentation_up", "fallback" },
-				["<C-d>"] = { "scroll_documentation_down", "fallback" },
-			},
-
-			completion = {
-				list = {
-					selection = { preselect = true, auto_insert = true },
-					max_items = 200,
-				},
-				accept = { auto_brackets = { enabled = true } },
-				documentation = {
-					auto_show = true,
-					auto_show_delay_ms = 200,
-					window = { border = "rounded" },
-				},
-				ghost_text = { enabled = true },
-				menu = {
-					border = "rounded",
-					scrollbar = false,
-					draw = {
-						treesitter = { "lsp" },
-						columns = { { "kind_icon" }, { "label", "label_description", gap = 1 } },
-					},
-				},
-			},
-
-			sources = {
-				default = { "lazydev", "lsp", "path", "snippets", "buffer", "emoji" },
-				per_filetype = {
-					gitcommit = { "git", "buffer" },
-					markdown = { "obsidian", "lsp", "path", "snippets", "buffer", "dictionary", "emoji" },
-				},
-				providers = {
-					lazydev = {
-						name = "LazyDev",
-						module = "lazydev.integrations.blink",
-						score_offset = 100, -- show at top of suggestions
-					},
-					emoji = {
-						module = "blink-emoji",
-						name = "emoji",
-						score_offset = -15,
-						min_keyword_length = 2,
-					},
-					git = {
-						module = "blink-cmp-git",
-						name = "git",
-						score_offset = 10,
-						enabled = function()
-							return vim.bo.filetype == "gitcommit"
-						end,
-					},
-					dictionary = {
-						module = "blink-cmp-dictionary",
-						name = "dict",
-						score_offset = -10,
-						max_items = 5,
-						min_keyword_length = 3,
-						enabled = function()
-							return vim.tbl_contains({ "markdown", "text", "gitcommit" }, vim.bo.filetype)
-						end,
-					},
-				},
-			},
-
-			signature = {
-				enabled = true,
-				window = { border = "rounded" },
-			},
-			fuzzy = { sorts = { "exact", "score", "sort_text" } },
-			cmdline = { enabled = true },
-			snippets = { preset = "luasnip" },
-			appearance = { nerd_font_variant = "mono" },
-		},
 	},
 }

@@ -57,22 +57,10 @@ api.nvim_create_autocmd("BufWritePre", {
 -- ══════════════════════════════════════════════════════════════════════════════
 -- Markdown & Obsidian specific autocommands
 -- ══════════════════════════════════════════════════════════════════════════════
-local markdown_grp = api.nvim_create_augroup("MarkdownSettings", { clear = true })
+-- Note: Most markdown settings are now in after/ftplugin/markdown.lua
+-- Only Obsidian-specific autocmds remain here
 
--- Enable spell checking and line wrapping for markdown files
-api.nvim_create_autocmd("FileType", {
-	group = markdown_grp,
-	pattern = { "markdown", "mdx", "text", "gitcommit" },
-	callback = function()
-		vim.opt_local.wrap = true -- Enable line wrapping
-		vim.opt_local.linebreak = true -- Break at word boundaries
-		vim.opt_local.spell = true -- Enable spell checking
-		vim.opt_local.spelllang = "en_us" -- Set spell language
-		vim.opt_local.textwidth = 80 -- Wrap at 80 characters
-		vim.opt_local.colorcolumn = "" -- Disable color column in markdown
-	end,
-	desc = "Enable spell check and wrap for markdown files",
-})
+local markdown_grp = api.nvim_create_augroup("MarkdownSettings", { clear = true })
 
 -- Auto-save for Obsidian vault files (no confirmation needed)
 api.nvim_create_autocmd({ "FocusLost", "BufLeave" }, {
@@ -86,12 +74,15 @@ api.nvim_create_autocmd({ "FocusLost", "BufLeave" }, {
 	desc = "Auto-save Obsidian notes on focus lost",
 })
 
--- Set conceal level for markdown files (for wiki links, etc.)
+-- Spell and wrap for non-markdown prose files (gitcommit, text)
 api.nvim_create_autocmd("FileType", {
 	group = markdown_grp,
-	pattern = { "markdown" },
+	pattern = { "text", "gitcommit" },
 	callback = function()
-		vim.opt_local.conceallevel = 2
+		vim.opt_local.wrap = true
+		vim.opt_local.linebreak = true
+		vim.opt_local.spell = true
+		vim.opt_local.spelllang = "en_us"
 	end,
-	desc = "Set conceallevel for markdown",
+	desc = "Enable spell check and wrap for prose files",
 })
