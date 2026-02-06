@@ -104,7 +104,11 @@ Create this file at your work projects or in `~/.claude/settings.json`:
   "enabledPlugins": {
     "essentials@kriscard": true,
     "developer-tools@kriscard": true,
-    "testing@kriscard": true
+    "testing@kriscard": true,
+    "assistant@kriscard": true,
+    "chromedev-tools@kriscard": true,
+    "til@kriscard": true,
+    "architecture@kriscard": true
   },
   "enableAllProjectMcpServers": true
 }
@@ -172,14 +176,14 @@ Your current settings at home are fine for Max subscription. Key features:
 
 ### Environment-Aware Launcher
 
-Your dotfiles include `claude-env`, a wrapper that automatically loads the right settings based on `CLAUDE_ENV`:
+Your dotfiles include `claude-work`, a wrapper that loads the right settings based on `CLAUDE_ENV`. The `ai` alias automatically uses it when `CLAUDE_ENV=work`:
 
 ```
 ~/.dotfiles/
-├── bin/claude-env              # Wrapper script
+├── bin/claude-work              # Wrapper script (copies profile, launches claude)
 └── .claude/profiles/
     ├── settings-home.json      # Full features (Max subscription)
-    └── settings-work.json      # Token-optimized (API billing)
+    └── settings-work.json      # Token-optimized (API billing, 7 essential plugins)
 ```
 
 ### Shell Aliases (already configured in 60-aliases.zsh)
@@ -187,7 +191,7 @@ Your dotfiles include `claude-env`, a wrapper that automatically loads the right
 ```bash
 cw              # Claude with work profile (token-optimized)
 ch              # Claude with home profile (full features)
-ai              # Regular claude (uses CLAUDE_ENV or defaults to home)
+ai              # Conditional: claude-work if CLAUDE_ENV=work, else claude
 claude-profile  # Show current profile
 ```
 
@@ -213,20 +217,24 @@ claude-profile  # Show current profile
    ```bash
    cd ~/.dotfiles && stow .
    ```
-   This will symlink `bin/claude-env` and the profiles directory.
+   This will symlink `bin/claude-work` and the profiles directory.
 
 4. **Use the launcher**:
    ```bash
-   claude-env          # Uses CLAUDE_ENV (work)
+   claude-work          # Uses CLAUDE_ENV (work)
    # or
    cw                  # Explicitly use work profile
    ```
 
 5. **Install required plugins** (if using custom plugins)
    ```bash
-   claude plugins install kriscard/essentials
-   claude plugins install kriscard/developer-tools
-   claude plugins install kriscard/testing
+   claude plugin install essentials@kriscard
+   claude plugin install developer-tools@kriscard
+   claude plugin install testing@kriscard
+   claude plugin install assistant@kriscard
+   claude plugin install chromedev-tools@kriscard
+   claude plugin install til@kriscard
+   claude plugin install architecture@kriscard
    ```
 
 ### At Home (Personal Machine)
@@ -234,7 +242,7 @@ claude-profile  # Show current profile
 **No configuration needed!** The script defaults to `home` profile when `CLAUDE_ENV` is not set.
 
 ```bash
-claude-env    # Defaults to home profile
+claude-work    # Defaults to home profile
 ai            # Regular claude (also uses home by default)
 ch            # Explicitly use home profile
 ```
@@ -243,7 +251,7 @@ ch            # Explicitly use home profile
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│  You run: cw (or claude-env with CLAUDE_ENV=work)               │
+│  You run: cw (or claude-work with CLAUDE_ENV=work)               │
 │                           ↓                                      │
 │  Script checks: CLAUDE_ENV="${CLAUDE_ENV:-home}"                │
 │                           ↓                                      │
@@ -291,7 +299,7 @@ Add to your `.stow-local-ignore` or handle in stow command:
 ```
 Model: sonnet
 Thinking: off (use "think harder" when needed)
-Plugins: essentials, developer-tools, testing
+Plugins: essentials, developer-tools, testing, assistant, chromedev-tools, til, architecture
 Hooks: status only (with matcher)
 Style: default
 ```
