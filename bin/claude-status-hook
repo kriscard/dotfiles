@@ -6,12 +6,8 @@
 STATUS_DIR="$HOME/.cache/claude-status"
 mkdir -p "$STATUS_DIR"
 
-# Debug logging
-echo "$(date): Hook called with args: $*" >> "$STATUS_DIR/debug.log"
-
 # Read JSON from stdin (required by Claude Code hooks)
 JSON_INPUT=$(cat)
-echo "$(date): JSON input: $JSON_INPUT" >> "$STATUS_DIR/debug.log"
 
 # Get tmux session if in tmux
 if [ -n "$TMUX" ]; then
