@@ -23,4 +23,7 @@
 ^/\.claude/eslint_errors\.json
 ^/\.claude/settings.local.json
 
+# Claude Code machine-specific settings (see work-settings.md for docs)
+^/\.claude/settings\.json
+
 ^/node_modules
