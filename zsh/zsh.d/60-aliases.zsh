@@ -4,7 +4,14 @@
 alias reload!='RELOAD=1 source ~/.zshrc'
 
 # AI and dotfiles
-alias ai="claude"
+# Use claude-env for profile switching at work, plain claude at home
+function ai() {
+  if [[ "$CLAUDE_ENV" == "work" ]]; then
+    command claude-env "$@"
+  else
+    command claude "$@"
+  fi
+}
 alias df-cli="$DOTFILES/dotfiles"
 
 # Claude Code with environment-aware settings
