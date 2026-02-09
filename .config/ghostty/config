@@ -2,6 +2,9 @@
 # GHOSTTY CONFIGURATION - Modern, Fast Terminal
 # =============================================================================
 
+# Machine-local overrides (not tracked in git)
+config-file = config.local
+
 # Theme Configuration
 theme = dark:Catppuccin Macchiato,light:Catppuccin Latte
 
