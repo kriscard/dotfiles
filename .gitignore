@@ -72,7 +72,7 @@ fish_variables
 zsh/zsh.d/99-local.zsh
 
 # Machine-local configs
-.config/ghostty/config.local
+.config/ghostty/custom.config
 
 # Claude Code local files
 .claude/settings.local.json

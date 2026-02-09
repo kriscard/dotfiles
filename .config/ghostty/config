@@ -3,7 +3,7 @@
 # =============================================================================
 
 # Machine-local overrides (not tracked in git)
-config-file = config.local
+config-file = custom.config
 
 # Theme Configuration
 theme = dark:Catppuccin Macchiato,light:Catppuccin Latte
