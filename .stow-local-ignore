@@ -23,4 +23,7 @@
 ^/\.claude/eslint_errors\.json
 ^/\.claude/settings.local.json
 
+# Machine-local configs
+^/\.config/ghostty/config\.local
+
 ^/node_modules
