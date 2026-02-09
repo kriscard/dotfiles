@@ -24,6 +24,6 @@
 ^/\.claude/settings.local.json
 
 # Machine-local configs
-^/\.config/ghostty/config\.local
+^/\.config/ghostty/custom\.config
 
 ^/node_modules
