@@ -3,7 +3,7 @@
 # =============================================================================
 
 # Machine-local overrides (not tracked in git)
-config-file = custom.config
+config-file =  ~/.config/ghostty/local-config/config
 
 # Theme Configuration
 theme = dark:Catppuccin Macchiato,light:Catppuccin Latte
