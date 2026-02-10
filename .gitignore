@@ -54,7 +54,16 @@ npm-debug.log
 secrets.fish
 config/environment.d/secrets.conf
 state.yml
-work-config/config-secret-personal.zsh
+
+# Work-specific configs (private paths/emails)
+.gitconfig-work
+.config/sesh/configs/work.toml
+.config/bin/roofr_*
+.config/sesh/scripts/roofr_*
+.config/raycast/scripts/roofr-*.sh
+.claude/profiles/settings-work.json
+.claude/work-settings.md
+bin/claude-work
 
 # Other
 fzf
@@ -72,7 +81,15 @@ fish_variables
 zsh/zsh.d/99-local.zsh
 
 # Machine-local configs
-.config/ghostty/local-config/config
+.config/ghostty/config.local
+.config/kitty/*.icns
+
+# Binary files (should not be in dotfiles)
+*.icns
+*.exe
+*.spa
+*.woff
+*.woff2
 
 # Claude Code local files
 .claude/settings.local.json
