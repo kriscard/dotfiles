@@ -1,6 +1,0 @@
-[user]
-    email = christopher.cardoso@roofr.com
-    name = Christopher Cardoso
-    signingkey = /Users/christopher/.ssh/id_ed25519
-[core]
-    sshCommand = ssh -i /Users/christopher/.ssh/id_ed25519
