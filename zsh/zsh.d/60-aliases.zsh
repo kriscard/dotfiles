@@ -95,6 +95,11 @@ alias lzg='lazygit'
 alias preview="fzf --preview 'bat --color=always {}'"
 alias pf="fzf --preview 'bat --color=always {}'"
 
+# Obsidian CLI
+# obs() { obsidian search query="$*" format=json 2>/dev/null | tail -n1 | jq -r '.[]' | head -20 }
+obsread() { obsidian read path="$1" }
+obssearch() { obsidian search query="$*" | head -20 | tail -n +2  }
+
 # Node version management (via asdf)
 alias node-use="asdf shell nodejs"
 alias node-list="asdf list nodejs"

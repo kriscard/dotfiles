@@ -141,9 +141,27 @@ MCP servers provide powerful integrations. Use responsibly with appropriate safe
 - Simple API calls (use curl/httpie)
 - Direct file downloads (use wget/curl)
 
-### Obsidian MCP (Personal Knowledge Base)
+### Obsidian (Personal Knowledge Base)
 
 **⚠️ HIGH SENSITIVITY - Contains personal notes**
+
+**Access Method Preference:**
+
+1. **Prefer Obsidian CLI** (requires Obsidian 1.12+, CLI enabled in Settings → General)
+   ```bash
+   # Check CLI availability
+   obsidian vault 2>/dev/null && echo "CLI_AVAILABLE" || echo "CLI_UNAVAILABLE"
+
+   # Common CLI commands
+   obsidian read path="path/to/note.md"
+   obsidian create path="path/to/note.md" content="..." silent
+   obsidian append path="path/to/note.md" content="..." silent
+   obsidian files folder="0 - Inbox/" format=json
+   obsidian search query="search term" format=json
+   ```
+
+2. **Fall back to MCP** only if CLI unavailable - **always ask user first**:
+   "Obsidian CLI isn't available. May I use Obsidian MCP instead?"
 
 **Allowed Without Confirmation:**
 
@@ -156,6 +174,7 @@ MCP servers provide powerful integrations. Use responsibly with appropriate safe
 - ⚠️ **Deleting any note** - Ask: "Confirm deletion of '[note name]' by typing 'yes'"
 - ⚠️ **Bulk updates** affecting multiple notes - List affected notes, wait for approval
 - ⚠️ **Restructuring vault** (moving notes, renaming folders)
+- ⚠️ **Using MCP when CLI unavailable** - Get user confirmation first
 
 **Confirmation Template:**
 
