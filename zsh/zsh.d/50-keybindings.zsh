@@ -42,8 +42,8 @@ if (( $+widgets[history-substring-search-up] )); then
   bindkey '^N' history-substring-search-down      # Ctrl+N
 fi
 
-# Autosuggestion accept with Tab
-bindkey '^I' autosuggest-accept
+# Autosuggestion accept with Shift-Tab (preserves Tab for completion)
+bindkey '^[[Z' autosuggest-accept
 
 # Word navigation
 bindkey '^[[1;5C' forward-word   # Ctrl+Right
