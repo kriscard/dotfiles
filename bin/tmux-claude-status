@@ -29,10 +29,13 @@ if [ -f "$STATUS_FILE" ]; then
 
   case "$STATUS" in
     working)
-      echo "🤖 Claude Working "
+      # Braille spinner animation - cycles based on current time
+      SPINNER_FRAMES=("⠋" "⠙" "⠹" "⠸" "⠼" "⠴" "⠦" "⠧" "⠇" "⠏")
+      FRAME_INDEX=$(( $(date +%s) % ${#SPINNER_FRAMES[@]} ))
+      echo "🤖 ${SPINNER_FRAMES[$FRAME_INDEX]} Working "
       ;;
     done)
-      echo "✅ Claude Ready "
+      echo "✅ Ready "
       ;;
     *)
       exit 0
