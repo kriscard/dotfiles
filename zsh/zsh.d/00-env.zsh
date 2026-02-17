@@ -18,6 +18,7 @@ path=(
   "/usr/local/bin"
   "$HOME/Library/pnpm"
   "$HOME/.spicetify"
+  "/Applications/Obsidian.app/Contents/MacOS"
   $path
 )
 

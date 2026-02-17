@@ -95,15 +95,6 @@ alias lzg='lazygit'
 alias preview="fzf --preview 'bat --color=always {}'"
 alias pf="fzf --preview 'bat --color=always {}'"
 
-# Obsidian CLI
-obsread() { obsidian read path="$*" }
-obssearch() { obsidian search query="$*" | head -20 | tail -n +2 }
-obsnew() { obsidian create path="0 - Inbox/$1.md" content="# $1" silent && echo "Created: 0 - Inbox/$1.md" }
-obstoday() { obsidian append path="2 - Areas/Daily Ops/$(date +%Y-%m-%d).md" content="- $*" silent }
-obsopen() { obsidian open path="$*" }
-obsweekly() { obsidian open path="2 - Areas/Daily Ops/Weekly/$(date +%Y)-W$(date +%V).md" }
-obsyesterday() { obsidian open path="2 - Areas/Daily Ops/$(date -v-1d +%Y-%m-%d).md" }
-
 # Node version management (via asdf)
 alias node-use="asdf shell nodejs"
 alias node-list="asdf list nodejs"
