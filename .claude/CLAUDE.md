@@ -51,6 +51,12 @@ Use modern CLI tools for better performance and user experience. These tools are
 - **Use Glob tool** instead of fd/find for pattern-based file searches
 - **Use Grep tool** instead of ripgrep/grep bash commands
 
+### Web Access Priority
+
+1. **WebFetch** - Default for reading web content (built-in, token efficient)
+2. **WebSearch** - Default for searching the web (built-in)
+3. **browsermcp** - Only when explicitly requested OR when interaction needed (clicking, forms, screenshots)
+
 ---
 
 ## 📝 Git & Commit Guidelines
