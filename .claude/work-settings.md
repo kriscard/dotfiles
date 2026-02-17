@@ -37,6 +37,9 @@ Create this file at your work projects or in `~/.claude/settings.json`:
 ```json
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "env": {
+    "ENABLE_TOOL_SEARCH": "auto"
+  },
   "model": "sonnet",
   "alwaysThinkingEnabled": false,
   "permissions": {
@@ -122,6 +125,7 @@ Create this file at your work projects or in `~/.claude/settings.json`:
 
 | Removed/Changed | Reason | Token Savings |
 |-----------------|--------|---------------|
+| `ENABLE_TOOL_SEARCH: auto` | Defers MCP tool loading until needed (~47% context reduction) | **CRITICAL** |
 | `alwaysThinkingEnabled: false` | Extended thinking adds 50-200% output tokens | HIGH |
 | `model: sonnet` instead of `opus` | Opus is 5x more expensive than Sonnet | HIGH |
 | Removed `Notification` hooks | Python script overhead on every stop | LOW |
@@ -135,11 +139,12 @@ Create this file at your work projects or in `~/.claude/settings.json`:
 ## Home Settings (Full Features)
 
 Your current settings at home are fine for Max subscription. Key features:
+- `ENABLE_TOOL_SEARCH: auto` - Defers MCP tool loading (same as work)
 - `alwaysThinkingEnabled: true` - Better reasoning
 - `model: opus` - Most capable model
-- All plugins enabled - Full skill ecosystem
+- 19 plugins enabled - Full skill ecosystem (reduced from 22)
 - Learning output style - Educational responses
-- Full hooks - Notifications, linting, status
+- Full hooks with matchers - Notifications, linting, status (optimized)
 
 ---
 
