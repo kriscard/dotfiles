@@ -80,7 +80,7 @@ fish_variables
 zsh/zsh.d/99-local.zsh
 
 # Machine-local configs
-.config/ghostty/config.local
+.config/ghostty/local-config/config
 .config/kitty/*.icns
 
 # Binary files (should not be in dotfiles)
