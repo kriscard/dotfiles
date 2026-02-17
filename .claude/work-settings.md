@@ -362,6 +362,31 @@ Add to your `.stow-local-ignore` or handle in stow command:
 
 ---
 
+## MCP Server Strategy
+
+### Lean MCP Setup (3 servers)
+
+| Server | Purpose | When Used |
+|--------|---------|-----------|
+| **mcp-obsidian** | Vault operations | Fallback when Obsidian CLI unavailable |
+| **context7** | Library documentation | Fetching up-to-date docs for frameworks |
+| **browsermcp** | Browser automation | Interactive web testing, form filling |
+
+### CLI Over MCP Philosophy
+
+Prefer CLI tools over MCP when available:
+- **GitHub**: Use `gh pr view`, `gh issue list`, `gh api` instead of MCP
+- **npm**: Use `npm search`, `npm info` instead of MCP
+- **Web reading**: Use `WebFetch` (built-in) before browser MCP
+- **Obsidian**: Prefer CLI (`obsidian read/create/append`) over MCP
+
+MCP is best for:
+- Complex browser interactions (clicking, form filling, screenshots)
+- Documentation lookups (Context7)
+- Operations where CLI isn't available
+
+---
+
 ## Quick Reference Card
 
 ### Work Environment
@@ -378,8 +403,9 @@ Status line: enabled (shows project, branch, context %, model, cost)
 ```
 Model: opus
 Thinking: always on
-Plugins: all
-Hooks: full (status, notifications, linting)
+Plugins: 19 (reduced from 22)
+MCP servers: 3 (mcp-obsidian, context7, browsermcp)
+Hooks: full with matchers (status, notifications, linting)
 Style: learning
 Status line: enabled (same script)
 ```
