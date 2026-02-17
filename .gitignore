@@ -62,7 +62,6 @@ state.yml
 .config/sesh/scripts/roofr_*
 .config/raycast/scripts/roofr-*.sh
 .claude/profiles/settings-work.json
-.claude/work-settings.md
 bin/claude-work
 
 # Other
