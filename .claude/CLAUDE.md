@@ -149,16 +149,15 @@ MCP servers provide powerful integrations. Use responsibly with appropriate safe
 
 1. **Prefer Obsidian CLI** (requires Obsidian 1.12+, CLI enabled in Settings → General)
    ```bash
-   # Check CLI availability (try PATH, then macOS app location)
-   OBSIDIAN_CLI="${OBSIDIAN_CLI:-$(command -v obsidian 2>/dev/null || echo '/Applications/Obsidian.app/Contents/MacOS/Obsidian')}"
-   "$OBSIDIAN_CLI" vault &>/dev/null && echo "CLI_AVAILABLE" || echo "CLI_UNAVAILABLE"
+   # Check CLI availability
+   obsidian vault &>/dev/null && echo "CLI_AVAILABLE" || echo "CLI_UNAVAILABLE"
 
-   # Common CLI commands (use $OBSIDIAN_CLI or bare 'obsidian' if in PATH)
-   "$OBSIDIAN_CLI" read path="path/to/note.md"
-   "$OBSIDIAN_CLI" create path="path/to/note.md" content="..." silent
-   "$OBSIDIAN_CLI" append path="path/to/note.md" content="..." silent
-   "$OBSIDIAN_CLI" files folder="0 - Inbox/" format=json
-   "$OBSIDIAN_CLI" search query="search term" format=json
+   # Common CLI commands
+   obsidian read path="path/to/note.md"
+   obsidian create path="path/to/note.md" content="..." silent
+   obsidian append path="path/to/note.md" content="..." silent
+   obsidian files folder="0 - Inbox/" format=json
+   obsidian search query="search term" format=json
    ```
 
 2. **Fall back to MCP** only if CLI unavailable - **always ask user first**:
