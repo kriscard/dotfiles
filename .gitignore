@@ -105,3 +105,4 @@ zsh/zsh.d/99-local.zsh
 .claude/eslint_errors.json
 .claude/plugins/
 .claude/stats-cache.json
+.claude/local-plugins/*
