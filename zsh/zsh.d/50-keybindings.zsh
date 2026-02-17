@@ -42,8 +42,17 @@ if (( $+widgets[history-substring-search-up] )); then
   bindkey '^N' history-substring-search-down      # Ctrl+N
 fi
 
-# Autosuggestion accept with Shift-Tab (preserves Tab for completion)
-bindkey '^[[Z' autosuggest-accept
+# Smart Tab: accept autosuggestion if present, otherwise complete
+function smart-tab() {
+  if [[ -n "$POSTDISPLAY" ]]; then
+    zle autosuggest-accept
+  else
+    zle expand-or-complete
+  fi
+}
+zle -N smart-tab
+bindkey '^I' smart-tab             # Tab → accept suggestion or complete
+bindkey '^[[Z' expand-or-complete  # Shift-Tab → always show completions
 
 # Word navigation
 bindkey '^[[1;5C' forward-word   # Ctrl+Right
