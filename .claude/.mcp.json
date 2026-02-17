@@ -24,12 +24,6 @@
         "CONTEXT7_API_KEY": "${CONTEXT7_API_KEY}"
       }
     },
-    "sequential-thinking": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["@modelcontextprotocol/server-sequential-thinking"],
-      "env": {}
-    },
     "browsermcp": {
       "type": "stdio",
       "command": "npx",
