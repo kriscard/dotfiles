@@ -16,6 +16,7 @@ vim.env.PATH = vim.fn.stdpath("data") .. "/mason/bin:" .. vim.env.PATH
 
 local opt = vim.opt
 
+opt.number = true -- Show line numbers
 opt.relativenumber = true -- Relative line numbers
 
 opt.tabstop = 2 -- Set tabs to 2 spaces
