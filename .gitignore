@@ -55,12 +55,7 @@ secrets.fish
 config/environment.d/secrets.conf
 state.yml
 
-# Work-specific configs (private paths/emails)
 .gitconfig-work
-.config/sesh/configs/work.toml
-.config/bin/roofr_*
-.config/sesh/scripts/roofr_*
-.config/raycast/scripts/roofr-*.sh
 .claude/profiles/settings-work.json
 bin/claude-work
 

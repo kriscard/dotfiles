@@ -1,0 +1,27 @@
+# Work Sessions (Roofr)
+
+[[session]]
+name = "Claude Plugins Roofr 🤖"
+path = "~/Code/kriscard-claude-plugins/"
+windows = ["lazygit"]
+
+[[session]]
+name = "Roofr dev 👨‍💻"
+path = "~/Code/roofr-dev/roofr/"
+windows = ["roofr-dev"]
+
+[[session]]
+name = "Roofr pick worktree 🚧"
+path = "~/Code/roofr-dev/roofr/"
+startup_command = "~/.config/sesh/scripts/roofr_pick_worktree"
+
+[[session]]
+name = "Roofr new worktree ➕"
+path = "~/Code/roofr-dev/roofr/"
+startup_command = "~/.config/sesh/scripts/roofr_new_worktree"
+
+[[session]]
+name = "Roofr reviews 👀"
+path = "~/Code/roofr-dev/roofr"
+startup_command = "~/.config/sesh/scripts/roofr_pr_review"
+preview_command = "gh pr list --limit 5"

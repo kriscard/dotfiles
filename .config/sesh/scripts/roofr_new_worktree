@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Create a new Roofr worktree and connect to it
+# Called from sesh session startup_command
+
+cd ~/Code/roofr-dev/roofr || exit 1
+
+# Get branch name interactively
+BRANCH=$(gum input --placeholder "branch-name (e.g., feat/my-feature)" --prompt "🌱 New branch: ")
+
+if [ -n "$BRANCH" ]; then
+    # Fetch latest and select source branch (default: staging)
+    git fetch origin --prune
+    SOURCE=$(git branch -r --format='%(refname:short)' | sed 's|origin/||' | grep -v HEAD | gum filter --header "📌 Base branch (PR target):" --value "staging")
+
+    if [ -n "$SOURCE" ]; then
+        git worktree add "$BRANCH" -b "$BRANCH" "origin/$SOURCE"
+        sesh connect "$BRANCH"
+    fi
+fi

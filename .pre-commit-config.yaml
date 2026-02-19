@@ -3,13 +3,16 @@
 # Run `pre-commit run --all-files` to check all files
 
 repos:
-  # ShellCheck - Shell script linter
+  # ShellCheck - Shell script linter (uses local Homebrew installation)
   # Note: Excludes .zsh files since shellcheck has limited ZSH support
-  - repo: https://github.com/koalaman/shellcheck-precommit
-    rev: v0.10.0
+  - repo: local
     hooks:
       - id: shellcheck
+        name: shellcheck
+        entry: shellcheck
+        language: system
         args: ["--severity=warning", "--shell=bash"]
+        types: [shell]
         files: \.(sh|bash)$|^dotfiles$
         exclude: \.zsh$|zsh/
 
