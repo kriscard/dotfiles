@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# Create a worktree for PR review and open gh-dash
+# Called from sesh session startup_command
+
+ROOFR_DIR="$HOME/Code/roofr-dev/roofr"
+cd "$ROOFR_DIR" || exit 1
+
+# Fetch latest and list open PRs
+git fetch origin
+
+# Use gh to pick a PR (shows all open PRs with base branch)
+PR_NUMBER=$(gh pr list --json number,title,headRefName,baseRefName --template '{{range .}}{{.number}}	[{{.baseRefName}}] {{.title}} ({{.headRefName}}){{"\n"}}{{end}}' | \
+    gum filter --limit 1 --fuzzy --placeholder "Pick a PR to review" --prompt "👀 " | \
+    cut -f1)
+
+if [ -z "$PR_NUMBER" ]; then
+    echo "No PR selected, opening gh dash instead..."
+    gh dash
+    exit 0
+fi
+
+# Get PR branch name
+BRANCH=$(gh pr view "$PR_NUMBER" --json headRefName --jq '.headRefName')
+
+if [ -z "$BRANCH" ]; then
+    echo "Could not get branch name for PR #$PR_NUMBER"
+    exit 1
+fi
+
+# Create worktree if it doesn't exist
+if [ ! -d "$ROOFR_DIR/$BRANCH" ]; then
+    echo "Creating worktree for PR #$PR_NUMBER ($BRANCH)..."
+    git fetch origin "$BRANCH"
+    git worktree add "$BRANCH" "origin/$BRANCH"
+fi
+
+# cd into worktree and open Octo with the PR
+cd "$ROOFR_DIR/$BRANCH" || exit 1
+echo "Worktree ready at $ROOFR_DIR/$BRANCH"
+echo "Opening PR #$PR_NUMBER in Octo..."
+nvim -c "Octo pr edit $PR_NUMBER"
