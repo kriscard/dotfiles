@@ -1,0 +1,18 @@
+# Nerd font window name plugin
+# https://github.com/joshmedeski/tmux-nerd-font-window-name
+
+config:
+  fallback-icon: "❓"
+  show-name: true
+
+icons:
+  btop: "📈"
+  lazygit: "󰊢"
+  bun: "󰎙"
+  docker: "🐳"
+  fish: "🐠"
+  fx: "📄"
+  claude: "🤖"
+  opencode: "🤖"
+  sesh: "⚡"
+  yazi: "📂"
