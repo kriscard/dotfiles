@@ -5,12 +5,14 @@ This document explains how to configure Claude Code for different environments (
 ## Why Not Stow settings.json?
 
 Claude Code's `~/.claude.json` and project `.claude/settings.json` files contain:
+
 - Machine-specific paths and project references
 - OAuth tokens and account information
 - Usage statistics and session history
 - Project-specific MCP server configurations
 
 **Recommendation**: Do NOT symlink these files with Stow. Instead:
+
 1. Use this document as a reference
 2. Manually create settings on each machine
 3. Keep environment-specific configurations separate
@@ -19,14 +21,14 @@ Claude Code's `~/.claude.json` and project `.claude/settings.json` files contain
 
 ## Environment Differences
 
-| Setting | Home (Max) | Work (API) |
-|---------|------------|------------|
-| Billing | Unlimited subscription | Per-token cost |
-| Model default | `opus` | `sonnet` |
-| Extended thinking | Always on | Off (enable per-task) |
-| Plugins | All enabled | Minimal set |
-| Output styles | Learning/explanatory | Default |
-| Hooks | Full (notifications, linting) | Minimal (status only) |
+| Setting           | Home (Max)                    | Work (API)            |
+| ----------------- | ----------------------------- | --------------------- |
+| Billing           | Unlimited subscription        | Per-token cost        |
+| Model default     | `opus`                        | `sonnet`              |
+| Extended thinking | Always on                     | Off (enable per-task) |
+| Plugins           | All enabled                   | Minimal set           |
+| Output styles     | Learning/explanatory          | Default               |
+| Hooks             | Full (notifications, linting) | Minimal (status only) |
 
 ---
 
@@ -39,6 +41,10 @@ Create this file at your work projects or in `~/.claude/settings.json`:
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "env": {
     "ENABLE_TOOL_SEARCH": "auto"
+  },
+  "attribution": {
+    "commit": "",
+    "pr": ""
   },
   "model": "sonnet",
   "alwaysThinkingEnabled": false,
@@ -123,22 +129,23 @@ Create this file at your work projects or in `~/.claude/settings.json`:
 
 ### What's Different from Home Settings
 
-| Removed/Changed | Reason | Token Savings |
-|-----------------|--------|---------------|
-| `ENABLE_TOOL_SEARCH: auto` | Defers MCP tool loading until needed (~47% context reduction) | **CRITICAL** |
-| `alwaysThinkingEnabled: false` | Extended thinking adds 50-200% output tokens | HIGH |
-| `model: sonnet` instead of `opus` | Opus is 5x more expensive than Sonnet | HIGH |
-| Removed `Notification` hooks | Python script overhead on every stop | LOW |
-| Removed `SubagentStop` hooks | Unnecessary for status tracking | LOW |
-| Removed `PostToolUse` ESLint hook | Spawns Node process on every edit | MEDIUM |
-| Added `matcher` to PreToolUse | Only runs on write operations, not reads | MEDIUM |
-| Reduced `enabledPlugins` | Fewer skill descriptions in context | MEDIUM |
+| Removed/Changed                   | Reason                                                        | Token Savings |
+| --------------------------------- | ------------------------------------------------------------- | ------------- |
+| `ENABLE_TOOL_SEARCH: auto`        | Defers MCP tool loading until needed (~47% context reduction) | **CRITICAL**  |
+| `alwaysThinkingEnabled: false`    | Extended thinking adds 50-200% output tokens                  | HIGH          |
+| `model: sonnet` instead of `opus` | Opus is 5x more expensive than Sonnet                         | HIGH          |
+| Removed `Notification` hooks      | Python script overhead on every stop                          | LOW           |
+| Removed `SubagentStop` hooks      | Unnecessary for status tracking                               | LOW           |
+| Removed `PostToolUse` ESLint hook | Spawns Node process on every edit                             | MEDIUM        |
+| Added `matcher` to PreToolUse     | Only runs on write operations, not reads                      | MEDIUM        |
+| Reduced `enabledPlugins`          | Fewer skill descriptions in context                           | MEDIUM        |
 
 ---
 
 ## Home Settings (Full Features)
 
 Your current settings at home are fine for Max subscription. Key features:
+
 - `ENABLE_TOOL_SEARCH: auto` - Defers MCP tool loading (same as work)
 - `alwaysThinkingEnabled: true` - Better reasoning
 - `model: opus` - Most capable model
@@ -207,11 +214,13 @@ claude-profile  # Show current profile
 ### At Work (New Machine)
 
 1. **Install Claude Code**
+
    ```bash
    npm install -g @anthropic-ai/claude-code
    ```
 
 2. **Set environment variable** in your local shell config:
+
    ```bash
    # Copy the example and customize
    cp ~/.dotfiles/zsh/zsh.d/99-local.zsh.example ~/.dotfiles/zsh/zsh.d/99-local.zsh
@@ -223,12 +232,15 @@ claude-profile  # Show current profile
    The `99-local.zsh` file is gitignored, so work-specific settings stay local.
 
 3. **Sync dotfiles** (if using Stow):
+
    ```bash
    cd ~/.dotfiles && stow .
    ```
+
    This will symlink `bin/claude-work` and the profiles directory.
 
 4. **Use the launcher**:
+
    ```bash
    claude-work          # Uses CLAUDE_ENV (work)
    # or
@@ -307,6 +319,7 @@ Add to `~/.claude/settings.json`:
 ### Script Location
 
 The script lives at `~/.dotfiles/bin/claude-statusline`. It:
+
 - Reads JSON from stdin (provided by Claude Code)
 - Extracts model, context %, cost, git branch
 - Outputs ANSI-colored statusline
@@ -314,12 +327,14 @@ The script lives at `~/.dotfiles/bin/claude-statusline`. It:
 ### Customization
 
 Edit `bin/claude-statusline` to change:
+
 - Icons (emoji or text)
 - Colors (ANSI codes)
 - Fields displayed
 - Progress bar width/style
 
 Or regenerate with `/statusline` command:
+
 ```
 /statusline show model, context bar, and cost only
 ```
@@ -327,6 +342,7 @@ Or regenerate with `/statusline` command:
 ### Troubleshooting
 
 If not visible:
+
 1. Verify script is executable: `chmod +x ~/.dotfiles/bin/claude-statusline`
 2. Test manually: `echo '{"model":{"display_name":"Sonnet"}}' | ~/.dotfiles/bin/claude-statusline`
 3. Restart Claude Code after config changes
@@ -336,13 +352,16 @@ If not visible:
 ## Stow Strategy
 
 ### Files to Stow (symlink)
+
 - `bin/claude-statusline` - Status line display script
 - `bin/claude-status-hook` - Status tracking script
 - `.claude/hooks/` - Hook scripts (notification.py, ts_lint.py)
 - `.claude/CLAUDE.md` - Project instructions
-- `.claude/work-settings.md` - This documentation
+- `.claude/work-settings.md` - Work settings documentation
+- `.claude/personal-settings.md` - Home settings documentation
 
 ### Files to NOT Stow
+
 - `~/.claude.json` - Global config with machine-specific data
 - `.claude/settings.json` - Environment-specific settings
 - `.claude/todos/` - Session-specific task lists
@@ -352,6 +371,7 @@ If not visible:
 ### Stow Ignore Pattern
 
 Add to your `.stow-local-ignore` or handle in stow command:
+
 ```
 # Claude Code machine-specific files
 \.claude/settings\.json
@@ -366,21 +386,23 @@ Add to your `.stow-local-ignore` or handle in stow command:
 
 ### Lean MCP Setup (3 servers)
 
-| Server | Purpose | When Used |
-|--------|---------|-----------|
-| **mcp-obsidian** | Vault operations | Fallback when Obsidian CLI unavailable |
-| **context7** | Library documentation | Fetching up-to-date docs for frameworks |
-| **browsermcp** | Browser automation | Interactive web testing, form filling |
+| Server           | Purpose               | When Used                               |
+| ---------------- | --------------------- | --------------------------------------- |
+| **mcp-obsidian** | Vault operations      | Fallback when Obsidian CLI unavailable  |
+| **context7**     | Library documentation | Fetching up-to-date docs for frameworks |
+| **browsermcp**   | Browser automation    | Interactive web testing, form filling   |
 
 ### CLI Over MCP Philosophy
 
 Prefer CLI tools over MCP when available:
+
 - **GitHub**: Use `gh pr view`, `gh issue list`, `gh api` instead of MCP
 - **npm**: Use `npm search`, `npm info` instead of MCP
 - **Web reading**: Use `WebFetch` (built-in) before browser MCP
 - **Obsidian**: Prefer CLI (`obsidian read/create/append`) over MCP
 
 MCP is best for:
+
 - Complex browser interactions (clicking, form filling, screenshots)
 - Documentation lookups (Context7)
 - Operations where CLI isn't available
@@ -390,6 +412,7 @@ MCP is best for:
 ## Quick Reference Card
 
 ### Work Environment
+
 ```
 Model: sonnet
 Thinking: off (use "think harder" when needed)
@@ -400,6 +423,7 @@ Status line: enabled (shows project, branch, context %, model, cost)
 ```
 
 ### Home Environment
+
 ```
 Model: opus
 Thinking: always on
@@ -411,7 +435,9 @@ Status line: enabled (same script)
 ```
 
 ### Per-Task Model Override
+
 In conversations, you can say:
+
 - "Use haiku for this search" - Cheaper exploration
 - "Think harder about this" - Enable extended thinking
 - "Give me a quick answer" - Shorter responses
@@ -421,12 +447,14 @@ In conversations, you can say:
 ## Monitoring Token Usage
 
 At work, monitor your usage:
+
 1. Check Honeycomb dashboard for trends
 2. Watch for 400 errors (wasted tokens on failed requests)
 3. Track cost per session
 4. Identify high-output-token sessions
 
 Red flags:
+
 - Sessions over $10-15
 - Output tokens > 5x input tokens
 - Many 400 "invalid request" errors
