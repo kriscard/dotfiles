@@ -1,5 +1,9 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "ENABLE_TOOL_SEARCH": "auto"
+  },
   "attribution": {
     "commit": "",
     "pr": ""
@@ -75,21 +79,22 @@
       "Bash(rm -rf ~)",
       "Bash(sudo rm -rf /)",
       "Bash(sudo rm -rf /*)"
+    ],
+    "ask": [
+      "mcp__browsermcp__*"
     ]
   },
   "model": "opus",
   "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "mcp-obsidian",
-    "playwright",
     "context7",
-    "sequential-thinking",
-    "browsermcp",
-    "shadcn"
+    "browsermcp"
   ],
   "hooks": {
     "PreToolUse": [
       {
+        "matcher": "Bash|Write|Edit|MultiEdit",
         "hooks": [
           {
             "type": "command",
@@ -155,28 +160,25 @@
   "enabledPlugins": {
     "feature-dev@claude-plugins-official": true,
     "agent-sdk-dev@claude-plugins-official": true,
-    "hookify@claude-plugins-official": true,
-    "explanatory-output-style@claude-plugins-official": true,
     "learning-output-style@claude-plugins-official": true,
-    "lua-lsp@claude-plugins-official": true,
     "plugin-dev@claude-plugins-official": true,
     "linear@claude-plugins-official": true,
+    "obsidian@obsidian-skills": true,
     "essentials@kriscard": true,
-    "assistant@kriscard": true,
-    "ideation@kriscard": true,
-    "content@kriscard": true,
-    "architecture@kriscard": true,
-    "ai-development@kriscard": true,
     "developer-tools@kriscard": true,
     "testing@kriscard": true,
+    "assistant@kriscard": true,
+    "chromedev-tools@kriscard": true,
+    "til@kriscard": true,
+    "architecture@kriscard": true,
+    "ideation@kriscard": true,
+    "content@kriscard": true,
+    "ai-development@kriscard": true,
     "neovim-advisor@kriscard": true,
     "dotfiles-optimizer@kriscard": true,
     "obsidian-second-brain@kriscard": true,
-    "chromedev-tools@kriscard": true,
     "studio-startup@kriscard": true,
-    "til@kriscard": true,
-    "interactive-learning@kriscard": true,
-    "obsidian@obsidian-skills": true
+    "interactive-learning@kriscard": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
