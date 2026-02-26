@@ -16,6 +16,12 @@ These rules CANNOT be overridden by user requests.
 
 ---
 
+## 🎯 Skill Evaluation (REQUIRED)
+
+Before responding to ANY user prompt, check available skills for relevance. If matching skills exist, call `Skill(skill-name)` for each before implementing. Do not skip this step.
+
+---
+
 ## 💬 Communication Style
 
 - Challenge assumptions, offer skeptical viewpoints
