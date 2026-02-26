@@ -152,7 +152,7 @@ return {
 				-- Web Development
 				vtsls = {
 					filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" },
-					root_dir = require("lspconfig").util.root_pattern(".git", "pnpm-workspace.yaml", "pnpm-lock.yaml", "yarn.lock", "package-lock.json", "bun.lockb", "lerna.json", "nx.json"),
+					root_dir = require("lspconfig").util.root_pattern("tsconfig.json", "jsconfig.json", "package.json"),
 					settings = {
 						complete_function_calls = true,
 						vtsls = {
@@ -164,7 +164,11 @@ return {
 							},
 						},
 						typescript = {
+							tsserver = {
+								maxTsServerMemory = 4096,
+							},
 							updateImportsOnFileMove = { enabled = "always" },
+							disableAutomaticTypeAcquisition = true,
 							suggest = {
 								completeFunctionCalls = false,
 								includeCompletionsForModuleExports = false,
@@ -190,7 +194,6 @@ return {
 								organizeImportsAccentCollation = false,
 								organizeImportsCaseFirst = "lower",
 							},
-							maxTsServerMemory = 4096,
 							watchOptions = {
 								excludeDirectories = { "**/node_modules", "**/.git", "**/dist", "**/.next", "**/build", "**/coverage", "**/out", "**/.turbo", "**/.cache" },
 								excludeFiles = { "**/.eslintrc.js", "**/webpack.config.js", "**/rollup.config.js", "**/vite.config.js" },
@@ -211,7 +214,7 @@ return {
 				},
 
 				eslint = {
-					cmd = { "vscode-eslint-language-server", "--stdio", "--max-old-space-size=12288" },
+					cmd = { "vscode-eslint-language-server", "--stdio", "--max-old-space-size=4096" },
 					settings = {
 						workingDirectories = { mode = "auto" },
 						format = true,
@@ -291,9 +294,7 @@ return {
 			require("mason").setup({ ui = { border = "rounded" } })
 			require("mason-tool-installer").setup({
 				auto_update = true,
-				run_on_start = true,
-				start_delay = 3000,
-				debounce_hours = 12,
+				run_on_start = false,
 				ensure_installed = ensure_installed,
 			})
 
