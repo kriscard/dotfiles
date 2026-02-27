@@ -25,6 +25,11 @@ path = "~/projects/christophercardoso.dev/"
 windows = ["lazygit"]
 
 [[session]]
+name = "Markly 👨‍💻"
+path = "~/projects/markly/"
+windows = ["lazygit"]
+
+[[session]]
 name = "Projects 📂"
 path = "~/projects/"
 disable_startup_command = true
