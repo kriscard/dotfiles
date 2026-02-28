@@ -120,47 +120,74 @@ return {
 		},
 	},
 	config = function()
+		-- Detect test framework from package.json to avoid adapter conflicts
+		local function has_package(name)
+			local cwd = vim.uv.cwd()
+			local pkg_path = cwd .. "/package.json"
+			if vim.fn.filereadable(pkg_path) == 0 then
+				return false
+			end
+			local ok, content = pcall(vim.fn.readfile, pkg_path)
+			if not ok then
+				return false
+			end
+			local text = table.concat(content, "\n")
+			return text:find('"' .. name .. '"') ~= nil
+		end
+
+		local adapters = {}
+
+		local has_vitest = has_package("vitest")
+		local has_jest = has_package("jest")
+
+		if has_vitest then
+			table.insert(adapters, require("neotest-vitest")({
+				cwd = function(file)
+					if string.find(file, "/packages/") then
+						return string.match(file, "(.-/[^/]+/)src")
+					end
+					local root = vim.fn.fnamemodify(file, ":p:h")
+					while root ~= "/" do
+						if vim.fn.filereadable(root .. "/package.json") == 1 then
+							return root
+						end
+						root = vim.fn.fnamemodify(root, ":h")
+					end
+					return vim.fn.getcwd()
+				end,
+				filter_dir = function(name)
+					return name ~= "node_modules"
+				end,
+			}))
+		end
+
+		if has_jest then
+			table.insert(adapters, require("neotest-jest")({
+				jestCommand = "npm test --",
+				jestConfigFile = function(file)
+					if string.find(file, "/packages/") then
+						return string.match(file, "(.-/[^/]+/)src") .. "jest.config.ts"
+					end
+					return vim.fn.getcwd() .. "/jest.config.ts"
+				end,
+				env = { CI = true },
+				cwd = function(file)
+					if string.find(file, "/packages/") then
+						return string.match(file, "(.-/[^/]+/)src")
+					end
+					return vim.fn.getcwd()
+				end,
+			}))
+		end
+
+		-- Fallback: load both if neither detected (e.g., monorepo with hoisted deps)
+		if #adapters == 0 then
+			table.insert(adapters, require("neotest-vitest")({}))
+			table.insert(adapters, require("neotest-jest")({ jestCommand = "npm test --", env = { CI = true } }))
+		end
+
 		require("neotest").setup({
-			adapters = {
-				require("neotest-jest")({
-					jestCommand = "npm test --",
-					jestConfigFile = function(file)
-						if string.find(file, "/packages/") then
-							return string.match(file, "(.-/[^/]+/)src") .. "jest.config.ts"
-						end
-						return vim.fn.getcwd() .. "/jest.config.ts"
-					end,
-					env = { CI = true },
-					cwd = function(file)
-						if string.find(file, "/packages/") then
-							return string.match(file, "(.-/[^/]+/)src")
-						end
-						return vim.fn.getcwd()
-					end,
-				}),
-				require("neotest-vitest")({
-					-- Find project root by looking for package.json
-					cwd = function(file)
-						-- For monorepos with packages directory
-						if string.find(file, "/packages/") then
-							return string.match(file, "(.-/[^/]+/)src")
-						end
-						-- Find nearest package.json going up the directory tree
-						local root = vim.fn.fnamemodify(file, ":p:h")
-						while root ~= "/" do
-							if vim.fn.filereadable(root .. "/package.json") == 1 then
-								return root
-							end
-							root = vim.fn.fnamemodify(root, ":h")
-						end
-						return vim.fn.getcwd()
-					end,
-					-- Filter node_modules for faster discovery
-					filter_dir = function(name)
-						return name ~= "node_modules"
-					end,
-				}),
-			},
+			adapters = adapters,
 			status = {
 				enabled = true,
 				virtual_text = true,
