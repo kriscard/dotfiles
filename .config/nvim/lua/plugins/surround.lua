@@ -17,7 +17,7 @@ return {
 					duration = 0,
 				},
 				move_cursor = "begin",
-				indent_lines = function(start, stop)
+				indent_lines = function(_, _)
 					local b = vim.bo
 					if b.expandtab then
 						local shiftwidth = b.shiftwidth ~= 0 and b.shiftwidth or b.tabstop
