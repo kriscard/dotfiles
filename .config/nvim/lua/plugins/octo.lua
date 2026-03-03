@@ -40,6 +40,9 @@ return {
 					next_thread = { lhs = "]t", desc = "next thread" },
 					prev_thread = { lhs = "[t", desc = "previous thread" },
 				},
+				submit_win = {
+					approve_review = { lhs = "<C-S-a>", desc = "approve review", mode = { "n", "i" } },
+				},
 				review_thread = {
 					add_comment = { lhs = "<leader>ca", desc = "add comment" },
 					delete_comment = { lhs = "<leader>cd", desc = "delete comment" },
