@@ -288,20 +288,31 @@ The settings file is only copied if it changed, so subsequent launches are fast.
 
 ## Status Line
 
-The status line displays real-time session info at the bottom of Claude Code. It runs locally (no API cost).
+Powerline-style statusline using **Catppuccin Macchiato** true colors (24-bit RGB) with Nerd Font icons. Runs locally (no API cost). Inspired by [claude-powerline](https://github.com/Owloops/claude-powerline) and [claude-statusline](https://github.com/kamranahmedse/claude-statusline).
 
 ### What It Shows
 
+**Line 1 — Powerline segments:**
+
 ```
-📁 project │ 🌿 main │ 📊 ██░░░░░░░░ 23% │ 🎵 Sonnet │ 💰 $0.42 │ 🎨 default
+ 󰈙 Opus 4.6  󰉋 .dotfiles 󰘬 main ●  󱄎 36%  󰥔 12m
 ```
 
-- **Project**: Current directory/project name
-- **Branch**: Git branch
-- **Context**: Visual progress bar of context window usage (color changes: white <40%, yellow <80%, red ≥80%)
-- **Model**: Current model with icon (🎭 Opus, 🎵 Sonnet, 🍃 Haiku)
-- **Cost**: Session cost in USD
-- **Style**: Output style mode
+| Segment      | Color        | Icon | Info                                          |
+| ------------ | ------------ | ---- | --------------------------------------------- |
+| Model        | Mauve bg     | 󰈙/󰀞/󰛖 | Model name (Opus/Sonnet/Haiku icon)          |
+| Directory    | Blue bg      | 󰉋 󰘬  | Project dir + git branch + dirty indicator (●) |
+| Context      | Surface1 bg  | 󱄎    | Context window % (color-coded by usage)       |
+| Session      | Surface0 bg  | 󰥔    | Session duration (only if available)          |
+
+Context % color thresholds: green <50%, peach <70%, yellow <90%, red ≥90%.
+
+**Lines 2-3 — Rate limits** (fetched via OAuth, cached 60s):
+
+```
+current ●●○○○○○○○○  20% ⟳ 3:45pm
+weekly  ●○○○○○○○○○  12% ⟳ mar 15, 2:00pm
+```
 
 ### Configuration
 
@@ -316,28 +327,17 @@ Add to `~/.claude/settings.json`:
 }
 ```
 
+### Requirements
+
+- **Nerd Font** — for powerline arrows and segment icons
+- **True color terminal** — for Catppuccin Macchiato 24-bit colors
+- **jq** — JSON parsing
+- **curl** — rate limit API calls
+- **git** — branch/dirty status
+
 ### Script Location
 
-The script lives at `~/.dotfiles/bin/claude-statusline`. It:
-
-- Reads JSON from stdin (provided by Claude Code)
-- Extracts model, context %, cost, git branch
-- Outputs ANSI-colored statusline
-
-### Customization
-
-Edit `bin/claude-statusline` to change:
-
-- Icons (emoji or text)
-- Colors (ANSI codes)
-- Fields displayed
-- Progress bar width/style
-
-Or regenerate with `/statusline` command:
-
-```
-/statusline show model, context bar, and cost only
-```
+`~/.dotfiles/bin/claude-statusline` — reads JSON from stdin, outputs ANSI powerline.
 
 ### Troubleshooting
 
@@ -346,6 +346,7 @@ If not visible:
 1. Verify script is executable: `chmod +x ~/.dotfiles/bin/claude-statusline`
 2. Test manually: `echo '{"model":{"display_name":"Sonnet"}}' | ~/.dotfiles/bin/claude-statusline`
 3. Restart Claude Code after config changes
+4. Ensure terminal supports true color and has a Nerd Font installed
 
 ---
 
