@@ -1,124 +1,279 @@
 #!/usr/bin/env bash
+set -f
 
-# Colors
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[0;33m'
-BLUE='\033[0;34m'
-MAGENTA='\033[0;35m'
-CYAN='\033[0;36m'
-WHITE='\033[0;37m'
-DIM='\033[2m'
-RESET='\033[0m'
-
-# Separator (minimal style)
-SEP="${DIM}│${RESET}"
-
-# Emoji icons
-ICON_PROJECT="📁"
-ICON_BRANCH="🌿"
-ICON_CONTEXT="📊"
-ICON_COST="💰"
-ICON_STYLE="🎨"
-
-# Read JSON input from stdin
 input=$(cat)
 
-# Helper functions for extracting data
-get_model_name() { echo "$input" | jq -r '.model.display_name // "Unknown Model"'; }
-
-# Get model-specific icon based on model name
-get_model_icon() {
-  local model_name=$(get_model_name)
-  case "$model_name" in
-    *[Oo]pus*)     echo "🎭" ;;  # Theater masks for the dramatic, powerful model
-    *[Ss]onnet*)   echo "🎵" ;;  # Musical note for the balanced, harmonious model
-    *[Hh]aiku*)    echo "🍃" ;;  # Leaf for the light, quick model
-    *)             echo "🧠" ;;  # Default brain icon
-  esac
-}
-get_output_style() { echo "$input" | jq -r '.output_style.name // "default"'; }
-get_current_dir() { echo "$input" | jq -r '.workspace.current_dir // "."'; }
-get_project_dir() { echo "$input" | jq -r '.workspace.project_dir // "."'; }
-get_cost() {
-  local cost=$(echo "$input" | jq -r '.cost.total_cost_usd // 0')
-  printf "\$%.2f" "$cost"
-}
-
-get_context_percent() {
-  local input_tokens=$(echo "$input" | jq -r '.context_window.total_input_tokens // 0')
-  local context_size=$(echo "$input" | jq -r '.context_window.context_window_size // 200000')
-
-  local percent=$((input_tokens * 100 / context_size))
-  echo "$percent"
-}
-
-# Build a progress bar with color based on percentage
-build_context_bar() {
-  local percent=$(get_context_percent)
-  local bar_width=10
-  local filled=$((percent * bar_width / 100))
-  local empty=$((bar_width - filled))
-
-  # Cap filled at bar_width
-  if [ "$filled" -gt "$bar_width" ]; then
-    filled=$bar_width
-    empty=0
-  fi
-
-  # Choose color based on percentage thresholds
-  local bar_color
-  if [ "$percent" -lt 40 ]; then
-    bar_color="$WHITE"
-  elif [ "$percent" -lt 80 ]; then
-    bar_color="$YELLOW"
-  else
-    bar_color="$RED"
-  fi
-
-  # Build the bar
-  local bar=""
-  for ((i=0; i<filled; i++)); do
-    bar+="█"
-  done
-  for ((i=0; i<empty; i++)); do
-    bar+="░"
-  done
-
-  printf "%s%s%s %d%%" "$bar_color" "$bar" "$RESET" "$percent"
-}
-
-# Extract values
-model=$(get_model_name)
-model_icon=$(get_model_icon)
-output_style=$(get_output_style)
-current_dir=$(get_current_dir)
-project_dir=$(get_project_dir)
-cost_display=$(get_cost)
-context_bar=$(build_context_bar)
-
-# Get project name and handle subdirectory display
-project=$(basename "$project_dir")
-if [ "$current_dir" != "$project_dir" ]; then
-  subdir=$(basename "$current_dir")
-  project="${project} (CWD: ${subdir}/)"
+if [ -z "$input" ]; then
+    printf "Claude"
+    exit 0
 fi
 
-# Get git branch
-git_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "no-git")
+# ── Catppuccin Macchiato — true color (24-bit) ─────────
+# Foreground helper: \033[38;2;R;G;Bm
+# Background helper: \033[48;2;R;G;Bm
+reset='\033[0m'
 
-# Build statusline (order: project → branch → context → model → cost → style)
-statusline=""
-statusline+="${ICON_PROJECT} ${BLUE}${project}${RESET}"
-statusline+=" ${SEP} "
-statusline+="${ICON_BRANCH} ${GREEN}${git_branch}${RESET}"
-statusline+=" ${SEP} "
-statusline+="${ICON_CONTEXT} ${context_bar}"
-statusline+=" ${SEP} "
-statusline+="${model_icon} ${MAGENTA}${model}${RESET}"
-statusline+=" ${SEP} "
-statusline+="${ICON_COST} ${CYAN}${cost_display}${RESET}"
-statusline+=" ${SEP} "
-statusline+="${ICON_STYLE} ${DIM}${output_style}${RESET}"
+# Segment bg/fg pairs (dark fg on colored bg)
+crust_fg='\033[38;2;24;25;38m'    # #181926
 
-echo -e "$statusline"
+mauve_bg='\033[48;2;198;160;246m' # #c6a0f6
+mauve_fg='\033[38;2;198;160;246m'
+
+blue_bg='\033[48;2;138;173;244m'  # #8aadf4
+blue_fg='\033[38;2;138;173;244m'
+
+green_bg='\033[48;2;166;218;149m' # #a6da95
+green_fg='\033[38;2;166;218;149m'
+
+surface1_bg='\033[48;2;73;77;100m'  # #494d64
+surface1_fg='\033[38;2;73;77;100m'
+
+surface0_bg='\033[48;2;54;58;79m'   # #363a4f
+surface0_fg='\033[38;2;54;58;79m'
+
+# Text colors for rate limit lines
+text_fg='\033[38;2;202;211;245m'     # #cad3f5
+subtext_fg='\033[38;2;165;173;203m'  # #a5adcb
+overlay_fg='\033[38;2;110;115;141m'  # #6e738d
+green_txt='\033[38;2;166;218;149m'
+yellow_txt='\033[38;2;238;212;159m'
+peach_txt='\033[38;2;245;169;127m'
+red_txt='\033[38;2;237;135;150m'
+teal_txt='\033[38;2;139;213;202m'
+
+# Powerline arrow
+arrow=$'\uE0B0'
+
+# ── Helpers ─────────────────────────────────────────────
+color_for_pct() {
+    local pct=$1
+    if [ "$pct" -ge 90 ]; then printf "$red_txt"
+    elif [ "$pct" -ge 70 ]; then printf "$yellow_txt"
+    elif [ "$pct" -ge 50 ]; then printf "$peach_txt"
+    else printf "$green_txt"
+    fi
+}
+
+build_bar() {
+    local pct=$1 width=$2
+    [ "$pct" -lt 0 ] 2>/dev/null && pct=0
+    [ "$pct" -gt 100 ] 2>/dev/null && pct=100
+
+    local filled=$(( pct * width / 100 ))
+    local empty=$(( width - filled ))
+    local bar_color
+    bar_color=$(color_for_pct "$pct")
+
+    local filled_str="" empty_str=""
+    for ((i=0; i<filled; i++)); do filled_str+="●"; done
+    for ((i=0; i<empty; i++)); do empty_str+="○"; done
+
+    printf "${bar_color}${filled_str}${overlay_fg}${empty_str}${reset}"
+}
+
+iso_to_epoch() {
+    local iso_str="$1" epoch
+    epoch=$(date -d "${iso_str}" +%s 2>/dev/null)
+    if [ -n "$epoch" ]; then echo "$epoch"; return 0; fi
+
+    local stripped="${iso_str%%.*}"
+    stripped="${stripped%%Z}"
+    stripped="${stripped%%+*}"
+    stripped="${stripped%%-[0-9][0-9]:[0-9][0-9]}"
+
+    if [[ "$iso_str" == *"Z"* ]] || [[ "$iso_str" == *"+00:00"* ]]; then
+        epoch=$(env TZ=UTC date -j -f "%Y-%m-%dT%H:%M:%S" "$stripped" +%s 2>/dev/null)
+    else
+        epoch=$(date -j -f "%Y-%m-%dT%H:%M:%S" "$stripped" +%s 2>/dev/null)
+    fi
+    if [ -n "$epoch" ]; then echo "$epoch"; return 0; fi
+    return 1
+}
+
+format_reset_time() {
+    local iso_str="$1" style="$2"
+    [ -z "$iso_str" ] || [ "$iso_str" = "null" ] && return
+
+    local epoch
+    epoch=$(iso_to_epoch "$iso_str")
+    [ -z "$epoch" ] && return
+
+    case "$style" in
+        time)
+            date -j -r "$epoch" +"%l:%M%p" 2>/dev/null | sed 's/^ //; s/\.//g' | tr '[:upper:]' '[:lower:]' || \
+            date -d "@$epoch" +"%l:%M%P" 2>/dev/null | sed 's/^ //; s/\.//g'
+            ;;
+        datetime)
+            date -j -r "$epoch" +"%b %-d, %l:%M%p" 2>/dev/null | sed 's/  / /g; s/^ //; s/\.//g' | tr '[:upper:]' '[:lower:]' || \
+            date -d "@$epoch" +"%b %-d, %l:%M%P" 2>/dev/null | sed 's/  / /g; s/^ //; s/\.//g'
+            ;;
+    esac
+}
+
+# ── Extract data ────────────────────────────────────────
+model_name=$(echo "$input" | jq -r '.model.display_name // "Claude"')
+
+size=$(echo "$input" | jq -r '.context_window.context_window_size // 200000')
+[ "$size" -eq 0 ] 2>/dev/null && size=200000
+input_tokens=$(echo "$input" | jq -r '.context_window.current_usage.input_tokens // 0')
+cache_create=$(echo "$input" | jq -r '.context_window.current_usage.cache_creation_input_tokens // 0')
+cache_read=$(echo "$input" | jq -r '.context_window.current_usage.cache_read_input_tokens // 0')
+current=$(( input_tokens + cache_create + cache_read ))
+pct_used=$(( size > 0 ? current * 100 / size : 0 ))
+
+cwd=$(echo "$input" | jq -r '.cwd // ""')
+[ -z "$cwd" ] || [ "$cwd" = "null" ] && cwd=$(pwd)
+dirname=$(basename "$cwd")
+
+git_branch="" git_dirty=""
+if git -C "$cwd" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    git_branch=$(git -C "$cwd" symbolic-ref --short HEAD 2>/dev/null)
+    [ -n "$(git -C "$cwd" status --porcelain 2>/dev/null)" ] && git_dirty=" ●"
+fi
+
+session_duration=""
+session_start=$(echo "$input" | jq -r '.session.start_time // empty')
+if [ -n "$session_start" ] && [ "$session_start" != "null" ]; then
+    start_epoch=$(iso_to_epoch "$session_start")
+    if [ -n "$start_epoch" ]; then
+        elapsed=$(( $(date +%s) - start_epoch ))
+        if [ "$elapsed" -ge 3600 ]; then
+            session_duration="$(( elapsed / 3600 ))h$(( (elapsed % 3600) / 60 ))m"
+        elif [ "$elapsed" -ge 60 ]; then
+            session_duration="$(( elapsed / 60 ))m"
+        else
+            session_duration="${elapsed}s"
+        fi
+    fi
+fi
+
+# Model icon (Nerd Font — using printf to preserve glyphs)
+case "$model_name" in
+    *[Oo]pus*)   model_icon=$(printf '\U000f0219') ;;  # 󰈙 nf-md-file_music
+    *[Ss]onnet*) model_icon=$(printf '\U000f001e') ;;  # 󰀞 nf-md-music_note
+    *[Hh]aiku*)  model_icon=$(printf '\U000f06d6') ;;  # 󰛖 nf-md-leaf
+    *)           model_icon=$(printf '\U000f110e') ;;  # 󱄎 nf-md-brain
+esac
+
+# ── LINE 1: Powerline segments ──────────────────────────
+# Segment order: Model → Directory (+ git) → Context → Session
+line1=""
+
+# Segment 1: Model (mauve bg)
+line1+="${mauve_bg}${crust_fg} ${model_icon} ${model_name} "
+
+# Arrow: mauve → blue
+line1+="${reset}${blue_bg}${mauve_fg}${arrow}"
+
+# Nerd Font icons via printf
+icon_folder=$(printf '\U000f024b')   # 󰉋 nf-md-folder
+icon_branch=$(printf '\U000f062c')   # 󰘬 nf-md-source_branch
+icon_ctx=$(printf '\U000f110e')      # 󱄎 nf-md-brain
+icon_clock=$(printf '\U000f0954')    # 󰥔 nf-md-clock_outline
+
+# Segment 2: Directory + git branch (blue bg)
+line1+="${blue_bg}${crust_fg} ${icon_folder} ${dirname}"
+if [ -n "$git_branch" ]; then
+    line1+=" ${icon_branch} ${git_branch}${git_dirty}"
+fi
+line1+=" "
+
+# Arrow: blue → surface1
+line1+="${reset}${surface1_bg}${blue_fg}${arrow}"
+
+# Segment 3: Context % (surface1 bg)
+pct_color=$(color_for_pct "$pct_used")
+line1+="${surface1_bg}${text_fg} ${icon_ctx} ${pct_used}% "
+
+# Arrow: surface1 → surface0 (if session) or end
+if [ -n "$session_duration" ]; then
+    line1+="${reset}${surface0_bg}${surface1_fg}${arrow}"
+    line1+="${surface0_bg}${subtext_fg} ${icon_clock} ${session_duration} "
+    line1+="${reset}${surface0_fg}${arrow}${reset}"
+else
+    line1+="${reset}${surface1_fg}${arrow}${reset}"
+fi
+
+# ── OAuth token ─────────────────────────────────────────
+get_oauth_token() {
+    if [ -n "$CLAUDE_CODE_OAUTH_TOKEN" ]; then
+        echo "$CLAUDE_CODE_OAUTH_TOKEN"; return 0
+    fi
+    if command -v security >/dev/null 2>&1; then
+        local blob token
+        blob=$(security find-generic-password -s "Claude Code-credentials" -w 2>/dev/null)
+        if [ -n "$blob" ]; then
+            token=$(echo "$blob" | jq -r '.claudeAiOauth.accessToken // empty' 2>/dev/null)
+            [ -n "$token" ] && [ "$token" != "null" ] && { echo "$token"; return 0; }
+        fi
+    fi
+    local creds_file="${HOME}/.claude/.credentials.json"
+    if [ -f "$creds_file" ]; then
+        local token
+        token=$(jq -r '.claudeAiOauth.accessToken // empty' "$creds_file" 2>/dev/null)
+        [ -n "$token" ] && [ "$token" != "null" ] && { echo "$token"; return 0; }
+    fi
+    echo ""
+}
+
+# ── Fetch usage (cached 60s) ───────────────────────────
+cache_file="/tmp/claude/statusline-usage-cache.json"
+cache_max_age=60
+mkdir -p /tmp/claude
+
+needs_refresh=true
+usage_data=""
+
+if [ -f "$cache_file" ]; then
+    cache_mtime=$(stat -f %m "$cache_file" 2>/dev/null || stat -c %Y "$cache_file" 2>/dev/null)
+    cache_age=$(( $(date +%s) - cache_mtime ))
+    [ "$cache_age" -lt "$cache_max_age" ] && { needs_refresh=false; usage_data=$(cat "$cache_file" 2>/dev/null); }
+fi
+
+if $needs_refresh; then
+    token=$(get_oauth_token)
+    if [ -n "$token" ] && [ "$token" != "null" ]; then
+        response=$(curl -s --max-time 5 \
+            -H "Accept: application/json" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer $token" \
+            -H "anthropic-beta: oauth-2025-04-20" \
+            -H "User-Agent: claude-code/2.1.34" \
+            "https://api.anthropic.com/api/oauth/usage" 2>/dev/null)
+        if [ -n "$response" ] && echo "$response" | jq -e '.five_hour' >/dev/null 2>&1; then
+            usage_data="$response"
+            echo "$response" > "$cache_file"
+        fi
+    fi
+    [ -z "$usage_data" ] && [ -f "$cache_file" ] && usage_data=$(cat "$cache_file" 2>/dev/null)
+fi
+
+# ── Rate limit bars ─────────────────────────────────────
+rate_lines=""
+bar_width=10
+
+if [ -n "$usage_data" ] && echo "$usage_data" | jq -e . >/dev/null 2>&1; then
+    five_pct=$(echo "$usage_data" | jq -r '.five_hour.utilization // 0' | awk '{printf "%.0f", $1}')
+    five_reset_iso=$(echo "$usage_data" | jq -r '.five_hour.resets_at // empty')
+    five_reset=$(format_reset_time "$five_reset_iso" "time")
+    five_bar=$(build_bar "$five_pct" "$bar_width")
+    five_pct_color=$(color_for_pct "$five_pct")
+
+    rate_lines+="${subtext_fg}current${reset} ${five_bar} ${five_pct_color}$(printf '%3d' "$five_pct")%${reset}"
+    [ -n "$five_reset" ] && rate_lines+=" ${overlay_fg}⟳${reset} ${text_fg}${five_reset}${reset}"
+
+    seven_pct=$(echo "$usage_data" | jq -r '.seven_day.utilization // 0' | awk '{printf "%.0f", $1}')
+    seven_reset_iso=$(echo "$usage_data" | jq -r '.seven_day.resets_at // empty')
+    seven_reset=$(format_reset_time "$seven_reset_iso" "datetime")
+    seven_bar=$(build_bar "$seven_pct" "$bar_width")
+    seven_pct_color=$(color_for_pct "$seven_pct")
+
+    rate_lines+="\n${subtext_fg}weekly ${reset} ${seven_bar} ${seven_pct_color}$(printf '%3d' "$seven_pct")%${reset}"
+    [ -n "$seven_reset" ] && rate_lines+=" ${overlay_fg}⟳${reset} ${text_fg}${seven_reset}${reset}"
+fi
+
+# ── Output ──────────────────────────────────────────────
+printf "%b" "$line1"
+[ -n "$rate_lines" ] && printf "\n\n%b" "$rate_lines"
+
+exit 0
