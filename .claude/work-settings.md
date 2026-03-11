@@ -292,10 +292,10 @@ Powerline-style statusline using **Catppuccin Macchiato** true colors (24-bit RG
 
 ### What It Shows
 
-**Line 1 — Powerline segments:**
+**Powerline segments:**
 
 ```
- 󰈙 Opus 4.6  󰉋 .dotfiles 󰘬 main ●  󱄎 36%  󰥔 12m
+ 󰈙 Opus 4.6  󰉋 .dotfiles 󰘬 main ●  󱄎 36%  󰥔 12m · $0.85
 ```
 
 | Segment      | Color        | Icon | Info                                          |
@@ -303,16 +303,9 @@ Powerline-style statusline using **Catppuccin Macchiato** true colors (24-bit RG
 | Model        | Mauve bg     | 󰈙/󰀞/󰛖 | Model name (Opus/Sonnet/Haiku icon)          |
 | Directory    | Blue bg      | 󰉋 󰘬  | Project dir + git branch + dirty indicator (●) |
 | Context      | Surface1 bg  | 󱄎    | Context window % (color-coded by usage)       |
-| Session      | Surface0 bg  | 󰥔    | Session duration (only if available)          |
+| Session      | Surface0 bg  | 󰥔    | Duration + session cost (cost hidden at $0)   |
 
 Context % color thresholds: green <50%, peach <70%, yellow <90%, red ≥90%.
-
-**Lines 2-3 — Rate limits** (fetched via OAuth, cached 60s):
-
-```
-current ●●○○○○○○○○  20% ⟳ 3:45pm
-weekly  ●○○○○○○○○○  12% ⟳ mar 15, 2:00pm
-```
 
 ### Configuration
 
@@ -420,7 +413,7 @@ Thinking: off (use "think harder" when needed)
 Plugins: essentials, developer-tools, testing, assistant, chromedev-tools, til, architecture
 Hooks: status only (with matcher)
 Style: default
-Status line: enabled (shows project, branch, context %, model, cost)
+Status line: enabled (model, project, branch, context %, duration, cost)
 ```
 
 ### Home Environment
