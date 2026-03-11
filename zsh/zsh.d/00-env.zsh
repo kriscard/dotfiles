@@ -36,7 +36,7 @@ export TERM="xterm-ghostty"
 
 # Theme
 export THEME_FLAVOUR=macchiato
-export BAT_THEME=catppuccin_macchiato
+export BAT_THEME="Catppuccin Macchiato"
 
 # Browser
 export BROWSER=/usr/bin/arc
