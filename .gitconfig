@@ -149,7 +149,8 @@
 [transfer]
     fsckObjects = true
 [maintenance]
-    auto = true
+    auto = false
+    strategy = incremental
 [credential]
     helper = osxkeychain
 [rebase]
