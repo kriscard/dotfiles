@@ -30,10 +30,16 @@ startup_command = "nvim tmux.conf"
 preview_command = "bat --language=bash --style=snip --color=always ~/.dotfiles/.config/tmux/tmux.conf"
 
 [[session]]
-name = "gitmux config 📊"
-path = "~/.dotfiles/.config/tmux"
-startup_command = "nvim gitmux.conf"
-preview_command = "bat --language=yaml --style=snip --color=always ~/.dotfiles/.config/tmux/gitmux.conf"
+name = "lazygit config 🦥"
+path = "~/.dotfiles/.config/lazygit"
+startup_command = "nvim config.yml"
+preview_command = "bat --language=yaml --style=snip --color=always ~/.dotfiles/.config/lazygit/config.yml"
+
+[[session]]
+name = "starship config ⭐"
+path = "~/.dotfiles/.config"
+startup_command = "nvim starship.toml"
+preview_command = "bat --language=toml --style=snip --color=always ~/.dotfiles/.config/starship.toml"
 
 [[session]]
 name = "/etc/hosts 🌐"

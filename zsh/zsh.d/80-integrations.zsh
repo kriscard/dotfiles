@@ -1,9 +1,5 @@
 # External Tool Integrations
-
-# direnv - auto-load .envrc files per directory
-if (( $+commands[direnv] )); then
-  eval "$(direnv hook zsh)"
-fi
+# Note: direnv is now cached in 40-lazy.zsh for faster startup
 
 # Load environment from .env file (if exists)
 if [[ -f "$DOTFILES/.env" ]]; then

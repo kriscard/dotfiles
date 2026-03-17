@@ -39,7 +39,7 @@ export THEME_FLAVOUR=macchiato
 export BAT_THEME="Catppuccin Macchiato"
 
 # Browser
-export BROWSER=/usr/bin/arc
+export BROWSER="open -a Arc"
 
 # pnpm
 export PNPM_HOME="$HOME/Library/pnpm"

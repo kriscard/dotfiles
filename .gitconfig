@@ -108,7 +108,6 @@
 [diff]
     renames = copies
     mnemonicprefix = true
-    compactionHeuristic = true
 [difftool]
     prompt = false
 [apply]
@@ -116,6 +115,7 @@
     whitespace = nowarn
 [core]
 	excludesfile = ~/.gitignore_global
+	pager = delta
 [delta]
     features = unobtrusive-line-numbers decorations
     whitespace-error-style = 22 reverse
@@ -136,6 +136,8 @@
     hunk-header-decoration-style = yellow box
 [interactive]
     diffFilter = delta --color-only
+[merge]
+    conflictstyle = zdiff3
 [rerere]
     enabled = true
 [grep]

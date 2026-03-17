@@ -4,6 +4,12 @@ gui:
   border: rounded
   showCommandLog: false
   nerdFontsVersion: "3"
+  showDivergenceFromBaseBranch: arrowAndNumber
+  filterMode: fuzzy
+  showFileTree: true
+  showNumstatInFilesView: true
+  showBranchCommitHash: true
+  animateExplosion: true
   theme:
     activeBorderColor:
       - "#8aadf4"  # blue
@@ -28,6 +34,20 @@ gui:
 git:
   paging:
     pager: delta --paging=never
+  autoFetch: true
+  autoRefresh: true
+  mainBranches:
+    - main
+    - master
+    - develop
+  autoForwardBranches: onlyMainBranches
+  parseEmoji: true
+  commit:
+    autoWrapCommitMessage: true
+    autoWrapWidth: 72
+  log:
+    order: topo-order
+    showGraph: always
 os:
   editPreset: "nvim"
 keybinding:
