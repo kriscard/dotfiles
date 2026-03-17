@@ -84,7 +84,6 @@ alias K='clear'
 alias rmf="rm -rf"
 
 # zoxide
-alias zi="zi"
 alias ccd="cd"
 
 # Lazy tools

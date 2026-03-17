@@ -18,7 +18,7 @@ return {
 			{ "<leader>i", group = "issue", icon = { icon = " ", color = "purple" } },
 			{ "<leader>k", group = "http", icon = { icon = "󰖟 ", color = "green" } },
 			{ "<leader>P", group = "package", icon = { icon = " ", color = "red" } },
-			{ "<leader>S", group = "spectre", icon = { icon = " ", color = "orange" } },
+			{ "<leader>S", group = "search/replace", icon = { icon = " ", color = "orange" } },
 			{ "<leader>o", group = "obsidian", icon = { icon = "󰠗 ", color = "purple" } },
 			{ "<leader>p", group = "pr", icon = { icon = " ", color = "cyan" } },
 			{ "<leader>q", group = "session", icon = { icon = " ", color = "red" } },

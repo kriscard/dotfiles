@@ -20,6 +20,7 @@ _lazy_init() {
       starship) starship init zsh --print-full-init > "$cache_file" 2>/dev/null ;;
       zoxide)   zoxide init zsh > "$cache_file" 2>/dev/null ;;
       atuin)    atuin init zsh --disable-up-arrow > "$cache_file" 2>/dev/null ;;
+      direnv)   direnv hook zsh > "$cache_file" 2>/dev/null ;;
     esac
   fi
 
@@ -31,6 +32,7 @@ if [[ -o interactive ]]; then
   (( $+commands[starship] )) && _lazy_init starship
   (( $+commands[zoxide] )) && _lazy_init zoxide
   (( $+commands[atuin] )) && _lazy_init atuin
+  (( $+commands[direnv] )) && _lazy_init direnv
 fi
 
 # Starship config location
