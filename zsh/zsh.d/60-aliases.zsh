@@ -61,6 +61,11 @@ alias gb="git branch"
 alias gf="git fetch"
 alias gsu='git submodule update --init --recursive'
 alias delete_all_branch='git branch | grep -v "master" | grep -v "main" | grep -v "dev" | grep -v "staging" | grep -v "production" | xargs git branch -D'
+alias gw="git worktree"
+alias gwa="git worktree add"
+alias gwl="git worktree list"
+alias gwr="git worktree remove"
+alias gwp="git worktree prune"
 
 # Stow
 alias unstow="stow -D ."
