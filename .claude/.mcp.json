@@ -1,15 +1,5 @@
 {
   "mcpServers": {
-    "mcp-obsidian": {
-      "type": "stdio",
-      "command": "/opt/homebrew/bin/uvx",
-      "args": ["mcp-obsidian"],
-      "env": {
-        "OBSIDIAN_API_KEY": "${OBSIDIAN_API_KEY}",
-        "OBSIDIAN_HOST": "127.0.0.1",
-        "OBSIDIAN_PORT": "27124"
-      }
-    },
     "context7": {
       "type": "stdio",
       "command": "npx",
