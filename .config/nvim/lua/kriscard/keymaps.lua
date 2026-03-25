@@ -19,9 +19,7 @@ map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit all" })
 -- BUFFER NAVIGATION
 -- ══════════════════════════════════════════════════════════════════════════════
 
--- Buffer navigation
-map("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
-map("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next buffer" })
+-- Buffer close (navigation handled by bufferline plugin)
 map("n", "<C-x>", ":bd<CR>", { desc = "Close current buffer" })
 
 -- ══════════════════════════════════════════════════════════════════════════════
@@ -87,7 +85,7 @@ map("n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next Warning" })
 map("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" })
 
 -- Diagnostic lists
-map("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
+map("n", "<leader>xq", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
 
 -- Code actions (can work globally)
 map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code action" })
@@ -109,7 +107,7 @@ map("n", "<leader>rn", vim.lsp.buf.rename, { desc = "[R]e[n]ame" })
 -- ══════════════════════════════════════════════════════════════════════════════
 
 -- Lazy package manager
-map("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy" })
+map("n", "<leader>L", "<cmd>Lazy<cr>", { desc = "Lazy" })
 
 -- Mason LSP installer
 map("n", "<leader>cm", "<cmd>Mason<cr>", { desc = "Mason" })
@@ -179,14 +177,6 @@ map("n", "<left>", '<cmd>echo "Use h to move!!"<CR>', { desc = "Disabled - use h
 map("n", "<right>", '<cmd>echo "Use l to move!!"<CR>', { desc = "Disabled - use l" })
 map("n", "<up>", '<cmd>echo "Use k to move!!"<CR>', { desc = "Disabled - use k" })
 map("n", "<down>", '<cmd>echo "Use j to move!!"<CR>', { desc = "Disabled - use j" })
-
--- ══════════════════════════════════════════════════════════════════════════════
--- REACT DEVELOPMENT SPECIFIC
--- ══════════════════════════════════════════════════════════════════════════════
-
--- Quick React patterns (these work globally)
-map("n", "<leader>rc", "o{/* */}<Esc>hhi", { desc = "[R]eact [C]omment" })
-map("n", "<leader>rl", "oconsole.log()<Esc>hi", { desc = "[R]eact [L]og" })
 
 -- ══════════════════════════════════════════════════════════════════════════════
 -- ADDITIONAL USEFUL MAPPINGS

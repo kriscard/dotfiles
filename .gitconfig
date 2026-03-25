@@ -119,7 +119,7 @@
 [delta]
     features = unobtrusive-line-numbers decorations
     whitespace-error-style = 22 reverse
-    syntax-theme = base16-256
+    syntax-theme = Catppuccin Macchiato
 [delta "unobtrusive-line-numbers"]
     line-numbers = true
     # line-numbers-minus-style = "#444444"

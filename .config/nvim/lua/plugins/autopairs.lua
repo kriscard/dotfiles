@@ -29,19 +29,6 @@ return {
 				},
 			})
 
-			-- Integration with blink.cmp
-			local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-			local ok, blink_cmp = pcall(require, "blink.cmp")
-			if ok then
-				blink_cmp.setup({
-					completion = {
-						list = {
-							selection = "auto_insert",
-						},
-					},
-				})
-			end
-
 			-- Add bracket completion for treesitter
 			local ts_conds = require("nvim-autopairs.ts-conds")
 

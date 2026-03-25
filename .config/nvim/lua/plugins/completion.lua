@@ -1,5 +1,6 @@
 return {
 	"saghen/blink.cmp",
+	event = { "InsertEnter", "CmdlineEnter" },
 	version = "*",
 	dependencies = {
 		"saghen/blink.compat",
@@ -26,7 +27,7 @@ return {
 		completion = {
 			list = {
 				selection = { preselect = true, auto_insert = true },
-				max_items = 200,
+				max_items = 50,
 			},
 			accept = { auto_brackets = { enabled = true } },
 			documentation = {

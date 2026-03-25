@@ -7,3 +7,15 @@
 .spec.md
 .SPEC.md
 .REVIEW.md
+
+# OS / IDE
+.DS_Store
+
+# Python
+*.pyc
+
+# Environment
+.env.local
+
+# direnv
+.direnv/

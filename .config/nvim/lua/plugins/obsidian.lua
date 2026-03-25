@@ -54,11 +54,11 @@ return {
 			-- ══════════════════════════════════════════════════════════════════════
 			-- Wiki Links & Markdown Links
 			-- ══════════════════════════════════════════════════════════════════════
-			-- Prefer wiki links [[note]] over markdown links [note](note.md)
-			preferred_link_style = "wiki",
-
-			-- How to generate wiki link IDs
-			wiki_link_func = "prepend_note_id", -- prepend_note_id, prepend_note_path, use_alias_only, use_path_only
+			-- Link configuration (replaces deprecated wiki_link_func / preferred_link_style)
+			link = {
+				style = "wiki",    -- "wiki" for [[note]] or "markdown" for [note](note.md)
+				format = "shortest", -- "shortest", "relative", or "absolute"
+			},
 
 			-- Frontmatter configuration
 			frontmatter = {

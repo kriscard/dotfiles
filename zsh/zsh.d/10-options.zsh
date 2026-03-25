@@ -19,7 +19,6 @@ setopt SHARE_HISTORY             # Share history between sessions
 setopt HIST_IGNORE_ALL_DUPS      # Delete old entry if new is duplicate
 setopt HIST_IGNORE_SPACE         # Don't record commands starting with space
 setopt HIST_VERIFY               # Show command before executing from history
-setopt INC_APPEND_HISTORY        # Add commands immediately to history
 
 # Directory options
 setopt AUTO_CD                   # cd by typing directory name

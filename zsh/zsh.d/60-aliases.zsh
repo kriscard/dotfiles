@@ -47,7 +47,7 @@ alias ios='open -a /Applications/Xcode.app/Contents/Developer/Applications/Simul
 alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
 alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
 alias cleanup="fd -H '.DS_Store' -t f -x rm {}"
-alias clsym="find -L . -name . -o -type d -prune -o -type l -exec rm {} +"
+alias clsym="/usr/bin/find -L . -name . -o -type d -prune -o -type l -exec rm {} +"
 
 # Git
 alias ggl="git pull"
@@ -60,7 +60,7 @@ alias gco="git checkout"
 alias gb="git branch"
 alias gf="git fetch"
 alias gsu='git submodule update --init --recursive'
-alias delete_all_branch='git branch | grep -v "master" | grep -v "main" | grep -v "dev" | grep -v "staging" | grep -v "production" | xargs git branch -D'
+alias delete_all_branch='git branch | /usr/bin/grep -v "master" | /usr/bin/grep -v "main" | /usr/bin/grep -v "dev" | /usr/bin/grep -v "staging" | /usr/bin/grep -v "production" | xargs git branch -D'
 alias gw="git worktree"
 alias gwa="git worktree add"
 alias gwl="git worktree list"
