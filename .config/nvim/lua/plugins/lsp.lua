@@ -84,6 +84,10 @@ return {
 					map("<leader>gsd", vim.lsp.buf.definition, "[G]o to [S]ource [D]efinition")
 					map("<leader>e", vim.diagnostic.open_float, "Lin[e] diagnostics")
 
+					vim.keymap.set("n", "<leader>rn", function()
+						return ":IncRename " .. vim.fn.expand("<cword>")
+					end, { buffer = event.buf, expr = true, desc = "LSP: [R]e[n]ame" })
+
 					-- Highlight references on cursor hold
 					local client = vim.lsp.get_client_by_id(event.data.client_id)
 					if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
@@ -107,8 +111,9 @@ return {
 						})
 					end
 
-					-- Toggle inlay hints
+					-- Inlay hints
 					if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
+						vim.lsp.inlay_hint.enable(true, { bufnr = event.buf })
 						map("<leader>th", function()
 							vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
 						end, "[T]oggle Inlay [H]ints")
@@ -121,12 +126,7 @@ return {
 			-- ═══════════════════════════════════════════════════════════════════
 
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
-			local ok, blink_capabilities = pcall(function()
-				return require("blink.compat").get_lsp_capabilities()
-			end)
-			if ok and blink_capabilities then
-				capabilities = vim.tbl_deep_extend("force", capabilities, blink_capabilities)
-			end
+			capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
 
 			-- ═══════════════════════════════════════════════════════════════════
 			-- Server Configurations
@@ -156,7 +156,7 @@ return {
 					settings = {
 						complete_function_calls = true,
 						vtsls = {
-							enableMoveToFileCodeAction = false,
+							enableMoveToFileCodeAction = true,
 							autoUseWorkspaceTsdk = true,
 							experimental = {
 								maxInlayHintLength = 10,
@@ -171,7 +171,7 @@ return {
 							disableAutomaticTypeAcquisition = true,
 							suggest = {
 								completeFunctionCalls = false,
-								includeCompletionsForModuleExports = false,
+								includeCompletionsForModuleExports = true,
 								includeCompletionsForImportStatements = true,
 							},
 							inlayHints = {
@@ -202,7 +202,7 @@ return {
 						javascript = {
 							suggest = {
 								completeFunctionCalls = false,
-								includeCompletionsForModuleExports = false,
+								includeCompletionsForModuleExports = true,
 								includeCompletionsForImportStatements = true,
 							},
 							preferences = {

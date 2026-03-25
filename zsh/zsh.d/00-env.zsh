@@ -7,7 +7,6 @@ export PATH="$HOMEBREW_PREFIX/bin:$HOMEBREW_PREFIX/sbin:$PATH"
 
 # Dotfiles
 export DOTFILES="$HOME/.dotfiles"
-export ZSH="$DOTFILES/zsh"
 
 # PATH configuration (ordered by priority, first = highest)
 path=(
@@ -30,9 +29,6 @@ export PATH
 export EDITOR=nvim
 export GIT_EDITOR=nvim
 export NVIM_CONFIG="$HOME/.config/nvim/init.lua"
-
-# Terminal
-export TERM="xterm-ghostty"
 
 # Theme
 export THEME_FLAVOUR=macchiato

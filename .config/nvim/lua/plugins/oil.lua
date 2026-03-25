@@ -1,5 +1,10 @@
 return {
 	"stevearc/oil.nvim",
+	cmd = "Oil",
+	keys = {
+		{ "<leader>fe", function() require("oil").toggle_float() end, desc = "[F]ile [E]xplorer (Oil)" },
+		{ "<leader>-", function() require("oil").toggle_float() end, desc = "Open Oil" },
+	},
 	dependencies = { "nvim-tree/nvim-web-devicons" },
 	config = function()
 		-- Autocmd to remove colorcolumn in oil buffers

@@ -15,14 +15,7 @@ return {
 	opts = {
 		notify_on_error = true,
 		default_format_opts = { timeout_ms = 3000, lsp_format = "fallback" },
-		format_after_save = { timeout_ms = 3000, lsp_format = "fallback" },
-		formatters = {
-			stylua = {
-				command = vim.fn.stdpath("data") .. "/mason/bin/stylua",
-				args = { "--stdin-filepath", "$FILENAME", "-" },
-				stdin = true,
-			},
-		},
+		format_on_save = { timeout_ms = 3000, lsp_format = "fallback" },
 		formatters_by_ft = {
 			javascript = { "prettierd", "prettier", stop_after_first = true },
 			typescript = { "prettierd", "prettier", stop_after_first = true },
@@ -37,7 +30,8 @@ return {
 			markdown = { "prettierd", "prettier", stop_after_first = true },
 			mdx = { "prettierd", "prettier", stop_after_first = true },
 			astro = { "prettierd", "prettier", stop_after_first = true },
-			ruby = { "prettierd", "prettier", stop_after_first = true },
+			css = { "prettierd", "prettier", stop_after_first = true },
+			scss = { "prettierd", "prettier", stop_after_first = true },
 		},
 	},
 }

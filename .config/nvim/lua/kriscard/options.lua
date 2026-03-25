@@ -29,7 +29,7 @@ opt.incsearch = true --Enable incremental searching
 
 opt.wrap = false -- Disable line wrap
 
-opt.list = false -- Show some invisible characters (tabs...)
+opt.list = false -- Don't show invisible characters (tabs...)
 
 -- search settings
 opt.ignorecase = true -- ignore case when searching
@@ -44,6 +44,8 @@ opt.mouse = "a" -- Enable mouse mode
 opt.updatetime = 250 -- Save changes to swap file every 250ms and trigger CursorHold
 
 opt.completeopt = "menu,menuone,noselect" -- Customize completion menu behavior
+opt.pumblend = 10 -- Popup menu transparency
+opt.winblend = 10 -- Floating window transparency
 
 opt.undofile = true -- Enable persistent undo history
 opt.undolevels = 10000
@@ -61,6 +63,7 @@ opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus" -- Sync with system clip
 opt.cursorline = true -- Enable highlighting of the current line
 
 opt.scrolloff = 10 -- Always keep 10 lines above/below cursor unless at start/end of file
+opt.smoothscroll = true
 
 opt.colorcolumn = "80" -- Highlight the 80th column in the window
 
@@ -104,7 +107,7 @@ opt.fillchars = {
   eob = " ",
 }
 
-opt.jumpoptions = "view"
+opt.jumpoptions = "view,stack"
 opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" }
 opt.shiftround = true -- Round indent
 opt.shortmess:append({ W = true, I = true, c = true, C = true })

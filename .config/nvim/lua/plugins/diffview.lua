@@ -10,8 +10,8 @@ return {
 		"DiffviewFileHistory",
 	},
 	keys = {
-		{ "<leader>gd", "<cmd>DiffviewOpen<CR>", desc = "Open Diffview" },
-		{ "<leader>gD", "<cmd>DiffviewClose<CR>", desc = "Close Diffview" },
+		{ "<leader>gv", "<cmd>DiffviewOpen<CR>", desc = "Open Diffview" },
+		{ "<leader>gV", "<cmd>DiffviewClose<CR>", desc = "Close Diffview" },
 	},
 	config = function()
 		-- Create DAP directory to fix the missing log file error

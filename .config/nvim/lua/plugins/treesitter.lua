@@ -1,6 +1,7 @@
 -- Highlight, edit, and navigate code
 return {
 	"nvim-treesitter/nvim-treesitter",
+	event = { "BufReadPost", "BufNewFile" },
 	build = ":TSUpdate",
 	main = "nvim-treesitter.configs", -- Sets main module to use for opts
 	-- [[ Configure Treesitter ]] See `:help nvim-treesitter`
@@ -48,6 +49,7 @@ return {
 			"gosum",
 			"toml",
 			"dockerfile",
+			"astro",
 		},
 		-- Autoinstall languages that are not installed
 		auto_install = true,
@@ -59,12 +61,6 @@ return {
 			additional_vim_regex_highlighting = { "ruby" },
 		},
 		indent = { enable = true, disable = { "ruby" } },
-		autopairs = {
-			enable = true,
-		},
-		autotag = {
-			enable = true,
-		},
 		incremental_selection = {
 			enable = true,
 			keymaps = {

@@ -1,18 +1,17 @@
 #!/usr/bin/env bash
 
-# Formats tmux window title for Claude Code windows
-# Usage: tmux-window-title <pane_command> <pane_title>
+# Formats tmux window title based on active pane's process
+# Usage: tmux-window-title <pane_current_command> <window_name>
 
 COMMAND="$1"
-TITLE="$2"
+WINDOW_NAME="$2"
 
-# Claude Code shows version as command (e.g., "2.1.20") and uses ✳ or ... in title
-if [[ "$COMMAND" =~ ^[0-9]+\.[0-9]+\.[0-9]+ ]] || [[ "$TITLE" == ✳* ]] || [[ "$TITLE" == ...* ]]; then
-  # Strip Claude's activity indicators and add robot emoji
-  CLEAN_TITLE="${TITLE#✳ }"       # Remove leading "✳ " (star emoji)
-  CLEAN_TITLE="${CLEAN_TITLE#... }" # Remove leading "... "
-  CLEAN_TITLE="${CLEAN_TITLE#\* }"  # Remove leading "* " (asterisk)
-  echo "🤖 $CLEAN_TITLE"
+# Claude Code shows version as command (e.g., "2.1.20")
+if [[ "$COMMAND" =~ ^[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+  echo "🤖 Claude Code"
+elif [[ "$COMMAND" == "nvim" ]]; then
+  echo "$COMMAND"
 else
-  echo "$TITLE"
+  # For everything else, prefer window name if set, else command
+  echo "${WINDOW_NAME:-$COMMAND}"
 fi
