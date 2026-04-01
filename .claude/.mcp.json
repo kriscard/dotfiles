@@ -7,12 +7,6 @@
       "env": {
         "CONTEXT7_API_KEY": "${CONTEXT7_API_KEY}"
       }
-    },
-    "browsermcp": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["@browsermcp/mcp@latest"],
-      "env": {}
     }
   }
 }
