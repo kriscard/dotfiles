@@ -103,4 +103,4 @@ alias pf="fzf --preview 'bat --color=always {}'"
 alias node-use="asdf shell nodejs"
 alias node-list="asdf list nodejs"
 alias node-install="asdf install nodejs"
-alias chrome-debug='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222'
+alias chrome-debug='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222 &'

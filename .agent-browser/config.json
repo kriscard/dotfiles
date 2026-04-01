@@ -1,5 +1,5 @@
 {
   "headed": false,
   "contentBoundaries": true,
-  "autoConnect": true
+  "autoConnect": false
 }
