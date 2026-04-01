@@ -27,7 +27,6 @@ Prefer modern CLI tools when running Bash commands:
 
 1. WebFetch — default for reading web content
 2. WebSearch — default for searching the web
-3. browsermcp — only when interaction needed (clicking, forms, screenshots)
 
 ## Git
 
