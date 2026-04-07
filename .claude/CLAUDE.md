@@ -31,6 +31,7 @@ Prefer modern CLI tools when running Bash commands:
 ## Git
 
 Use conventional commits (feat:, fix:, chore:, docs:, refactor:).
+All git operations require explicit approval (`ask` rule in settings.json).
 
 ## Context Management
 

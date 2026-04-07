@@ -24,7 +24,7 @@ Claude Code's `~/.claude.json` and project `.claude/settings.json` files contain
 | Setting           | Home (Max)                    | Work (API)            |
 | ----------------- | ----------------------------- | --------------------- |
 | Billing           | Unlimited subscription        | Per-token cost        |
-| Model default     | `opus`                        | `sonnet`              |
+| Model default     | `opus[1m]`                    | `sonnet`              |
 | Extended thinking | Always on                     | Off (enable per-task) |
 | Plugins           | All enabled                   | Minimal set           |
 | Output styles     | Learning/explanatory          | Default               |
@@ -54,12 +54,6 @@ Create this file at your work projects or in `~/.claude/settings.json`:
       "Bash(docker run *)",
       "Bash(gh pr view *)",
       "Bash(gh run view *)",
-      "Bash(git branch *)",
-      "Bash(git checkout *)",
-      "Bash(git fetch *)",
-      "Bash(git rebase *)",
-      "Bash(git stash *)",
-      "Bash(git switch *)",
       "Bash(mkdir *)",
       "Bash(node *)",
       "Bash(npm run build *)",
@@ -85,6 +79,9 @@ Create this file at your work projects or in `~/.claude/settings.json`:
       "Edit(./package-lock.json)",
       "Edit(./yarn.lock)",
       "Edit(./pnpm-lock.yaml)"
+    ],
+    "ask": [
+      "Bash(git *)"
     ]
   },
   "hooks": {
@@ -148,8 +145,8 @@ Your current settings at home are fine for Max subscription. Key features:
 
 - `ENABLE_TOOL_SEARCH: auto` - Defers MCP tool loading (same as work)
 - `alwaysThinkingEnabled: true` - Better reasoning
-- `model: opus` - Most capable model
-- 19 plugins enabled - Full skill ecosystem (reduced from 22)
+- `model: opus[1m]` - Most capable model with 1M context
+- 22 plugins enabled - Full skill ecosystem
 - Learning output style - Educational responses
 - Full hooks with matchers - Notifications, linting, status (optimized)
 
@@ -412,6 +409,7 @@ Model: sonnet
 Thinking: off (use "think harder" when needed)
 Plugins: essentials, developer-tools, testing, assistant, chromedev-tools, til, architecture
 Hooks: status only (with matcher)
+Git ops: ask (all git commands require approval)
 Style: default
 Status line: enabled (model, project, branch, context %, duration, cost)
 ```
@@ -419,11 +417,13 @@ Status line: enabled (model, project, branch, context %, duration, cost)
 ### Home Environment
 
 ```
-Model: opus
+Model: opus[1m] (1M context)
 Thinking: always on
-Plugins: 19 (reduced from 22)
-MCP servers: 3 (mcp-obsidian, context7, browsermcp)
+Voice: enabled
+Plugins: 22 (8 official + 13 @kriscard + 1 third-party)
+MCP servers: 2 (context7, browsermcp)
 Hooks: full with matchers (status, notifications, linting)
+Git ops: ask (all git commands require approval)
 Style: learning
 Status line: enabled (same script)
 ```
