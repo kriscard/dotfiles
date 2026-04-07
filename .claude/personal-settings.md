@@ -32,19 +32,13 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
   },
   "permissions": {
     "allow": [
-      "Bash(docker compose exec:*)",
-      "Bash(docker run:*)",
-      "Bash(gh pr view:*)",
-      "Bash(gh run view:*)",
-      "Bash(git branch:*)",
-      "Bash(git checkout:*)",
-      "Bash(git fetch:*)",
-      "Bash(git rebase:*)",
-      "Bash(git stash:*)",
-      "Bash(git switch:*)",
-      "Bash(mkdir:*)",
-      "Bash(node:*)",
-      "Bash(npm run build:*)",
+      "Bash(docker compose exec *)",
+      "Bash(docker run *)",
+      "Bash(gh pr view *)",
+      "Bash(gh run view *)",
+      "Bash(mkdir *)",
+      "Bash(node *)",
+      "Bash(npm run build *)",
       "ExitPlanMode(*)",
       "Fetch(*)",
       "Glob(*)",
@@ -103,10 +97,12 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
       "Bash(sudo rm -rf /*)"
     ],
     "ask": [
+      "Bash(git *)",
       "mcp__browsermcp__*"
     ]
   },
-  "model": "opus",
+  "model": "opus[1m]",
+  "voiceEnabled": true,
   "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "mcp-obsidian",
@@ -190,23 +186,38 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
     "developer-tools@kriscard": true,
     "testing@kriscard": true,
     "assistant@kriscard": true,
-    "chromedev-tools@kriscard": true,
+    "skill-creator@claude-plugins-official": true,
+    "claude-md-management@claude-plugins-official": true,
+    "lua-lsp@claude-plugins-official": true,
     "til@kriscard": true,
     "architecture@kriscard": true,
+    "obsidian-second-brain@kriscard": true,
     "ideation@kriscard": true,
     "content@kriscard": true,
     "ai-development@kriscard": true,
     "neovim-advisor@kriscard": true,
     "dotfiles-optimizer@kriscard": true,
-    "obsidian-second-brain@kriscard": true,
     "studio-startup@kriscard": true,
-    "interactive-learning@kriscard": true
+    "interactive-learning@kriscard": true,
+    "browser@kriscard": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
       "source": {
         "source": "github",
         "repo": "anthropics/claude-plugins-official"
+      }
+    },
+    "kriscard": {
+      "source": {
+        "source": "github",
+        "repo": "kriscard/kriscard-claude-plugins"
+      }
+    },
+    "better-auth-agent-skills": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/better-auth/skills.git"
       }
     }
   },
@@ -235,7 +246,8 @@ Enforces the safety rule: **no AI attribution** in commits or PRs. Empty strings
 
 ### Model & Thinking
 
-- **Model**: `opus` - Most capable reasoning model (5x cost vs Sonnet, but unlimited on Max)
+- **Model**: `opus[1m]` - Most capable reasoning model with 1M context (5x cost vs Sonnet, but unlimited on Max)
+- **Voice**: Enabled — hold-to-talk dictation
 - **Extended thinking**: Always on - Better reasoning, deeper analysis, fewer errors
 
 ---
@@ -246,7 +258,6 @@ Enforces the safety rule: **no AI attribution** in commits or PRs. Empty strings
 
 Broad auto-approve for common dev operations. Notable:
 - All read-only tools (`Glob`, `Grep`, `LS`, `Read`) - no friction for exploration
-- Git operations (branch, checkout, fetch, rebase, stash, switch) - but NOT `push` or `commit`
 - Docker exec/run, Node, npm build
 - All MCP tools (`mcp__*`) auto-approved except browsermcp (see Ask rules)
 
@@ -268,10 +279,11 @@ This extended deny list exists because home sessions run with `opus` + extended 
 ### Ask Rules
 
 ```json
-"ask": ["mcp__browsermcp__*"]
+"ask": ["Bash(git *)", "mcp__browsermcp__*"]
 ```
 
-Browser automation requires confirmation. Prevents unexpected browser interactions during autonomous work.
+- **All git operations** require explicit approval — commit, push, add, rebase, etc.
+- **Browser automation** requires confirmation — prevents unexpected browser interactions during autonomous work.
 
 ---
 
@@ -299,9 +311,9 @@ Browser automation requires confirmation. Prevents unexpected browser interactio
 
 ---
 
-## Plugin Ecosystem (21 plugins)
+## Plugin Ecosystem (22 plugins)
 
-### Official Plugins (5)
+### Official Plugins (8)
 
 | Plugin | Purpose |
 |--------|---------|
@@ -310,8 +322,11 @@ Browser automation requires confirmation. Prevents unexpected browser interactio
 | `learning-output-style` | Educational response mode |
 | `plugin-dev` | Plugin creation and validation |
 | `linear` | Linear issue tracker integration |
+| `skill-creator` | Skill creation and optimization |
+| `claude-md-management` | CLAUDE.md audit and improvement |
+| `lua-lsp` | Lua/Neovim LSP support |
 
-### Community Plugins (15 @kriscard)
+### Community Plugins (13 @kriscard)
 
 | Plugin | Category | Purpose |
 |--------|----------|---------|
@@ -319,17 +334,17 @@ Browser automation requires confirmation. Prevents unexpected browser interactio
 | `developer-tools` | Dev | Code review, debugging, TypeScript, frontend, Next.js |
 | `testing` | QA | Unit, integration, E2E, automation testing |
 | `assistant` | Workflow | Standup, weekly summary, context management, career |
-| `chromedev-tools` | Browser | Page inspection, screenshots, performance traces |
 | `til` | Learning | Today I Learned note creation |
 | `architecture` | Design | Repo analysis, sprint planning, arch docs, ADRs |
+| `obsidian-second-brain` | PKM | Vault management, PARA, OKRs, templates |
 | `ideation` | Planning | Brain dump to structured specs workflow |
 | `content` | Writing | Blog posts, conference talks, technical docs |
 | `ai-development` | AI/ML | Prompt engineering, RAG, agent orchestration |
 | `neovim-advisor` | Editor | Plugin recommendations, LSP config, performance |
 | `dotfiles-optimizer` | Config | Shell config optimization, audit |
-| `obsidian-second-brain` | PKM | Vault management, PARA, OKRs, templates |
 | `studio-startup` | Projects | New project/MVP guided workflow |
 | `interactive-learning` | Education | Interactive learning sessions |
+| `browser` | Browser | Page inspection, screenshots, automation |
 
 ### Third-Party (1)
 
@@ -337,33 +352,16 @@ Browser automation requires confirmation. Prevents unexpected browser interactio
 |--------|---------|
 | `obsidian@obsidian-skills` | Obsidian markdown, bases, JSON canvas |
 
-### Removed from Previous (3)
-
-| Removed Plugin | Reason |
-|----------------|--------|
-| `hookify` | Superseded by native hook configuration |
-| `explanatory-output-style` | Redundant with `learning-output-style` |
-| `lua-lsp` | Rarely used, adds context overhead |
-
 ---
 
 ## MCP Server Configuration
 
-### Enabled Servers (3)
+### Enabled Servers (2)
 
 | Server | Purpose | When Used |
 |--------|---------|-----------|
-| **mcp-obsidian** | Vault read/write/search | Fallback when Obsidian CLI unavailable |
 | **context7** | Library documentation | Up-to-date framework/library docs |
 | **browsermcp** | Browser automation | Interactive web testing (requires `ask` confirmation) |
-
-### Removed from Previous (3)
-
-| Removed Server | Reason |
-|----------------|--------|
-| `playwright` | Redundant with browsermcp for most tasks |
-| `sequential-thinking` | Rarely used, extended thinking covers this |
-| `shadcn` | Only needed for specific UI projects |
 
 ### CLI Over MCP
 
@@ -378,15 +376,17 @@ Prefer built-in tools and CLI over MCP where possible:
 ## Quick Reference
 
 ```
-Model: opus
+Model: opus[1m] (1M context)
 Thinking: always on
-Plugins: 21 (5 official + 15 @kriscard + 1 third-party)
-MCP servers: 3 (mcp-obsidian, context7, browsermcp)
+Voice: enabled
+Plugins: 22 (8 official + 13 @kriscard + 1 third-party)
+MCP servers: 2 (context7, browsermcp)
 Hooks: full pipeline (status, notifications, linting)
 Style: learning (educational responses)
 Teams: enabled (experimental)
 Tool search: auto (deferred loading)
 Attribution: suppressed (empty strings)
+Git ops: ask (all git commands require approval)
 Status line: enabled
 ```
 
@@ -396,14 +396,14 @@ Status line: enabled
 
 | Setting | Home (Max) | Work (API) |
 |---------|------------|------------|
-| Model | `opus` | `sonnet` |
+| Model | `opus[1m]` | `sonnet` |
 | Thinking | Always on | Off (per-task) |
-| Plugins | 21 | 7 |
+| Plugins | 22 | 7 |
 | MCP servers | 3 | project-only |
 | Hooks | 5 events (full pipeline) | 2 events (status only) |
 | Output style | Learning | Default |
 | Agent teams | Enabled | Not set |
 | Deny rules | Extended (disk + rm) | Basic (env + locks) |
-| Ask rules | browsermcp | None |
+| Ask rules | git + browsermcp | git + browsermcp |
 | Attribution | Suppressed | Not set |
 | Cost concern | None (unlimited) | Per-token |

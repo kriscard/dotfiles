@@ -103,4 +103,5 @@ alias pf="fzf --preview 'bat --color=always {}'"
 alias node-use="asdf shell nodejs"
 alias node-list="asdf list nodejs"
 alias node-install="asdf install nodejs"
-alias chrome-debug='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222 &'
+# Launch Chrome with CDP for agent-browser (quits existing instance first)
+alias chrome-debug='osascript -e "tell application \"Google Chrome\" to quit" 2>/dev/null; sleep 3; /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222 &'
