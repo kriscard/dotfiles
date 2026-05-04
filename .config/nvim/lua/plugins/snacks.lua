@@ -54,10 +54,14 @@ return {
 			},
 			image = {
 				enabled = true,
-				-- max dimensions for images in documents (markdown, etc.)
+				-- doc.enabled = false because snacks.image.doc currently crashes
+				-- on Neovim 0.12.1 when rendering markdown inside LSP hover popups
+				-- (decoration provider "conceal_line" + treesitter languagetree errors).
+				-- Re-enable once folke ships an upstream fix.
 				doc = {
-					max_width = 120, -- increase from default 80
-					max_height = 60, -- increase from default 40
+					enabled = false,
+					max_width = 120,
+					max_height = 60,
 				},
 			},
 			indent = { enabled = true },

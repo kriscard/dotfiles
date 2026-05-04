@@ -35,6 +35,22 @@ return {
 					BlinkCmpDocBorder = { fg = colors.surface1, bg = colors.base },
 					BlinkCmpSignatureHelp = { bg = colors.base },
 					BlinkCmpSignatureHelpBorder = { fg = colors.surface1, bg = colors.base },
+
+					-- Native LSP floats (vim.lsp.buf.hover, signature_help, diagnostics) —
+					-- styled to match blink so the hover popup feels like part of the
+					-- same UI surface. surface1 border + base bg + mauve title accent.
+					NormalFloat = { bg = colors.base },
+					FloatBorder = { fg = colors.surface1, bg = colors.base },
+					FloatTitle = { fg = colors.mauve, bg = colors.base, bold = true },
+
+					-- Diagnostic floats: keep severity color but unify bg with hover
+					DiagnosticFloatingError = { fg = colors.red, bg = colors.base },
+					DiagnosticFloatingWarn = { fg = colors.yellow, bg = colors.base },
+					DiagnosticFloatingHint = { fg = colors.teal, bg = colors.base },
+					DiagnosticFloatingInfo = { fg = colors.sky, bg = colors.base },
+
+					-- Active parameter in signature help — use mauve accent
+					LspSignatureActiveParameter = { fg = colors.mauve, bold = true, underline = true },
 				}
 			end,
 		})

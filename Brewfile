@@ -28,6 +28,7 @@ brew "fzf"          # Fuzzy finder
 brew "zoxide"       # Smart cd command
 brew "stow"         # Symlink management
 brew "tree"         # Directory visualization
+brew "tree-sitter-cli"  # Compiles parsers for nvim-treesitter (main branch)
 
 # =============================================================================
 # TERMINAL & SHELL
