@@ -44,8 +44,8 @@ opt.mouse = "a" -- Enable mouse mode
 opt.updatetime = 250 -- Save changes to swap file every 250ms and trigger CursorHold
 
 opt.completeopt = "menu,menuone,noselect" -- Customize completion menu behavior
-opt.pumblend = 10 -- Popup menu transparency
-opt.winblend = 10 -- Floating window transparency
+opt.pumblend = 0 -- Popup menu transparency (0 = opaque)
+opt.winblend = 0 -- Floating window transparency (0 = opaque)
 
 opt.undofile = true -- Enable persistent undo history
 opt.undolevels = 10000

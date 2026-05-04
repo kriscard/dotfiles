@@ -2,7 +2,29 @@ return {
 	"folke/which-key.nvim",
 	event = "VeryLazy",
 	opts = {
+		preset = "modern",
+		delay = 200,
+		win = {
+			border = "rounded",
+			title = true,
+			title_pos = "center",
+			padding = { 1, 2 },
+			no_overlap = true,
+		},
+		layout = {
+			width = { min = 25 },
+			spacing = 3,
+		},
 		plugins = { spelling = true },
+		disable = {
+			ft = {
+				"TelescopePrompt",
+				"snacks_picker_input",
+				"lazy",
+				"mason",
+				"oil",
+			},
+		},
 		-- Clean, organized keymap groups
 		spec = {
 			mode = { "n", "v" },
@@ -14,9 +36,11 @@ return {
 			{ "<leader>f", group = "find", icon = { icon = " ", color = "green" } },
 			{ "<leader>g", group = "git", icon = { icon = " ", color = "orange" } },
 			{ "<leader>gh", group = "hunk", icon = { icon = "󰊢 ", color = "orange" } },
+			{ "<leader>G", group = "git (visual)", icon = { icon = " ", color = "orange" }, mode = "v" },
 			{ "<leader>h", group = "harpoon", icon = { icon = "󱡀 ", color = "blue" } },
 			{ "<leader>i", group = "issue", icon = { icon = " ", color = "purple" } },
 			{ "<leader>k", group = "http", icon = { icon = "󰖟 ", color = "green" } },
+			{ "<leader>l", group = "list", icon = { icon = " ", color = "yellow" } },
 			{ "<leader>P", group = "package", icon = { icon = " ", color = "red" } },
 			{ "<leader>S", group = "search/replace", icon = { icon = " ", color = "orange" } },
 			{ "<leader>o", group = "obsidian", icon = { icon = "󰠗 ", color = "purple" } },
