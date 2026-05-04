@@ -2,10 +2,24 @@
 
 from __future__ import annotations
 
+import os
 from datetime import date
 from pathlib import Path
 
-VAULT_PATH = Path("/Users/kriscard/obsidian-vault-kriscard")
+def _find_vault() -> Path:
+    """Resolve vault path from env var or auto-detect."""
+    if env_vault := os.environ.get("OBSIDIAN_VAULT"):
+        return Path(env_vault).expanduser()
+    # Fallback: look for obsidian-vault-* in home
+    home = Path.home()
+    for candidate in home.glob("obsidian-vault-*"):
+        if candidate.is_dir():
+            return candidate
+    # Last resort — original path
+    return home / "obsidian-vault-kriscard"
+
+
+VAULT_PATH = _find_vault()
 
 AGENTS_FILE = VAULT_PATH / "AGENTS.md"
 SOUL_FILE = VAULT_PATH / "SOUL.md"
