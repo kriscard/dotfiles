@@ -32,7 +32,9 @@ return {
 				-- snacks resolves theme values through nvim_get_hl_id_by_name —
 				-- so values MUST be highlight group names (strings), not hex.
 				-- The SnacksLazygit* groups are defined in init() below from
-				-- the Catppuccin Macchiato palette.
+				-- the official Catppuccin Macchiato (mauve accent) palette.
+				-- Mirrors ~/.config/lazygit/config.yml so <leader>gg and standalone
+				-- lazygit render identically.
 				theme = {
 					[241] = { fg = "SnacksLazygitSpecial" },
 					activeBorderColor = { fg = "SnacksLazygitActiveBorder", bold = true },
@@ -40,8 +42,11 @@ return {
 					cherryPickedCommitFgColor = { fg = "SnacksLazygitCherryFg" },
 					defaultFgColor = { fg = "SnacksLazygitDefault" },
 					inactiveBorderColor = { fg = "SnacksLazygitInactiveBorder" },
+					inactiveViewSelectedLineBgColor = { bg = "SnacksLazygitInactiveSelected" },
+					markedBaseCommitBgColor = { bg = "SnacksLazygitMarkedBaseBg" },
+					markedBaseCommitFgColor = { fg = "SnacksLazygitMarkedBaseFg" },
 					optionsTextColor = { fg = "SnacksLazygitOptions" },
-					searchingActiveBorderColor = { fg = "SnacksLazygitSearch", bold = true },
+					searchingActiveBorderColor = { fg = "SnacksLazygitSearch" },
 					selectedLineBgColor = { bg = "SnacksLazygitSelected" },
 					unstagedChangesColor = { fg = "SnacksLazygitUnstaged" },
 				},
@@ -107,9 +112,12 @@ return {
 			local macchiato = require("catppuccin.palettes").get_palette("macchiato")
 			vim.api.nvim_set_hl(0, "SnacksIndentScope", { fg = macchiato.mauve })
 			vim.api.nvim_set_hl(0, "SnacksLazygitActiveBorder", { fg = macchiato.mauve, bold = true })
-			vim.api.nvim_set_hl(0, "SnacksLazygitInactiveBorder", { fg = macchiato.overlay1 })
+			vim.api.nvim_set_hl(0, "SnacksLazygitInactiveBorder", { fg = macchiato.subtext0 })
+			vim.api.nvim_set_hl(0, "SnacksLazygitInactiveSelected", { bg = macchiato.overlay0 })
+			vim.api.nvim_set_hl(0, "SnacksLazygitMarkedBaseBg", { bg = macchiato.yellow })
+			vim.api.nvim_set_hl(0, "SnacksLazygitMarkedBaseFg", { fg = macchiato.blue })
 			vim.api.nvim_set_hl(0, "SnacksLazygitOptions", { fg = macchiato.blue })
-			vim.api.nvim_set_hl(0, "SnacksLazygitSearch", { fg = macchiato.yellow, bold = true })
+			vim.api.nvim_set_hl(0, "SnacksLazygitSearch", { fg = macchiato.yellow })
 			vim.api.nvim_set_hl(0, "SnacksLazygitSelected", { bg = macchiato.surface0 })
 			vim.api.nvim_set_hl(0, "SnacksLazygitUnstaged", { fg = macchiato.red })
 			vim.api.nvim_set_hl(0, "SnacksLazygitCherryBg", { fg = macchiato.surface1 })
