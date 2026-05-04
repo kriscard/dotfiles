@@ -10,6 +10,8 @@ Thumbs.db
 .Trashes
 
 node_modules/
+__pycache__/
+*.pyc
 
 # Editor/IDE specific
 .vimrc.local
