@@ -133,6 +133,6 @@ opt.diffopt:append("indent-heuristic")
 
 -- Semantic highlighting (Neovim 0.10+)
 -- Ensure LSP semantic tokens take priority over treesitter syntax highlighting
-vim.highlight.priorities.semantic_tokens = 95
+vim.hl.priorities.semantic_tokens = 95
 
 -- Diagnostic config is set authoritatively in lsp.lua (includes sign icons)

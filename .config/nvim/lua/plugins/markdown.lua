@@ -21,6 +21,20 @@ return {
 		opts = {
 			file_types = { "markdown", "vimwiki", "norg", "rmd", "org", "Avante", "mdx", "codecompanion" },
 
+			-- Skip rendering inside floating windows (LSP hover popups have
+			-- filetype=markdown, which would otherwise trigger conceal +
+			-- code-block padding inside the hover float and create empty rows).
+			ignore = function(buf)
+				for _, win in ipairs(vim.api.nvim_list_wins()) do
+					if vim.api.nvim_win_get_buf(win) == buf then
+						if vim.api.nvim_win_get_config(win).relative ~= "" then
+							return true
+						end
+					end
+				end
+				return false
+			end,
+
 			-- Render modes (normal, insert, etc.)
 			render_modes = { "n", "c", "t" }, -- Normal, command, terminal
 
