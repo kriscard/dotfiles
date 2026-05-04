@@ -5,6 +5,10 @@ Modern development environment with one-command setup, Catppuccin Macchiato them
 ![Neovim Development Environment](screenshots/neovim-react.png)
 ![Tmux Workflow](screenshots/tmux-workflow.png)
 
+## Requirements
+
+Neovim ≥ 0.12 (uses `vim.lsp.config` and treesitter `main` branch). `tree-sitter-cli` is installed automatically via Brewfile to compile parsers locally.
+
 ## Quick Start
 
 ```bash
@@ -16,13 +20,17 @@ cd ~/.dotfiles
 
 ## CLI Commands
 
-| Command             | Purpose                    |
-| ------------------- | -------------------------- |
-| `dotfiles init`     | Complete system setup      |
-| `dotfiles doctor`   | Health check & diagnostics |
-| `dotfiles sync`     | Sync configurations only   |
-| `dotfiles backup`   | Backup existing configs    |
-| `dotfiles ds_store` | Clean .DS_Store files      |
+| Command             | Purpose                       |
+| ------------------- | ----------------------------- |
+| `dotfiles init`     | Complete system setup         |
+| `dotfiles update`   | Update dotfiles + packages    |
+| `dotfiles packages` | Install Brewfile packages     |
+| `dotfiles sync`     | Sync config symlinks (Stow)   |
+| `dotfiles doctor`   | Health check & diagnostics    |
+| `dotfiles backup`   | Backup existing configs       |
+| `dotfiles restore`  | Restore from backup           |
+| `dotfiles macos`    | Apply macOS defaults          |
+| `dotfiles ds_store` | Clean .DS_Store files         |
 
 **Options:** `--dry-run` `--force` `--verbose`
 
