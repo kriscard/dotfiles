@@ -10,6 +10,8 @@ gui:
   showNumstatInFilesView: true
   showBranchCommitHash: true
   animateExplosion: true
+  scrollOffMargin: 5
+  scrollOffBehavior: margin
   # Catppuccin Macchiato — mauve accent (official theme)
   # https://github.com/catppuccin/lazygit/blob/main/themes/macchiato/mauve.yml
   theme:
@@ -41,8 +43,9 @@ gui:
   authorColors:
     "*": "#b7bdf8"  # lavender
 git:
-  paging:
-    pager: delta --paging=never
+  pagers:
+    - pager: delta --paging=never
+      colorArg: always
   autoFetch: true
   autoRefresh: true
   mainBranches:
@@ -59,6 +62,7 @@ git:
     showGraph: always
 os:
   editPreset: "nvim"
+  shellFunctionsFile: ~/.dotfiles/zsh/zsh.d/70-functions.zsh
 keybinding:
   universal:
     # Tmux pane navigation (use actual tmux commands, not Neovim commands)
@@ -68,16 +72,16 @@ customCommands:
   - key: "<c-h>"
     command: "tmux select-pane -L"
     context: "global"
-    subprocess: true
+    output: terminal
   - key: "<c-l>"
     command: "tmux select-pane -R"
     context: "global"
-    subprocess: true
+    output: terminal
   - key: "<c-j>"
     command: "tmux select-pane -D"
     context: "global"
-    subprocess: true
+    output: terminal
   - key: "<c-k>"
     command: "tmux select-pane -U"
     context: "global"
-    subprocess: true
+    output: terminal
