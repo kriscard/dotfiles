@@ -7,6 +7,7 @@ This document explains the home/personal Claude Code settings. For work/API sett
 ## Design Philosophy
 
 Home environment uses Max subscription (unlimited). Settings optimize for **capability over cost**:
+
 - Most powerful model (Opus)
 - Extended thinking always on
 - Full plugin ecosystem
@@ -30,12 +31,55 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
     "commit": "",
     "pr": ""
   },
-  "permissions": {
+    "permissions": {
     "allow": [
+      "Bash(agent-browser back)",
+      "Bash(agent-browser click *)",
+      "Bash(agent-browser close)",
+      "Bash(agent-browser console)",
+      "Bash(agent-browser console *)",
+      "Bash(agent-browser diff *)",
+      "Bash(agent-browser errors)",
+      "Bash(agent-browser errors *)",
+      "Bash(agent-browser fill *)",
+      "Bash(agent-browser find *)",
+      "Bash(agent-browser forward)",
+      "Bash(agent-browser get *)",
+      "Bash(agent-browser hover *)",
+      "Bash(agent-browser is *)",
+      "Bash(agent-browser network har *)",
+      "Bash(agent-browser network requests)",
+      "Bash(agent-browser network requests *)",
+      "Bash(agent-browser open *)",
+      "Bash(agent-browser pdf *)",
+      "Bash(agent-browser press *)",
+      "Bash(agent-browser reload)",
+      "Bash(agent-browser screenshot)",
+      "Bash(agent-browser screenshot *)",
+      "Bash(agent-browser scroll *)",
+      "Bash(agent-browser select *)",
+      "Bash(agent-browser snapshot)",
+      "Bash(agent-browser snapshot *)",
+      "Bash(agent-browser type *)",
+      "Bash(agent-browser wait)",
+      "Bash(agent-browser wait *)",
       "Bash(docker compose exec *)",
       "Bash(docker run *)",
       "Bash(gh pr view *)",
       "Bash(gh run view *)",
+      "Bash(git add *)",
+      "Bash(git blame *)",
+      "Bash(git diff)",
+      "Bash(git diff *)",
+      "Bash(git fetch)",
+      "Bash(git fetch *)",
+      "Bash(git log)",
+      "Bash(git log *)",
+      "Bash(git ls-files *)",
+      "Bash(git show)",
+      "Bash(git show *)",
+      "Bash(git status)",
+      "Bash(git status *)",
       "Bash(mkdir *)",
       "Bash(node *)",
       "Bash(npm run build *)",
@@ -96,6 +140,21 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
       "Bash(diskutil resetFusion)",
       "Bash(diskutil zeroDisk)",
       "Bash(fork bomb)",
+      "Bash(git branch -D *)",
+      "Bash(git clean -df *)",
+      "Bash(git clean -f *)",
+      "Bash(git clean -fd *)",
+      "Bash(git filter-branch *)",
+      "Bash(git push --force)",
+      "Bash(git push --force *)",
+      "Bash(git push -f)",
+      "Bash(git push -f *)",
+      "Bash(git rebase)",
+      "Bash(git rebase *)",
+      "Bash(git reflog expire *)",
+      "Bash(git reset --hard)",
+      "Bash(git reset --hard *)",
+      "Bash(git rm *)",
       "Bash(mkfs.ext4 /dev/sda)",
       "Bash(rm -rf $HOME)",
       "Bash(rm -rf $PAI_DIR)",
@@ -108,11 +167,40 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
       "Bash(sudo rm -rf /*)"
     ],
     "ask": [
-      "Bash(git *)",
+      "Bash(agent-browser auth delete *)",
+      "Bash(agent-browser auth login *)",
+      "Bash(agent-browser auth save *)",
+      "Bash(agent-browser clipboard copy *)",
+      "Bash(agent-browser clipboard write *)",
+      "Bash(agent-browser connect *)",
+      "Bash(agent-browser cookies clear)",
+      "Bash(agent-browser cookies clear *)",
+      "Bash(agent-browser cookies set *)",
+      "Bash(agent-browser download *)",
+      "Bash(agent-browser eval *)",
+      "Bash(agent-browser network route *)",
+      "Bash(agent-browser network unroute *)",
+      "Bash(agent-browser set credentials *)",
+      "Bash(agent-browser storage *)",
+      "Bash(agent-browser upload *)",
+      "Bash(git branch *)",
+      "Bash(git checkout *)",
+      "Bash(git cherry-pick *)",
+      "Bash(git commit)",
+      "Bash(git commit *)",
+      "Bash(git merge *)",
+      "Bash(git pull)",
+      "Bash(git pull *)",
+      "Bash(git push)",
+      "Bash(git push *)",
+      "Bash(git restore *)",
+      "Bash(git revert *)",
+      "Bash(git stash *)",
+      "Bash(git switch *)",
+      "Bash(git tag *)",
       "mcp__browsermcp__*"
     ]
-  },
-  "model": "opus[1m]",
+  }  "model": "opus[1m]",
   "voiceEnabled": true,
   "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
@@ -272,10 +360,10 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
 
 ### Environment Variables
 
-| Variable | Value | Purpose |
-|----------|-------|---------|
-| `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` | `"1"` | Enables multi-agent team coordination (experimental) |
-| `ENABLE_TOOL_SEARCH` | `"auto"` | Defers MCP tool loading until needed (~47% context reduction) |
+| Variable                               | Value    | Purpose                                                       |
+| -------------------------------------- | -------- | ------------------------------------------------------------- |
+| `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` | `"1"`    | Enables multi-agent team coordination (experimental)          |
+| `ENABLE_TOOL_SEARCH`                   | `"auto"` | Defers MCP tool loading until needed (~47% context reduction) |
 
 ### Attribution
 
@@ -298,6 +386,7 @@ Enforces the safety rule: **no AI attribution** in commits or PRs. Empty strings
 ### Allow Rules
 
 Broad auto-approve for common dev operations. Notable:
+
 - All read-only tools (`Glob`, `Grep`, `LS`, `Read`) - no friction for exploration
 - Docker exec/run, Node, npm build
 - All MCP tools (`mcp__*`) auto-approved except browsermcp (see Ask rules)
@@ -307,10 +396,12 @@ Broad auto-approve for common dev operations. Notable:
 Two categories of deny rules:
 
 **Data protection** (shared with work):
+
 - `.env`, `.env.*`, `secrets/**`, `credentials.json` - prevents credential leaks
 - Lock files (`package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`) - prevents accidental corruption
 
 **Destructive command blocklist** (home only):
+
 - Disk operations (`diskutil erase/partition/reformat`, `dd`, `mkfs`)
 - Recursive deletions (`rm -rf /`, `rm -rf ~`, `rm -rf $HOME`, `rm -rf $DOTFILES`)
 - Fork bombs
@@ -332,28 +423,28 @@ This extended deny list exists because home sessions run with `opus` + extended 
 
 8 hook events, each with specific purpose:
 
-| Event | Matcher | Hook(s) | Purpose |
-|-------|---------|---------|---------|
-| **PreToolUse** | `Bash\|Write\|Edit\|MultiEdit` | `claude-status-hook` | Track status for write operations only |
-| **Stop** | all | `notification.py` + `claude-status-hook` | Desktop notification + status update on completion |
-| **SubagentStop** | all | `claude-status-hook` | Track when subagents finish |
-| **Notification** | all | `notification.py` + `claude-status-hook` | System notifications + status |
-| **PostToolUse** | `Write\|Edit\|MultiEdit` | `ts_lint.py` | Auto-lint TypeScript after edits |
-| **SessionStart** | all | `memory_session_start.py` | Inject vault memory (AGENTS/SOUL/USER/MEMORY/MOC stub) into context, kick daily reflection if first session of day |
-| **SessionEnd** | all | `memory_session_end.py` | Summarize transcript via Claude Agent SDK → append to vault session log + patch daily-note wikilink |
-| **PreCompact** | all | `memory_session_end.py` | Same handler — captures context before auto-compaction wipes it |
+| Event            | Matcher                        | Hook(s)                                  | Purpose                                                                                                            |
+| ---------------- | ------------------------------ | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| **PreToolUse**   | `Bash\|Write\|Edit\|MultiEdit` | `claude-status-hook`                     | Track status for write operations only                                                                             |
+| **Stop**         | all                            | `notification.py` + `claude-status-hook` | Desktop notification + status update on completion                                                                 |
+| **SubagentStop** | all                            | `claude-status-hook`                     | Track when subagents finish                                                                                        |
+| **Notification** | all                            | `notification.py` + `claude-status-hook` | System notifications + status                                                                                      |
+| **PostToolUse**  | `Write\|Edit\|MultiEdit`       | `ts_lint.py`                             | Auto-lint TypeScript after edits                                                                                   |
+| **SessionStart** | all                            | `memory_session_start.py`                | Inject vault memory (AGENTS/SOUL/USER/MEMORY/MOC stub) into context, kick daily reflection if first session of day |
+| **SessionEnd**   | all                            | `memory_session_end.py`                  | Summarize transcript via Claude Agent SDK → append to vault session log + patch daily-note wikilink                |
+| **PreCompact**   | all                            | `memory_session_end.py`                  | Same handler — captures context before auto-compaction wipes it                                                    |
 
 ### What's Different from Work
 
-| Feature | Home | Work | Why |
-|---------|------|------|-----|
-| PreToolUse matcher | Yes (write ops only) | Yes (same) | Reduces hook overhead |
-| Stop notification | `notification.py` | Removed | Python overhead per-stop |
-| SubagentStop | Enabled | Removed | Not needed at work |
-| Notification hook | Enabled | Removed | Extra overhead |
-| PostToolUse linting | Enabled | Removed | Node process per-edit |
-| SessionStart memory injection | Enabled | Removed | Personal vault, home only |
-| SessionEnd / PreCompact capture | Enabled | Removed | Personal vault, home only |
+| Feature                         | Home                 | Work       | Why                       |
+| ------------------------------- | -------------------- | ---------- | ------------------------- |
+| PreToolUse matcher              | Yes (write ops only) | Yes (same) | Reduces hook overhead     |
+| Stop notification               | `notification.py`    | Removed    | Python overhead per-stop  |
+| SubagentStop                    | Enabled              | Removed    | Not needed at work        |
+| Notification hook               | Enabled              | Removed    | Extra overhead            |
+| PostToolUse linting             | Enabled              | Removed    | Node process per-edit     |
+| SessionStart memory injection   | Enabled              | Removed    | Personal vault, home only |
+| SessionEnd / PreCompact capture | Enabled              | Removed    | Personal vault, home only |
 
 ---
 
@@ -361,41 +452,41 @@ This extended deny list exists because home sessions run with `opus` + extended 
 
 ### Official Plugins (8)
 
-| Plugin | Purpose |
-|--------|---------|
-| `feature-dev` | Guided feature development workflow |
-| `agent-sdk-dev` | Claude Agent SDK app creation |
-| `learning-output-style` | Educational response mode |
-| `plugin-dev` | Plugin creation and validation |
-| `linear` | Linear issue tracker integration |
-| `skill-creator` | Skill creation and optimization |
-| `claude-md-management` | CLAUDE.md audit and improvement |
-| `lua-lsp` | Lua/Neovim LSP support |
+| Plugin                  | Purpose                             |
+| ----------------------- | ----------------------------------- |
+| `feature-dev`           | Guided feature development workflow |
+| `agent-sdk-dev`         | Claude Agent SDK app creation       |
+| `learning-output-style` | Educational response mode           |
+| `plugin-dev`            | Plugin creation and validation      |
+| `linear`                | Linear issue tracker integration    |
+| `skill-creator`         | Skill creation and optimization     |
+| `claude-md-management`  | CLAUDE.md audit and improvement     |
+| `lua-lsp`               | Lua/Neovim LSP support              |
 
 ### Community Plugins (13 @kriscard)
 
-| Plugin | Category | Purpose |
-|--------|----------|---------|
-| `essentials` | Core | Git commits, PRs, specs, search, deep thinking |
-| `developer-tools` | Dev | Code review, debugging, TypeScript, frontend, Next.js |
-| `testing` | QA | Unit, integration, E2E, automation testing |
-| `assistant` | Workflow | Standup, weekly summary, context management, career |
-| `til` | Learning | Today I Learned note creation |
-| `architecture` | Design | Repo analysis, sprint planning, arch docs, ADRs |
-| `obsidian-second-brain` | PKM | Vault management, PARA, OKRs, templates |
-| `ideation` | Planning | Brain dump to structured specs workflow |
-| `content` | Writing | Blog posts, conference talks, technical docs |
-| `ai-development` | AI/ML | Prompt engineering, RAG, agent orchestration |
-| `neovim-advisor` | Editor | Plugin recommendations, LSP config, performance |
-| `dotfiles-optimizer` | Config | Shell config optimization, audit |
-| `studio-startup` | Projects | New project/MVP guided workflow |
-| `interactive-learning` | Education | Interactive learning sessions |
-| `browser` | Browser | Page inspection, screenshots, automation |
+| Plugin                  | Category  | Purpose                                               |
+| ----------------------- | --------- | ----------------------------------------------------- |
+| `essentials`            | Core      | Git commits, PRs, specs, search, deep thinking        |
+| `developer-tools`       | Dev       | Code review, debugging, TypeScript, frontend, Next.js |
+| `testing`               | QA        | Unit, integration, E2E, automation testing            |
+| `assistant`             | Workflow  | Standup, weekly summary, context management, career   |
+| `til`                   | Learning  | Today I Learned note creation                         |
+| `architecture`          | Design    | Repo analysis, sprint planning, arch docs, ADRs       |
+| `obsidian-second-brain` | PKM       | Vault management, PARA, OKRs, templates               |
+| `ideation`              | Planning  | Brain dump to structured specs workflow               |
+| `content`               | Writing   | Blog posts, conference talks, technical docs          |
+| `ai-development`        | AI/ML     | Prompt engineering, RAG, agent orchestration          |
+| `neovim-advisor`        | Editor    | Plugin recommendations, LSP config, performance       |
+| `dotfiles-optimizer`    | Config    | Shell config optimization, audit                      |
+| `studio-startup`        | Projects  | New project/MVP guided workflow                       |
+| `interactive-learning`  | Education | Interactive learning sessions                         |
+| `browser`               | Browser   | Page inspection, screenshots, automation              |
 
 ### Third-Party (1)
 
-| Plugin | Purpose |
-|--------|---------|
+| Plugin                     | Purpose                               |
+| -------------------------- | ------------------------------------- |
 | `obsidian@obsidian-skills` | Obsidian markdown, bases, JSON canvas |
 
 ---
@@ -404,14 +495,15 @@ This extended deny list exists because home sessions run with `opus` + extended 
 
 ### Enabled Servers (2)
 
-| Server | Purpose | When Used |
-|--------|---------|-----------|
-| **context7** | Library documentation | Up-to-date framework/library docs |
-| **browsermcp** | Browser automation | Interactive web testing (requires `ask` confirmation) |
+| Server         | Purpose               | When Used                                             |
+| -------------- | --------------------- | ----------------------------------------------------- |
+| **context7**   | Library documentation | Up-to-date framework/library docs                     |
+| **browsermcp** | Browser automation    | Interactive web testing (requires `ask` confirmation) |
 
 ### CLI Over MCP
 
 Prefer built-in tools and CLI over MCP where possible:
+
 - **GitHub**: `gh` CLI commands
 - **Web content**: `WebFetch` / `WebSearch` built-ins
 - **Obsidian**: `obsidian` CLI first, MCP as fallback
@@ -441,25 +533,25 @@ All Python scripts use `uv run` with PEP 723 inline-script deps (`claude-agent-s
 
 ### Files in the vault (created in Phase 1, not in this repo)
 
-| Path | Purpose |
-|------|---------|
-| `<vault>/AGENTS.md` | Schema / operational rules (Karpathy convention) |
-| `<vault>/SOUL.md` | Short persona for vault-aware operation |
-| `<vault>/USER.md` | Stable user profile |
-| `<vault>/MEMORY.md` | Curated long-term facts (managed by daily reflection) |
-| `<vault>/MOCs/Claude Memory MOC.md` | Agent-readable index of compiled notes |
-| `<vault>/2 - Areas/Daily Ops/<year>/Claude Sessions/` | Per-day session capture directory |
+| Path                                                  | Purpose                                               |
+| ----------------------------------------------------- | ----------------------------------------------------- |
+| `<vault>/AGENTS.md`                                   | Schema / operational rules (Karpathy convention)      |
+| `<vault>/SOUL.md`                                     | Short persona for vault-aware operation               |
+| `<vault>/USER.md`                                     | Stable user profile                                   |
+| `<vault>/MEMORY.md`                                   | Curated long-term facts (managed by daily reflection) |
+| `<vault>/MOCs/Claude Memory MOC.md`                   | Agent-readable index of compiled notes                |
+| `<vault>/2 - Areas/Daily Ops/<year>/Claude Sessions/` | Per-day session capture directory                     |
 
 The vault path is hardcoded in `hooks/lib/memory_common.py:9`. To port to a different machine with a different vault location, edit that one line.
 
 ### External dependencies (install on each machine)
 
-| Tool | Install command | Purpose |
-|------|-----------------|---------|
-| `uv` | `brew install uv` | Runs Python scripts with inline deps |
-| `qmd` | `npm install -g @tobilu/qmd` | Hybrid BM25 + vector + LLM-rerank search |
-| `obsidian` CLI | Settings → General → Command line interface | File ops on the vault |
-| GNU stow | `brew install stow` | Symlink dotfiles into `~/.claude/` |
+| Tool           | Install command                             | Purpose                                  |
+| -------------- | ------------------------------------------- | ---------------------------------------- |
+| `uv`           | `brew install uv`                           | Runs Python scripts with inline deps     |
+| `qmd`          | `npm install -g @tobilu/qmd`                | Hybrid BM25 + vector + LLM-rerank search |
+| `obsidian` CLI | Settings → General → Command line interface | File ops on the vault                    |
+| GNU stow       | `brew install stow`                         | Symlink dotfiles into `~/.claude/`       |
 
 After installing `qmd`:
 
@@ -479,6 +571,7 @@ qmd embed                                # one-time, ~2-3 min
 ### Safety model
 
 The compile script writes ONLY to the auto-write set without permission:
+
 - `Claude Sessions/*.md` (raw captures)
 - `MEMORY.md` + archive
 - `MOCs/Claude Memory MOC.md` + archive
@@ -499,14 +592,14 @@ No `/recall` slash command — recall lives as a skill in the plugin marketplace
 
 ### Token budget (bounded by design)
 
-| Source | Frequency | Cost cap |
-|--------|-----------|----------|
-| SessionStart injection | every session | ~2300 tokens (AGENTS+SOUL+USER+MEMORY+MOC stub) |
-| SessionEnd Agent SDK | every session-end (if ≥5 turns) | bounded — Haiku 4.5, last 50 turns, ~2KB/msg cap |
-| MOC full read | on-demand only | ~3000 tokens cap (auto-rolls older entries) |
-| MEMORY.md | every session | ~1000 tokens cap (auto-archives oldest) |
-| Daily reflection | once per active day | bounded by yesterday's session log |
-| Compile / lint | manual | bounded by today's session log |
+| Source                 | Frequency                       | Cost cap                                         |
+| ---------------------- | ------------------------------- | ------------------------------------------------ |
+| SessionStart injection | every session                   | ~2300 tokens (AGENTS+SOUL+USER+MEMORY+MOC stub)  |
+| SessionEnd Agent SDK   | every session-end (if ≥5 turns) | bounded — Haiku 4.5, last 50 turns, ~2KB/msg cap |
+| MOC full read          | on-demand only                  | ~3000 tokens cap (auto-rolls older entries)      |
+| MEMORY.md              | every session                   | ~1000 tokens cap (auto-archives oldest)          |
+| Daily reflection       | once per active day             | bounded by yesterday's session log               |
+| Compile / lint         | manual                          | bounded by today's session log                   |
 
 Net effect: per-session overhead is bounded regardless of how big memory grows over years.
 
@@ -539,17 +632,17 @@ Status line: enabled
 
 ## Side-by-Side Comparison with Work
 
-| Setting | Home (Max) | Work (API) |
-|---------|------------|------------|
-| Model | `opus[1m]` | `sonnet` |
-| Thinking | Always on | Off (per-task) |
-| Plugins | 22 | 7 |
-| MCP servers | 3 | project-only |
-| Hooks | 8 events (full pipeline + memory) | 2 events (status only) |
-| Memory system | Enabled (vault-backed second brain) | Disabled |
-| Output style | Learning | Default |
-| Agent teams | Enabled | Not set |
-| Deny rules | Extended (disk + rm) | Basic (env + locks) |
-| Ask rules | git + browsermcp | git + browsermcp |
-| Attribution | Suppressed | Not set |
-| Cost concern | None (unlimited) | Per-token |
+| Setting       | Home (Max)                          | Work (API)             |
+| ------------- | ----------------------------------- | ---------------------- |
+| Model         | `opus[1m]`                          | `sonnet`               |
+| Thinking      | Always on                           | Off (per-task)         |
+| Plugins       | 22                                  | 7                      |
+| MCP servers   | 3                                   | project-only           |
+| Hooks         | 8 events (full pipeline + memory)   | 2 events (status only) |
+| Memory system | Enabled (vault-backed second brain) | Disabled               |
+| Output style  | Learning                            | Default                |
+| Agent teams   | Enabled                             | Not set                |
+| Deny rules    | Extended (disk + rm)                | Basic (env + locks)    |
+| Ask rules     | git + browsermcp                    | git + browsermcp       |
+| Attribution   | Suppressed                          | Not set                |
+| Cost concern  | None (unlimited)                    | Per-token              |
