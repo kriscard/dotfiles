@@ -169,6 +169,36 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
           }
         ]
       }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run ~/.dotfiles/.claude/hooks/memory_session_start.py"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run ~/.dotfiles/.claude/hooks/memory_session_end.py"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run ~/.dotfiles/.claude/hooks/memory_session_end.py"
+          }
+        ]
+      }
     ]
   },
   "statusLine": {
@@ -289,7 +319,7 @@ This extended deny list exists because home sessions run with `opus` + extended 
 
 ## Hook Pipeline
 
-5 hook events, each with specific purpose:
+8 hook events, each with specific purpose:
 
 | Event | Matcher | Hook(s) | Purpose |
 |-------|---------|---------|---------|
@@ -298,6 +328,9 @@ This extended deny list exists because home sessions run with `opus` + extended 
 | **SubagentStop** | all | `claude-status-hook` | Track when subagents finish |
 | **Notification** | all | `notification.py` + `claude-status-hook` | System notifications + status |
 | **PostToolUse** | `Write\|Edit\|MultiEdit` | `ts_lint.py` | Auto-lint TypeScript after edits |
+| **SessionStart** | all | `memory_session_start.py` | Inject vault memory (AGENTS/SOUL/USER/MEMORY/MOC stub) into context, kick daily reflection if first session of day |
+| **SessionEnd** | all | `memory_session_end.py` | Summarize transcript via Claude Agent SDK → append to vault session log + patch daily-note wikilink |
+| **PreCompact** | all | `memory_session_end.py` | Same handler — captures context before auto-compaction wipes it |
 
 ### What's Different from Work
 
@@ -308,6 +341,8 @@ This extended deny list exists because home sessions run with `opus` + extended 
 | SubagentStop | Enabled | Removed | Not needed at work |
 | Notification hook | Enabled | Removed | Extra overhead |
 | PostToolUse linting | Enabled | Removed | Node process per-edit |
+| SessionStart memory injection | Enabled | Removed | Personal vault, home only |
+| SessionEnd / PreCompact capture | Enabled | Removed | Personal vault, home only |
 
 ---
 
@@ -373,6 +408,103 @@ Prefer built-in tools and CLI over MCP where possible:
 
 ---
 
+## Memory System (vault-backed second brain)
+
+Auto-captures every Claude Code session into the Obsidian vault, compiles distilled knowledge into PARA notes, and re-injects vault context at SessionStart. Inspired by Karpathy's LLM-knowledge-base gist + coleam00's claude-memory-compiler. PARA-native (no parallel `Knowledge/` taxonomy) and plugin-aware (coexists with `obsidian-second-brain` without modifying it).
+
+### Files in this dotfiles dir
+
+```
+.claude/
+├── hooks/
+│   ├── lib/memory_common.py         # vault paths, write-guard, atomic-claim helper for tmux concurrency
+│   ├── memory_session_start.py      # SessionStart: inject AGENTS+SOUL+USER+MEMORY+MOC stub
+│   └── memory_session_end.py        # SessionEnd + PreCompact: SDK-summarize transcript → session log + wikilink
+└── scripts/
+    ├── memory_compile.py            # concept extraction + qmd query + permission-gated writes
+    ├── memory_reflect.py            # daily curation: yesterday's session log → vault MEMORY.md
+    └── memory_lint.py               # read-only health check (broken links, orphans, MOC drift)
+```
+
+All Python scripts use `uv run` with PEP 723 inline-script deps (`claude-agent-sdk`). No requirements.txt or venv to manage.
+
+### Files in the vault (created in Phase 1, not in this repo)
+
+| Path | Purpose |
+|------|---------|
+| `<vault>/AGENTS.md` | Schema / operational rules (Karpathy convention) |
+| `<vault>/SOUL.md` | Short persona for vault-aware operation |
+| `<vault>/USER.md` | Stable user profile |
+| `<vault>/MEMORY.md` | Curated long-term facts (managed by daily reflection) |
+| `<vault>/MOCs/Claude Memory MOC.md` | Agent-readable index of compiled notes |
+| `<vault>/2 - Areas/Daily Ops/<year>/Claude Sessions/` | Per-day session capture directory |
+
+The vault path is hardcoded in `hooks/lib/memory_common.py:9`. To port to a different machine with a different vault location, edit that one line.
+
+### External dependencies (install on each machine)
+
+| Tool | Install command | Purpose |
+|------|-----------------|---------|
+| `uv` | `brew install uv` | Runs Python scripts with inline deps |
+| `qmd` | `npm install -g @tobilu/qmd` | Hybrid BM25 + vector + LLM-rerank search |
+| `obsidian` CLI | Settings → General → Command line interface | File ops on the vault |
+| GNU stow | `brew install stow` | Symlink dotfiles into `~/.claude/` |
+
+After installing `qmd`:
+
+```bash
+qmd collection add <vault-path> --name vault
+qmd context add qmd://vault "<short context line for the agent>"
+qmd embed                                # one-time, ~2-3 min
+```
+
+`claude-agent-sdk` installs lazily when uv first runs the SessionEnd / compile / reflect scripts — no manual install needed.
+
+### Hook behavior at a glance
+
+- **SessionStart** — emits ~2300 tokens of vault context (AGENTS + SOUL + USER + MEMORY + MOC stub) via `hookSpecificOutput.additionalContext`. Bounded forever regardless of vault growth (MOC is stub-loaded; MEMORY.md is capped + auto-archived). Also kicks `memory_reflect.py` in the background if first session of day (atomic claim across tmux panes).
+- **SessionEnd / PreCompact** — receives transcript JSON via stdin, spawns Haiku 4.5 via `claude-agent-sdk` to summarize, appends `## HH:MM — <project>` section to today's session log, and patches today's daily note in-place under `## 💬 Sessions` with a wikilink. Uses `fcntl.flock` for safe concurrent writes from parallel tmux sessions.
+
+### Safety model
+
+The compile script writes ONLY to the auto-write set without permission:
+- `Claude Sessions/*.md` (raw captures)
+- `MEMORY.md` + archive
+- `MOCs/Claude Memory MOC.md` + archive
+- `## 💬 Sessions` line in today's daily note
+
+Everything else — new concept notes in `3 - Resources/<subfolder>/`, edits to existing notes, deletions — requires explicit user approval. `compile.py` defaults to `--dry-run`; `--apply` requires interactive confirmation; `--apply --yes` skips the prompt for scripted runs.
+
+### Recall mechanism
+
+The `memory-recall` skill in the `obsidian-second-brain` plugin fires on natural-language patterns ("what did I learn about", "remember when we", "did I decide", "what's my note on") and runs:
+
+```
+qmd query "<topic>" --json -n 8       → semantic+hybrid+rerank match
+obsidian search:context query="..."    → keyword fallback
+```
+
+No `/recall` slash command — recall lives as a skill in the plugin marketplace.
+
+### Token budget (bounded by design)
+
+| Source | Frequency | Cost cap |
+|--------|-----------|----------|
+| SessionStart injection | every session | ~2300 tokens (AGENTS+SOUL+USER+MEMORY+MOC stub) |
+| SessionEnd Agent SDK | every session-end (if ≥5 turns) | bounded — Haiku 4.5, last 50 turns, ~2KB/msg cap |
+| MOC full read | on-demand only | ~3000 tokens cap (auto-rolls older entries) |
+| MEMORY.md | every session | ~1000 tokens cap (auto-archives oldest) |
+| Daily reflection | once per active day | bounded by yesterday's session log |
+| Compile / lint | manual | bounded by today's session log |
+
+Net effect: per-session overhead is bounded regardless of how big memory grows over years.
+
+### Reusable from the existing setup
+
+Memory hooks follow the conventions of the existing `notification.py` and `ts_lint.py` hooks: `uv run` shebang for the SDK-using ones, stdin-JSON parsing, stderr for logs. The compile script shells out to the `obsidian` CLI (already on PATH via the `obsidian-second-brain` plugin's `obsidian` skill).
+
+---
+
 ## Quick Reference
 
 ```
@@ -381,7 +513,9 @@ Thinking: always on
 Voice: enabled
 Plugins: 22 (8 official + 13 @kriscard + 1 third-party)
 MCP servers: 2 (context7, browsermcp)
-Hooks: full pipeline (status, notifications, linting)
+Hooks: full pipeline (status, notifications, linting, memory capture)
+Memory system: enabled (SessionStart injection + SessionEnd/PreCompact capture + daily reflection + compile/lint scripts)
+External tooling: uv, qmd (npm), obsidian CLI, stow
 Style: learning (educational responses)
 Teams: enabled (experimental)
 Tool search: auto (deferred loading)
@@ -400,7 +534,8 @@ Status line: enabled
 | Thinking | Always on | Off (per-task) |
 | Plugins | 22 | 7 |
 | MCP servers | 3 | project-only |
-| Hooks | 5 events (full pipeline) | 2 events (status only) |
+| Hooks | 8 events (full pipeline + memory) | 2 events (status only) |
+| Memory system | Enabled (vault-backed second brain) | Disabled |
 | Output style | Learning | Default |
 | Agent teams | Enabled | Not set |
 | Deny rules | Extended (disk + rm) | Basic (env + locks) |
