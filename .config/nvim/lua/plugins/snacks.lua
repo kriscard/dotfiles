@@ -4,8 +4,12 @@ return {
 		priority = 1000,
 		lazy = false,
 		---@module 'snacks'
-		---@type snacks.Config
-		opts = {
+		opts = function()
+			-- Pull the Catppuccin Macchiato palette inline so theme keys
+			-- reference hex colors directly — no intermediate SnacksLazygit*
+			-- highlight groups needed.
+			local macchiato = require("catppuccin.palettes").get_palette("macchiato")
+			return {
 			bigfile = {
 				notify = true,
 				-- notify = true, -- show notification when big file detected
@@ -29,17 +33,19 @@ return {
 			lazygit = {
 				enabled = true,
 				configure = true,
+				-- Theme colors point straight at the Catppuccin Macchiato palette
+				-- (no intermediate SnacksLazygit* highlight groups required).
 				theme = {
-					[241] = { fg = "SnacksLazygitSpecial" },
-					activeBorderColor = { fg = "SnacksLazygitActiveBorder", bold = true },
-					cherryPickedCommitBgColor = { fg = "SnacksLazygitCherryBg" },
-					cherryPickedCommitFgColor = { fg = "SnacksLazygitCherryFg" },
-					defaultFgColor = { fg = "SnacksLazygitDefault" },
-					inactiveBorderColor = { fg = "SnacksLazygitInactiveBorder" },
-					optionsTextColor = { fg = "SnacksLazygitOptions" },
-					searchingActiveBorderColor = { fg = "SnacksLazygitSearch", bold = true },
-					selectedLineBgColor = { bg = "SnacksLazygitSelected" },
-					unstagedChangesColor = { fg = "SnacksLazygitUnstaged" },
+					[241] = { fg = macchiato.lavender },
+					activeBorderColor = { fg = macchiato.mauve, bold = true },
+					cherryPickedCommitBgColor = { fg = macchiato.surface1 },
+					cherryPickedCommitFgColor = { fg = macchiato.mauve },
+					defaultFgColor = { fg = macchiato.text },
+					inactiveBorderColor = { fg = macchiato.overlay1 },
+					optionsTextColor = { fg = macchiato.blue },
+					searchingActiveBorderColor = { fg = macchiato.yellow, bold = true },
+					selectedLineBgColor = { bg = macchiato.surface0 },
+					unstagedChangesColor = { fg = macchiato.red },
 				},
 				-- Disable Snacks' tmux navigation (uses TmuxNavigate commands that don't work in terminal)
 				-- Navigation is handled by lazygit config with proper tmux commands
@@ -95,21 +101,13 @@ return {
 			},
 			words = {},
 			zen = {},
-		},
+			}
+		end,
 		init = function()
-			-- Snacks highlight groups using Catppuccin Macchiato palette
+			-- Only SnacksIndentScope remains — the lazygit theme now references
+			-- the Catppuccin palette directly inside opts().
 			local macchiato = require("catppuccin.palettes").get_palette("macchiato")
 			vim.api.nvim_set_hl(0, "SnacksIndentScope", { fg = macchiato.mauve })
-			vim.api.nvim_set_hl(0, "SnacksLazygitActiveBorder", { fg = macchiato.mauve, bold = true })
-			vim.api.nvim_set_hl(0, "SnacksLazygitInactiveBorder", { fg = macchiato.overlay1 })
-			vim.api.nvim_set_hl(0, "SnacksLazygitOptions", { fg = macchiato.blue })
-			vim.api.nvim_set_hl(0, "SnacksLazygitSearch", { fg = macchiato.yellow, bold = true })
-			vim.api.nvim_set_hl(0, "SnacksLazygitSelected", { bg = macchiato.surface0 })
-			vim.api.nvim_set_hl(0, "SnacksLazygitUnstaged", { fg = macchiato.red })
-			vim.api.nvim_set_hl(0, "SnacksLazygitCherryBg", { fg = macchiato.surface1 })
-			vim.api.nvim_set_hl(0, "SnacksLazygitCherryFg", { fg = macchiato.mauve })
-			vim.api.nvim_set_hl(0, "SnacksLazygitDefault", { fg = macchiato.text })
-			vim.api.nvim_set_hl(0, "SnacksLazygitSpecial", { fg = macchiato.lavender })
 
 			-- Create GoToFile command early for sesh integration
 			-- Command is available immediately, but defers picker until Snacks loads
