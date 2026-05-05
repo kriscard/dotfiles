@@ -3,19 +3,17 @@
 # requires-python = ">=3.10"
 # dependencies = []
 # ///
-"""SessionEnd hook — captures conversation transcript for memory extraction.
+"""PreCompact hook — captures conversation transcript before auto-compaction.
 
-When a Claude Code session ends, this hook reads the transcript path from
-stdin, extracts conversation context, and spawns memory_flush.py as a
-background process to summarize the session and append to the vault session
-log.
+When Claude Code's context window fills up, it auto-compacts (summarizes and
+discards detail). This hook fires BEFORE that happens, extracting conversation
+context and spawning memory_flush.py to extract knowledge that would otherwise
+be lost to summarization.
 
 The hook itself does NO API calls — only local file I/O for speed (<10s).
 
-Recursion guard: when memory_flush.py invokes the Claude Agent SDK, that
-spawns a child Claude Code process which would re-fire this hook. The flush
-script sets CLAUDE_INVOKED_BY=memory_flush in its env; we exit immediately
-when we see it.
+Recursion guard: same as SessionEnd — exit immediately when invoked from
+within a memory_flush.py-spawned Agent SDK child process.
 """
 
 from __future__ import annotations
@@ -45,11 +43,14 @@ STATE_DIR.mkdir(parents=True, exist_ok=True)
 logging.basicConfig(
     filename=str(LOG_FILE),
     level=logging.INFO,
-    format="%(asctime)s %(levelname)s [hook] %(message)s",
+    format="%(asctime)s %(levelname)s [pre-compact] %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
 )
 
-MIN_TURNS_TO_FLUSH = 1
+# Higher threshold than SessionEnd: don't burn a flush on a 4-turn warm-up
+# that happens to trip the context window. If you're compacting, the
+# conversation usually has substance worth preserving.
+MIN_TURNS_TO_FLUSH = 5
 
 
 def main() -> None:
@@ -60,13 +61,14 @@ def main() -> None:
         return
 
     session_id = hook_input.get("session_id", "unknown")
-    event = hook_input.get("hook_event_name", "SessionEnd")
     transcript_path_str = hook_input.get("transcript_path", "")
     cwd = hook_input.get("cwd", "")
 
-    logging.info("%s fired: session=%s cwd=%s", event, session_id, cwd)
+    logging.info("PreCompact fired: session=%s cwd=%s", session_id, cwd)
 
     if not transcript_path_str:
+        # Known Claude Code bug: PreCompact sometimes ships an empty
+        # transcript_path. Nothing actionable, just log and bail.
         logging.info("SKIP: no transcript path")
         return
     transcript_path = Path(transcript_path_str)
