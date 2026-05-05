@@ -38,14 +38,5 @@ fi
 # Starship config location
 export STARSHIP_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/starship.toml"
 
-# asdf - lazy load full asdf.sh only when `asdf` command is used
-# (Shim PATH is set in .zshenv so non-interactive shells get it too.)
-if [[ -d "/opt/homebrew/opt/asdf/libexec" ]]; then
-  export ASDF_DIR="/opt/homebrew/opt/asdf/libexec"
-
-  asdf() {
-    unfunction asdf 2>/dev/null
-    source "$ASDF_DIR/asdf.sh"
-    asdf "$@"
-  }
-fi
+# asdf 0.16+ ships as a native Go binary — no shell loader to source, no
+# lazy-load needed. Shim PATH is set in .zshenv for non-interactive shells.
