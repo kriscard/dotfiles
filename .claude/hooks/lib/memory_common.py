@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+import json
+import logging
 import os
-from datetime import date
+import subprocess
+from datetime import date, datetime
 from pathlib import Path
 
 def _find_vault() -> Path:
@@ -151,3 +154,100 @@ def moc_stub(full_moc_text: str, max_lines: int = 30) -> str:
     if len(lines) <= max_lines:
         return full_moc_text
     return "\n".join(lines[:max_lines]) + f"\n\n_(stub: {len(lines) - max_lines} more lines in full MOC)_"
+
+
+# ---------------------------------------------------------------------------
+# Transcript helpers — shared by SessionEnd and PreCompact hooks.
+
+MAX_TURNS = 30
+MAX_CONTEXT_CHARS = 15_000
+
+# .claude/hooks/lib/memory_common.py → ../../scripts/memory_flush.py
+FLUSH_SCRIPT = Path(__file__).parent.parent.parent / "scripts" / "memory_flush.py"
+
+
+def extract_conversation_context(transcript_path: Path) -> tuple[str, int]:
+    """Read JSONL transcript, return (markdown_text, turn_count) for the last
+    MAX_TURNS user/assistant turns, capped at MAX_CONTEXT_CHARS."""
+    turns: list[str] = []
+    with open(transcript_path, encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                entry = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+
+            msg = entry.get("message", {})
+            if isinstance(msg, dict):
+                role = msg.get("role", "")
+                content = msg.get("content", "")
+            else:
+                role = entry.get("role", "")
+                content = entry.get("content", "")
+
+            if role not in ("user", "assistant"):
+                continue
+
+            if isinstance(content, list):
+                parts: list[str] = []
+                for block in content:
+                    if isinstance(block, dict) and block.get("type") == "text":
+                        parts.append(block.get("text", ""))
+                    elif isinstance(block, str):
+                        parts.append(block)
+                content = "\n".join(parts)
+
+            if isinstance(content, str) and content.strip():
+                label = "User" if role == "user" else "Assistant"
+                turns.append(f"**{label}:** {content.strip()}\n")
+
+    recent = turns[-MAX_TURNS:]
+    context = "\n".join(recent)
+
+    if len(context) > MAX_CONTEXT_CHARS:
+        context = context[-MAX_CONTEXT_CHARS:]
+        boundary = context.find("\n**")
+        if boundary > 0:
+            context = context[boundary + 1 :]
+
+    return context, len(recent)
+
+
+def spawn_flush(context: str, session_id: str, project_name: str, hhmm: str) -> None:
+    """Write context to a temp file under STATE_DIR and Popen memory_flush.py
+    detached. Fire-and-forget — errors are logged, never raised."""
+    STATE_DIR.mkdir(parents=True, exist_ok=True)
+    timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    context_file = STATE_DIR / f"session-flush-{session_id}-{timestamp}.md"
+    try:
+        context_file.write_text(context, encoding="utf-8")
+    except Exception as exc:
+        logging.error("failed to write context file: %s", exc)
+        return
+
+    cmd = [
+        "uv",
+        "run",
+        str(FLUSH_SCRIPT),
+        str(context_file),
+        session_id,
+        project_name,
+        hhmm,
+    ]
+    try:
+        subprocess.Popen(
+            cmd,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            stdin=subprocess.DEVNULL,
+            start_new_session=True,
+        )
+        logging.info(
+            "spawned memory_flush.py: session=%s chars=%d project=%s",
+            session_id, len(context), project_name,
+        )
+    except Exception as exc:
+        logging.error("failed to spawn memory_flush.py: %s", exc)
