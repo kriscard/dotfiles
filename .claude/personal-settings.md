@@ -31,7 +31,7 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
     "commit": "",
     "pr": ""
   },
-    "permissions": {
+  "permissions": {
     "allow": [
       "Bash(agent-browser back)",
       "Bash(agent-browser click *)",
@@ -83,6 +83,8 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
       "Bash(mkdir *)",
       "Bash(node *)",
       "Bash(npm run build *)",
+      "Bash(obsidian)",
+      "Bash(obsidian *)",
       "Bash(qmd --help)",
       "Bash(qmd bench *)",
       "Bash(qmd get *)",
@@ -156,6 +158,12 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
       "Bash(git reset --hard *)",
       "Bash(git rm *)",
       "Bash(mkfs.ext4 /dev/sda)",
+      "Bash(obsidian dev:cdp *)",
+      "Bash(obsidian dev:debug *)",
+      "Bash(obsidian dev:eval *)",
+      "Bash(obsidian devtools)",
+      "Bash(obsidian devtools *)",
+      "Bash(obsidian eval *)",
       "Bash(rm -rf $HOME)",
       "Bash(rm -rf $PAI_DIR)",
       "Bash(rm -rf $PAI_HOME)",
@@ -198,16 +206,46 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
       "Bash(git stash *)",
       "Bash(git switch *)",
       "Bash(git tag *)",
+      "Bash(obsidian append *)",
+      "Bash(obsidian base:create *)",
+      "Bash(obsidian bookmark *)",
+      "Bash(obsidian create *)",
+      "Bash(obsidian daily:append *)",
+      "Bash(obsidian daily:prepend *)",
+      "Bash(obsidian delete)",
+      "Bash(obsidian delete *)",
+      "Bash(obsidian history:restore *)",
+      "Bash(obsidian move *)",
+      "Bash(obsidian patch *)",
+      "Bash(obsidian plugin:disable *)",
+      "Bash(obsidian plugin:enable *)",
+      "Bash(obsidian plugin:install *)",
+      "Bash(obsidian plugin:reload *)",
+      "Bash(obsidian plugin:uninstall *)",
+      "Bash(obsidian plugins:restrict)",
+      "Bash(obsidian plugins:restrict *)",
+      "Bash(obsidian prepend *)",
+      "Bash(obsidian property:remove *)",
+      "Bash(obsidian property:set *)",
+      "Bash(obsidian reload)",
+      "Bash(obsidian rename *)",
+      "Bash(obsidian restart)",
+      "Bash(obsidian snippet:disable *)",
+      "Bash(obsidian snippet:enable *)",
+      "Bash(obsidian sync)",
+      "Bash(obsidian sync *)",
+      "Bash(obsidian sync:restore *)",
+      "Bash(obsidian task *)",
+      "Bash(obsidian template:insert *)",
+      "Bash(obsidian theme:install *)",
+      "Bash(obsidian theme:set *)",
+      "Bash(obsidian theme:uninstall *)",
       "mcp__browsermcp__*"
     ]
-  }  "model": "opus[1m]",
-  "voiceEnabled": true,
+  },
+  "model": "opus[1m]",
   "enableAllProjectMcpServers": true,
-  "enabledMcpjsonServers": [
-    "mcp-obsidian",
-    "context7",
-    "browsermcp"
-  ],
+  "enabledMcpjsonServers": ["context7", "browsermcp"],
   "hooks": {
     "PreToolUse": [
       {
@@ -284,7 +322,8 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
         "hooks": [
           {
             "type": "command",
-            "command": "uv run ~/.dotfiles/.claude/hooks/memory_session_end.py"
+            "command": "uv run ~/.dotfiles/.claude/hooks/memory_session_end.py",
+            "timeout": 10
           }
         ]
       }
@@ -294,7 +333,8 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
         "hooks": [
           {
             "type": "command",
-            "command": "uv run ~/.dotfiles/.claude/hooks/memory_session_end.py"
+            "command": "uv run ~/.dotfiles/.claude/hooks/memory_pre_compact.py",
+            "timeout": 10
           }
         ]
       }
@@ -311,13 +351,13 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
     "plugin-dev@claude-plugins-official": true,
     "linear@claude-plugins-official": true,
     "obsidian@obsidian-skills": true,
+    "skill-creator@claude-plugins-official": true,
+    "lua-lsp@claude-plugins-official": true,
+    "claude-md-management@claude-plugins-official": true,
     "essentials@kriscard": true,
     "developer-tools@kriscard": true,
     "testing@kriscard": true,
     "assistant@kriscard": true,
-    "skill-creator@claude-plugins-official": true,
-    "claude-md-management@claude-plugins-official": true,
-    "lua-lsp@claude-plugins-official": true,
     "til@kriscard": true,
     "architecture@kriscard": true,
     "obsidian-second-brain@kriscard": true,
@@ -327,8 +367,7 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
     "neovim-advisor@kriscard": true,
     "dotfiles-optimizer@kriscard": true,
     "studio-startup@kriscard": true,
-    "interactive-learning@kriscard": true,
-    "browser@kriscard": true
+    "interactive-learning@kriscard": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
@@ -337,20 +376,23 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
         "repo": "anthropics/claude-plugins-official"
       }
     },
-    "kriscard": {
-      "source": {
-        "source": "github",
-        "repo": "kriscard/kriscard-claude-plugins"
-      }
-    },
     "better-auth-agent-skills": {
       "source": {
         "source": "git",
         "url": "https://github.com/better-auth/skills.git"
       }
+    },
+    "kriscard": {
+      "source": {
+        "source": "github",
+        "repo": "kriscard/kriscard-claude-plugins"
+      }
     }
   },
-  "alwaysThinkingEnabled": true
+  "alwaysThinkingEnabled": true,
+  "editorMode": "vim",
+  "teammateMode": "tmux",
+  "voiceEnabled": true
 }
 ```
 
