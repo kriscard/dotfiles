@@ -46,6 +46,7 @@ opt.updatetime = 250 -- Save changes to swap file every 250ms and trigger Cursor
 opt.completeopt = "menu,menuone,noselect" -- Customize completion menu behavior
 opt.pumblend = 0 -- Popup menu transparency (0 = opaque)
 opt.winblend = 0 -- Floating window transparency (0 = opaque)
+opt.winborder = "rounded" -- Default border for all floats (oil prompts, LSP hover, etc.)
 
 opt.undofile = true -- Enable persistent undo history
 opt.undolevels = 10000
