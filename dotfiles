@@ -418,25 +418,27 @@ cmd_sync() {
         fi
     done
 
-    # Stow packages
-    local packages=(".config" "zsh" ".claude" ".agent-browser")
-
-    for package in "${packages[@]}"; do
-        if [[ -d "$package" ]]; then
-            if [[ "$DRY_RUN" == true ]]; then
-                echo "[DRY RUN] Would stow: $package"
-            else
-                info "Stowing $package..."
-                if stow -t "$HOME" "$package" 2>/dev/null; then
-                    success "Stowed $package"
-                else
-                    warning "Some symlinks for $package already exist. Restowing..."
-                    stow -R -t "$HOME" "$package"
-                    success "Restowed $package"
-                fi
-            fi
+    # Stow the dotfiles repo as a single package — the structure inside the
+    # repo (e.g. .config/nvim/, .claude/CLAUDE.md, zsh/zsh.d/) maps directly to
+    # $HOME (e.g. $HOME/.config/nvim/, $HOME/.claude/CLAUDE.md, $HOME/zsh.d/).
+    # .stow-local-ignore filters out top-level files that shouldn't be linked.
+    #
+    # NOTE: do NOT iterate packages with `stow -t $HOME .config` etc. — that
+    # treats the inner directory as the package root, dropping the .config/
+    # prefix and putting nvim at $HOME/nvim instead of $HOME/.config/nvim.
+    if [[ "$DRY_RUN" == true ]]; then
+        echo "[DRY RUN] Would run: stow -t $HOME ."
+        stow -n -v -t "$HOME" . 2>&1 | head -40
+    else
+        info "Stowing dotfiles..."
+        if stow -t "$HOME" . 2>/dev/null; then
+            success "Stowed dotfiles"
+        else
+            warning "Some symlinks already exist. Restowing..."
+            stow -R -t "$HOME" .
+            success "Restowed dotfiles"
         fi
-    done
+    fi
 
     if [[ "$DRY_RUN" != true ]]; then
         success "Configuration files synced successfully!"
