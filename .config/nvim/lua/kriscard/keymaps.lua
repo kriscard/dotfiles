@@ -87,8 +87,10 @@ map("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" })
 -- Diagnostic lists
 map("n", "<leader>xq", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
 
--- Code actions (can work globally)
-map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code action" })
+-- Code action (kriscard.util.code_action) — async fan-out, skips slow servers.
+map({ "n", "v" }, "<leader>ca", function()
+	require("kriscard.util.code_action").run()
+end, { desc = "Code action" })
 
 -- ══════════════════════════════════════════════════════════════════════════════
 -- LSP DOCUMENTATION & REFACTORING (Global)
