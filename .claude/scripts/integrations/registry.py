@@ -39,11 +39,11 @@ def _build_registry() -> dict[str, Integration]:
     except ImportError:
         pass
 
-    # Jira (added when phase 4.3 ships)
+    # Jira (renamed jira_api to avoid shadowing PyPI "jira" package)
     try:
-        from . import jira  # type: ignore
+        from . import jira_api  # type: ignore
 
-        registry["jira"] = Integration(name="jira", enabled=True, cli=jira.cli)
+        registry["jira"] = Integration(name="jira", enabled=True, cli=jira_api.cli)
     except ImportError:
         pass
 
