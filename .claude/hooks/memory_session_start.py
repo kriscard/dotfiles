@@ -99,9 +99,7 @@ def main() -> None:
         # Pointer to AGENTS.md (read on demand for vault operations, not inline).
         sections.append(
             "# === Vault rules ===\n"
-            "Vault operational rules live in $VAULT/AGENTS.md. Read it when "
-            "performing vault operations (create/update/delete notes, run "
-            "compile/reflect/lint, search-before-write). Not loaded inline."
+            "See $VAULT/AGENTS.md for vault operation rules (read on demand)."
         )
 
         if not sections:
