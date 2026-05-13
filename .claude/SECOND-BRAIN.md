@@ -1,41 +1,29 @@
 # Second Brain — Setup Guide
 
-End-to-end instructions for reproducing this AI second brain on a new machine (work laptop, new personal machine, etc.). The system is local-first, vault-based, and built on Claude Code + Claude Agent SDK.
-
-Based on the [second-brain-starter](https://github.com/coleam00/second-brain-starter) architecture, adapted to Chris's existing Obsidian PARA vault.
-
----
-
-## What this system does
-
-- **Remembers** across Claude Code sessions via vault-backed `SOUL.md`/`USER.md`/`MEMORY.md` + session capture
-- **Searches** months of personal notes with hybrid keyword + vector + LLM-rerank (qmd)
-- **Captures** every Claude Code conversation as a daily session log
-- **Distills** session logs into PARA concept notes (memory_compile.py)
-- **Monitors** proactively via scheduled heartbeat: surfaces new GitHub PR reviews, important Gmail, overdue Jira on weekdays
-- **Defends** with a 3-layer sanitization wrapper for any external content
-- **Routes credentials** through Python CLI wrappers — the LLM never sees API keys
+End-to-end instructions for reproducing this AI second brain on a new machine. Local-first, vault-based, built on Claude Code.
 
 ---
 
 ## Prerequisites
 
-| Tool | Why | Install |
-|---|---|---|
-| macOS (Sequoia or newer) | launchd scheduling | n/a |
-| Python 3.10+ | scripts | `brew install python` |
-| `uv` | inline-script dep management | `brew install uv` or `curl -LsSf https://astral.sh/uv/install.sh \| sh` |
-| GNU `stow` | dotfiles symlinking | `brew install stow` |
-| Obsidian | vault viewer + CLI | obsidian.md (install + enable CLI in Settings → General) |
-| `gh` CLI | GitHub integration | `brew install gh` then `gh auth login` |
-| `qmd` | hybrid vault search | `npm i -g @tobilu/qmd` |
-| Node.js | qmd runtime | `brew install node` |
-| `fd`, `rg`, `ast-grep`, `zoxide`, `tree` | modern CLI defaults | `brew install fd ripgrep ast-grep zoxide tree` |
+| Tool                                     | Why                                 | Install                                                                 |
+| ---------------------------------------- | ----------------------------------- | ----------------------------------------------------------------------- |
+| macOS (Sequoia or newer)                 | launchd scheduling                  | n/a                                                                     |
+| Python 3.10+                             | scripts                             | `brew install python`                                                   |
+| `uv`                                     | inline-script dep management        | `brew install uv` or `curl -LsSf https://astral.sh/uv/install.sh \| sh` |
+| GNU `stow`                               | dotfiles symlinking                 | `brew install stow`                                                     |
+| Obsidian                                 | vault viewer + CLI                  | obsidian.md (install + enable CLI in Settings → General)                |
+| `gh` CLI                                 | GitHub integration                  | `brew install gh` then `gh auth login`                                  |
+| `qmd`                                    | hybrid vault search                 | `npm i -g @tobilu/qmd`                                                  |
+| Node.js                                  | qmd runtime                         | `brew install node`                                                     |
+| `fd`, `rg`, `ast-grep`, `zoxide`, `tree` | modern CLI defaults                 | `brew install fd ripgrep ast-grep zoxide tree`                          |
+| `jq`                                     | JSON inspection (hook verification) | `brew install jq`                                                       |
 
 Optional but recommended:
+
 - VSCode / Neovim with Claude Code extension
-- A separate Google Cloud project for Gmail OAuth (if Gmail integration desired)
-- An Atlassian API token if Jira integration desired
+- Google Cloud project (if Gmail / Calendar integration desired — they share one OAuth client)
+- Atlassian API token (if Jira integration desired)
 
 ---
 
@@ -48,11 +36,13 @@ stow --target=$HOME .
 ```
 
 This symlinks:
+
 - `~/.dotfiles/.claude/` → `~/.claude/` (hooks, scripts, skills, settings)
 - `~/.dotfiles/.config/` → `~/.config/`
 - All other dotfile targets
 
 Verify:
+
 ```bash
 ls -l ~/.claude/hooks/memory_*.py
 ls -l ~/.claude/scripts/heartbeat.py
@@ -72,14 +62,17 @@ If using **Obsidian Sync**: log in, restore vault to `~/obsidian-vault-<your-use
 If using **git-backed vault**: clone it.
 
 **Important: vault path.** The hooks hardcode `/Users/kriscard/obsidian-vault-kriscard`. On a new machine with a different username, edit `~/.dotfiles/.claude/hooks/lib/memory_common.py:9`:
+
 ```python
 VAULT_PATH = Path("/Users/<username>/obsidian-vault-kriscard")
 ```
-*(Future improvement: env var fallback — see TODO in setup recap.)*
+
+_(Future improvement: env var fallback — see TODO in setup recap.)_
 
 ### 2b. Enable Obsidian CLI
 
 Obsidian → Settings → General → enable **"Command line interface"**. Verify:
+
 ```bash
 obsidian --version
 ```
@@ -93,6 +86,7 @@ git clone git@github.com:kriscard/obsidian-web-clippers.git ~/projects/obsidian-
 ```
 
 In the Obsidian Web Clipper browser extension settings:
+
 - Templates → Import → import each `.json` file from the repo
 - Verify the `path` field in each template matches your vault structure (e.g. `3 - Resources/Articles/`)
 
@@ -134,10 +128,10 @@ qmd query "PARA structure" --json -n 3
 Claude Code reads hooks from `~/.claude/settings.json`. Should already be wired by step 1 (stow). Verify:
 
 ```bash
-grep -A2 '"SessionStart"\|"SessionEnd"\|"PreCompact"' ~/.claude/settings.json
+jq '.hooks | {SessionStart, SessionEnd, PreCompact}' ~/.claude/settings.json
 ```
 
-Each should point at `~/.dotfiles/.claude/hooks/memory_session_*.py`.
+Each `command` field should point at `~/.dotfiles/.claude/hooks/memory_session_*.py`.
 
 **Test the SessionStart payload size** — it must stay under ~10 KB or Claude Code evicts it to disk:
 
@@ -154,18 +148,16 @@ If over the threshold, trim AGENTS.md / USER.md per the same pattern already in 
 
 ## 5. Auto-memory dir
 
+> _Skip this step if you're on the canonical machine — the files are already in place. This applies only when bootstrapping a second machine._
+
 Claude Code uses `~/.claude/projects/<slug>/memory/` as a harness-guaranteed inline tier. Populate with the typed feedback memories that exist on the canonical machine:
 
 ```bash
 # Copy memories from the source machine
 mkdir -p ~/.claude/projects/-Users-<username>-obsidian-vault-kriscard/memory/
-scp source-machine:~/.claude/projects/-Users-kriscard-obsidian-vault-kriscard/memory/*.md \
-    ~/.claude/projects/-Users-<username>-obsidian-vault-kriscard/memory/
+rsync -av <source-host>:~/.claude/projects/-Users-kriscard-obsidian-vault-kriscard/memory/ \
+          ~/.claude/projects/-Users-<username>-obsidian-vault-kriscard/memory/
 ```
-
-Or rebuild on the new machine by asking Claude (in a new session) to remember the same feedback rules.
-
----
 
 ## 6. Integrations layer
 
@@ -186,32 +178,33 @@ First run installs ~30 Python deps via `uv` (one-time, ~10 seconds).
 
 ### 6b. Gmail (OAuth)
 
-```bash
-# 1. Create OAuth credentials
-#    Go to: console.cloud.google.com → APIs & Services → Credentials
-#    Create OAuth 2.0 Client ID → Application type: Desktop app
-#    Download JSON.
+GCP setup (one-time per machine, all done at console.cloud.google.com):
 
-# 2. Save credentials file:
+1. Create a project (or use an existing one).
+2. Enable both APIs on the project:
+   - `library/gmail.googleapis.com`
+   - `library/calendar-json.googleapis.com` (Calendar in 6d shares this OAuth client)
+3. **OAuth consent screen** → External (personal Gmail can't pick Internal) → add yourself under **Test users**.
+4. **Credentials** → Create OAuth 2.0 Client ID → Desktop app → Download JSON.
+
+Then locally:
+
+```bash
 mkdir -p ~/.dotfiles/.claude/scripts/integrations/.tokens
 mv ~/Downloads/client_secret_*.json \
    ~/.dotfiles/.claude/scripts/integrations/.tokens/google-client-secret.json
 
-# 3. Run the OAuth flow (opens browser):
+# OAuth flow (opens browser, grants Gmail + Calendar in one consent):
 uv run ~/.dotfiles/.claude/scripts/integrations/query.py gmail --setup
 
-# 4. After approving, the token is cached. Test:
+# Test:
 uv run ~/.dotfiles/.claude/scripts/integrations/query.py gmail triage
 uv run ~/.dotfiles/.claude/scripts/integrations/query.py gmail count-unread
 ```
 
-Scope is **gmail.readonly only**. The system never drafts or sends emails.
+Scope: **gmail.readonly + calendar.readonly** via a shared OAuth client (`lib/google_auth.py`). The system never drafts emails or modifies events.
 
-**Triage rules** (`~/.dotfiles/.claude/scripts/integrations/gmail.py`):
-- Important senders: `@roofr.com`, `newsletter`, `@anthropic.com`, `noreply@github.com`
-- Important subjects: `this week in`, `action required`, `deadline`, `approve`, `urgent`, `security advisory`
-
-Edit the constants `IMPORTANT_SENDER_FRAGMENTS` / `IMPORTANT_SUBJECT_KEYWORDS` to tune for your inbox.
+Tune triage by editing `IMPORTANT_SENDER_FRAGMENTS` / `IMPORTANT_SUBJECT_KEYWORDS` in `gmail.py`.
 
 ### 6c. Jira (API token)
 
@@ -233,9 +226,34 @@ uv run ~/.dotfiles/.claude/scripts/integrations/query.py jira blocked
 
 The `.env` is gitignored — never commit it.
 
-### 6d. Linear / Calendar (deferred)
+### 6d. Calendar (shared OAuth with Gmail)
 
-Templates exist; modules not built yet. When ready, copy `integration_template.py` to `linear.py` / `calendar_api.py` and follow the existing patterns.
+Calendar reuses the OAuth client + token minted in 6b. No separate setup — if you completed 6b correctly, you already have a token covering both scopes.
+
+```bash
+uv run ~/.dotfiles/.claude/scripts/integrations/query.py calendar today
+uv run ~/.dotfiles/.claude/scripts/integrations/query.py calendar next
+```
+
+Default filters in `calendar_api.py`: skip declined, skip all-day, primary calendar only. Tune by editing `_passes_filters()`.
+
+### 6e. Linear (via MCP plugin, not Python)
+
+Linear is accessed through the Linear MCP plugin in live Claude Code sessions — no Python module, no API token, nothing in `integrations/`. The plugin handles OAuth and exposes tools directly to Claude.
+
+**On a new machine:**
+
+1. Plugin ships with dotfiles. Verify it's listed:
+
+   ```bash
+   jq '.enabledPlugins // empty' ~/.claude/settings.json
+   ```
+
+2. In any Claude Code session, ask Claude about Linear (e.g., "list my open Linear issues"). The first call prompts for OAuth in the browser via `mcp__plugin_linear_linear__authenticate`. Authenticate once per machine; the token persists.
+
+**When you'd build a Python module instead:**
+
+Only if you need **scheduled** Linear ingestion (heartbeat surfacing overdue tickets while Claude isn't running). MCP can't fire from launchd. Migration path: copy `integration_template.py` → `linear_api.py`, add a Linear API token to `.env`, register in `registry.py`. Until that need is concrete, leave it alone.
 
 ---
 
@@ -268,6 +286,7 @@ tail /tmp/heartbeat-github.log /tmp/heartbeat-github.err
 ```
 
 **Schedules (Eastern Time):**
+
 - `github` — weekdays 9:30 (PR review sweep, post-standup)
 - `gmail` — weekdays 8:15 (newsletter triage)
 - `jira` — weekdays 8:00 (overdue + in-progress carry awareness)
@@ -277,6 +296,7 @@ tail /tmp/heartbeat-github.log /tmp/heartbeat-github.err
 ### Notification permissions
 
 macOS may suppress notifications until you grant permission. After the first manual `launchctl start`:
+
 - System Settings → Notifications → find the helper that triggered (often "Script Editor" or "Terminal")
 - Enable banners
 
@@ -309,18 +329,19 @@ The skill is **optional** — the system is already built. The skill is only use
 
 After everything is set up:
 
-| Check | Command | Expected |
-|---|---|---|
-| Hook size | `echo '{}' \| uv run ~/.dotfiles/.claude/hooks/memory_session_start.py \| wc -c` | < 10000 |
-| qmd indexed | `qmd ls` | shows vault collection |
-| qmd recall works | `qmd query "PARA" --json -n 2` | returns notes |
-| GitHub integration | `uv run ~/.dotfiles/.claude/scripts/integrations/query.py github prs` | markdown or empty section |
-| Gmail integration (after OAuth) | `uv run ... query.py gmail triage` | markdown or empty section |
-| Jira integration (after .env) | `uv run ... query.py jira overdue` | markdown or empty section |
-| Heartbeat dry-run | `uv run ~/.dotfiles/.claude/scripts/heartbeat.py --mode github --dry-run` | prints sections, no notification |
-| launchd loaded | `launchctl list \| grep kriscard.heartbeat` | 3 entries |
-| Manual heartbeat fires | `launchctl start com.kriscard.heartbeat.github` then check macOS notification | banner appears within 10–60 sec |
-| /context in Claude Code | open session in vault, run `/context` | Memory files ~2-3K tokens (not 858) |
+| Check                           | Command                                                                          | Expected                            |
+| ------------------------------- | -------------------------------------------------------------------------------- | ----------------------------------- |
+| Hook size                       | `echo '{}' \| uv run ~/.dotfiles/.claude/hooks/memory_session_start.py \| wc -c` | < 10000                             |
+| qmd indexed                     | `qmd ls`                                                                         | shows vault collection              |
+| qmd recall works                | `qmd query "PARA" --json -n 2`                                                   | returns notes                       |
+| GitHub integration              | `uv run ~/.dotfiles/.claude/scripts/integrations/query.py github prs`            | markdown or empty section           |
+| Gmail integration (after OAuth)    | `uv run ... query.py gmail triage`                                            | markdown or empty section           |
+| Calendar integration (after OAuth) | `uv run ... query.py calendar today`                                          | markdown or empty section           |
+| Jira integration (after .env)      | `uv run ... query.py jira overdue`                                            | markdown or empty section           |
+| Heartbeat dry-run               | `uv run ~/.dotfiles/.claude/scripts/heartbeat.py --mode github --dry-run`        | prints sections, no notification    |
+| launchd loaded                  | `launchctl list \| grep kriscard.heartbeat`                                      | 3 entries                           |
+| Manual heartbeat fires          | `launchctl start com.kriscard.heartbeat.github` then check macOS notification    | banner appears within 10–60 sec     |
+| /context in Claude Code         | open session in vault, run `/context`                                            | Memory files ~2-3K tokens (not 858) |
 
 ---
 
@@ -373,34 +394,42 @@ After everything is set up:
 ## Troubleshooting
 
 **SessionStart hook silent / not injecting context**
+
 - Run `echo '{}' | uv run ~/.dotfiles/.claude/hooks/memory_session_start.py` manually
 - Check `~/.claude/settings.json` has the SessionStart entry
 - Check hook script is executable: `ls -l ~/.claude/hooks/memory_session_start.py` (must have `x`)
 
 **`/context` shows Memory files = 858 tokens (= only CLAUDE.md)**
+
 - Hook output > 10 KB and harness evicted it to disk
 - Check: `echo '{}' | uv run ~/.dotfiles/.claude/hooks/memory_session_start.py | wc -c`
 - Trim AGENTS.md / USER.md in the hook output if needed
 
 **`qmd query` slow on first call**
+
 - Reranker model (~1.28 GB) downloads on first call. Subsequent calls are sub-second.
 
 **Gmail OAuth fails with "Access blocked"**
+
 - OAuth consent screen must be in "Testing" mode with your email added as a test user
 - Don't need full Google verification for personal use
 
 **Jira `assignee` JQL errors**
+
 - Modern Atlassian Cloud requires `accountId`, not username
 - Use `currentUser()` in JQL (already done in `jira_api.py`)
 
 **`launchctl load` "already loaded"**
+
 - `launchctl unload <plist>` then re-`load`
 
 **Heartbeat notification never appears**
+
 - System Settings → Notifications → "Script Editor" or the trigger app → Allow banners
 - Notification queued but suppressed; check `/tmp/heartbeat-<mode>.log` for the actual output
 
 **Integration module shadows a PyPI package (e.g., `jira.py`)**
+
 - Pattern bit us during build: integration files in `~/.dotfiles/.claude/scripts/integrations/` end up on `sys.path` when query.py runs, shadowing top-level PyPI packages of the same name
 - Workaround: rename the integration module (`jira.py` → `jira_api.py`)
 - Currently affects: `jira_api.py` (could affect future `linear.py`, `slack.py`, etc.)

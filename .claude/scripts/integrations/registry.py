@@ -47,6 +47,16 @@ def _build_registry() -> dict[str, Integration]:
     except ImportError:
         pass
 
+    # Calendar (shares Google OAuth with gmail via lib/google_auth.py)
+    try:
+        from . import calendar_api  # type: ignore
+
+        registry["calendar"] = Integration(
+            name="calendar", enabled=True, cli=calendar_api.cli
+        )
+    except ImportError:
+        pass
+
     return registry
 
 
