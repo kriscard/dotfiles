@@ -4,14 +4,16 @@
 Outputs a structured `additionalContext` JSON per Claude Code hooks spec.
 Also kicks off daily reflection in the background if it hasn't run today.
 
-Files injected (in order):
-  1. AGENTS.md  — vault rules
-  2. SOUL.md    — agent persona
-  3. USER.md    — stable user profile
-  4. MEMORY.md  — long-term curated facts (capped)
-  5. MOC stub   — top entries of the agent index
+Files injected (in order — matches second-brain-starter architecture reference):
+  1. SOUL.md    — agent persona
+  2. USER.md    — stable user profile
+  3. MEMORY.md  — long-term curated facts (capped)
+  4. MOC stub   — recent compiled entries (the "recent daily logs" tier)
 
-Total budget: ~2300 tokens, bounded by file caps.
+Total budget: under ~10KB so the output stays inline rather than being
+evicted to disk by the harness. AGENTS.md (vault operational rules) is
+intentionally NOT in this list — it's only relevant when doing vault
+operations, and the agent can read it on demand.
 """
 
 from __future__ import annotations
@@ -24,7 +26,6 @@ from pathlib import Path
 # Add lib/ to sys.path so we can import memory_common
 sys.path.insert(0, str(Path(__file__).parent / "lib"))
 from memory_common import (  # noqa: E402
-    AGENTS_FILE,
     MEMORY_FILE,
     MOC_FILE,
     SOUL_FILE,
@@ -80,7 +81,6 @@ def main() -> None:
         pass
 
     try:
-        agents = read_or_empty(AGENTS_FILE)
         soul = read_or_empty(SOUL_FILE)
         user = read_or_empty(USER_FILE)
         memory = truncate_to_token_cap(read_or_empty(MEMORY_FILE), target_tokens=1000)
@@ -88,8 +88,6 @@ def main() -> None:
         moc_top = moc_stub(moc_full) if moc_full else ""
 
         sections: list[str] = []
-        if agents:
-            sections.append(f"# === Vault: AGENTS.md (rules) ===\n{agents}")
         if soul:
             sections.append(f"# === Vault: SOUL.md (persona) ===\n{soul}")
         if user:
@@ -98,6 +96,13 @@ def main() -> None:
             sections.append(f"# === Vault: MEMORY.md (long-term curated facts) ===\n{memory}")
         if moc_top:
             sections.append(f"# === Vault: Claude Memory MOC (recent index, stub) ===\n{moc_top}")
+        # Pointer to AGENTS.md (read on demand for vault operations, not inline).
+        sections.append(
+            "# === Vault rules ===\n"
+            "Vault operational rules live in $VAULT/AGENTS.md. Read it when "
+            "performing vault operations (create/update/delete notes, run "
+            "compile/reflect/lint, search-before-write). Not loaded inline."
+        )
 
         if not sections:
             return
