@@ -1,6 +1,12 @@
 #!/usr/bin/env -S uv run --script
 # /// script
 # requires-python = ">=3.10"
+# dependencies = [
+#   "google-api-python-client>=2.0",
+#   "google-auth>=2.0",
+#   "google-auth-oauthlib>=1.0",
+#   "jira>=3.5",
+# ]
 # ///
 """Unified CLI for all integrations.
 
