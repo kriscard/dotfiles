@@ -88,14 +88,19 @@ def main() -> None:
         moc_top = moc_stub(moc_full) if moc_full else ""
 
         sections: list[str] = []
+        loaded_paths: list[Path] = []  # real file paths for the status line
         if soul:
             sections.append(f"# === Vault: SOUL.md (persona) ===\n{soul}")
+            loaded_paths.append(SOUL_FILE)
         if user:
             sections.append(f"# === Vault: USER.md (profile) ===\n{user}")
+            loaded_paths.append(USER_FILE)
         if memory:
             sections.append(f"# === Vault: MEMORY.md (long-term curated facts) ===\n{memory}")
+            loaded_paths.append(MEMORY_FILE)
         if moc_top:
             sections.append(f"# === Vault: Claude Memory MOC (recent index, stub) ===\n{moc_top}")
+            loaded_paths.append(MOC_FILE)
         # Pointer to AGENTS.md (read on demand for vault operations, not inline).
         sections.append(
             "# === Vault rules ===\n"
@@ -105,13 +110,21 @@ def main() -> None:
         if not sections:
             return
 
+        additional_context = "\n\n".join(sections)
         output = {
             "hookSpecificOutput": {
                 "hookEventName": "SessionStart",
-                "additionalContext": "\n\n".join(sections),
+                "additionalContext": additional_context,
             }
         }
         print(json.dumps(output))
+
+        # Visible status on stderr — confirms the hook fired and lists each
+        # real file path that was inlined into context.
+        size_kb = len(additional_context) / 1024
+        print(f"🧠 vault memory loaded ({size_kb:.1f} KB)", file=sys.stderr)
+        for path in loaded_paths:
+            print(f"   • {path}", file=sys.stderr)
 
         kick_off_reflection_if_first_session_of_day()
     except Exception as exc:
