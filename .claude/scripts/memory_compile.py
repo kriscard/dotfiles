@@ -48,6 +48,7 @@ from memory_common import (  # noqa: E402
 )
 
 COMPILE_STATE = STATE_DIR / "memory-compile-processed.json"
+COMPILE_PLAN_DIR = STATE_DIR / "memory-compile-plans"
 
 QMD_MATCH_THRESHOLD = 0.55  # below this, treat as no-match
 EXTRACT_PROMPT = """You are reading a Claude Code session log and extracting durable concepts
@@ -98,6 +99,75 @@ def load_processed_state() -> dict:
         return json.loads(COMPILE_STATE.read_text())
     except Exception:
         return {}
+
+
+def save_plan(date_iso: str, actions: list[PlannedAction]) -> Path:
+    """Persist the planned actions for a date so --apply is deterministic.
+
+    Without this, --apply re-runs the LLM extractor + qmd queries, producing
+    different actions than the dry-run the user reviewed.
+    """
+    COMPILE_PLAN_DIR.mkdir(parents=True, exist_ok=True)
+    path = COMPILE_PLAN_DIR / f"{date_iso}.json"
+    payload = {
+        "date": date_iso,
+        "saved_at": datetime.now().isoformat(timespec="seconds"),
+        "actions": [
+            {
+                "action": a.action,
+                "target_path": str(a.target_path) if a.target_path else None,
+                "score": a.score,
+                "reason": a.reason,
+                "concept": {
+                    "topic": a.concept.topic,
+                    "summary": a.concept.summary,
+                    "suggested_subfolder": a.concept.suggested_subfolder,
+                    "tags": a.concept.tags,
+                },
+            }
+            for a in actions
+        ],
+    }
+    path.write_text(json.dumps(payload, indent=2))
+    return path
+
+
+def load_plan(date_iso: str) -> list[PlannedAction] | None:
+    path = COMPILE_PLAN_DIR / f"{date_iso}.json"
+    if not path.exists():
+        return None
+    data = json.loads(path.read_text())
+    return [
+        PlannedAction(
+            action=a["action"],
+            concept=Concept(
+                topic=a["concept"]["topic"],
+                summary=a["concept"]["summary"],
+                suggested_subfolder=a["concept"]["suggested_subfolder"],
+                tags=a["concept"]["tags"],
+            ),
+            target_path=Path(a["target_path"]) if a["target_path"] else None,
+            score=a["score"],
+            reason=a["reason"],
+        )
+        for a in data["actions"]
+    ]
+
+
+def parse_only_indices(spec: str, total: int) -> list[int]:
+    """Parse '1,3,5-7' into [0,2,4,5,6] (0-indexed)."""
+    indices: set[int] = set()
+    for chunk in spec.split(","):
+        chunk = chunk.strip()
+        if not chunk:
+            continue
+        if "-" in chunk:
+            start, end = chunk.split("-", 1)
+            for i in range(int(start), int(end) + 1):
+                indices.add(i - 1)
+        else:
+            indices.add(int(chunk) - 1)
+    return sorted(i for i in indices if 0 <= i < total)
 
 
 def save_processed_state(state: dict) -> None:
@@ -404,10 +474,27 @@ def main() -> int:
     parser.add_argument("--apply", action="store_true", help="Execute the plan (with confirmation).")
     parser.add_argument("--yes", action="store_true", help="Skip interactive confirmation. Requires --apply.")
     parser.add_argument("--force", action="store_true", help="Re-process even if already done.")
+    parser.add_argument(
+        "--only",
+        help="Apply only specific 1-indexed actions from the saved plan, e.g. '1,3,5-7'. Requires --apply.",
+    )
+    parser.add_argument(
+        "--skip-backlinks",
+        action="store_true",
+        help="Apply only new-note + append-to actions (skip moc-backlink). Requires --apply.",
+    )
+    parser.add_argument(
+        "--regenerate",
+        action="store_true",
+        help="Force re-extraction even if a saved plan exists for this date.",
+    )
     args = parser.parse_args()
 
     if args.yes and not args.apply:
         print("--yes requires --apply", file=sys.stderr)
+        return 2
+    if (args.only or args.skip_backlinks) and not args.apply:
+        print("--only / --skip-backlinks require --apply", file=sys.stderr)
         return 2
 
     target = (
@@ -427,40 +514,72 @@ def main() -> int:
         print(f"compile: already processed {target} (use --force to re-run)", file=sys.stderr)
         return 0
 
-    log_text = log_path.read_text()
-    if len(log_text.strip()) < 200:
-        print(f"compile: session log for {target} too short ({len(log_text)} chars), skipping", file=sys.stderr)
-        return 0
+    # Determinism: prefer the saved plan from a prior dry-run so --apply
+    # matches what the user reviewed. Re-extract only if no plan exists
+    # or --regenerate is set.
+    actions: list[PlannedAction] | None = None
+    saved_plan_path = COMPILE_PLAN_DIR / f"{target.isoformat()}.json"
+    if not args.regenerate:
+        actions = load_plan(target.isoformat())
+        if actions is not None:
+            print(f"compile: loaded saved plan from {saved_plan_path.relative_to(Path.home())}")
 
-    print(f"compile: extracting concepts from {log_path.relative_to(VAULT_PATH)}…")
-    try:
-        concepts = asyncio.run(extract_concepts(log_text))
-    except Exception as exc:
-        print(f"compile: SDK extract failed: {exc}", file=sys.stderr)
-        return 1
+    if actions is None:
+        log_text = log_path.read_text()
+        if len(log_text.strip()) < 200:
+            print(f"compile: session log for {target} too short ({len(log_text)} chars), skipping", file=sys.stderr)
+            return 0
 
-    if not concepts:
-        print("compile: no durable concepts extracted")
-        return 0
+        print(f"compile: extracting concepts from {log_path.relative_to(VAULT_PATH)}…")
+        try:
+            concepts = asyncio.run(extract_concepts(log_text))
+        except Exception as exc:
+            print(f"compile: SDK extract failed: {exc}", file=sys.stderr)
+            return 1
 
-    print(f"compile: {len(concepts)} concept(s) extracted; running search-before-write…")
-    actions = [plan_for_concept(c, target) for c in concepts]
+        if not concepts:
+            print("compile: no durable concepts extracted")
+            return 0
+
+        print(f"compile: {len(concepts)} concept(s) extracted; running search-before-write…")
+        actions = [plan_for_concept(c, target) for c in concepts]
+        save_plan(target.isoformat(), actions)
+        print(f"compile: saved plan to {saved_plan_path.relative_to(Path.home())}")
+
     print_plan(actions)
 
     if not args.apply:
         print("(dry-run — pass --apply to execute, or --apply --yes to skip the prompt)")
+        print(f"(plan persisted; --apply will use the same plan unless --regenerate is set)")
         return 0
+
+    # Filter the saved plan if --only or --skip-backlinks were passed.
+    filtered = list(actions)
+    if args.skip_backlinks:
+        filtered = [a for a in filtered if a.action != "moc-backlink"]
+    if args.only:
+        keep_indices = parse_only_indices(args.only, len(actions))
+        filtered = [actions[i] for i in keep_indices]
+
+    if not filtered:
+        print("compile: no actions match filters; nothing to apply.", file=sys.stderr)
+        return 0
+
+    if filtered != actions:
+        print(f"\ncompile: applying {len(filtered)} of {len(actions)} actions (filtered)")
+        for i, a in enumerate(filtered, 1):
+            print(f"  {i}. [{a.action}] {a.concept.topic}")
 
     if not args.yes:
         try:
-            response = input("Apply this plan? [y/N] ").strip().lower()
+            response = input(f"Apply {len(filtered)} action(s)? [y/N] ").strip().lower()
         except (EOFError, KeyboardInterrupt):
             response = ""
         if response not in {"y", "yes"}:
             print("Aborted.")
             return 0
 
-    execute_plan(actions, target)
+    execute_plan(filtered, target)
 
     state[target.isoformat()] = log_mtime
     save_processed_state(state)
