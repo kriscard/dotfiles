@@ -126,6 +126,41 @@ def append_to_memory(reflection_md: str, target_date: date) -> None:
         f.write(section)
 
 
+SECTION_HEADER_RE = re.compile(r"^## (\d{4}-\d{2}-\d{2}) Reflection\b", re.MULTILINE)
+SECTION_SPLIT_RE = re.compile(r"(?=^## \d{4}-\d{2}-\d{2} Reflection\b)", re.MULTILINE)
+
+
+def _dedup_sections_by_date(text: str) -> str:
+    """Keep only the LAST occurrence of each '## YYYY-MM-DD Reflection' section.
+
+    When the same date appears multiple times (e.g. because a manual --force
+    re-ran reflection and rolled again), assume the newer run is the desired
+    content and discard earlier copies. Header text before the first section
+    is preserved unchanged.
+    """
+    splits = SECTION_SPLIT_RE.split(text)
+    if len(splits) <= 1:
+        return text
+    header = splits[0]
+    sections = splits[1:]
+
+    last_index_by_date: dict[str, int] = {}
+    for i, sec in enumerate(sections):
+        m = SECTION_HEADER_RE.match(sec)
+        if m:
+            last_index_by_date[m.group(1)] = i
+
+    kept: list[str] = []
+    for i, sec in enumerate(sections):
+        m = SECTION_HEADER_RE.match(sec)
+        if not m:
+            kept.append(sec)  # unrecognized — preserve verbatim, dedup only known shape
+            continue
+        if last_index_by_date.get(m.group(1)) == i:
+            kept.append(sec)
+    return header + "".join(kept)
+
+
 def cap_memory_and_archive() -> None:
     """If MEMORY.md exceeds the token cap, roll oldest dated reflection sections into the archive."""
     if not MEMORY_FILE.exists():
@@ -135,8 +170,7 @@ def cap_memory_and_archive() -> None:
     if len(text) <= MEMORY_CHAR_CAP:
         return
 
-    section_re = re.compile(r"(?=^## \d{4}-\d{2}-\d{2} Reflection\b)", re.MULTILINE)
-    splits = section_re.split(text)
+    splits = SECTION_SPLIT_RE.split(text)
     if len(splits) <= 2:
         return  # only header + one section, nothing to roll
 
@@ -157,6 +191,9 @@ def cap_memory_and_archive() -> None:
         archive_text = "# MEMORY — Archive\n\nOlder reflections rolled out of MEMORY.md to keep the live file under the token cap.\n\n"
 
     archive_text += "".join(archived)
+    # Dedup by date — when rolling re-introduces an already-archived section,
+    # the freshly-rolled one wins (it's the LAST occurrence in archive_text).
+    archive_text = _dedup_sections_by_date(archive_text)
 
     if is_auto_write_allowed(MEMORY_ARCHIVE):
         MEMORY_ARCHIVE.write_text(archive_text)
@@ -169,6 +206,30 @@ def cap_memory_and_archive() -> None:
         print(f"reflect: write-guard rejected MEMORY.md.archive", file=sys.stderr)
 
 
+def dedup_archive_once() -> int:
+    """Clean up duplicate sections accumulated in MEMORY.md.archive before
+    dedup logic was added to cap_memory_and_archive. Run once via
+    `--dedup-archive`.
+    """
+    if not MEMORY_ARCHIVE.exists():
+        print("no archive to dedup")
+        return 0
+    original = MEMORY_ARCHIVE.read_text()
+    deduped = _dedup_sections_by_date(original)
+    if original == deduped:
+        print("no duplicates found")
+        return 0
+    if not is_auto_write_allowed(MEMORY_ARCHIVE):
+        print("write-guard rejected MEMORY.md.archive", file=sys.stderr)
+        return 1
+    MEMORY_ARCHIVE.write_text(deduped)
+    print(
+        f"deduped: {len(original)} → {len(deduped)} bytes "
+        f"({len(original) - len(deduped)} saved)"
+    )
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Promote durable facts from a session log to MEMORY.md")
     parser.add_argument(
@@ -177,7 +238,15 @@ def main() -> int:
     )
     parser.add_argument("--dry-run", action="store_true", help="Print plan, do not write.")
     parser.add_argument("--force", action="store_true", help="Re-run even if already processed.")
+    parser.add_argument(
+        "--dedup-archive",
+        action="store_true",
+        help="One-off: collapse duplicate '## YYYY-MM-DD Reflection' sections in MEMORY.md.archive, keeping the LAST occurrence. Then exit.",
+    )
     args = parser.parse_args()
+
+    if args.dedup_archive:
+        return dedup_archive_once()
 
     if args.date:
         target = datetime.strptime(args.date, "%Y-%m-%d").date()

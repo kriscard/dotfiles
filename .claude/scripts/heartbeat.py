@@ -224,22 +224,53 @@ def _extract_text(msg) -> str:
 # ──────────────────────────────────────────────────────────────────────────────
 # Notify
 
-def notify_macos(title: str, body: str) -> None:
-    short = body[:240].replace('"', '\\"').replace("\n", " — ")
-    if len(body) > 240:
+ICON_PATH = SCRIPTS_DIR / "assets" / "heartbeat-icon.png"
+
+
+def notify_macos(title: str, body: str, group: str = "heartbeat") -> None:
+    """Display a macOS banner via terminal-notifier when available, else osascript.
+
+    `terminal-notifier` gives a custom app icon and groups successive runs
+    so each new run replaces the previous notification rather than stacking.
+    Falls back to osascript (Script Editor icon) if terminal-notifier isn't
+    installed — system still works, just less polished.
+    """
+    short = body[:300].replace("\n", " — ")
+    if len(body) > 300:
         short += "…"
+
+    if _has_terminal_notifier():
+        cmd = [
+            "terminal-notifier",
+            "-title", title,
+            "-message", short,
+            "-sound", "Pop",
+            "-group", group,
+        ]
+        if ICON_PATH.exists():
+            cmd += ["-appIcon", str(ICON_PATH)]
+        try:
+            subprocess.run(cmd, check=False, timeout=5)
+            return
+        except Exception as exc:
+            print(f"heartbeat: terminal-notifier failed ({exc}); falling back to osascript", file=sys.stderr)
+
+    # Fallback: AppleScript display notification (no custom icon)
+    safe = short.replace('"', '\\"')
     try:
         subprocess.run(
-            [
-                "osascript",
-                "-e",
-                f'display notification "{short}" with title "{title}" sound name "Pop"',
-            ],
+            ["osascript", "-e", f'display notification "{safe}" with title "{title}" sound name "Pop"'],
             check=False,
             timeout=5,
         )
     except Exception as exc:
         print(f"heartbeat: notification failed: {exc}", file=sys.stderr)
+
+
+def _has_terminal_notifier() -> bool:
+    from shutil import which
+
+    return which("terminal-notifier") is not None
 
 
 def archive_summary(mode: str, summary: str, full_context: str) -> Path:
