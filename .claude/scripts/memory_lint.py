@@ -18,7 +18,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent / "hooks" / "lib"))
 from memory_common import (  # noqa: E402
     DAILY_OPS,
-    MOC_FILE,
+    INDEX_FILE,
     RESOURCES_DIR,
     VAULT_PATH,
 )
@@ -102,7 +102,7 @@ def main() -> int:
     note_index = index_all_notes()
     inbound = collect_inbound_links(all_md)
 
-    moc_text = MOC_FILE.read_text() if MOC_FILE.exists() else ""
+    index_text = INDEX_FILE.read_text() if INDEX_FILE.exists() else ""
 
     issues: dict[str, list[str]] = defaultdict(list)
 
@@ -120,17 +120,17 @@ def main() -> int:
                     f"{note.relative_to(VAULT_PATH)} → [[{link}]]"
                 )
 
-    # 2 — orphans (no inbound links + not in MOC)
+    # 2 — orphans (no inbound links + not in index)
     for note in agent_notes:
         stem = note.stem.lower()
-        moc_mentions_it = note.stem in moc_text or stem in moc_text.lower()
-        if not inbound.get(stem) and not moc_mentions_it:
+        index_mentions_it = note.stem in index_text or stem in index_text.lower()
+        if not inbound.get(stem) and not index_mentions_it:
             issues["orphan"].append(str(note.relative_to(VAULT_PATH)))
 
-    # 3 — MOC drift: agent notes missing from MOC
+    # 3 — index drift: agent notes missing from index.md
     for note in agent_notes:
-        if note.stem not in moc_text and note.stem.lower() not in moc_text.lower():
-            issues["missing-from-moc"].append(str(note.relative_to(VAULT_PATH)))
+        if note.stem not in index_text and note.stem.lower() not in index_text.lower():
+            issues["missing-from-index"].append(str(note.relative_to(VAULT_PATH)))
 
     # 4 — agent notes outside 3 - Resources/ (write-guard violation indicator)
     resources_resolved = RESOURCES_DIR.resolve()
@@ -142,11 +142,11 @@ def main() -> int:
         if not note_resolved.is_relative_to(resources_resolved):
             issues["outside-resources"].append(str(note.relative_to(VAULT_PATH)))
 
-    # 5 — MOC entries pointing to deleted files
-    for link in find_wikilinks(moc_text):
+    # 5 — index entries pointing to deleted files
+    for link in find_wikilinks(index_text):
         target = link.split("/")[-1].lower()
         if target not in note_index:
-            issues["moc-broken-link"].append(f"MOC → [[{link}]]")
+            issues["index-broken-link"].append(f"index → [[{link}]]")
 
     # 6 — topic concentration (≥4 agent notes sharing the same first tag)
     tag_counts: Counter[str] = Counter()

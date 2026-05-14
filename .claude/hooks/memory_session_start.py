@@ -26,12 +26,12 @@ from pathlib import Path
 # Add lib/ to sys.path so we can import memory_common
 sys.path.insert(0, str(Path(__file__).parent / "lib"))
 from memory_common import (  # noqa: E402
+    INDEX_FILE,
     MEMORY_FILE,
-    MOC_FILE,
     SOUL_FILE,
     USER_FILE,
     claim_reflection_for_today,
-    moc_stub,
+    index_stub,
     truncate_to_token_cap,
 )
 
@@ -84,8 +84,10 @@ def main() -> None:
         soul = read_or_empty(SOUL_FILE)
         user = read_or_empty(USER_FILE)
         memory = truncate_to_token_cap(read_or_empty(MEMORY_FILE), target_tokens=1000)
-        moc_full = read_or_empty(MOC_FILE)
-        moc_top = moc_stub(moc_full) if moc_full else ""
+        # Only inject index.md if it has actual entries (any `##` section).
+        # Empty/template-only index isn't worth the inline tokens.
+        index_full = read_or_empty(INDEX_FILE)
+        index_top = index_stub(index_full) if index_full and "\n## " in index_full else ""
 
         sections: list[str] = []
         loaded_paths: list[Path] = []  # real file paths for the status line
@@ -98,9 +100,9 @@ def main() -> None:
         if memory:
             sections.append(f"# === Vault: MEMORY.md (long-term curated facts) ===\n{memory}")
             loaded_paths.append(MEMORY_FILE)
-        if moc_top:
-            sections.append(f"# === Vault: Claude Memory MOC (recent index, stub) ===\n{moc_top}")
-            loaded_paths.append(MOC_FILE)
+        if index_top:
+            sections.append(f"# === Vault: index.md (wiki catalog, stub) ===\n{index_top}")
+            loaded_paths.append(INDEX_FILE)
         # Pointer to AGENTS.md (read on demand for vault operations, not inline).
         sections.append(
             "# === Vault rules ===\n"

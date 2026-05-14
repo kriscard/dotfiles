@@ -38,10 +38,11 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "hooks" / "lib"))
 from memory_common import (  # noqa: E402
-    MOC_FILE,
+    INDEX_FILE,
     RESOURCES_DIR,
     STATE_DIR,
     VAULT_PATH,
+    append_to_log,
     is_auto_write_allowed,
     is_inside_vault,
     session_log_path,
@@ -407,7 +408,16 @@ def execute_plan(actions: list[PlannedAction], session_date: date) -> None:
                 continue
             a.target_path.parent.mkdir(parents=True, exist_ok=True)
             a.target_path.write_text(render_new_note(a.concept, session_date))
-            print(f"  ✓ wrote {a.target_path.relative_to(VAULT_PATH)}")
+            # Index the new concept note so it appears in vault/index.md
+            rel = a.target_path.relative_to(VAULT_PATH)
+            tags = ", ".join(a.concept.tags) if a.concept.tags else ""
+            tag_suffix = f" · tags: {tags}" if tags else ""
+            index_line = (
+                f"- **{a.concept.topic}** ({session_date.isoformat()}) — "
+                f"[[{a.target_path.stem}]] ({rel}). _{a.concept.summary}_{tag_suffix}\n"
+            )
+            _append_to_index(index_line, section="Concept notes (claude-memory)")
+            print(f"  ✓ wrote {rel}")
 
         elif a.action == "append-to":
             if not _confirm_target(a.target_path, "append-to"):
@@ -419,8 +429,8 @@ def execute_plan(actions: list[PlannedAction], session_date: date) -> None:
 
         elif a.action == "moc-backlink":
             backlink = render_moc_backlink(a, session_date)
-            _append_to_moc(backlink)
-            print(f"  ✓ MOC backlink → {a.target_path.relative_to(VAULT_PATH) if a.target_path else '?'}")
+            _append_to_index(backlink, section="Backlinks to human notes")
+            print(f"  ✓ index backlink → {a.target_path.relative_to(VAULT_PATH) if a.target_path else '?'}")
 
 
 def _confirm_target(path: Path, action: str) -> bool:
@@ -434,19 +444,26 @@ def _confirm_target(path: Path, action: str) -> bool:
     return True
 
 
-def _append_to_moc(line: str) -> None:
-    if not is_auto_write_allowed(MOC_FILE):
-        print(f"compile: write-guard rejected {MOC_FILE}", file=sys.stderr)
+INDEX_TEMPLATE = """# Wiki Index
+
+> Catalog of LLM-touchable content. Updated by `memory_compile.py` (concept notes) and future `memory_ingest.py` (clippings). Sections populate as content is added.
+"""
+
+
+def _append_to_index(line: str, section: str = "Concept notes (claude-memory)") -> None:
+    """Prepend a line under the given index section (newest first per section)."""
+    if not is_auto_write_allowed(INDEX_FILE):
+        print(f"compile: write-guard rejected {INDEX_FILE}", file=sys.stderr)
         return
-    if not MOC_FILE.exists():
-        MOC_FILE.parent.mkdir(parents=True, exist_ok=True)
-        MOC_FILE.write_text("# Claude Memory MOC\n\n## Recent entries\n\n")
-    text = MOC_FILE.read_text()
-    if "## Recent entries" not in text:
-        text += "\n## Recent entries\n\n"
-    insert_at = text.index("## Recent entries") + len("## Recent entries\n\n")
+    if not INDEX_FILE.exists():
+        INDEX_FILE.write_text(INDEX_TEMPLATE)
+    text = INDEX_FILE.read_text()
+    heading = f"## {section}"
+    if heading not in text:
+        text += f"\n{heading}\n\n"
+    insert_at = text.index(heading) + len(heading) + len("\n\n")
     new_text = text[:insert_at] + line + text[insert_at:]
-    MOC_FILE.write_text(new_text)
+    INDEX_FILE.write_text(new_text)
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -580,6 +597,23 @@ def main() -> int:
             return 0
 
     execute_plan(filtered, target)
+
+    # Log the compile run for the operational timeline (log.md)
+    new_notes = sum(1 for a in filtered if a.action == "new-note")
+    backlinks = sum(1 for a in filtered if a.action == "moc-backlink")
+    appends = sum(1 for a in filtered if a.action == "append-to")
+    details_parts = []
+    if new_notes:
+        details_parts.append(f"{new_notes} new-note")
+    if appends:
+        details_parts.append(f"{appends} append")
+    if backlinks:
+        details_parts.append(f"{backlinks} backlink")
+    append_to_log(
+        operation="compile",
+        subject=target.isoformat(),
+        details=", ".join(details_parts) if details_parts else "no actions",
+    )
 
     state[target.isoformat()] = log_mtime
     save_processed_state(state)

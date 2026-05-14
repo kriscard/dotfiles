@@ -29,7 +29,10 @@ SOUL_FILE = VAULT_PATH / "SOUL.md"
 USER_FILE = VAULT_PATH / "USER.md"
 MEMORY_FILE = VAULT_PATH / "MEMORY.md"
 MEMORY_ARCHIVE = VAULT_PATH / "MEMORY.md.archive"
-MOC_FILE = VAULT_PATH / "MOCs" / "Claude Memory MOC.md"
+# Karpathy LLM-wiki pattern: index.md (content catalog) + log.md (op timeline)
+# both at vault root. Retired: MOCs/Claude Memory MOC.md.
+INDEX_FILE = VAULT_PATH / "index.md"
+LOG_FILE = VAULT_PATH / "log.md"
 
 DAILY_OPS = VAULT_PATH / "2 - Areas" / "Daily Ops"
 RESOURCES_DIR = VAULT_PATH / "3 - Resources"
@@ -50,7 +53,7 @@ def daily_note_path(d: date | None = None) -> Path:
 
 def is_auto_write_allowed(path: Path) -> bool:
     """True iff the path is part of the agent's raw-capture infrastructure
-    (Claude Sessions/, MEMORY.md/.archive, MOC and its archive). These are the
+    (Claude Sessions/, MEMORY.md/.archive, index.md, log.md). These are the
     only paths the agent is allowed to write WITHOUT explicit user approval.
 
     All other vault writes (PARA notes, Inbox, USER.md, AGENTS.md, SOUL.md,
@@ -68,15 +71,14 @@ def is_auto_write_allowed(path: Path) -> bool:
     if p.is_relative_to(daily_ops_resolved) and "Claude Sessions" in p.parts:
         return True
 
-    # MEMORY.md, MEMORY.md.archive, MOC and its archive folder
+    # MEMORY.md, MEMORY.md.archive, index.md, log.md
     auto_files = {
         MEMORY_FILE.resolve(),
         MEMORY_ARCHIVE.resolve(),
-        MOC_FILE.resolve(),
+        INDEX_FILE.resolve(),
+        LOG_FILE.resolve(),
     }
     if p in auto_files:
-        return True
-    if p.is_relative_to((VAULT_PATH / "MOCs" / "Claude Memory Archive").resolve()):
         return True
 
     return False
@@ -148,12 +150,38 @@ def truncate_to_token_cap(text: str, target_tokens: int) -> str:
     return text[:target_chars].rstrip() + "\n\n_(truncated to token budget)_"
 
 
-def moc_stub(full_moc_text: str, max_lines: int = 30) -> str:
-    """Return a recency-truncated stub of the MOC for SessionStart injection."""
-    lines = full_moc_text.splitlines()
+def index_stub(full_index_text: str, max_lines: int = 30) -> str:
+    """Return a recency-truncated stub of the wiki index for SessionStart injection."""
+    lines = full_index_text.splitlines()
     if len(lines) <= max_lines:
-        return full_moc_text
-    return "\n".join(lines[:max_lines]) + f"\n\n_(stub: {len(lines) - max_lines} more lines in full MOC)_"
+        return full_index_text
+    return "\n".join(lines[:max_lines]) + f"\n\n_(stub: {len(lines) - max_lines} more lines in full index)_"
+
+
+def append_to_log(operation: str, subject: str, details: str = "") -> None:
+    """Append a one-line entry to log.md per Karpathy LLM-wiki pattern.
+
+    Format: ## [YYYY-MM-DD HH:MM] <operation> | <subject> — <details>
+
+    Parseable: `grep "^## \\[" log.md | tail -10` for recent activity.
+    """
+    if not is_auto_write_allowed(LOG_FILE):
+        return  # write-guard rejected (shouldn't happen but be safe)
+
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
+    line = f"## [{timestamp}] {operation} | {subject}"
+    if details:
+        line += f" — {details}"
+    line += "\n"
+
+    if not LOG_FILE.exists():
+        LOG_FILE.write_text(
+            "# Operational log\n\n"
+            "> Append-only record of system operations (reflect, compile, ingest, lint).\n"
+            "> Parseable: `grep \"^## \\[\" log.md | tail -10` for recent activity.\n\n"
+        )
+    with open(LOG_FILE, "a") as f:
+        f.write(line)
 
 
 # ---------------------------------------------------------------------------
