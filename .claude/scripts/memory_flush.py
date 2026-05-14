@@ -30,6 +30,7 @@ import contextlib
 import fcntl
 import json
 import logging
+import re
 import subprocess
 import sys
 import time
@@ -70,9 +71,16 @@ Output Markdown only. Format strictly as:
 Be terse. Skip pleasantries. Focus on durable content. No preamble, no closing.
 If the session was trivial (greeting, typo fix, file open, no decisions) respond
 with exactly: FLUSH_OK
+If you cannot identify session content in the transcript (e.g. the input is a
+prompt-only payload, hook-injection meta, agent-spawn instructions, or empty),
+also respond with exactly: FLUSH_OK
+Never ask clarifying questions. Never describe the input. Only emit the
+summary block or one of the two markers.
 
 Use this header timestamp and project name:
 """
+
+SUMMARY_HEADER_RE = re.compile(r"^##\s+\d{1,2}:\d{2}\s+—\s+\S")
 
 REFLECT_SCRIPT = Path.home() / ".dotfiles" / ".claude" / "scripts" / "memory_reflect.py"
 
@@ -288,6 +296,19 @@ def main() -> None:
             f"- _(short session, nothing durable to record)_\n"
         )
         flush_succeeded = True
+    elif not SUMMARY_HEADER_RE.match(response.lstrip()):
+        # Haiku went off-script: returned natural-language meta-text instead
+        # of the requested summary header or a marker. Treat as malformed,
+        # preserve context for replay, don't pollute the session log.
+        preview = response[:200].replace("\n", " ")
+        logging.error("malformed response (no summary header): %r", preview)
+        summary_to_append = (
+            f"## {hhmm} — {project_name}\n"
+            f"- _(malformed flush response — context preserved at "
+            f"{context_file.name}.failed for replay; see memory_flush.log)_\n"
+        )
+        # Force the .failed-preservation branch below by neutralising response.
+        response = "FLUSH_ERROR: malformed (no summary header)"
     else:
         logging.info("result: appending %d chars to session log", len(response))
         summary_to_append = response
