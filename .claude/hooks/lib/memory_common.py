@@ -39,6 +39,7 @@ RESOURCES_DIR = VAULT_PATH / "3 - Resources"
 
 STATE_DIR = Path.home() / ".claude" / "state"
 REFLECTION_LAST_RUN = STATE_DIR / "memory-reflection-last-run.txt"
+INGEST_LAST_RUN = STATE_DIR / "memory-ingest-last-run.txt"
 
 
 def session_log_path(d: date | None = None) -> Path:
@@ -115,14 +116,29 @@ def claim_reflection_for_today() -> bool:
     in different tmux panes. Returns True iff this caller wins the right to run
     today's reflection (caller should kick the subprocess). Returns False if
     reflection was already claimed today.
+    """
+    return _claim_for_today(REFLECTION_LAST_RUN, "memory-reflection-claim.lock")
 
-    Uses fcntl.flock on the state directory to serialize the check-and-write.
+
+def claim_ingest_for_today() -> bool:
+    """Same atomic claim pattern as reflection, but for the daily ingest pass.
+
+    Returns True iff this caller wins the right to fire memory_ingest.py.
+    """
+    return _claim_for_today(INGEST_LAST_RUN, "memory-ingest-claim.lock")
+
+
+def _claim_for_today(last_run_file: Path, lock_filename: str) -> bool:
+    """Shared flock-protected once-per-day claim helper.
+
+    Uses fcntl.flock on the lock file to serialize the check-and-write across
+    concurrent SessionStart hooks (e.g., multiple tmux panes opening at once).
     Falls back to non-locked behavior if fcntl is unavailable.
     """
     import fcntl  # noqa: PLC0415 — local to keep stdlib-only import surface
 
     STATE_DIR.mkdir(parents=True, exist_ok=True)
-    lock_file = STATE_DIR / "memory-reflection-claim.lock"
+    lock_file = STATE_DIR / lock_filename
     today = date.today().isoformat()
     f = open(lock_file, "w")
     try:
@@ -130,9 +146,13 @@ def claim_reflection_for_today() -> bool:
             fcntl.flock(f, fcntl.LOCK_EX)
         except Exception:
             pass
-        if reflection_already_ran_today():
-            return False
-        REFLECTION_LAST_RUN.write_text(today)
+        if last_run_file.exists():
+            try:
+                if last_run_file.read_text().strip() == today:
+                    return False
+            except Exception:
+                pass
+        last_run_file.write_text(today)
         return True
     finally:
         try:
