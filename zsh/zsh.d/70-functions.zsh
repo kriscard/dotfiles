@@ -114,3 +114,12 @@ obstoday() { obsidian append path="2 - Areas/Daily Ops/$(date +%Y-%m-%d).md" con
 obsopen() { obsidian open path="$*" }
 obsweekly() { obsidian open path="2 - Areas/Daily Ops/Weekly/$(date +%Y)-W$(date +%V).md" }
 obsyesterday() { obsidian open path="2 - Areas/Daily Ops/$(date -v-1d +%Y-%m-%d).md" }
+
+# Memory system shortcuts — run from anywhere (vault path auto-resolves)
+#   mcompile                       apply for today
+#   mcompile --date 2026-05-12     apply for a specific session date
+#   mcompile --skip-backlinks      apply only new-note + append-to actions
+# For dry-run, call the script directly without the alias.
+mcompile() {
+  uv run "$HOME/.dotfiles/.claude/scripts/memory_compile.py" --apply "$@"
+}
