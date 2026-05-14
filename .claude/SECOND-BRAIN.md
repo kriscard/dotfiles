@@ -18,17 +18,17 @@ Based on the [second-brain-starter](https://github.com/coleam00/second-brain-sta
 
 ## Prerequisites
 
-| Tool | Why | Install |
-|---|---|---|
-| macOS (Sequoia or newer) | dev environment | n/a |
-| Python 3.10+ | scripts | `brew install python` |
-| `uv` | inline-script dep management | `brew install uv` |
-| GNU `stow` | dotfiles symlinking | `brew install stow` |
-| Obsidian | vault viewer + CLI | obsidian.md (enable CLI in Settings → General) |
-| `qmd` | hybrid vault search | `npm i -g @tobilu/qmd` |
-| Node.js | qmd runtime | `brew install node` |
-| `fd`, `rg`, `ast-grep`, `zoxide`, `tree` | modern CLI defaults | `brew install fd ripgrep ast-grep zoxide tree` |
-| `jq` | JSON inspection (hook verification) | `brew install jq` |
+| Tool                                     | Why                                 | Install                                        |
+| ---------------------------------------- | ----------------------------------- | ---------------------------------------------- |
+| macOS (Sequoia or newer)                 | dev environment                     | n/a                                            |
+| Python 3.10+                             | scripts                             | `brew install python`                          |
+| `uv`                                     | inline-script dep management        | `brew install uv`                              |
+| GNU `stow`                               | dotfiles symlinking                 | `brew install stow`                            |
+| Obsidian                                 | vault viewer + CLI                  | obsidian.md (enable CLI in Settings → General) |
+| `qmd`                                    | hybrid vault search                 | `npm i -g @tobilu/qmd`                         |
+| Node.js                                  | qmd runtime                         | `brew install node`                            |
+| `fd`, `rg`, `ast-grep`, `zoxide`, `tree` | modern CLI defaults                 | `brew install fd ripgrep ast-grep zoxide tree` |
+| `jq`                                     | JSON inspection (hook verification) | `brew install jq`                              |
 
 ---
 
@@ -41,11 +41,13 @@ stow --target=$HOME .
 ```
 
 This symlinks:
+
 - `~/.dotfiles/.claude/` → `~/.claude/` (hooks, scripts, skills, settings)
 - `~/.dotfiles/.config/` → `~/.config/`
 - All other dotfile targets
 
 Verify:
+
 ```bash
 ls -l ~/.claude/hooks/memory_*.py
 ls -l ~/.claude/scripts/memory_*.py
@@ -63,14 +65,26 @@ If using **Obsidian Sync**: log in, restore vault to `~/obsidian-vault-<your-use
 
 If using **git-backed vault**: clone it.
 
-**Important: vault path.** The hooks hardcode `/Users/kriscard/obsidian-vault-kriscard`. On a new machine with a different username, edit `~/.dotfiles/.claude/hooks/lib/memory_common.py:9`:
-```python
-VAULT_PATH = Path("/Users/<username>/obsidian-vault-kriscard")
-```
+**Vault path resolution.** The hooks auto-detect the vault — no per-machine edit needed as long as the directory is named `obsidian-vault-*` under the current user's home. Resolution order in `~/.dotfiles/.claude/hooks/lib/memory_common.py:12`:
+
+1. `$OBSIDIAN_VAULT` env var (if set — useful for non-standard locations)
+2. Glob match `~/obsidian-vault-*`
+3. Fallback: `~/obsidian-vault-kriscard`
+
+Username is always derived from `Path.home()`, so different usernames on different machines work automatically.
+
+**Other places that hardcode the vault directory name** (username already dynamic via `~/`, but the literal `obsidian-vault-kriscard` is baked in):
+
+- `.config/nvim/lua/plugins/obsidian.lua` (3 lines)
+- `.config/nvim/lua/kriscard/autocmds.lua:109`
+- `.config/sesh/configs/personal.toml:10`
+
+Keep your vault directory named `obsidian-vault-kriscard` on every machine and these all "just work." If you must rename, do a `rg -l obsidian-vault-kriscard ~/.dotfiles` and update the matches.
 
 ### 2b. Enable Obsidian CLI
 
 Obsidian → Settings → General → enable **"Command line interface"**. Verify:
+
 ```bash
 obsidian --version
 ```
@@ -84,6 +98,7 @@ git clone git@github.com:kriscard/obsidian-web-clippers.git ~/projects/obsidian-
 ```
 
 In the Obsidian Web Clipper browser extension settings:
+
 - Templates → Import → import each `.json` file from the repo
 - Verify the `path` field in each template matches your vault structure (e.g. `3 - Resources/Articles/`)
 
@@ -145,39 +160,24 @@ If over the threshold, trim USER.md / MEMORY.md (or shrink the MEMORY.md token c
 
 ## 5. Auto-memory dir (optional)
 
-> *Skip this step if you're keeping a pure blueprint setup. The dir is a Claude Code convention, not part of coleam00's pattern.*
+> _Skip this step if you're keeping a pure blueprint setup. The dir is a Claude Code convention, not part of coleam00's pattern._
 
 Claude Code uses `~/.claude/projects/<slug>/memory/` as a harness-guaranteed inline tier. If you want short-term typed memories visible in `/context` Memory files row, populate it. For strict blueprint compliance, leave it empty — the vault is the canonical layer.
 
 ---
 
-## 6. Optional: install the create-second-brain-prd skill
-
-If you want to regenerate a PRD on the new machine:
-
-```bash
-git clone https://github.com/coleam00/second-brain-starter /tmp/sb-starter
-mkdir -p ~/.claude/skills/create-second-brain-prd
-cp -r /tmp/sb-starter/.claude/skills/create-second-brain-prd/* \
-      ~/.claude/skills/create-second-brain-prd/
-```
-
-The skill is **optional** — the system is already built. The skill is only useful if you want to revise requirements and regenerate the build plan.
-
----
-
-## 7. End-to-end verification checklist
+## 6. End-to-end verification checklist
 
 After everything is set up:
 
-| Check | Command | Expected |
-|---|---|---|
-| Hook size | `echo '{}' \| uv run ~/.dotfiles/.claude/hooks/memory_session_start.py \| wc -c` | < 10000 |
-| Hook delivers sections | `echo '{}' \| uv run ~/.dotfiles/.claude/hooks/memory_session_start.py \| jq -r '.hookSpecificOutput.additionalContext' \| grep "^# ==="` | 5 lines (SOUL, USER, MEMORY, MOC, Vault rules) |
-| qmd indexed | `qmd ls` | shows vault collection |
-| qmd recall works | `qmd query "PARA" --json -n 2` | returns notes |
-| /context in Claude Code | open session in vault, run `/context` | Memory files = 858 tokens (CLAUDE.md only); Messages includes the ~2 K hook payload |
-| Direct recall | ask Claude "without reading any file, what's my role?" | answers correctly from USER.md |
+| Check                   | Command                                                                                                                                   | Expected                                                                            |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| Hook size               | `echo '{}' \| uv run ~/.dotfiles/.claude/hooks/memory_session_start.py \| wc -c`                                                          | < 10000                                                                             |
+| Hook delivers sections  | `echo '{}' \| uv run ~/.dotfiles/.claude/hooks/memory_session_start.py \| jq -r '.hookSpecificOutput.additionalContext' \| grep "^# ==="` | 5 lines (SOUL, USER, MEMORY, MOC, Vault rules)                                      |
+| qmd indexed             | `qmd ls`                                                                                                                                  | shows vault collection                                                              |
+| qmd recall works        | `qmd query "PARA" --json -n 2`                                                                                                            | returns notes                                                                       |
+| /context in Claude Code | open session in vault, run `/context`                                                                                                     | Memory files = 858 tokens (CLAUDE.md only); Messages includes the ~2 K hook payload |
+| Direct recall           | ask Claude "without reading any file, what's my role?"                                                                                    | answers correctly from USER.md                                                      |
 
 ---
 
@@ -223,27 +223,33 @@ After everything is set up:
 ## Troubleshooting
 
 **SessionStart hook silent / not injecting context**
+
 - Run `echo '{}' | uv run ~/.dotfiles/.claude/hooks/memory_session_start.py` manually
 - Check `~/.claude/settings.json` has the SessionStart entry
 - Check hook script is executable: `ls -l ~/.claude/hooks/memory_session_start.py` (must have `x`)
 
 **Hook payload too big (evicted to disk)**
+
 - Run: `echo '{}' | uv run ~/.dotfiles/.claude/hooks/memory_session_start.py | wc -c`
 - Must be under ~10 KB. If over, trim USER.md or MEMORY.md (or shrink the MEMORY.md token cap in the hook).
 
 **`qmd query` slow on first call**
+
 - Reranker model (~1.28 GB) downloads on first call. Subsequent calls are sub-second.
 
 **Daily reflection not firing**
+
 - `memory_session_start.py` kicks it off via subprocess on the first session of the day (atomic claim via `fcntl.flock` so multiple tmux panes don't race).
 - Check `~/.claude/state/memory-reflection-processed.json` — entries with today's date mean reflection already ran.
 - Force re-run for a specific date: `uv run ~/.dotfiles/.claude/scripts/memory_reflect.py --date YYYY-MM-DD --force`
 
 **MOC empty after `memory_compile.py`**
+
 - Compile uses LLM extraction + qmd matching. If qmd matches at 0.55+ to a human note, the concept gets a backlink-only entry. Many false positives at 0.88-0.92 — tune `QMD_MATCH_THRESHOLD` in `memory_compile.py` if you want stricter routing.
 - Plans are persisted at `~/.claude/state/memory-compile-plans/<date>.json` after a dry-run, so `--apply` consumes the same plan.
 
 **`MEMORY.md.archive` has duplicate `## YYYY-MM-DD Reflection` sections**
+
 - Run once: `uv run ~/.dotfiles/.claude/scripts/memory_reflect.py --dedup-archive`. Keeps the last occurrence per date.
 
 ---

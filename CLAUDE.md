@@ -2,6 +2,17 @@
 
 Personal dev environment managed with GNU Stow. Configs live in `.config/`.
 
+## Layout
+
+- `.config/` — app configs (Stow targets → `~/.config/`)
+- `.claude/` — Claude Code subsystem (see `.claude/SECOND-BRAIN.md` for full setup)
+  - `hooks/` — SessionStart/End/PreCompact memory hooks
+  - `scripts/` — memory tools (`memory_*.py`), `heartbeat.py`, `integrations/`
+  - `scripts/integrations/` — Python CLI wrappers (github, gmail, jira, calendar); shared Google OAuth in `lib/google_auth.py`; entry point `query.py`
+  - `scripts/launchd/` — macOS scheduled job plists
+- `bin/` — personal scripts on `PATH`
+- `Brewfile` — managed via `dotfiles packages`
+
 ## Commands
 
 ```bash
@@ -23,7 +34,13 @@ Test tmux changes: `tmux source-file ~/.config/tmux/tmux.conf`
 ## Key Variables
 
 - `$DOTFILES` — path to this repo
-- `$THEME_FLAVOUR` — Catppuccin variant (frappe/latte/macchiato/mocha); must be set before launching themed apps
+- `$THEME_FLAVOUR` — Catppuccin variant (frappe/latte/macchiato/mocha); pre-set to `macchiato` in `zsh/zsh.d/00-env.zsh`. Override per-shell if needed.
+
+## Secrets
+
+- `.env` (gitignored) — API keys; sourced by `zsh/zsh.d/80-integrations.zsh`
+- `.claude/scripts/integrations/.tokens/` (gitignored) — OAuth tokens (Google, etc.)
+- Never commit either — pre-commit hook + global safety rules enforce this
 
 ## Gotchas
 
