@@ -36,6 +36,7 @@ from memory_common import (  # noqa: E402
     VAULT_PATH,
     append_to_log,
     is_auto_write_allowed,
+    is_inside_vault,
 )
 
 
@@ -189,7 +190,107 @@ def _source_hostname(url: str) -> str:
 
 
 # ──────────────────────────────────────────────────────────────────────────────
+# Entity-page fanout helpers (Karpathy "single source touches 10-15 pages")
+
+WIKILINK_RE = re.compile(r"\[\[([^\]\|#]+?)(?:\#[^\]\|]+)?(?:\|[^\]]+)?\]\]")
+
+MAX_ENTITIES_PER_SOURCE = 15
+STUB_TARGET_DIR = "3 - Resources/Concepts"
+
+# Words/phrases that look like wikilinks but aren't useful entities (skip).
+WIKILINK_SKIP_PATTERNS = (
+    re.compile(r"^\d+$"),  # numbers
+    re.compile(r"^[a-z]{1,2}$"),  # very short
+    re.compile(r"https?://"),  # URLs masquerading as entities
+    re.compile(r"^[\w.-]+\.(com|org|io|dev|net|app|co)(/|$)"),  # domain-only refs
+    re.compile(r"^[\w-]+/[\w-]+$"),  # github-style org/repo
+)
+
+
+def extract_summary_wikilinks(text: str) -> list[str]:
+    """Pull deduped wikilink targets from the Summary / AI Highlights section.
+
+    Top-of-document only, not full body, to focus on AI-curated entity refs
+    rather than every incidental mention.
+    """
+    body = re.sub(FRONTMATTER_RE, "", text, count=1)
+    summary_block = ""
+    for heading in SUMMARY_HEADINGS:
+        if heading in body:
+            tail = body.split(heading, 1)[1]
+            tail = re.split(r"\n#{1,3} ", tail, maxsplit=1)[0]
+            summary_block = tail
+            break
+    if not summary_block:
+        return []
+
+    targets: list[str] = []
+    seen: set[str] = set()
+    for m in WIKILINK_RE.finditer(summary_block):
+        raw = m.group(1).strip()
+        if not raw or raw.lower() in seen:
+            continue
+        if any(p.match(raw) for p in WIKILINK_SKIP_PATTERNS):
+            continue
+        seen.add(raw.lower())
+        targets.append(raw)
+        if len(targets) >= MAX_ENTITIES_PER_SOURCE:
+            break
+    return targets
+
+
+def resolve_wikilink(target: str) -> tuple[Path | None, bool]:
+    """Find a vault note matching the wikilink target.
+
+    Returns (path, is_claude_memory). path=None means no match (stub candidate).
+    Searches by exact-stem match (case-insensitive). When multiple exist,
+    prefer one with `source: claude-memory` frontmatter.
+    """
+    target_lower = target.lower()
+    candidates: list[Path] = []
+    for md in VAULT_PATH.rglob("*.md"):
+        # Skip dot-prefixed dirs (.obsidian, .trash, etc.)
+        if any(part.startswith(".") for part in md.relative_to(VAULT_PATH).parts):
+            continue
+        if md.stem.lower() == target_lower:
+            candidates.append(md)
+    if not candidates:
+        return None, False
+
+    # Prefer claude-memory notes if multiple
+    cm_match: Path | None = None
+    other_match: Path | None = None
+    for c in candidates:
+        try:
+            head = c.read_text()[:2000]
+        except Exception:
+            continue
+        if re.search(r"^source:\s*claude-memory\s*$", head, re.MULTILINE):
+            cm_match = c
+            break
+        if other_match is None:
+            other_match = c
+    if cm_match:
+        return cm_match, True
+    return other_match, False
+
+
+# ──────────────────────────────────────────────────────────────────────────────
 # Plan
+
+@dataclass
+class EntityAction:
+    """One target wikilink → one wiki page update.
+
+    action: "append-citation" — entity page exists with source: claude-memory; append
+            "human-backlink"  — entity page exists without claude-memory; add line to index.md cross-refs
+            "create-stub"     — entity page doesn't exist; create a new stub
+    """
+    target: str  # wikilink text (e.g., "Cloudflare")
+    action: str
+    existing_path: Path | None = None  # set for append-citation / human-backlink
+    stub_path: Path | None = None      # set for create-stub
+
 
 @dataclass
 class IngestPlan:
@@ -200,10 +301,11 @@ class IngestPlan:
     summary: str
     source_url: str
     created_date: str
+    entity_actions: list[EntityAction] = field(default_factory=list)
     skipped_reason: str = ""  # set if plan is invalid
 
 
-def plan_for(source_path: Path) -> IngestPlan:
+def plan_for(source_path: Path, with_entities: bool = False) -> IngestPlan:
     rel_path = str(source_path.relative_to(VAULT_PATH))
     try:
         text = source_path.read_text()
@@ -241,10 +343,32 @@ def plan_for(source_path: Path) -> IngestPlan:
     created_date = str(created_raw)[:10] if created_raw else date.today().isoformat()
     summary = extract_summary_oneliner(text)
 
+    entity_actions: list[EntityAction] = []
+    if with_entities:
+        targets = extract_summary_wikilinks(text)
+        for target in targets:
+            existing, is_cm = resolve_wikilink(target)
+            if existing is None:
+                # Brand-new entity → create stub
+                safe = re.sub(r"[^\w\s\-]", "", target).strip()
+                stub_path = VAULT_PATH / STUB_TARGET_DIR / f"{safe}.md"
+                entity_actions.append(EntityAction(
+                    target=target, action="create-stub", stub_path=stub_path,
+                ))
+            elif is_cm:
+                entity_actions.append(EntityAction(
+                    target=target, action="append-citation", existing_path=existing,
+                ))
+            else:
+                entity_actions.append(EntityAction(
+                    target=target, action="human-backlink", existing_path=existing,
+                ))
+
     return IngestPlan(
         source_path=source_path, rel_path=rel_path,
         title=title, category=category, summary=summary,
         source_url=source_url, created_date=created_date,
+        entity_actions=entity_actions,
     )
 
 
@@ -279,10 +403,78 @@ def _append_to_index(line: str, section: str) -> None:
     INDEX_FILE.write_text(new_text)
 
 
+def _render_stub(target: str, plan: IngestPlan) -> str:
+    """Initial body for a brand-new entity stub created from a clipping."""
+    return (
+        f"---\n"
+        f"source: claude-memory\n"
+        f"created: {date.today().isoformat()}\n"
+        f"tags: [claude-memory, entity, stub]\n"
+        f"---\n\n"
+        f"# {target}\n\n"
+        f"> Auto-created stub from ingest. Expand as more sources mention this entity.\n\n"
+        f"## Mentioned in\n\n"
+        f"- [[{plan.source_path.stem}]] ({plan.created_date}): _{plan.summary}_\n"
+    )
+
+
+def _append_citation(path: Path, plan: IngestPlan) -> None:
+    """Append a citation block to an existing claude-memory entity page."""
+    block = (
+        f"\n## From [[{plan.source_path.stem}]] ({plan.created_date})\n\n"
+        f"_{plan.summary}_\n"
+    )
+    with open(path, "a") as f:
+        f.write(block)
+
+
+def _append_human_backlink(target: str, plan: IngestPlan, existing: Path) -> None:
+    """Add a one-liner under index.md's 'Cross-references' section noting
+    that a clipped source mentions a human-curated note. Never modifies the
+    human note itself."""
+    rel = existing.relative_to(VAULT_PATH)
+    line = (
+        f"- [[{plan.source_path.stem}]] mentions [[{target}]] "
+        f"({rel}) — _{plan.summary}_\n"
+    )
+    _append_to_index(line, "Cross-references")
+
+
 def apply_plan(plan: IngestPlan) -> None:
     _append_to_index(render_index_line(plan), plan.category)
     append_to_log("ingest", plan.title, f"{plan.category} · {plan.rel_path}")
     print(f"  ✓ indexed under '{plan.category}': {plan.rel_path}")
+
+    if not plan.entity_actions:
+        return
+
+    touched = 0
+    for ea in plan.entity_actions:
+        if ea.action == "create-stub" and ea.stub_path is not None:
+            if not is_inside_vault(ea.stub_path):
+                print(f"    ✗ stub-path outside vault, skipping: {ea.stub_path}", file=sys.stderr)
+                continue
+            ea.stub_path.parent.mkdir(parents=True, exist_ok=True)
+            if ea.stub_path.exists():
+                _append_citation(ea.stub_path, plan)  # race: another source already created
+            else:
+                ea.stub_path.write_text(_render_stub(ea.target, plan))
+            print(f"    ↳ stub: {ea.stub_path.relative_to(VAULT_PATH)}")
+            touched += 1
+        elif ea.action == "append-citation" and ea.existing_path is not None:
+            if not is_inside_vault(ea.existing_path):
+                print(f"    ✗ entity outside vault, skipping: {ea.existing_path}", file=sys.stderr)
+                continue
+            _append_citation(ea.existing_path, plan)
+            print(f"    ↳ cited [[{ea.target}]]: {ea.existing_path.relative_to(VAULT_PATH)}")
+            touched += 1
+        elif ea.action == "human-backlink" and ea.existing_path is not None:
+            _append_human_backlink(ea.target, plan, ea.existing_path)
+            print(f"    ↳ cross-ref [[{ea.target}]] (human note)")
+            touched += 1
+
+    if touched:
+        append_to_log("ingest-fanout", plan.title, f"{touched} entity pages touched")
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -312,6 +504,12 @@ def main() -> int:
     parser.add_argument("--inbox", action="store_true", help="Batch-process every clipping in 3 - Resources/")
     parser.add_argument("--apply", action="store_true", help="Write to index.md / log.md (default: dry-run)")
     parser.add_argument("--force", action="store_true", help="Re-ingest sources already in state file")
+    parser.add_argument(
+        "--entities",
+        action="store_true",
+        help="Karpathy entity-fanout: walk summary [[wikilinks]] and create stubs / "
+        "append citations to existing concept pages. Default off — opt in.",
+    )
     args = parser.parse_args()
 
     if not args.source and not args.inbox:
@@ -342,7 +540,7 @@ def main() -> int:
         if not args.force and rel in state:
             skipped.append((src, f"already ingested {state[rel][:10]}"))
             continue
-        p = plan_for(src)
+        p = plan_for(src, with_entities=args.entities)
         if p.skipped_reason:
             skipped.append((src, p.skipped_reason))
             continue
@@ -354,6 +552,20 @@ def main() -> int:
         print(f"  [{p.category}] {p.title}")
         print(f"    → {p.rel_path}")
         print(f"    summary: {p.summary[:120]}{'…' if len(p.summary) > 120 else ''}")
+        if p.entity_actions:
+            counts = {"create-stub": 0, "append-citation": 0, "human-backlink": 0}
+            for ea in p.entity_actions:
+                counts[ea.action] = counts.get(ea.action, 0) + 1
+            print(f"    entities: {len(p.entity_actions)} targets — "
+                  f"{counts['create-stub']} new stub(s), "
+                  f"{counts['append-citation']} cite(s), "
+                  f"{counts['human-backlink']} human-backlink(s)")
+            for ea in p.entity_actions[:10]:
+                print(f"      • [{ea.action}] [[{ea.target}]]"
+                      + (f" → {ea.stub_path.relative_to(VAULT_PATH)}" if ea.stub_path else "")
+                      + (f" → {ea.existing_path.relative_to(VAULT_PATH)}" if ea.existing_path else ""))
+            if len(p.entity_actions) > 10:
+                print(f"      … and {len(p.entity_actions) - 10} more")
         print()
 
     if skipped and len(skipped) <= 20:
