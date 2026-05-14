@@ -15,6 +15,7 @@ Based on the [second-brain-starter](https://github.com/coleam00/second-brain-sta
 - **Reflects** durable facts into `MEMORY.md` daily (`memory_reflect.py`)
 - **Catalogs** wiki content in `index.md` (vault root, per Karpathy LLM-wiki pattern)
 - **Logs** operational events in `log.md` (vault root, append-only timeline)
+- **Ingests** clipped sources into the catalog (`memory_ingest.py`, single file or `--inbox` batch)
 
 ---
 
