@@ -127,3 +127,15 @@ mcompile-dry() {
 mcompile() {
   uv run "$HOME/.dotfiles/.claude/scripts/memory_compile.py" --apply "$@"
 }
+
+# memory_ingest.py shortcuts
+#   mingest-dry --inbox                   preview every clipping (no writes)
+#   mingest-dry <path> --entities         preview entity fanout for one clip
+#   mingest --inbox                       apply (index entries + log)
+#   mingest --inbox --entities --force    full Karpathy fanout
+mingest-dry() {
+  uv run "$HOME/.dotfiles/.claude/scripts/memory_ingest.py" "$@"
+}
+mingest() {
+  uv run "$HOME/.dotfiles/.claude/scripts/memory_ingest.py" --apply "$@"
+}
