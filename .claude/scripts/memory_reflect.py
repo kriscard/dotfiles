@@ -34,6 +34,7 @@ from memory_common import (  # noqa: E402
     MEMORY_ARCHIVE,
     MEMORY_FILE,
     STATE_DIR,
+    append_to_log,
     is_auto_write_allowed,
     session_log_path,
 )
@@ -291,6 +292,7 @@ def main() -> int:
     save_processed_state(state)
 
     print(f"reflect: appended reflection for {target} to MEMORY.md", file=sys.stderr)
+    append_to_log("reflect", target.isoformat(), "1 section appended to MEMORY.md")
     return 0
 
 

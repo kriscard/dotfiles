@@ -13,6 +13,8 @@ Based on the [second-brain-starter](https://github.com/coleam00/second-brain-sta
 - **Captures** every Claude Code conversation as a daily session log
 - **Distills** session logs into PARA concept notes (`memory_compile.py`)
 - **Reflects** durable facts into `MEMORY.md` daily (`memory_reflect.py`)
+- **Catalogs** wiki content in `index.md` (vault root, per Karpathy LLM-wiki pattern)
+- **Logs** operational events in `log.md` (vault root, append-only timeline)
 
 ---
 
@@ -108,7 +110,7 @@ These should already be in the synced vault:
 
 ```bash
 ls /Users/<username>/obsidian-vault-kriscard/
-# Expected: SOUL.md, USER.md, MEMORY.md, AGENTS.md
+# Expected: SOUL.md, USER.md, MEMORY.md, AGENTS.md, index.md, log.md
 ```
 
 If missing, copy them from the canonical machine — they're vault content, not dotfiles.
