@@ -169,7 +169,53 @@ Claude Code uses `~/.claude/projects/<slug>/memory/` as a harness-guaranteed inl
 
 ---
 
-## 6. End-to-end verification checklist
+## 6. Shell aliases (`zsh/zsh.d/70-functions.zsh`)
+
+Already stowed by step 1. Source your shell to pick them up: `exec zsh`.
+
+| Command | Effect |
+|---|---|
+| `mcompile-dry [--date YYYY-MM-DD]` | Compile preview — extract concepts from session log, route via qmd, save plan. No writes. |
+| `mcompile [--date YYYY-MM-DD]` | Apply saved plan (or run + apply if no plan exists). Writes new concept notes + index.md + log.md. |
+| `mcompile --skip-backlinks` | Apply only new-notes + appends (drop moc-backlink actions when qmd matches look noisy). |
+| `mingest-dry [--inbox] [--entities] [--force]` | Ingest preview — show which clippings would land in index.md, optionally with entity-page fanout. |
+| `mingest [--inbox] [--entities] [--force]` | Apply ingest. With `--entities` it walks summary wikilinks and creates concept stubs + appends citations. |
+
+All run from anywhere — vault path auto-resolves via `~/obsidian-vault-*` glob.
+
+---
+
+## 7. Image download (Karpathy tip — clipped images live in vault)
+
+Two GUI changes in Obsidian (~30 seconds total). Worth doing if you clip image-heavy articles — without this, clipped images stay as remote URLs that may break.
+
+### 7a. Set the attachment folder
+
+Obsidian → Settings → **Files and links** → **Attachment folder path** → enter:
+
+```
+3 - Resources/assets
+```
+
+(Or another path of your choice. This is where downloaded attachments will land.)
+
+### 7b. Bind a hotkey to "Download attachments for current file"
+
+Obsidian → Settings → **Hotkeys** → search for **"Download attachments"** → bind it.
+
+Suggested: **⌃⇧D** (Control + Shift + D).
+
+### Workflow
+
+1. Web Clipper saves a clipped article to `3 - Resources/Articles/<title>.md`
+2. The clip's body has remote image URLs (e.g., `![alt](https://cdn...)`)
+3. Open the clipped note in Obsidian, hit ⌃⇧D
+4. All images download to `3 - Resources/assets/` and the note's image links update to local paths
+5. Images now survive forever even if the original URL breaks
+
+---
+
+## 8. End-to-end verification checklist
 
 After everything is set up:
 
