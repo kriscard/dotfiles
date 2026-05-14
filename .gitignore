@@ -103,7 +103,3 @@ zsh/zsh.d/99-local.zsh
 .claude/plugins/
 .claude/stats-cache.json
 .claude/local-plugins/*
-
-# Integrations layer — never commit credentials
-.claude/scripts/integrations/.tokens/
-.claude/scripts/integrations/.env
