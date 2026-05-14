@@ -1,4 +1,6 @@
 return {
+	-- A Neovim port of Matt Pocock's ts-error-translator
+	{ "dmmulroy/ts-error-translator.nvim" },
 	{
 		"vuki656/package-info.nvim",
 		ft = "json",
