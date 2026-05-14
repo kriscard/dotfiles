@@ -30,12 +30,14 @@ from memory_common import (  # noqa: E402
     MEMORY_FILE,
     SOUL_FILE,
     USER_FILE,
+    claim_ingest_for_today,
     claim_reflection_for_today,
     index_stub,
     truncate_to_token_cap,
 )
 
 REFLECT_SCRIPT = Path.home() / ".dotfiles" / ".claude" / "scripts" / "memory_reflect.py"
+INGEST_SCRIPT = Path.home() / ".dotfiles" / ".claude" / "scripts" / "memory_ingest.py"
 
 
 def read_or_empty(path: Path) -> str:
@@ -56,7 +58,7 @@ def kick_off_reflection_if_first_session_of_day() -> None:
     and kicks the subprocess.
     """
     if not REFLECT_SCRIPT.exists():
-        return  # Phase 3 hasn't shipped yet
+        return
 
     if not claim_reflection_for_today():
         return  # another concurrent SessionStart already claimed today
@@ -73,6 +75,29 @@ def kick_off_reflection_if_first_session_of_day() -> None:
         print(f"memory_session_start: failed to kick reflection: {exc}", file=sys.stderr)
 
 
+def kick_off_ingest_if_first_session_of_day() -> None:
+    """Fire-and-forget batch ingest of any new clippings. Same once-per-day
+    flock-protected claim pattern as reflection. Idempotent at the script
+    level too — already-ingested sources are skipped via state file.
+    """
+    if not INGEST_SCRIPT.exists():
+        return
+
+    if not claim_ingest_for_today():
+        return
+
+    try:
+        subprocess.Popen(
+            ["uv", "run", str(INGEST_SCRIPT), "--inbox", "--apply"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            stdin=subprocess.DEVNULL,
+            start_new_session=True,
+        )
+    except Exception as exc:
+        print(f"memory_session_start: failed to kick ingest: {exc}", file=sys.stderr)
+
+
 def main() -> None:
     # Consume stdin (hook input). We don't need any specific field from it.
     try:
@@ -84,10 +109,11 @@ def main() -> None:
         soul = read_or_empty(SOUL_FILE)
         user = read_or_empty(USER_FILE)
         memory = truncate_to_token_cap(read_or_empty(MEMORY_FILE), target_tokens=1000)
-        # Only inject index.md if it has actual entries (any `##` section).
-        # Empty/template-only index isn't worth the inline tokens.
-        index_full = read_or_empty(INDEX_FILE)
-        index_top = index_stub(index_full) if index_full and "\n## " in index_full else ""
+        # index.md is read on demand by the agent (not inlined). The file lives
+        # at $VAULT/index.md and is referenced from AGENTS.md. Inlining it
+        # would push the payload past the eviction threshold once entries
+        # accumulate — and qmd handles semantic recall anyway.
+        index_top = ""
 
         sections: list[str] = []
         loaded_paths: list[Path] = []  # real file paths for the status line
@@ -129,6 +155,7 @@ def main() -> None:
             print(f"   • {path}", file=sys.stderr)
 
         kick_off_reflection_if_first_session_of_day()
+        kick_off_ingest_if_first_session_of_day()
     except Exception as exc:
         print(f"memory_session_start failed: {exc}", file=sys.stderr)
 
