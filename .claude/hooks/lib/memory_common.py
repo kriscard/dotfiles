@@ -264,6 +264,26 @@ def extract_conversation_context(transcript_path: Path) -> tuple[str, int]:
     return context, len(recent)
 
 
+def _load_dotenv(env_path: Path) -> dict[str, str]:
+    """Parse KEY=VALUE lines from a .env file, skipping comments and blanks."""
+    result: dict[str, str] = {}
+    if not env_path.exists():
+        return result
+    try:
+        for line in env_path.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, _, val = line.partition("=")
+            key = key.strip()
+            val = val.strip().strip('"').strip("'")
+            if key:
+                result[key] = val
+    except Exception:
+        pass
+    return result
+
+
 def spawn_flush(context: str, session_id: str, project_name: str, hhmm: str) -> None:
     """Write context to a temp file under STATE_DIR and Popen memory_flush.py
     detached. Fire-and-forget — errors are logged, never raised."""
@@ -275,6 +295,14 @@ def spawn_flush(context: str, session_id: str, project_name: str, hhmm: str) -> 
     except Exception as exc:
         logging.error("failed to write context file: %s", exc)
         return
+
+    # Inherit current env and layer in dotenv so detached subprocesses have
+    # ANTHROPIC_API_KEY even when Claude Code was launched outside a shell
+    # that sources ~/.zshrc (e.g. from an IDE or Spotlight).
+    child_env = dict(os.environ)
+    dotenv_vars = _load_dotenv(Path.home() / ".dotfiles" / ".env")
+    for k, v in dotenv_vars.items():
+        child_env.setdefault(k, v)  # current env wins over .env
 
     cmd = [
         "uv",
@@ -292,6 +320,7 @@ def spawn_flush(context: str, session_id: str, project_name: str, hhmm: str) -> 
             stderr=subprocess.DEVNULL,
             stdin=subprocess.DEVNULL,
             start_new_session=True,
+            env=child_env,
         )
         logging.info(
             "spawned memory_flush.py: session=%s chars=%d project=%s",
