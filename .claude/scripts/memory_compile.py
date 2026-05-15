@@ -66,10 +66,26 @@ For each concept found, output ONE JSON object per line (NDJSON), with keys:
 If nothing in the session is durable enough to warrant a note, output an empty line.
 
 Rules:
-- Concepts must be reusable knowledge, not session-specific events.
-- "Decided to use X" is a concept; "ran X command at 14:23" is not.
+- Only extract PATTERNS and CONCEPTS that a developer would want to remember
+  months from now on a completely different project. The bar is high: if you
+  would not add this to a personal programming handbook, skip it.
+- A concept must be fully self-contained and codebase-agnostic. Strip every
+  product-specific noun (component names, ticket IDs, feature names, library
+  instance names) before writing the summary. If stripping leaves nothing
+  meaningful, skip the concept entirely.
+- NEVER extract PR review observations, bundle-size judgements, or code-review
+  opinions about a specific changeset — even if they sound like advice. Those
+  belong in the PR, not a wiki.
+- Skip anything whose summary would confuse a developer at a different company:
+  if it requires knowing "CallRecording", "GROW-1234", "Markly", or any other
+  internal noun to make sense, it is not ready to be a note.
+- Topic titles must state the transferable principle, not the specific context.
+  GOOD: "Unstable useEffect deps cause imperative lib remounts"
+  BAD:  "WaveSurfer event handlers need useCallback stabilization"
+- "Decided to use X" is a concept only if X is a general pattern — not a
+  one-time project decision. "ran X command at 14:23" is never a concept.
 - Skip pleasantries, debugging steps, ephemeral state.
-- 0-5 concepts per session is normal; 0 is fine.
+- Most sessions yield 0-2 concepts. 0 is the correct answer more often than not.
 
 Session log follows:
 ---
