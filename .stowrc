@@ -1,5 +1,4 @@
 --target=$HOME
---no-folding
 --ignore=.stowrc
 --ignore=DS_Store
 --ignore=atuin/*
