@@ -114,28 +114,3 @@ obstoday() { obsidian append path="2 - Areas/Daily Ops/$(date +%Y-%m-%d).md" con
 obsopen() { obsidian open path="$*" }
 obsweekly() { obsidian open path="2 - Areas/Daily Ops/Weekly/$(date +%Y)-W$(date +%V).md" }
 obsyesterday() { obsidian open path="2 - Areas/Daily Ops/$(date -v-1d +%Y-%m-%d).md" }
-
-# Memory system shortcuts — run from anywhere (vault path auto-resolves)
-#   mcompile-dry                   preview plan for today (no writes)
-#   mcompile-dry --date 2026-05-12 preview for a specific session date
-#   mcompile                       apply for today
-#   mcompile --date 2026-05-12     apply a specific session date
-#   mcompile --skip-backlinks      apply only new-note + append-to actions
-mcompile-dry() {
-  uv run "$HOME/.dotfiles/.claude/scripts/memory_compile.py" "$@"
-}
-mcompile() {
-  uv run "$HOME/.dotfiles/.claude/scripts/memory_compile.py" --apply "$@"
-}
-
-# memory_ingest.py shortcuts
-#   mingest-dry --inbox                   preview every clipping (no writes)
-#   mingest-dry <path> --entities         preview entity fanout for one clip
-#   mingest --inbox                       apply (index entries + log)
-#   mingest --inbox --entities --force    full Karpathy fanout
-mingest-dry() {
-  uv run "$HOME/.dotfiles/.claude/scripts/memory_ingest.py" "$@"
-}
-mingest() {
-  uv run "$HOME/.dotfiles/.claude/scripts/memory_ingest.py" --apply "$@"
-}
