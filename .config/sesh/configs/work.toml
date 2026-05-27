@@ -1,8 +1,8 @@
 # Work Sessions (Roofr)
 
 [[session]]
-name = "Claude Plugins Roofr 🤖"
-path = "~/Code/kriscard-claude-plugins/"
+name = "Skills 🤖"
+path = "~/Code/Skills/"
 windows = ["lazygit"]
 
 [[session]]
