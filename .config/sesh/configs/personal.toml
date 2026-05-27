@@ -11,8 +11,8 @@ path = "~/obsidian-vault-kriscard/"
 windows = ["lazygit"]
 
 [[session]]
-name = "Claude Plugins 🤖"
-path = "~/projects/kriscard-claude-plugins/"
+name = "Skills 🤖"
+path = "~/projects/Skills/"
 windows = ["lazygit"]
 
 [[session]]
