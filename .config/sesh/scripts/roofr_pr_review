@@ -34,8 +34,6 @@ if [ ! -d "$ROOFR_DIR/$BRANCH" ]; then
     git worktree add "$BRANCH" "origin/$BRANCH"
 fi
 
-# cd into worktree and open Octo with the PR
-cd "$ROOFR_DIR/$BRANCH" || exit 1
 echo "Worktree ready at $ROOFR_DIR/$BRANCH"
 echo "Opening PR #$PR_NUMBER in Octo..."
-nvim -c "Octo pr edit $PR_NUMBER"
+tmux send-keys "cd '$ROOFR_DIR/$BRANCH' && nvim -c 'Octo pr edit $PR_NUMBER'" Enter
