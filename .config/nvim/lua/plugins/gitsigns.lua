@@ -22,6 +22,14 @@ return {
 					text = "~",
 				},
 			},
+			current_line_blame = true,
+			current_line_blame_opts = {
+				virt_text = true,
+				virt_text_pos = "eol",
+				delay = 300,
+				ignore_whitespace = false,
+			},
+			current_line_blame_formatter = "<author>, <author_time:%R> - <summary>",
 			on_attach = function(bufnr)
 				local gitsigns = require("gitsigns")
 
@@ -66,7 +74,9 @@ return {
 				map("n", "<leader>ghP", function()
 					gitsigns.preview_hunk_inline()
 				end, { desc = "git [P]review hunk inline" })
-				map("n", "<leader>ghb", gitsigns.blame_line, { desc = "git [b]lame line" })
+				map("n", "<leader>ghb", function()
+					gitsigns.blame_line({ full = true })
+				end, { desc = "git [b]lame line (full)" })
 				map("n", "<leader>ghB", gitsigns.blame, { desc = "git [b]lame buffer" })
 				map("n", "<leader>ght", gitsigns.toggle_current_line_blame, { desc = "git [T]oggle show [b]lame line" })
 				map("n", "<leader>ghd", gitsigns.diffthis, { desc = "git [d]iff against index" })

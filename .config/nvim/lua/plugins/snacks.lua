@@ -297,9 +297,9 @@ return {
 			{
 				"<leader>gb",
 				function()
-					Snacks.git.blame_line()
+					Snacks.git.blame_line({ win = { title = " Git Line History " } })
 				end,
-				desc = "Git Blame Line",
+				desc = "Git Line History",
 			},
 			{
 				"<leader>gL",
