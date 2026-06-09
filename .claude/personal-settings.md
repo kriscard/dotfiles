@@ -96,6 +96,14 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
       "Bash(qmd skill show*)",
       "Bash(qmd status)",
       "Bash(qmd vsearch *)",
+      "Bash(fd *)",
+      "Bash(tree *)",
+      "Bash(sg *)",
+      "Bash(ast-grep *)",
+      "Bash(nvim --headless *)",
+      "Bash(luajit *)",
+      "Bash(lua -e *)",
+      "Bash(dotfiles doctor *)",
       "ExitPlanMode(*)",
       "Fetch(*)",
       "Glob(*)",
@@ -431,6 +439,9 @@ Broad auto-approve for common dev operations. Notable:
 
 - All read-only tools (`Glob`, `Grep`, `LS`, `Read`) - no friction for exploration
 - Docker exec/run, Node, npm build
+- Search/dev CLIs (`fd`, `tree`, `sg`/`ast-grep`) - preferred tools from CLAUDE.md, no per-run prompt
+- Neovim config verification (`nvim --headless`, `luajit`, `lua -e`) - syntax/health checks during nvim work
+- `dotfiles doctor` - repo health check (note: `stow`/`dotfiles sync` deliberately left to prompt, they mutate symlinks)
 - All MCP tools (`mcp__*`) auto-approved except browsermcp (see Ask rules)
 
 ### Deny Rules (Hardened)
