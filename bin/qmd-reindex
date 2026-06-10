@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Refresh the qmd index over the Obsidian vault. Scheduled via launchd
+# (com.kriscard.qmd-reindex). qmd update re-indexes content/BM25; qmd embed
+# refreshes vectors. No --pull: the vault commits locally via obsidian-git,
+# and indexing reads files on disk regardless of git state.
+set -euo pipefail
+
+# asdf shims first so `node` resolves to the version qmd's better-sqlite3 was
+# built against (Node 24 / MODULE_VERSION 137). Homebrew's Node (25/141) would
+# fail the native dlopen. Then /opt/homebrew/bin for the qmd wrapper itself.
+export PATH="${HOME}/.asdf/shims:/opt/homebrew/bin:${PATH}"
+
+LOG="${HOME}/.cache/qmd/reindex.log"
+mkdir -p "$(dirname "$LOG")"
+
+{
+  echo "=== $(date '+%Y-%m-%d %H:%M:%S') reindex start ==="
+  qmd update
+  qmd embed
+  echo "=== $(date '+%Y-%m-%d %H:%M:%S') reindex done ==="
+} >>"$LOG" 2>&1
