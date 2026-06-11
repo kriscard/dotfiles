@@ -72,8 +72,13 @@ Use MCP only when the CLI equivalent cannot accomplish the task. When in doubt: 
 
 ## Web Access Priority
 
-1. WebFetch: default for reading web content
-2. WebSearch: default for searching the web
+Reading a URL:
+
+1. WebFetch (or `defuddle` for articles): default for public pages. Fast, one-shot.
+2. Escalate to **agent-browser** when the page needs login, is JS-rendered/SPA, or step 1 returns an error, empty body, or blocked/403 result. Use `agent-browser open <url>` against a Chrome debug session so the user can log in if a wall appears, then read with `agent-browser snapshot`/`get`.
+3. WebFetch remains the fallback if the browser path fails.
+
+Searching the web: WebSearch.
 
 ## Git
 
