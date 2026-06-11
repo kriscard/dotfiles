@@ -78,6 +78,10 @@ brew "delta"        # Better git diffs
 # Development Utilities
 brew "ast-grep"     # Semantic code search
 brew "imagemagick"  # Image processing
+brew "uv"           # Python runner (Claude Code notification.py Stop hook)
+
+# Note: qmd (vault recall search engine) is an npm global, not a brew formula.
+# Installed by bin/setup-recall via: npm install -g @tobilu/qmd
 
 # =============================================================================
 # WEB DEVELOPMENT SPECIFIC
