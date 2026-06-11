@@ -86,6 +86,7 @@
       "Bash(nvim --headless *)",
       "Bash(luajit *)",
       "Bash(lua -e *)",
+      "Bash(ls:*)",
       "Bash(dotfiles doctor *)",
       "ExitPlanMode(*)",
       "Fetch(*)",
