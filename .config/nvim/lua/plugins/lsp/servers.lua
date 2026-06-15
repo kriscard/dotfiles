@@ -233,6 +233,16 @@ M.specs = {
 		init_options = { typescript = { enabled = true } },
 	},
 
+	-- ── PHP (intelephense) ──────────────────────────────────────────────────────
+	intelephense = {
+		settings = {
+			intelephense = {
+				-- Index large framework/vendor files (default cap skips them)
+				files = { maxSize = 5000000 },
+			},
+		},
+	},
+
 	-- ── Project-scoped servers ─ workspace_required keeps them off in scratch ──
 	prismals = { workspace_required = true },
 	rust_analyzer = { workspace_required = true },
@@ -249,11 +259,12 @@ M.install = {
 	"cssls", "tailwindcss", "unocss", "stylelint_lsp", "emmet_ls",
 	"html", "jsonls", "yamlls", "graphql",
 	"marksman", "harper_ls", "mdx_analyzer",
+	"intelephense",
 	"bashls", "prismals", "sqlls", "rust_analyzer",
 	"dockerls", "docker_compose_language_service",
 }
 
 -- Mason-tool-installer list (formatters/linters that are NOT LSP servers)
-M.tools = { "stylua", "prettier", "prettierd" }
+M.tools = { "stylua", "prettier", "prettierd", "php-cs-fixer" }
 
 return M
