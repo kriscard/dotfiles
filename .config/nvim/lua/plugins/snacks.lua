@@ -139,8 +139,6 @@ return {
 					-- Filter out nil messages
 					local filtered_message = {
 						"No information available",
-						"[Copilot.lua] copilot is disabled",
-						"[Copilot.lua] Node.js version 22 or newer required but found 21.6.1",
 					}
 					local notify = Snacks.notifier.notify
 					Snacks.notifier.notify = function(message, level, opts)

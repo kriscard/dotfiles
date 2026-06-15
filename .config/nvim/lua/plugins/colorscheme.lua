@@ -7,7 +7,6 @@ return {
 			integrations = {
 				blink_cmp = true,
 				bufferline = true,
-				copilot_vim = true,
 				dap = true,
 				dap_ui = true,
 				diffview = true,
