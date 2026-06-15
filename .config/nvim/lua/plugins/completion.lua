@@ -50,7 +50,7 @@ return {
 			default = { "lazydev", "lsp", "path", "snippets", "buffer", "emoji" },
 			per_filetype = {
 				gitcommit = { "git", "buffer" },
-				markdown = { "obsidian", "lsp", "path", "snippets", "buffer", "dictionary", "emoji" },
+				markdown = { "lsp", "path", "snippets", "buffer", "dictionary", "emoji" },
 			},
 			providers = {
 				lazydev = {

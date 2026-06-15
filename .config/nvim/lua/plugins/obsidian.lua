@@ -43,15 +43,6 @@ return {
 			new_notes_location = "notes_subdir",
 
 			-- ══════════════════════════════════════════════════════════════════════
-			-- Completion (Blink.cmp integration)
-			-- ══════════════════════════════════════════════════════════════════════
-			completion = {
-				nvim_cmp = false,
-				blink = true,
-				min_chars = 2,
-			},
-
-			-- ══════════════════════════════════════════════════════════════════════
 			-- Wiki Links & Markdown Links
 			-- ══════════════════════════════════════════════════════════════════════
 			-- Link configuration (replaces deprecated wiki_link_func / preferred_link_style)
