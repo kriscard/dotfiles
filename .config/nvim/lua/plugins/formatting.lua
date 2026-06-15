@@ -25,6 +25,7 @@ return {
 			jsonc = { "prettierd", "prettier", stop_after_first = true },
 			graphql = { "prettierd", "prettier", stop_after_first = true },
 			lua = { "stylua" },
+			php = { "php_cs_fixer" },
 			html = { "prettierd", "prettier", stop_after_first = true },
 			yaml = { "prettierd", "prettier", stop_after_first = true },
 			markdown = { "prettierd", "prettier", stop_after_first = true },

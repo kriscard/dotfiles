@@ -36,6 +36,7 @@ return {
 				-- Markdown
 				"markdown", "markdown_inline",
 				-- Backends
+				"php", "phpdoc",
 				"python", "rust", "go", "gomod", "gosum",
 				"prisma", "gleam",
 				-- Treesitter / vim itself
@@ -60,6 +61,7 @@ return {
 				"lua",
 				"diff", "gitcommit", "gitconfig", "gitignore", "gitrebase",
 				"markdown",
+				"php",
 				"python", "rust", "go", "gomod", "gosum",
 				"prisma", "gleam",
 				"query", "vim", "help",
