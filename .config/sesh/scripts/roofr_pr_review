@@ -1,39 +1,40 @@
 #!/usr/bin/env bash
-# Create a worktree for PR review and open gh-dash
-# Called from sesh session startup_command
+# Roofr: pick a PR, spin up a headless worktree via make wt-start, open in Octo.
 
-ROOFR_DIR="$HOME/Code/roofr-dev/roofr"
-cd "$ROOFR_DIR" || exit 1
+RDEV="$HOME/Code/roofr-dev"
+cd "$RDEV" || exit 1
 
-# Fetch latest and list open PRs
-git fetch origin
+git -C roofr fetch origin --prune
 
-# Use gh to pick a PR (shows all open PRs with base branch)
-PR_NUMBER=$(gh pr list --json number,title,headRefName,baseRefName --template '{{range .}}{{.number}}	[{{.baseRefName}}] {{.title}} ({{.headRefName}}){{"\n"}}{{end}}' | \
-    gum filter --limit 1 --fuzzy --placeholder "Pick a PR to review" --prompt "👀 " | \
-    cut -f1)
+PR_NUMBER=$(gh pr list --json number,title,headRefName,baseRefName \
+    --template '{{range .}}{{.number}}	[{{.baseRefName}}] {{.title}} ({{.headRefName}}){{"\n"}}{{end}}' \
+    | gum filter --limit 1 --fuzzy --placeholder "Pick a PR to review" --prompt "👀 " \
+    | cut -f1)
 
 if [ -z "$PR_NUMBER" ]; then
-    echo "No PR selected, opening gh dash instead..."
-    gh dash
+    echo "No PR selected."
     exit 0
 fi
 
-# Get PR branch name
 BRANCH=$(gh pr view "$PR_NUMBER" --json headRefName --jq '.headRefName')
-
 if [ -z "$BRANCH" ]; then
-    echo "Could not get branch name for PR #$PR_NUMBER"
+    echo "Could not resolve branch for PR #$PR_NUMBER"
     exit 1
 fi
 
-# Create worktree if it doesn't exist
-if [ ! -d "$ROOFR_DIR/$BRANCH" ]; then
-    echo "Creating worktree for PR #$PR_NUMBER ($BRANCH)..."
-    git fetch origin "$BRANCH"
-    git worktree add "$BRANCH" "origin/$BRANCH"
+# Sanitize branch to valid slug
+SLUG=$(echo "$BRANCH" | tr '[:upper:]/' '[:lower:]-' | sed 's/^[^a-z0-9]*//' | cut -c1-20)
+
+WORKTREE_PATH="$RDEV/roofr__worktrees/$SLUG"
+
+if [ ! -d "$WORKTREE_PATH" ]; then
+    echo "Spinning up worktree for PR #$PR_NUMBER ($BRANCH → $SLUG)..."
+    # Headless: skip Vite + node_modules hydration, only need code + DB for review
+    make wt-start name="$SLUG" ARGS="--without frontend --base origin/$BRANCH"
+else
+    echo "Worktree $SLUG already exists, resuming..."
+    make wt-start name="$SLUG"
 fi
 
-echo "Worktree ready at $ROOFR_DIR/$BRANCH"
 echo "Opening PR #$PR_NUMBER in Octo..."
-tmux send-keys "cd '$ROOFR_DIR/$BRANCH' && nvim -c 'Octo pr edit $PR_NUMBER'" Enter
+tmux new-window -c "$WORKTREE_PATH/roofr" "nvim -c 'Octo pr edit $PR_NUMBER'"

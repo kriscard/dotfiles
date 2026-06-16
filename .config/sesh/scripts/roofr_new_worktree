@@ -1,19 +1,27 @@
 #!/usr/bin/env bash
-# Create a new Roofr worktree and connect to it
-# Called from sesh session startup_command
+# Roofr: create a new worktree via make wt-start and connect via sesh.
+# Worktrees land at roofr-dev/roofr__worktrees/<slug>/ per the roofr-dev docs.
 
-cd ~/Code/roofr-dev/roofr || exit 1
+RDEV="$HOME/Code/roofr-dev"
+cd "$RDEV" || exit 1
 
-# Get branch name interactively
 BRANCH=$(gum input --placeholder "branch-name (e.g., feat/my-feature)" --prompt "🌱 New branch: ")
+[ -z "$BRANCH" ] && exit 0
 
-if [ -n "$BRANCH" ]; then
-    # Fetch latest and select source branch (default: staging)
-    git fetch origin --prune
-    SOURCE=$(git branch -r --format='%(refname:short)' | sed 's|origin/||' | grep -v HEAD | gum filter --header "📌 Base branch (PR target):" --value "staging")
+# Sanitize to a valid slug: lowercase, / → -, strip leading non-alnum, truncate to 20
+SLUG=$(echo "$BRANCH" | tr '[:upper:]/' '[:lower:]-' | sed 's/^[^a-z0-9]*//' | cut -c1-20)
 
-    if [ -n "$SOURCE" ]; then
-        git worktree add "$BRANCH" -b "$BRANCH" "origin/$SOURCE"
-        sesh connect "$BRANCH"
-    fi
+if [ "$SLUG" != "$BRANCH" ]; then
+    echo "Branch sanitized to slug: $SLUG"
 fi
+
+git -C roofr fetch origin --prune
+
+SOURCE=$(git -C roofr branch -r --format='%(refname:short)' | sed 's|origin/||' | grep -v HEAD \
+    | gum filter --header "📌 Base branch (PR target):" --value "staging")
+[ -z "$SOURCE" ] && exit 0
+
+make wt-start name="$SLUG" ARGS="--base origin/$SOURCE"
+
+WORKTREE_PATH="$RDEV/roofr__worktrees/$SLUG"
+sesh connect "$WORKTREE_PATH"

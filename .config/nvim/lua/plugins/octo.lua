@@ -11,7 +11,7 @@ return {
 			enable_builtin = true,
 			default_merge_method = "squash",
 			picker = "snacks",
-			file_panel = { use_icons = true },
+			file_panel = { icons = true },
 			mappings = {
 				pull_request = {
 					checkout_pr = { lhs = "<leader>po", desc = "checkout PR" },
