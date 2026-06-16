@@ -1,13 +1,16 @@
 #!/usr/bin/env bash
-# Pick an existing Roofr worktree and connect to it
-# Called from sesh session startup_command
+# Roofr: pick an existing worktree from roofr__worktrees/ and connect via sesh.
 
-cd ~/Code/roofr-dev/roofr || exit 1
+WORKTREES_DIR="$HOME/Code/roofr-dev/roofr__worktrees"
 
-# List actual git worktrees and pick with fuzzy finder
-# git worktree list outputs: /path/to/worktree  hash [branch]
-WORKTREE=$(git worktree list | awk '{print $1}' | xargs -n1 basename | gum filter --limit 1 --fuzzy --no-sort --placeholder "Pick a worktree" --prompt "🌲 ")
+if [ ! -d "$WORKTREES_DIR" ]; then
+    echo "No worktrees found at $WORKTREES_DIR"
+    exit 1
+fi
 
-if [ -n "$WORKTREE" ]; then
-    sesh connect "$WORKTREE"
+SLUG=$(ls "$WORKTREES_DIR" | gum filter --limit 1 --fuzzy --no-sort \
+    --placeholder "Pick a worktree" --prompt "🌲 ")
+
+if [ -n "$SLUG" ]; then
+    sesh connect "$WORKTREES_DIR/$SLUG"
 fi

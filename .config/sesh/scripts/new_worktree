@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# Generic: create a new git worktree for any repo and connect via sesh.
+# Usage: set as startup_command for a sesh session.
+
+REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
+if [ -z "$REPO_ROOT" ]; then
+    echo "Not inside a git repository."
+    exit 1
+fi
+
+cd "$REPO_ROOT" || exit 1
+
+BRANCH=$(gum input --placeholder "branch-name (e.g., feat/my-feature)" --prompt "🌱 New branch: ")
+[ -z "$BRANCH" ] && exit 0
+
+git fetch origin --prune
+
+SOURCE=$(git branch -r --format='%(refname:short)' | sed 's|origin/||' | grep -v HEAD \
+    | gum filter --header "📌 Base branch:" --value "main")
+[ -z "$SOURCE" ] && exit 0
+
+# Worktree lives as a sibling of the repo root dir
+WORKTREE_PATH="$(dirname "$REPO_ROOT")/$BRANCH"
+
+git worktree add -b "$BRANCH" "$WORKTREE_PATH" "origin/$SOURCE"
+sesh connect "$WORKTREE_PATH"

@@ -16,12 +16,17 @@ path = "~/Code/roofr-dev/roofr/"
 startup_command = "~/.config/sesh/scripts/roofr_pick_worktree"
 
 [[session]]
+name = "New worktree ➕"
+path = "~/"
+startup_command = "~/.config/sesh/scripts/new_worktree"
+
+[[session]]
 name = "Roofr new worktree ➕"
-path = "~/Code/roofr-dev/roofr/"
+path = "~/Code/roofr-dev/"
 startup_command = "~/.config/sesh/scripts/roofr_new_worktree"
 
 [[session]]
 name = "Roofr reviews 👀"
-path = "~/Code/roofr-dev/roofr"
+path = "~/Code/roofr-dev"
 startup_command = "~/.config/sesh/scripts/roofr_pr_review"
 preview_command = "gh pr list --limit 5"
