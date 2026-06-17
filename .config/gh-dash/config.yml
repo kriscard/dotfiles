@@ -62,7 +62,7 @@ keybindings:
     # Edit PR in Neovim with Octo.nvim
     - key: O
       command: >
-        tmux new-window -c {{.RepoPath}} 'nvim -c ":silent Octo pr edit {{.PrNumber}}"'
+        tmux new-window -c {{.RepoPath}} 'nvim -n -c "lua require(\"lazy\").load({plugins={\"octo.nvim\"}})" -c "e octo://{{.RepoName}}/pull/{{.PrNumber}}"'
 # Map GitHub repos to local directories for quick navigation
 repoPaths:
   kriscard/dotfiles: ~/.dotfiles
