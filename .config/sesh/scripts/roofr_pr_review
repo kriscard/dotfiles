@@ -6,7 +6,7 @@ cd "$RDEV" || exit 1
 
 git -C roofr fetch origin --prune
 
-PR_NUMBER=$(gh pr list --json number,title,headRefName,baseRefName \
+PR_NUMBER=$(gh pr list --repo roofr/roofr --limit 200 --json number,title,headRefName,baseRefName \
     --template '{{range .}}{{.number}}	[{{.baseRefName}}] {{.title}} ({{.headRefName}}){{"\n"}}{{end}}' \
     | gum filter --limit 1 --fuzzy --placeholder "Pick a PR to review" --prompt "👀 " \
     | cut -f1)
@@ -16,7 +16,7 @@ if [ -z "$PR_NUMBER" ]; then
     exit 0
 fi
 
-BRANCH=$(gh pr view "$PR_NUMBER" --json headRefName --jq '.headRefName')
+BRANCH=$(gh pr view "$PR_NUMBER" --repo roofr/roofr --json headRefName --jq '.headRefName')
 if [ -z "$BRANCH" ]; then
     echo "Could not resolve branch for PR #$PR_NUMBER"
     exit 1
@@ -37,4 +37,4 @@ else
 fi
 
 echo "Opening PR #$PR_NUMBER in Octo..."
-tmux new-window -c "$WORKTREE_PATH/roofr" "nvim -c 'Octo pr edit $PR_NUMBER'"
+tmux new-window -c "$WORKTREE_PATH/roofr" "nvim -n -c 'lua require(\"lazy\").load({plugins={\"octo.nvim\"}})' -c 'e octo://roofr/roofr/pull/$PR_NUMBER'"
