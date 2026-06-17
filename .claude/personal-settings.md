@@ -66,7 +66,13 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
       "Bash(docker compose exec *)",
       "Bash(docker run *)",
       "Bash(gh pr view *)",
+      "Bash(gh pr list *)",
+      "Bash(gh pr checks *)",
+      "Bash(gh pr diff *)",
       "Bash(gh run view *)",
+      "Bash(gh run list *)",
+      "Bash(gh issue view *)",
+      "Bash(gh issue list *)",
       "Bash(git add *)",
       "Bash(git blame *)",
       "Bash(git diff)",
@@ -103,6 +109,7 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
       "Bash(nvim --headless *)",
       "Bash(luajit *)",
       "Bash(lua -e *)",
+      "Bash(ls:*)",
       "Bash(dotfiles doctor *)",
       "ExitPlanMode(*)",
       "Fetch(*)",
@@ -114,7 +121,7 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
       "TodoWrite(*)",
       "WebFetch(domain:*)",
       "WebSearch",
-      "mcp__*"
+      "mcp__context7__*"
     ],
     "deny": [
       "Read(./.env)",
@@ -248,13 +255,25 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
       "Bash(obsidian theme:install *)",
       "Bash(obsidian theme:set *)",
       "Bash(obsidian theme:uninstall *)",
-      "mcp__browsermcp__*"
+      "mcp__browsermcp__*",
+      "mcp__*"
     ]
   },
-  "model": "opus[1m]",
   "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": ["context7", "browsermcp"],
   "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ~/.dotfiles/.claude/hooks/vault_recall.py",
+            "timeout": 8,
+            "statusMessage": "Checking vault..."
+          }
+        ]
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "Bash|Write|Edit|MultiEdit",
@@ -310,11 +329,18 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
         "hooks": [
           {
             "type": "command",
+            "command": "uv run ~/.dotfiles/.claude/hooks/format.py"
+          },
+          {
+            "type": "command",
             "command": "uv run ~/.dotfiles/.claude/hooks/ts_lint.py"
           }
         ]
       }
     ]
+  },
+  "worktree": {
+    "symlinkDirectories": ["node_modules"]
   },
   "statusLine": {
     "type": "command",
@@ -330,20 +356,7 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
     "skill-creator@claude-plugins-official": true,
     "lua-lsp@claude-plugins-official": true,
     "claude-md-management@claude-plugins-official": true,
-    "essentials@kriscard": true,
-    "developer-tools@kriscard": true,
-    "testing@kriscard": true,
-    "assistant@kriscard": true,
-    "til@kriscard": true,
-    "architecture@kriscard": true,
-    "obsidian-second-brain@kriscard": true,
-    "ideation@kriscard": true,
-    "content@kriscard": true,
-    "ai-development@kriscard": true,
-    "neovim-advisor@kriscard": true,
-    "dotfiles-optimizer@kriscard": true,
-    "studio-startup@kriscard": true,
-    "interactive-learning@kriscard": true
+    "claude-code-setup@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
@@ -357,17 +370,15 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
         "source": "git",
         "url": "https://github.com/better-auth/skills.git"
       }
-    },
-    "kriscard": {
-      "source": {
-        "source": "github",
-        "repo": "kriscard/kriscard-claude-plugins"
-      }
     }
   },
   "alwaysThinkingEnabled": true,
+  "effortLevel": "xhigh",
+  "tui": "fullscreen",
   "editorMode": "vim",
+  "fileCheckpointingEnabled": true,
   "teammateMode": "tmux",
+  "skipAutoPermissionPrompt": true,
   "voiceEnabled": true
 }
 ```
@@ -526,7 +537,6 @@ Prefer built-in tools and CLI over MCP where possible:
 - **Browser**: Only MCP when interaction needed (clicking, forms)
 
 ---
-
 
 ## Quick Reference
 
