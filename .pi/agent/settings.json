@@ -1,0 +1,14 @@
+{
+  "lastChangelogVersion": "0.79.8",
+  "packages": [
+    "npm:pi-subagents",
+    "npm:pi-web-access",
+    "npm:@juicesharp/rpiv-ask-user-question",
+    "npm:context-mode",
+    "npm:pi-prompt-template-model"
+  ],
+  "defaultProvider": "openai-codex",
+  "defaultModel": "gpt-5.5",
+  "theme": "catppuccin-macchiato",
+  "defaultThinkingLevel": "high"
+}

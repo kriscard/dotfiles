@@ -26,4 +26,11 @@
 # Machine-local configs
 ^/\.config/ghostty/local-config/config
 
+# Pi runtime files and installed package caches (config/resources are stowed)
+^/\.pi/agent/auth\.json
+^/\.pi/agent/trust\.json
+^/\.pi/agent/sessions
+^/\.pi/agent/npm
+^/\.pi/agent/git
+
 ^/node_modules
