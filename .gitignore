@@ -76,6 +76,13 @@ fish_variables
 .env.local
 zsh/zsh.d/99-local.zsh
 
+# Pi: track config/resources; ignore runtime/cache/secrets
+/.pi/agent/auth.json
+/.pi/agent/trust.json
+/.pi/agent/sessions/
+/.pi/agent/npm/
+/.pi/agent/git/
+
 # Machine-local configs
 .config/ghostty/local-config/config
 .config/kitty/*.icns
