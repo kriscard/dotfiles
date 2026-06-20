@@ -23,13 +23,135 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
 ```json
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "alwaysThinkingEnabled": true,
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
+  "editorMode": "vim",
+  "effortLevel": "xhigh",
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": ["context7", "browsermcp"],
+  "enabledPlugins": {
+    "agent-sdk-dev@claude-plugins-official": true,
+    "claude-code-setup@claude-plugins-official": true,
+    "claude-md-management@claude-plugins-official": true,
+    "feature-dev@claude-plugins-official": true,
+    "learning-output-style@claude-plugins-official": true,
+    "linear@claude-plugins-official": true,
+    "lua-lsp@claude-plugins-official": true,
+    "obsidian@obsidian-skills": true,
+    "plugin-dev@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": true
+  },
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
     "ENABLE_TOOL_SEARCH": "auto"
   },
-  "attribution": {
-    "commit": "",
-    "pr": ""
+  "extraKnownMarketplaces": {
+    "better-auth-agent-skills": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/better-auth/skills.git"
+      }
+    },
+    "claude-plugins-official": {
+      "source": {
+        "repo": "anthropics/claude-plugins-official",
+        "source": "github"
+      }
+    }
+  },
+  "fileCheckpointingEnabled": true,
+  "hooks": {
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "command": "uv run ~/.dotfiles/.claude/hooks/notification.py",
+            "type": "command"
+          },
+          {
+            "command": "~/.dotfiles/bin/claude-status-hook Notification",
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "command": "uv run ~/.dotfiles/.claude/hooks/format.py",
+            "type": "command"
+          },
+          {
+            "command": "uv run ~/.dotfiles/.claude/hooks/ts_lint.py",
+            "type": "command"
+          }
+        ],
+        "matcher": "Write|Edit|MultiEdit"
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "command": "~/.dotfiles/bin/claude-status-hook PreToolUse",
+            "type": "command"
+          }
+        ],
+        "matcher": "Bash|Write|Edit|MultiEdit"
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "command": "bash '/Users/kriscard/.claude/hooks/herdr-agent-state.sh' session",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "command": "uv run ~/.dotfiles/.claude/hooks/notification.py",
+            "type": "command"
+          },
+          {
+            "command": "~/.dotfiles/bin/claude-status-hook Stop",
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "command": "~/.dotfiles/bin/claude-status-hook SubagentStop",
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "command": "python3 ~/.dotfiles/.claude/hooks/vault_recall.py",
+            "statusMessage": "Checking vault...",
+            "timeout": 8,
+            "type": "command"
+          }
+        ]
+      }
+    ]
   },
   "permissions": {
     "allow": [
@@ -123,72 +245,6 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
       "WebSearch",
       "mcp__context7__*"
     ],
-    "deny": [
-      "Read(./.env)",
-      "Read(./.env.*)",
-      "Read(./secrets/**)",
-      "Read(./config/credentials.json)",
-      "Read(./build)",
-      "Edit(./.env)",
-      "Edit(./.env.*)",
-      "Edit(./package-lock.json)",
-      "Edit(./yarn.lock)",
-      "Edit(./pnpm-lock.yaml)",
-      "Bash( /dev/sda)",
-      "Bash(> /dev/sda)",
-      "Bash(dd if=/dev/zero of=/dev/sda)",
-      "Bash(diskutil apfs changePassphrase)",
-      "Bash(diskutil apfs decryptVolume)",
-      "Bash(diskutil apfs deleteContainer)",
-      "Bash(diskutil apfs deleteSnapshot)",
-      "Bash(diskutil apfs deleteVolume)",
-      "Bash(diskutil apfs deleteVolumeGroup)",
-      "Bash(diskutil apfs eraseVolume)",
-      "Bash(diskutil appleRAID)",
-      "Bash(diskutil coreStorage)",
-      "Bash(diskutil cs)",
-      "Bash(diskutil disableJournal)",
-      "Bash(diskutil disableOwnership)",
-      "Bash(diskutil eraseDisk)",
-      "Bash(diskutil eraseVolume)",
-      "Bash(diskutil partitionDisk)",
-      "Bash(diskutil randomDisk)",
-      "Bash(diskutil reformat)",
-      "Bash(diskutil resetFusion)",
-      "Bash(diskutil zeroDisk)",
-      "Bash(fork bomb)",
-      "Bash(git branch -D *)",
-      "Bash(git clean -df *)",
-      "Bash(git clean -f *)",
-      "Bash(git clean -fd *)",
-      "Bash(git filter-branch *)",
-      "Bash(git push --force)",
-      "Bash(git push --force *)",
-      "Bash(git push -f)",
-      "Bash(git push -f *)",
-      "Bash(git rebase)",
-      "Bash(git rebase *)",
-      "Bash(git reflog expire *)",
-      "Bash(git reset --hard)",
-      "Bash(git reset --hard *)",
-      "Bash(git rm *)",
-      "Bash(mkfs.ext4 /dev/sda)",
-      "Bash(obsidian dev:cdp *)",
-      "Bash(obsidian dev:debug *)",
-      "Bash(obsidian dev:eval *)",
-      "Bash(obsidian devtools)",
-      "Bash(obsidian devtools *)",
-      "Bash(obsidian eval *)",
-      "Bash(rm -rf $HOME)",
-      "Bash(rm -rf $PAI_DIR)",
-      "Bash(rm -rf $PAI_HOME)",
-      "Bash(rm -rf $DOTFILES)",
-      "Bash(rm -rf /)",
-      "Bash(rm -rf /*)",
-      "Bash(rm -rf ~)",
-      "Bash(sudo rm -rf /)",
-      "Bash(sudo rm -rf /*)"
-    ],
     "ask": [
       "Bash(agent-browser auth delete *)",
       "Bash(agent-browser auth login *)",
@@ -257,129 +313,85 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
       "Bash(obsidian theme:uninstall *)",
       "mcp__browsermcp__*",
       "mcp__*"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./secrets/**)",
+      "Read(./config/credentials.json)",
+      "Read(./build)",
+      "Edit(./.env)",
+      "Edit(./.env.*)",
+      "Edit(./package-lock.json)",
+      "Edit(./yarn.lock)",
+      "Edit(./pnpm-lock.yaml)",
+      "Bash( /dev/sda)",
+      "Bash(> /dev/sda)",
+      "Bash(dd if=/dev/zero of=/dev/sda)",
+      "Bash(diskutil apfs changePassphrase)",
+      "Bash(diskutil apfs decryptVolume)",
+      "Bash(diskutil apfs deleteContainer)",
+      "Bash(diskutil apfs deleteSnapshot)",
+      "Bash(diskutil apfs deleteVolume)",
+      "Bash(diskutil apfs deleteVolumeGroup)",
+      "Bash(diskutil apfs eraseVolume)",
+      "Bash(diskutil appleRAID)",
+      "Bash(diskutil coreStorage)",
+      "Bash(diskutil cs)",
+      "Bash(diskutil disableJournal)",
+      "Bash(diskutil disableOwnership)",
+      "Bash(diskutil eraseDisk)",
+      "Bash(diskutil eraseVolume)",
+      "Bash(diskutil partitionDisk)",
+      "Bash(diskutil randomDisk)",
+      "Bash(diskutil reformat)",
+      "Bash(diskutil resetFusion)",
+      "Bash(diskutil zeroDisk)",
+      "Bash(fork bomb)",
+      "Bash(git branch -D *)",
+      "Bash(git clean -df *)",
+      "Bash(git clean -f *)",
+      "Bash(git clean -fd *)",
+      "Bash(git filter-branch *)",
+      "Bash(git push --force)",
+      "Bash(git push --force *)",
+      "Bash(git push -f)",
+      "Bash(git push -f *)",
+      "Bash(git rebase)",
+      "Bash(git rebase *)",
+      "Bash(git reflog expire *)",
+      "Bash(git reset --hard)",
+      "Bash(git reset --hard *)",
+      "Bash(git rm *)",
+      "Bash(mkfs.ext4 /dev/sda)",
+      "Bash(obsidian dev:cdp *)",
+      "Bash(obsidian dev:debug *)",
+      "Bash(obsidian dev:eval *)",
+      "Bash(obsidian devtools)",
+      "Bash(obsidian devtools *)",
+      "Bash(obsidian eval *)",
+      "Bash(rm -rf $HOME)",
+      "Bash(rm -rf $PAI_DIR)",
+      "Bash(rm -rf $PAI_HOME)",
+      "Bash(rm -rf $DOTFILES)",
+      "Bash(rm -rf /)",
+      "Bash(rm -rf /*)",
+      "Bash(rm -rf ~)",
+      "Bash(sudo rm -rf /)",
+      "Bash(sudo rm -rf /*)"
     ]
   },
-  "enableAllProjectMcpServers": true,
-  "enabledMcpjsonServers": ["context7", "browsermcp"],
-  "hooks": {
-    "UserPromptSubmit": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python3 ~/.dotfiles/.claude/hooks/vault_recall.py",
-            "timeout": 8,
-            "statusMessage": "Checking vault..."
-          }
-        ]
-      }
-    ],
-    "PreToolUse": [
-      {
-        "matcher": "Bash|Write|Edit|MultiEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.dotfiles/bin/claude-status-hook PreToolUse"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "uv run ~/.dotfiles/.claude/hooks/notification.py"
-          },
-          {
-            "type": "command",
-            "command": "~/.dotfiles/bin/claude-status-hook Stop"
-          }
-        ]
-      }
-    ],
-    "SubagentStop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.dotfiles/bin/claude-status-hook SubagentStop"
-          }
-        ]
-      }
-    ],
-    "Notification": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "uv run ~/.dotfiles/.claude/hooks/notification.py"
-          },
-          {
-            "type": "command",
-            "command": "~/.dotfiles/bin/claude-status-hook Notification"
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Write|Edit|MultiEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "uv run ~/.dotfiles/.claude/hooks/format.py"
-          },
-          {
-            "type": "command",
-            "command": "uv run ~/.dotfiles/.claude/hooks/ts_lint.py"
-          }
-        ]
-      }
-    ]
+  "skipAutoPermissionPrompt": true,
+  "statusLine": {
+    "command": "~/.dotfiles/bin/claude-statusline",
+    "type": "command"
   },
+  "teammateMode": "tmux",
+  "tui": "fullscreen",
+  "voiceEnabled": true,
   "worktree": {
     "symlinkDirectories": ["node_modules"]
-  },
-  "statusLine": {
-    "type": "command",
-    "command": "~/.dotfiles/bin/claude-statusline"
-  },
-  "enabledPlugins": {
-    "feature-dev@claude-plugins-official": true,
-    "agent-sdk-dev@claude-plugins-official": true,
-    "learning-output-style@claude-plugins-official": true,
-    "plugin-dev@claude-plugins-official": true,
-    "linear@claude-plugins-official": true,
-    "obsidian@obsidian-skills": true,
-    "skill-creator@claude-plugins-official": true,
-    "lua-lsp@claude-plugins-official": true,
-    "claude-md-management@claude-plugins-official": true,
-    "claude-code-setup@claude-plugins-official": true
-  },
-  "extraKnownMarketplaces": {
-    "claude-plugins-official": {
-      "source": {
-        "source": "github",
-        "repo": "anthropics/claude-plugins-official"
-      }
-    },
-    "better-auth-agent-skills": {
-      "source": {
-        "source": "git",
-        "url": "https://github.com/better-auth/skills.git"
-      }
-    }
-  },
-  "alwaysThinkingEnabled": true,
-  "effortLevel": "xhigh",
-  "tui": "fullscreen",
-  "editorMode": "vim",
-  "fileCheckpointingEnabled": true,
-  "teammateMode": "tmux",
-  "skipAutoPermissionPrompt": true,
-  "voiceEnabled": true
+  }
 }
 ```
 
