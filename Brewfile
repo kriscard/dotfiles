@@ -35,6 +35,7 @@ brew "tree-sitter-cli"  # Compiles parsers for nvim-treesitter (main branch)
 # =============================================================================
 
 brew "tmux"
+brew "herdr"        # Agent-aware multiplexer; sidebar shows agent state, coexists with tmux
 # gitmux removed - not using git status in tmux bar
 brew "starship"     # Fast shell prompt
 brew "zsh-autosuggestions"
