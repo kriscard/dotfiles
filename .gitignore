@@ -99,6 +99,9 @@ zsh/zsh.d/99-local.zsh
 .claude/settings.json
 .claude/history.jsonl
 .claude/projects/
+.claude/skills/
+.claude/backups/
+.claude/cache/
 .claude/shell-snapshots/
 .claude/statsig/
 .claude/todos/
