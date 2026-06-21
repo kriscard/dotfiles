@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "0.79.8",
+  "lastChangelogVersion": "0.79.9",
   "quietStartup": true,
   "hideThinkingBlock": true,
   "packages": [
@@ -9,8 +9,13 @@
     "npm:context-mode",
     "npm:pi-prompt-template-model"
   ],
-  "defaultProvider": "openai-codex",
-  "defaultModel": "gpt-5.5",
+  "defaultProvider": "opencode-go",
+  "defaultModel": "kimi-k2.7-code",
   "theme": "catppuccin-macchiato",
-  "defaultThinkingLevel": "high"
+  "defaultThinkingLevel": "high",
+  "enabledModels": [
+    "openai-codex/gpt-5.5",
+    "opencode-go/deepseek-v4-pro",
+    "opencode-go/kimi-k2.7-code"
+  ]
 }
