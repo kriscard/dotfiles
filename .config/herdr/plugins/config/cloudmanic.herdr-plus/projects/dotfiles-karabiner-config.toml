@@ -1,0 +1,10 @@
+# Generated from ~/.config/sesh/configs/dotfiles.toml.
+# Managed in ~/.dotfiles; synced to herdr-plus plugin config.
+name = "karabiner config ⌨️"
+description = "Imported from sesh Dotfiles sessions"
+group = "Dotfiles"
+working_dir = "~/.dotfiles/.config/karabiner"
+
+[[tabs]]
+name = "editor"
+command = "nvim +GoToFile"

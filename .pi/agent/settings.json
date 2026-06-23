@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "0.79.9",
+  "lastChangelogVersion": "0.79.10",
   "quietStartup": true,
   "hideThinkingBlock": true,
   "packages": [
@@ -7,15 +7,17 @@
     "npm:pi-web-access",
     "npm:@juicesharp/rpiv-ask-user-question",
     "npm:context-mode",
-    "npm:pi-prompt-template-model"
+    "npm:pi-prompt-template-model",
+    "npm:pi-mcp-adapter"
   ],
-  "defaultProvider": "opencode-go",
-  "defaultModel": "kimi-k2.7-code",
+  "defaultProvider": "openai-codex",
+  "defaultModel": "gpt-5.5",
   "theme": "catppuccin-macchiato",
   "defaultThinkingLevel": "high",
   "enabledModels": [
     "openai-codex/gpt-5.5",
     "opencode-go/deepseek-v4-pro",
-    "opencode-go/kimi-k2.7-code"
+    "opencode-go/kimi-k2.7-code",
+    "opencode-go/glm-5.2"
   ]
 }

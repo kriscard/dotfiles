@@ -1,0 +1,9 @@
+# Generated from ~/.config/sesh/configs/personal.toml.
+# Managed in ~/.dotfiles; synced to herdr-plus plugin config.
+name = "Projects 📂"
+description = "Imported from sesh Personal sessions"
+group = "Personal"
+working_dir = "~/projects/"
+
+[[tabs]]
+name = "terminal"

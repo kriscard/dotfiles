@@ -1,0 +1,14 @@
+# Generated from ~/.config/sesh/configs/work.toml.
+# Managed in ~/.dotfiles; synced to herdr-plus plugin config.
+name = "Roofr dev 👨‍💻"
+description = "Imported from sesh Work sessions"
+group = "Work"
+working_dir = "~/Code/roofr-dev/roofr/"
+
+[[tabs]]
+name = "editor"
+command = "nvim +GoToFile"
+
+[[tabs]]
+name = "roofr-dev"
+command = "git pull && yarn dev"

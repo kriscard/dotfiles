@@ -1,0 +1,14 @@
+# Generated from ~/.config/sesh/configs/personal.toml.
+# Managed in ~/.dotfiles; synced to herdr-plus plugin config.
+name = "Obsidian 🧠"
+description = "Imported from sesh Personal sessions"
+group = "Personal"
+working_dir = "~/obsidian-vault-kriscard/"
+
+[[tabs]]
+name = "editor"
+command = "nvim +GoToFile"
+
+[[tabs]]
+name = "lazygit"
+command = "git pull && lazygit"

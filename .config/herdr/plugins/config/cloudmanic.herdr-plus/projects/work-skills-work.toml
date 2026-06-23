@@ -1,0 +1,14 @@
+# Generated from ~/.config/sesh/configs/work.toml.
+# Managed in ~/.dotfiles; synced to herdr-plus plugin config.
+name = "Skills work 🤖"
+description = "Imported from sesh Work sessions"
+group = "Work"
+working_dir = "~/Code/Skills/"
+
+[[tabs]]
+name = "editor"
+command = "nvim +GoToFile"
+
+[[tabs]]
+name = "lazygit"
+command = "git pull && lazygit"

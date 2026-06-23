@@ -28,8 +28,7 @@ config/nvim/sessions
 tmux/plugins/
 .config/raycast/*
 !.config/raycast/scripts/
-.config/gh/*
-!.config/gh/config.yml
+.config/gh/
 .config/op/*
 .config/fish/*
 .config/dev/*
@@ -113,3 +112,5 @@ zsh/zsh.d/99-local.zsh
 .claude/plugins/
 .claude/stats-cache.json
 .claude/local-plugins/*
+.claude/.last-cleanup
+.claude/.last-update-result.json
