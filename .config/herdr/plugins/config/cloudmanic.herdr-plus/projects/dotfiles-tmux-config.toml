@@ -1,0 +1,10 @@
+# Generated from ~/.config/sesh/configs/dotfiles.toml.
+# Managed in ~/.dotfiles; synced to herdr-plus plugin config.
+name = "tmux config 🖥️"
+description = "Imported from sesh Dotfiles sessions"
+group = "Dotfiles"
+working_dir = "~/.dotfiles/.config/tmux"
+
+[[tabs]]
+name = "editor"
+command = "nvim tmux.conf"

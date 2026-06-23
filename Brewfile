@@ -3,7 +3,7 @@
 
 # Homebrew Taps
 tap "fsouza/prettierd"
-tap "koekeishiya/formulae"
+tap "asmvik/formulae"
 tap "ngrok/ngrok"
 
 # =============================================================================
@@ -102,7 +102,7 @@ brew "httpie"       # Better HTTP client
 # =============================================================================
 
 # Window Management (gaps only - Raycast handles window positioning)
-brew "koekeishiya/formulae/yabai"
+brew "asmvik/formulae/yabai"
 
 # Keyboard Customization
 cask "karabiner-elements"
@@ -149,7 +149,10 @@ cask "ngrok"
 # =============================================================================
 
 # Core Extensions
-vscode "GitHub.copilot"
+# GitHub Copilot Chat is bundled with recent VS Code builds; installing the
+# marketplace extension via `code --install-extension` can fail by trying to
+# downgrade the built-in chat extension.
+# vscode "GitHub.copilot"
 vscode "esbenp.prettier-vscode"
 vscode "dbaeumer.vscode-eslint"
 

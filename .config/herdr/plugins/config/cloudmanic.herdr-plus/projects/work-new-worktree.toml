@@ -1,0 +1,10 @@
+# Generated from ~/.config/sesh/configs/work.toml.
+# Managed in ~/.dotfiles; synced to herdr-plus plugin config.
+name = "New worktree ➕"
+description = "Imported from sesh Work sessions"
+group = "Work"
+working_dir = "~/"
+
+[[tabs]]
+name = "main"
+command = "~/.config/sesh/scripts/new_worktree"

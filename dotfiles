@@ -253,15 +253,58 @@ cmd_init() {
 cmd_update() {
     title "🔄 Updating dotfiles and packages"
 
+    cd "$DOTFILES_DIR" || error "Cannot access dotfiles directory"
+
     info "Pulling latest dotfiles..."
     if [[ "$DRY_RUN" == true ]]; then
-        echo "[DRY RUN] Would run: git pull origin main"
+        echo "[DRY RUN] Would run: git -C $DOTFILES_DIR pull --ff-only"
+    elif [[ -n "$(git status --porcelain)" ]]; then
+        warning "Dotfiles repo has uncommitted changes; skipping git pull"
+        info "Commit or stash changes, then re-run 'dotfiles update' to pull remote updates."
+    elif git pull --ff-only; then
+        success "Dotfiles repository updated"
     else
-        git pull origin main || warning "Could not pull latest changes"
+        warning "Could not pull latest dotfiles"
+    fi
+
+    local sudo_keepalive_pid=""
+    if [[ "$DRY_RUN" != true ]] && command_exists "sudo"; then
+        info "Refreshing sudo credentials once for package updates..."
+        if sudo -v; then
+            # Keep sudo timestamp alive so long cask upgrades don't prompt repeatedly.
+            while true; do sudo -n true; sleep 60; done 2>/dev/null &
+            sudo_keepalive_pid=$!
+            trap '[[ -n "${sudo_keepalive_pid:-}" ]] && kill "$sudo_keepalive_pid" 2>/dev/null || true' EXIT
+        else
+            warning "Could not refresh sudo credentials; package updates may prompt for a password"
+        fi
     fi
 
     info "Updating Homebrew packages..."
-    cmd_packages
+    if [[ "$DRY_RUN" == true ]]; then
+        echo "[DRY RUN] Would run: brew update"
+        echo "[DRY RUN] Would run: brew bundle --file=$DOTFILES_DIR/Brewfile"
+        echo "[DRY RUN] Would run: brew upgrade"
+    elif command_exists "brew"; then
+        brew update
+        brew bundle --file="$DOTFILES_DIR/Brewfile"
+        brew upgrade
+        success "Homebrew packages updated"
+    else
+        warning "Homebrew is not installed; skipping package update"
+    fi
+
+    info "Re-syncing GNU Stow symlinks..."
+    cmd_sync
+
+    info "Updating Pi and configured packages..."
+    if [[ "$DRY_RUN" == true ]]; then
+        echo "[DRY RUN] Would run: pi update --all"
+    elif command_exists "pi"; then
+        pi update --all || warning "Could not update Pi packages"
+    else
+        warning "Pi is not installed; skipping Pi update"
+    fi
 
     success "Update complete!"
 }

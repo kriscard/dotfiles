@@ -74,16 +74,27 @@ focus_agent    = "prefix+alt+1..9"
 toggle_sidebar = "prefix+b"
 
 # Navigate-mode movement (active only while navigate mode is open)
+# Herdr labels workspaces as "ws" in the navigation overlay.
+navigate_workspace_up   = ["up", "w"]
+navigate_workspace_down = ["down", "s"]
 navigate_pane_left  = "h"
 navigate_pane_down  = "j"
 navigate_pane_up    = "k"
 navigate_pane_right = "l"
 
-# sesh-style project launcher (mirrors tmux prefix+e): zoxide pick -> attach or create
+# herdr-plus launchers
+# Projects mirror ~/.config/sesh/configs/{dotfiles,personal,work}.toml.
 [[keys.command]]
 key = "prefix+e"
-type = "pane"
-command = "$HOME/.dotfiles/bin/herdr-sesh"
+type = "plugin_action"
+command = "cloudmanic.herdr-plus.projects"
+description = "herdr-plus: projects"
+
+[[keys.command]]
+key = "prefix+down"
+type = "plugin_action"
+command = "cloudmanic.herdr-plus.quick-actions"
+description = "herdr-plus: quick actions"
 
 [ui]
 sidebar_width     = 32
