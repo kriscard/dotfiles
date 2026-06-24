@@ -36,10 +36,12 @@ goto          = "prefix+g"
 settings      = "prefix+shift+s"           # moved off prefix+s to free it for workspace picker
 
 # tmux sessions ~= Herdr workspaces. sesh stays the picker for tmux.
-workspace_picker = ["prefix+s", "prefix+w"]
-new_workspace    = "prefix+shift+n"
-rename_workspace = "prefix+shift+w"
-close_workspace  = "prefix+shift+d"
+workspace_picker   = ["prefix+s", "prefix+w"]
+new_workspace      = "prefix+shift+n"
+rename_workspace   = "prefix+shift+w"
+close_workspace    = "prefix+shift+d"
+previous_workspace = "ctrl+alt+["   # cycle to previous workspace (direct, no prefix needed)
+next_workspace     = "ctrl+alt+]"   # cycle to next workspace     (direct, no prefix needed)
 
 # tmux windows ~= Herdr tabs
 new_tab      = "prefix+c"                   # tmux: bind c new-window
