@@ -114,3 +114,6 @@ zsh/zsh.d/99-local.zsh
 .claude/local-plugins/*
 .claude/.last-cleanup
 .claude/.last-update-result.json
+.claude/sessions/*
+.claude/tasks/*
+.claude/teams/*
