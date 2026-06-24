@@ -6,7 +6,7 @@
     "pr": ""
   },
   "editorMode": "vim",
-  "effortLevel": "xhigh",
+  "effortLevel": "high",
   "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": ["context7", "browsermcp"],
   "enabledPlugins": {
