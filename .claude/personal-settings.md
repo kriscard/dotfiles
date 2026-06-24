@@ -29,7 +29,7 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
     "pr": ""
   },
   "editorMode": "vim",
-  "effortLevel": "xhigh",
+  "effortLevel": "high",
   "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": ["context7", "browsermcp"],
   "enabledPlugins": {
