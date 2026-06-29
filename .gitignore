@@ -117,3 +117,4 @@ zsh/zsh.d/99-local.zsh
 .claude/sessions/*
 .claude/tasks/*
 .claude/teams/*
+.claude/telemetry/*

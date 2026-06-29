@@ -8,10 +8,11 @@
     "npm:@juicesharp/rpiv-ask-user-question",
     "npm:context-mode",
     "npm:pi-prompt-template-model",
-    "npm:pi-mcp-adapter"
+    "npm:pi-mcp-adapter",
+    "npm:@plannotator/pi-extension"
   ],
-  "defaultProvider": "anthropic",
-  "defaultModel": "claude-sonnet-4-6",
+  "defaultProvider": "openai-codex",
+  "defaultModel": "gpt-5.5",
   "theme": "catppuccin-macchiato",
   "defaultThinkingLevel": "high",
   "enabledModels": [
