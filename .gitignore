@@ -24,20 +24,20 @@ packer_compiled.lua
 config/nvim/sessions
 
 # Application configs
-.config/tmux/plugins/*
-tmux/plugins/
-.config/raycast/*
-!.config/raycast/scripts/
-.config/gh/
-.config/op/*
-.config/fish/*
-.config/dev/*
-.config/github-copilot/*
-.config/lazygit/*/*.patch
-.config/spicetify/*
-.config/tmuxinator/*
-.config/searxng
-.config/karabiner/automatic_backups/
+home/.config/tmux/plugins/*
+home/tmux/plugins/
+home/.config/raycast/*
+!home/.config/raycast/scripts/
+home/.config/gh/
+home/.config/op/*
+home/.config/fish/*
+home/.config/dev/*
+home/.config/github-copilot/*
+home/.config/lazygit/*/*.patch
+home/.config/spicetify/*
+home/.config/tmuxinator/*
+home/.config/searxng
+home/.config/karabiner/automatic_backups/
 
 # Doom Emacs
 /config/doom/*.html
@@ -56,9 +56,9 @@ secrets.fish
 config/environment.d/secrets.conf
 state.yml
 
-.gitconfig-work
-.claude/profiles/settings-work.json
-bin/claude-work
+home/.gitconfig-work
+home/.claude/profiles/settings-work.json
+home/bin/claude-work
 
 # Other
 fzf
@@ -73,18 +73,18 @@ fish_variables
 # Local configuration
 .env
 .env.local
-zsh/zsh.d/99-local.zsh
+home/zsh/zsh.d/99-local.zsh
 
 # Pi: track config/resources; ignore runtime/cache/secrets
-/.pi/agent/auth.json
-/.pi/agent/trust.json
-/.pi/agent/sessions/
-/.pi/agent/npm/
-/.pi/agent/git/
+/home/.pi/agent/auth.json
+/home/.pi/agent/trust.json
+/home/.pi/agent/sessions/
+/home/.pi/agent/npm/
+/home/.pi/agent/git/
 
 # Machine-local configs
-.config/ghostty/local-config/config
-.config/kitty/*.icns
+home/.config/ghostty/local-config/config
+home/.config/kitty/*.icns
 
 # Binary files (should not be in dotfiles)
 *.icns
@@ -93,30 +93,23 @@ zsh/zsh.d/99-local.zsh
 *.woff
 *.woff2
 
-# Claude Code local files
-.claude/settings.local.json
-.claude/settings.json
-.claude/history.jsonl
-.claude/projects/
-.claude/skills/
-.claude/backups/
-.claude/cache/
-.claude/shell-snapshots/
-.claude/statsig/
-.claude/todos/
-.claude/file-history/
-.claude/debug/
-.claude/statsig/
-.claude/plans/
-.claude/eslint_errors.json
-.claude/plugins/
-.claude/stats-cache.json
-.claude/local-plugins/*
-.claude/.last-cleanup
-.claude/.last-update-result.json
-.claude/sessions/*
-.claude/tasks/*
-.claude/teams/*
-.claude/telemetry/*
+# Claude Code: ignore runtime/cache files by default; track hand-authored config only
+home/.claude/*
 
-.config/herdr/session.json
+!home/.claude/.mcp.json
+!home/.claude/CLAUDE.md
+!home/.claude/personal-settings.md
+!home/.claude/work-settings.md
+
+!home/.claude/hooks/
+!home/.claude/hooks/**
+home/.claude/hooks/__pycache__/
+
+!home/.claude/output-styles/
+!home/.claude/output-styles/**
+
+!home/.claude/profiles/
+home/.claude/profiles/*
+!home/.claude/profiles/settings-home.json
+
+home/.config/herdr/session.json

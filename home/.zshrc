@@ -2,7 +2,7 @@
 # Modular configuration in zsh.d/
 
 export ZDOTDIR="${ZDOTDIR:-$HOME}"
-export ZSH="$HOME/.dotfiles/zsh"
+export ZSH="$HOME/zsh"
 
 # Source all configuration files in order (00-env, 10-options, etc.)
 for config_file in "$ZSH/zsh.d"/*.zsh(N); do

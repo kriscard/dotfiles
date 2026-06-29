@@ -18,6 +18,16 @@ cd ~/.dotfiles
 ./dotfiles init
 ```
 
+## Layout
+
+```text
+~/.dotfiles/
+├── home/      # single GNU Stow package, maps directly to ~
+├── Brewfile   # Homebrew packages
+├── dotfiles   # management CLI
+└── scripts/   # setup helpers used by the CLI
+```
+
 ## CLI Commands
 
 | Command             | Purpose                       |

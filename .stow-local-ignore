@@ -1,37 +1,44 @@
-^/\.git
-^/work-config
-^/raycast
-^/github-copilot
-^/fish
-^/op
-^/.zshrc
-^/.config/raycast
-^/.config/tmux/plugins/tmux-resurrect
-^/CLAUDE.md
-^/.tool-versions
+# Stow ignore patterns for the `home` package.
+# GNU Stow matches these against relative paths inside the package.
 
-# Claude Code runtime files (not config)
-^/\.claude/debug
-^/\.claude/projects
-^/\.claude/history\.jsonl
-^/\.claude/todos
-^/\.claude/file-history
-^/\.claude/shell-snapshots
-^/\.claude/statsig
-^/\.claude/plans
-^/\.claude/plugins
-^/\.claude/stats-cache\.json
-^/\.claude/eslint_errors\.json
-^/\.claude/settings.local.json
+# App/runtime files that should not be stowed
+^\.config/raycast
+^\.config/tmux/plugins/tmux-resurrect
+^\.config/ghostty/local-config/config
+^\.config/herdr/session\.json
 
-# Machine-local configs
-^/\.config/ghostty/local-config/config
+# Claude Code runtime/cache/local files (not config)
+^\.claude/debug
+^\.claude/projects
+^\.claude/history\.jsonl
+^\.claude/todos
+^\.claude/file-history
+^\.claude/shell-snapshots
+^\.claude/statsig
+^\.claude/plans
+^\.claude/plugins
+^\.claude/stats-cache\.json
+^\.claude/eslint_errors\.json
+^\.claude/settings\.local\.json
+^\.claude/settings\.json
+^\.claude/backups
+^\.claude/cache
+^\.claude/skills
+^\.claude/local-plugins
+^\.claude/session-env
+^\.claude/sessions
+^\.claude/tasks
+^\.claude/teams
+^\.claude/telemetry
+^\.claude/\.last-cleanup
+^\.claude/\.last-update-result\.json
+^\.claude/profiles/settings-work\.json
 
 # Pi runtime files and installed package caches (config/resources are stowed)
-^/\.pi/agent/auth\.json
-^/\.pi/agent/trust\.json
-^/\.pi/agent/sessions
-^/\.pi/agent/npm
-^/\.pi/agent/git
+^\.pi/agent/auth\.json
+^\.pi/agent/trust\.json
+^\.pi/agent/sessions
+^\.pi/agent/npm
+^\.pi/agent/git
 
-^/node_modules
+^node_modules

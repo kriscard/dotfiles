@@ -68,8 +68,8 @@ alias gwr="git worktree remove"
 alias gwp="git worktree prune"
 
 # Stow
-alias unstow="stow -D ."
-alias addstow="stow ."
+alias unstow="stow -D home"
+alias addstow="stow home"
 
 # Neovim
 alias v='nvim'
