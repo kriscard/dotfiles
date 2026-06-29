@@ -11,8 +11,8 @@
     "npm:pi-mcp-adapter",
     "npm:@plannotator/pi-extension"
   ],
-  "defaultProvider": "openai-codex",
-  "defaultModel": "gpt-5.5",
+  "defaultProvider": "anthropic",
+  "defaultModel": "claude-sonnet-4-6",
   "theme": "catppuccin-macchiato",
   "defaultThinkingLevel": "high",
   "enabledModels": [

@@ -47,6 +47,7 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
     "ENABLE_TOOL_SEARCH": "auto"
+    "PLANNOTATOR_BROWSER": "/Applications/Arc.app/Contents/MacOS/Arc"
   },
   "extraKnownMarketplaces": {
     "better-auth-agent-skills": {

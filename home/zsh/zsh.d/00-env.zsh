@@ -39,6 +39,7 @@ export BAT_THEME="Catppuccin Macchiato"
 
 # Browser
 export BROWSER="open -a Arc"
+export PLANNOTATOR_BROWSER="Arc"
 
 # pnpm
 export PNPM_HOME="$HOME/Library/pnpm"
