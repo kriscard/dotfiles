@@ -118,3 +118,5 @@ zsh/zsh.d/99-local.zsh
 .claude/tasks/*
 .claude/teams/*
 .claude/telemetry/*
+
+.config/herdr/session.json
