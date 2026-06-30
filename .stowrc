@@ -40,6 +40,7 @@
 --ignore=^\.agents/skills
 
 --ignore=^\.pi/agent/auth\.json
+--ignore=^\.pi/agent/settings\.json
 --ignore=^\.pi/agent/trust\.json
 --ignore=^\.pi/agent/sessions
 --ignore=^\.pi/agent/skills

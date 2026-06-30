@@ -39,6 +39,7 @@
 
 # Pi runtime files and installed package caches (config/resources are stowed)
 ^\.pi/agent/auth\.json
+^\.pi/agent/settings\.json
 ^\.pi/agent/trust\.json
 ^\.pi/agent/sessions
 ^\.pi/agent/skills
