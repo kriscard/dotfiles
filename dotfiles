@@ -57,6 +57,23 @@ command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
 
+# Run Stow for the home package without folding whole directories into symlinks.
+# Ignore patterns live in .stow-local-ignore so runtime/cache files stay local.
+stow_home() {
+    local stow_args=(--no-folding -t "$HOME")
+    local ignore_file="$DOTFILES_DIR/.stow-local-ignore"
+    local pattern
+
+    if [[ -f "$ignore_file" ]]; then
+        while IFS= read -r pattern || [[ -n "$pattern" ]]; do
+            [[ -z "$pattern" || "$pattern" =~ ^[[:space:]]*# ]] && continue
+            stow_args+=(--ignore="$pattern")
+        done < "$ignore_file"
+    fi
+
+    stow "${stow_args[@]}" "$@" home
+}
+
 # Confirmation prompt
 confirm() {
     local message="$1"
@@ -470,15 +487,15 @@ cmd_sync() {
     # $HOME/zsh/zsh.d/). Repo tooling like README.md, Brewfile, and this CLI stay
     # outside the stowed package.
     if [[ "$DRY_RUN" == true ]]; then
-        echo "[DRY RUN] Would run: stow -t $HOME home"
-        stow -n -v -t "$HOME" home 2>&1 | head -40
+        echo "[DRY RUN] Would run: stow_home -n -v"
+        stow_home -n -v 2>&1 | head -40
     else
         info "Stowing dotfiles..."
-        if stow -t "$HOME" home 2>/dev/null; then
+        if stow_home 2>/dev/null; then
             success "Stowed dotfiles"
         else
             warning "Some symlinks already exist. Restowing..."
-            stow -R -t "$HOME" home
+            stow_home -R
             success "Restowed dotfiles"
         fi
     fi
@@ -510,12 +527,12 @@ cmd_stow() {
 
     if [[ "$DRY_RUN" == true ]]; then
         info "Dry run - showing what would be symlinked:"
-        stow -n -v home
+        stow_home -n -v
     else
         if [[ "$VERBOSE" == true ]]; then
-            stow -v home
+            stow_home -v
         else
-            stow home
+            stow_home
         fi
         success "Symlinks created!"
     fi
@@ -542,12 +559,12 @@ cmd_unstow() {
 
     if [[ "$DRY_RUN" == true ]]; then
         info "Dry run - showing what would be removed:"
-        stow -n -v -D home
+        stow_home -n -v -D
     else
         if [[ "$VERBOSE" == true ]]; then
-            stow -v -D home
+            stow_home -v -D
         else
-            stow -D home
+            stow_home -D
         fi
         success "Symlinks removed!"
         info "Your home directory no longer links to dotfiles."
