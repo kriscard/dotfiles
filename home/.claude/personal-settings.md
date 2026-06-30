@@ -41,13 +41,13 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
     "linear@claude-plugins-official": true,
     "lua-lsp@claude-plugins-official": true,
     "obsidian@obsidian-skills": true,
+    "plannotator@plannotator": true,
     "plugin-dev@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": true
   },
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
     "ENABLE_TOOL_SEARCH": "auto"
-    "PLANNOTATOR_BROWSER": "/Applications/Arc.app/Contents/MacOS/Arc"
   },
   "extraKnownMarketplaces": {
     "better-auth-agent-skills": {
@@ -60,6 +60,12 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
       "source": {
         "repo": "anthropics/claude-plugins-official",
         "source": "github"
+      }
+    },
+    "plannotator": {
+      "source": {
+        "source": "github",
+        "repo": "backnotprop/plannotator"
       }
     }
   },
@@ -523,11 +529,12 @@ This extended deny list exists because home sessions run with `opus` + extended 
 | `interactive-learning`  | Education | Interactive learning sessions                         |
 | `browser`               | Browser   | Page inspection, screenshots, automation              |
 
-### Third-Party (1)
+### Third-Party (2)
 
 | Plugin                     | Purpose                               |
 | -------------------------- | ------------------------------------- |
 | `obsidian@obsidian-skills` | Obsidian markdown, bases, JSON canvas |
+| `plannotator@plannotator`  | Plan review, annotation, and chat UI  |
 
 ---
 
@@ -557,7 +564,7 @@ Prefer built-in tools and CLI over MCP where possible:
 Model: opus[1m] (1M context)
 Thinking: always on
 Voice: enabled
-Plugins: 22 (8 official + 13 @kriscard + 1 third-party)
+Plugins: 23 (8 official + 13 @kriscard + 2 third-party)
 MCP servers: 2 (context7, browsermcp)
 Hooks: full pipeline (status, notifications, linting)
 External tooling: uv, qmd (npm), obsidian CLI, stow
