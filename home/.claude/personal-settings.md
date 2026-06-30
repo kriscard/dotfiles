@@ -75,11 +75,11 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
       {
         "hooks": [
           {
-            "command": "uv run ~/.dotfiles/.claude/hooks/notification.py",
+            "command": "uv run ~/.dotfiles/home/.claude/hooks/notification.py",
             "type": "command"
           },
           {
-            "command": "~/.dotfiles/bin/claude-status-hook Notification",
+            "command": "~/.dotfiles/home/bin/claude-status-hook Notification",
             "type": "command"
           }
         ]
@@ -89,11 +89,11 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
       {
         "hooks": [
           {
-            "command": "uv run ~/.dotfiles/.claude/hooks/format.py",
+            "command": "uv run ~/.dotfiles/home/.claude/hooks/format.py",
             "type": "command"
           },
           {
-            "command": "uv run ~/.dotfiles/.claude/hooks/ts_lint.py",
+            "command": "uv run ~/.dotfiles/home/.claude/hooks/ts_lint.py",
             "type": "command"
           }
         ],
@@ -104,7 +104,7 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
       {
         "hooks": [
           {
-            "command": "~/.dotfiles/bin/claude-status-hook PreToolUse",
+            "command": "~/.dotfiles/home/bin/claude-status-hook PreToolUse",
             "type": "command"
           }
         ],
@@ -115,7 +115,7 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
       {
         "hooks": [
           {
-            "command": "bash '/Users/kriscard/.claude/hooks/herdr-agent-state.sh' session",
+            "command": "bash '~/.dotfiles/home/.claude/hooks/herdr-agent-state.sh' session",
             "timeout": 10,
             "type": "command"
           }
@@ -127,7 +127,7 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
       {
         "hooks": [
           {
-            "command": "uv run ~/.dotfiles/.claude/hooks/notification.py",
+            "command": "uv run ~/.dotfiles/home/.claude/hooks/notification.py",
             "type": "command"
           },
           {
@@ -141,7 +141,7 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
       {
         "hooks": [
           {
-            "command": "~/.dotfiles/bin/claude-status-hook SubagentStop",
+            "command": "~/.dotfiles/home/bin/claude-status-hook SubagentStop",
             "type": "command"
           }
         ]
@@ -151,10 +151,22 @@ Place in `~/.claude/settings.json` or use `ch` / `claude-work` (defaults to home
       {
         "hooks": [
           {
-            "command": "python3 ~/.dotfiles/.claude/hooks/vault_recall.py",
+            "command": "python3 ~/.dotfiles/home/.claude/hooks/vault_recall.py",
             "statusMessage": "Checking vault...",
             "timeout": 8,
             "type": "command"
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "matcher": "ExitPlanMode",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "plannotator",
+            "timeout": 345600
           }
         ]
       }
