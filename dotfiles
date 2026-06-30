@@ -425,7 +425,9 @@ cmd_sync() {
         "$HOME/.config/aerospace"
         "$HOME/.config/karabiner"
         "$HOME/.zshrc"
-        "$HOME/.claude"
+        # Do not back up whole agent runtime directories like ~/.claude.
+        # They contain mutable installs (skills/plugins/sessions) that must survive
+        # unstow/restow; Stow can merge managed leaf symlinks into the real dir.
     )
 
     is_stow_managed_dir() {

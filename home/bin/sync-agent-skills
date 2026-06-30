@@ -1,0 +1,110 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Keep Agent Skills installed in one canonical location, then expose them to
+# Claude Code and Pi through per-skill symlinks.
+#
+# Run after `npx skills add ...` if that command wrote real skill directories
+# into ~/.claude/skills or ~/.pi/agent/skills.
+
+CANONICAL_DIR="${AGENT_SKILLS_HOME:-$HOME/.agents/skills}"
+AGENT_DIRS=(
+  "$HOME/.claude/skills"
+  "$HOME/.pi/agent/skills"
+)
+
+mkdir -p "$CANONICAL_DIR"
+for dir in "${AGENT_DIRS[@]}"; do
+  mkdir -p "$dir"
+done
+
+log() {
+  printf '%s\n' "$*"
+}
+
+warn() {
+  printf 'warning: %s\n' "$*" >&2
+}
+
+note() {
+  printf 'note: %s\n' "$*"
+}
+
+is_skill_dir() {
+  [[ -d "$1" && -f "$1/SKILL.md" ]]
+}
+
+canonicalize_agent_dir() {
+  local agent_dir="$1"
+  local entry name target
+
+  shopt -s nullglob
+  for entry in "$agent_dir"/*; do
+    name="$(basename "$entry")"
+    target="$CANONICAL_DIR/$name"
+
+    # Already a per-skill symlink; leave it for the relink pass below.
+    if [[ -L "$entry" ]]; then
+      continue
+    fi
+
+    if ! is_skill_dir "$entry"; then
+      warn "skipping non-skill entry: $entry"
+      continue
+    fi
+
+    if [[ ! -e "$target" ]]; then
+      mv "$entry" "$target"
+      ln -s "$target" "$entry"
+      log "moved $entry -> $target and linked back"
+      continue
+    fi
+
+    if diff -qr "$entry" "$target" >/dev/null 2>&1; then
+      rm -rf "$entry"
+      ln -s "$target" "$entry"
+      log "replaced duplicate $entry with symlink"
+      continue
+    fi
+
+    note "preserved agent-specific override: $entry differs from $target"
+  done
+  shopt -u nullglob
+}
+
+link_canonical_skills() {
+  local target name agent_dir link
+
+  shopt -s nullglob
+  for target in "$CANONICAL_DIR"/*; do
+    is_skill_dir "$target" || continue
+    name="$(basename "$target")"
+
+    for agent_dir in "${AGENT_DIRS[@]}"; do
+      link="$agent_dir/$name"
+
+      if [[ -e "$link" && ! -L "$link" ]]; then
+        if diff -qr "$link" "$target" >/dev/null 2>&1; then
+          rm -rf "$link"
+          ln -s "$target" "$link"
+          log "replaced duplicate $link with symlink"
+        fi
+        continue
+      fi
+
+      ln -sfn "$target" "$link"
+    done
+  done
+  shopt -u nullglob
+}
+
+for dir in "${AGENT_DIRS[@]}"; do
+  canonicalize_agent_dir "$dir"
+done
+
+link_canonical_skills
+
+log "synced skills:"
+log "  canonical: $CANONICAL_DIR"
+log "  claude:    $HOME/.claude/skills"
+log "  pi:        $HOME/.pi/agent/skills"

@@ -34,10 +34,14 @@
 ^\.claude/\.last-update-result\.json
 ^\.claude/profiles/settings-work\.json
 
+# Shared Agent Skills install location
+^\.agents/skills
+
 # Pi runtime files and installed package caches (config/resources are stowed)
 ^\.pi/agent/auth\.json
 ^\.pi/agent/trust\.json
 ^\.pi/agent/sessions
+^\.pi/agent/skills
 ^\.pi/agent/npm
 ^\.pi/agent/git
 

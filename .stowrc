@@ -37,8 +37,11 @@
 --ignore=^\.claude/\.last-update-result\.json
 --ignore=^\.claude/profiles/settings-work\.json
 
+--ignore=^\.agents/skills
+
 --ignore=^\.pi/agent/auth\.json
 --ignore=^\.pi/agent/trust\.json
 --ignore=^\.pi/agent/sessions
+--ignore=^\.pi/agent/skills
 --ignore=^\.pi/agent/npm
 --ignore=^\.pi/agent/git

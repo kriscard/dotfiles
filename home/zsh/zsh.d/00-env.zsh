@@ -13,8 +13,8 @@ export DOTFILES="$HOME/.dotfiles"
 # pnpm, ...) win over Homebrew-installed copies of the same binaries.
 path=(
   "${ASDF_DATA_DIR:-$HOME/.asdf}/shims"
+  "$HOME/bin"
   "$HOME/.local/bin"
-  "$HOME/.dotfiles/bin"
   "$HOME/.config/bin"
   "/usr/local/opt/make/libexec/gnubin"
   "/usr/local/bin"
