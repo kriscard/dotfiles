@@ -20,7 +20,6 @@
 ^\.claude/stats-cache\.json
 ^\.claude/eslint_errors\.json
 ^\.claude/settings\.local\.json
-^\.claude/settings\.json
 ^\.claude/backups
 ^\.claude/cache
 ^\.claude/skills
@@ -32,8 +31,6 @@
 ^\.claude/telemetry
 ^\.claude/\.last-cleanup
 ^\.claude/\.last-update-result\.json
-^\.claude/profiles/settings-work\.json
-
 # Shared Agent Skills install location
 ^\.agents/skills
 

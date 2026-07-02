@@ -57,8 +57,6 @@ config/environment.d/secrets.conf
 state.yml
 
 home/.gitconfig-work
-home/.claude/profiles/settings-work.json
-home/bin/claude-work
 
 # Other
 fzf
@@ -98,8 +96,6 @@ home/.claude/*
 
 !home/.claude/.mcp.json
 !home/.claude/CLAUDE.md
-!home/.claude/personal-settings.md
-!home/.claude/work-settings.md
 
 !home/.claude/hooks/
 !home/.claude/hooks/**
@@ -107,9 +103,5 @@ home/.claude/hooks/__pycache__/
 
 !home/.claude/output-styles/
 !home/.claude/output-styles/**
-
-!home/.claude/profiles/
-home/.claude/profiles/*
-!home/.claude/profiles/settings-home.json
 
 home/.config/herdr/session.json
