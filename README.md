@@ -23,6 +23,7 @@ cd ~/.dotfiles
 ```text
 ~/.dotfiles/
 ├── home/      # single GNU Stow package, maps directly to ~
+├── AGENTS.md  # repo instructions for Pi and other coding agents
 ├── Brewfile   # Homebrew packages
 ├── dotfiles   # management CLI
 └── scripts/   # setup helpers used by the CLI
@@ -90,7 +91,3 @@ Consistent Catppuccin Macchiato theme across all tools:
 ```bash
 export THEME_FLAVOUR=macchiato  # frappe, latte, mocha
 ```
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

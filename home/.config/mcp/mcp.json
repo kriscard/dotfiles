@@ -4,6 +4,10 @@
       "url": "https://mcp.linear.app/mcp",
       "auth": "oauth"
     },
+    "supabase": {
+      "url": "https://mcp.supabase.com/mcp?read_only=true",
+      "auth": "oauth"
+    },
     "context7": {
       "command": "npx",
       "args": ["@upstash/context7-mcp"],
