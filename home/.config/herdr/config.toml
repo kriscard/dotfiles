@@ -7,8 +7,8 @@ onboarding = false
 
 [terminal]
 default_shell = "zsh"
-shell_mode = "auto"          # login shell on macOS, so .env + integrations load
-new_cwd = "follow"           # tmux: -c "#{pane_current_path}"
+shell_mode = "auto"   # login shell on macOS, so .env + integrations load
+new_cwd = "follow"    # tmux: -c "#{pane_current_path}"
 
 [theme]
 name = "catppuccin"
@@ -16,11 +16,11 @@ name = "catppuccin"
 [theme.custom]
 # Catppuccin Macchiato palette (matches $THEME_FLAVOUR)
 panel_bg = "#24273a"
-accent   = "#c6a0f6"
-blue     = "#8aadf4"
-green    = "#a6da95"
-red      = "#ed8796"
-yellow   = "#eed49f"
+accent = "#c6a0f6"
+blue = "#8aadf4"
+green = "#a6da95"
+red = "#ed8796"
+yellow = "#eed49f"
 
 [update]
 channel = "stable"
@@ -29,59 +29,67 @@ channel = "stable"
 # tmux prefix is C-a -> mirror it.
 prefix = "ctrl+a"
 
-help          = "prefix+?"
-reload_config = "prefix+r"                 # tmux: bind r source-file
-detach        = ["prefix+d", "prefix+q"]   # tmux: bind D detach-client
-goto          = "prefix+g"
-settings      = "prefix+shift+s"           # moved off prefix+s to free it for workspace picker
+help = "prefix+?"
+reload_config = "prefix+r"        # tmux: bind r source-file
+detach = ["prefix+d", "prefix+q"] # tmux: bind D detach-client
+goto = "prefix+g"
+settings = "prefix+shift+s"       # moved off prefix+s to free it for workspace picker
 
 # tmux sessions ~= Herdr workspaces. sesh stays the picker for tmux.
-workspace_picker   = ["prefix+s", "prefix+w"]
-new_workspace      = "prefix+shift+n"
-rename_workspace   = "prefix+shift+w"
-close_workspace    = "prefix+shift+d"
-previous_workspace = "ctrl+alt+["   # cycle to previous workspace (direct, no prefix needed)
-next_workspace     = "ctrl+alt+]"   # cycle to next workspace     (direct, no prefix needed)
+workspace_picker = ["prefix+s", "prefix+w"]
+new_workspace = "prefix+shift+n"
+new_worktree = "prefix+shift+w"
+open_worktree = "prefix+shift+o"
+rename_workspace = "prefix+<"
+close_workspace = "prefix+shift+d"
+previous_workspace = "prefix+("             # cycle to previous workspace (direct, no prefix needed)
+next_workspace = "prefix+)"                 # cycle to next workspace     (direct, no prefix needed)
 
 # tmux windows ~= Herdr tabs
-new_tab      = "prefix+c"                   # tmux: bind c new-window
-previous_tab = "prefix+p"                   # tmux: bind p previous-window
-next_tab     = "prefix+n"                   # tmux: bind n next-window
-switch_tab   = "prefix+1..9"
-rename_tab   = "prefix+comma"
-close_tab    = "prefix+shift+x"
+new_tab = "prefix+t"         # tmux: bind c new-window
+previous_tab = "prefix+p"    # tmux: bind p previous-window
+next_tab = "prefix+n"        # tmux: bind n next-window
+switch_tab = "prefix+1..9"
+rename_tab = "prefix+comma"
+close_tab = "prefix+shift+x"
 
 # Panes
 # tmux splits: bind | split -h (side-by-side), bind \ split -v (stacked).
 # backslash is reliable; "v" is the reliable side-by-side key (vim vsplit mnemonic).
 # To mirror tmux literally, change split_vertical to "prefix+pipe".
-split_vertical   = ["prefix+|", "prefix+shift+|", "prefix+v"]  # | matches tmux; v = fallback
-split_horizontal = "prefix+backslash"      # stacked       (tmux \)
-close_pane       = "prefix+x"              # tmux: bind x kill-pane (no confirm)
-zoom             = "prefix+z"              # tmux default prefix+z
-edit_scrollback  = "prefix+shift+e"        # moved off prefix+e (sesh launcher); copy_mode keeps prefix+[
-resize_mode      = "prefix+shift+r"        # tmux uses prefix+HJKL; Herdr has a resize mode
+split_vertical = [
+  "prefix+|",
+  "prefix+shift+|",
+  "prefix+v",
+] # | matches tmux; v = fallback
+split_horizontal = "prefix+backslash" # stacked       (tmux \)
+close_pane = "prefix+x" # tmux: bind x kill-pane (no confirm)
+zoom = "prefix+z" # tmux default prefix+z
+edit_scrollback = "prefix+shift+e" # moved off prefix+e (sesh launcher); copy_mode keeps prefix+[
+resize_mode = "prefix+shift+r" # tmux uses prefix+HJKL; Herdr has a resize mode
 
 # Pane focus: ctrl+hjkl direct (tmux muscle memory) + prefix+hjkl backup.
 # Note: Herdr eats ctrl+hjkl before nvim, so use <C-w>hjkl for nvim splits.
-focus_pane_left  = ["ctrl+h", "prefix+h"]
-focus_pane_down  = ["ctrl+j", "prefix+j"]
-focus_pane_up    = ["ctrl+k", "prefix+k"]
+focus_pane_left = ["ctrl+h", "prefix+h"]
+focus_pane_down = ["ctrl+j", "prefix+j"]
+focus_pane_up = ["ctrl+k", "prefix+k"]
 focus_pane_right = ["ctrl+l", "prefix+l"]
-cycle_pane_next     = "prefix+tab"
+cycle_pane_next = "prefix+tab"
 cycle_pane_previous = "prefix+shift+tab"
 
 # Agent sidebar
-focus_agent    = "prefix+alt+1..9"
+previous_agent = "prefix+alt+["
+next_agent = "prefix+alt+]"
+focus_agent = "prefix+alt+1..9"
 toggle_sidebar = "prefix+b"
 
 # Navigate-mode movement (active only while navigate mode is open)
 # Herdr labels workspaces as "ws" in the navigation overlay.
-navigate_workspace_up   = ["up", "w"]
+navigate_workspace_up = ["up", "w"]
 navigate_workspace_down = ["down", "s"]
-navigate_pane_left  = "h"
-navigate_pane_down  = "j"
-navigate_pane_up    = "k"
+navigate_pane_left = "h"
+navigate_pane_down = "j"
+navigate_pane_up = "k"
 navigate_pane_right = "l"
 
 # herdr-plus launchers
@@ -99,19 +107,19 @@ command = "cloudmanic.herdr-plus.quick-actions"
 description = "herdr-plus: quick actions"
 
 [ui]
-sidebar_width     = 32
-mouse_capture     = true
-confirm_close     = false    # tmux kill bindings don't prompt
-agent_panel_scope = "all"    # sidebar shows agents across all workspaces
-accent            = "#c6a0f6"
+sidebar_width = 32
+mouse_capture = true
+confirm_close = false     # tmux kill bindings don't prompt
+agent_panel_scope = "all" # sidebar shows agents across all workspaces
+accent = "#c6a0f6"
 
 show_agent_labels_on_pane_borders = true
 [session]
-resume_agents_on_restore = true   # ~ tmux-resurrect, for supported agents
+resume_agents_on_restore = true # ~ tmux-resurrect, for supported agents
 
 [experimental]
-allow_nested  = false   # don't launch Herdr inside tmux (or vice versa)
-pane_history  = false   # off: would persist raw pane output (incl. secrets) to disk
+allow_nested = false # don't launch Herdr inside tmux (or vice versa)
+pane_history = false # off: would persist raw pane output (incl. secrets) to disk
 
 [advanced]
-scrollback_limit_bytes = 52428800   # 50 MB (tmux history-limit analogue)
+scrollback_limit_bytes = 52428800 # 50 MB (tmux history-limit analogue)

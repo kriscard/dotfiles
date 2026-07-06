@@ -295,6 +295,15 @@ cmd_update() {
     info "Re-syncing GNU Stow symlinks..."
     cmd_sync
 
+    info "Updating Neovim lazy.nvim plugins..."
+    if [[ "$DRY_RUN" == true ]]; then
+        echo "[DRY RUN] Would run: nvim --headless '+Lazy! sync' +qa"
+    elif command_exists "nvim"; then
+        nvim --headless "+Lazy! sync" +qa || warning "Could not update Neovim lazy.nvim plugins"
+    else
+        warning "Neovim is not installed; skipping lazy.nvim plugin update"
+    fi
+
     info "Updating Pi and configured packages..."
     if [[ "$DRY_RUN" == true ]]; then
         echo "[DRY RUN] Would run: pi update --all"
@@ -432,54 +441,45 @@ cmd_sync() {
         mkdir -p "$HOME/.config"
     fi
 
-    # Handle conflicting files/directories
-    local conflicting_paths=(
-        "$HOME/.config/nvim"
-        "$HOME/.config/tmux"
-        "$HOME/.config/kitty"
-        "$HOME/.config/ghostty"
-        "$HOME/.config/alacritty"
-        "$HOME/.config/aerospace"
-        "$HOME/.config/karabiner"
-        "$HOME/.zshrc"
-        # Do not back up whole agent runtime directories like ~/.claude.
-        # They contain mutable installs (skills/plugins/sessions) that must survive
-        # unstow/restow; Stow can merge managed leaf symlinks into the real dir.
-    )
+    # Repair leaf-file conflicts reported by Stow. Some apps (notably
+    # Karabiner-Elements and gh) rewrite config files atomically and replace a
+    # Stow-managed symlink with a regular file. Do not back up whole config
+    # directories here: with --no-folding, Stow can safely merge managed leaf
+    # symlinks into existing directories.
+    repair_stow_leaf_conflicts() {
+        local stow_output line source_path target_path source_rel target_abs repo_abs backup_name
 
-    is_stow_managed_dir() {
-        local candidate="$1"
-        local link target
+        stow_output="$(stow_home -n 2>&1)" && return 0
 
-        [[ -d "$candidate" ]] || return 1
+        while IFS= read -r line; do
+            if [[ "$line" =~ cannot\ stow\ (.*)\ over\ existing\ target\ (.*)\ since\ neither ]]; then
+                source_path="${BASH_REMATCH[1]}"
+                target_path="${BASH_REMATCH[2]}"
+                source_rel="${source_path#*home/}"
+                target_abs="$HOME/$target_path"
+                repo_abs="$DOTFILES_DIR/home/$source_rel"
+                backup_name="${target_abs}.backup.$(date +%Y%m%d_%H%M%S)"
 
-        while IFS= read -r link; do
-            target="$(readlink "$link")"
-            if [[ "$target" == *".dotfiles/home"* ]] || [[ "$target" == "$DOTFILES_DIR/home"* ]]; then
-                return 0
+                if [[ -f "$target_abs" && ! -L "$target_abs" && -f "$repo_abs" ]]; then
+                    if [[ "$DRY_RUN" == true ]]; then
+                        if cmp -s "$target_abs" "$repo_abs"; then
+                            echo "[DRY RUN] Would remove duplicate Stow conflict: $target_abs"
+                        else
+                            echo "[DRY RUN] Would backup Stow conflict: $target_abs -> $backup_name"
+                        fi
+                    elif cmp -s "$target_abs" "$repo_abs"; then
+                        warning "Removing duplicate Stow conflict: $target_abs"
+                        rm "$target_abs"
+                    else
+                        warning "Backing up Stow conflict: $target_abs"
+                        mv "$target_abs" "$backup_name"
+                    fi
+                fi
             fi
-        done < <(find "$candidate" -type l -print 2>/dev/null)
-
-        return 1
+        done <<< "$stow_output"
     }
 
-    for path in "${conflicting_paths[@]}"; do
-        if [[ -e "$path" ]] && [[ ! -L "$path" ]]; then
-            if is_stow_managed_dir "$path"; then
-                [[ "$VERBOSE" == true ]] && info "Already managed by Stow: $path"
-                continue
-            fi
-
-            local backup_name
-            backup_name="${path}.backup.$(date +%Y%m%d_%H%M%S)"
-            if [[ "$DRY_RUN" == true ]]; then
-                echo "[DRY RUN] Would backup: $path -> $backup_name"
-            else
-                warning "Backing up existing configuration: $(basename "$path")"
-                mv "$path" "$backup_name"
-            fi
-        fi
-    done
+    repair_stow_leaf_conflicts
 
     # Stow the home package as a single package — the structure inside
     # home/ (e.g. home/.config/nvim/, home/.claude/CLAUDE.md, home/zsh/zsh.d/)
