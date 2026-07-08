@@ -1,7 +1,9 @@
 -- Collection of various small independent plugins/modules
 return {
 	"echasnovski/mini.nvim",
-	event = "VeryLazy",
+	-- Textobjects should be ready as soon as a real buffer opens; `VeryLazy`
+	-- can make `va[`, `vi"`, etc. feel flaky right after startup.
+	event = { "BufReadPost", "BufNewFile" },
 	config = function()
 		-- Better Around/Inside textobjects
 		--
