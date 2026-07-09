@@ -57,6 +57,36 @@ command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
 
+# Keep sudo credentials warm for long Homebrew/cask operations.
+# Homebrew itself should not be run with sudo, but some casks/installers need it.
+SUDO_KEEPALIVE_PID=""
+
+stop_sudo_keepalive() {
+    if [[ -n "${SUDO_KEEPALIVE_PID:-}" ]]; then
+        kill "$SUDO_KEEPALIVE_PID" 2>/dev/null || true
+        SUDO_KEEPALIVE_PID=""
+    fi
+}
+
+start_sudo_keepalive() {
+    [[ "$DRY_RUN" == true ]] && return 0
+    command_exists "sudo" || return 0
+
+    if [[ -n "${SUDO_KEEPALIVE_PID:-}" ]] && kill -0 "$SUDO_KEEPALIVE_PID" 2>/dev/null; then
+        return 0
+    fi
+
+    info "Refreshing sudo credentials once for package updates..."
+    if sudo -v; then
+        # Keep sudo timestamp alive so long cask upgrades don't prompt repeatedly.
+        while true; do sudo -n true; sleep 60; done 2>/dev/null &
+        SUDO_KEEPALIVE_PID=$!
+        trap stop_sudo_keepalive EXIT
+    else
+        warning "Could not refresh sudo credentials; package updates may prompt for a password"
+    fi
+}
+
 # Run Stow for the home package without folding whole directories into symlinks.
 # Ignore patterns live in .stow-local-ignore so runtime/cache files stay local.
 stow_home() {
@@ -265,18 +295,7 @@ cmd_update() {
         warning "Could not pull latest dotfiles"
     fi
 
-    local sudo_keepalive_pid=""
-    if [[ "$DRY_RUN" != true ]] && command_exists "sudo"; then
-        info "Refreshing sudo credentials once for package updates..."
-        if sudo -v; then
-            # Keep sudo timestamp alive so long cask upgrades don't prompt repeatedly.
-            while true; do sudo -n true; sleep 60; done 2>/dev/null &
-            sudo_keepalive_pid=$!
-            trap '[[ -n "${sudo_keepalive_pid:-}" ]] && kill "$sudo_keepalive_pid" 2>/dev/null || true' EXIT
-        else
-            warning "Could not refresh sudo credentials; package updates may prompt for a password"
-        fi
-    fi
+    start_sudo_keepalive
 
     info "Updating Homebrew packages..."
     if [[ "$DRY_RUN" == true ]]; then
@@ -600,6 +619,7 @@ cmd_packages() {
 
     # Install packages from Brewfile
     if [[ -f "$DOTFILES_DIR/Brewfile" ]]; then
+        start_sudo_keepalive
         info "Installing packages from Brewfile..."
         if [[ "$DRY_RUN" == true ]]; then
             echo "[DRY RUN] Would run: brew bundle --file=$DOTFILES_DIR/Brewfile"
