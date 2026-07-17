@@ -123,3 +123,9 @@ pane_history = false # off: would persist raw pane output (incl. secrets) to dis
 
 [advanced]
 scrollback_limit_bytes = 52428800 # 50 MB (tmux history-limit analogue)
+
+[ui.sound]
+enabled = false
+
+[ui.toast]
+delivery = "terminal"

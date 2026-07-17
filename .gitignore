@@ -56,6 +56,10 @@ secrets.fish
 config/environment.d/secrets.conf
 state.yml
 
+# SSH: only the client config is tracked; never track actual keys
+home/.ssh/*
+!home/.ssh/config
+
 home/.gitconfig-work
 
 # Other
