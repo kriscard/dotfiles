@@ -2,17 +2,13 @@ return {
 	{
 		"obsidian-nvim/obsidian.nvim",
 		version = "*", -- recommended, use latest release instead of latest commit
-		-- Load on markdown files OR when using Obsidian commands
+		-- Load on Markdown files or when using Obsidian commands.
 		ft = "markdown",
 		cmd = { "Obsidian" },
-		event = {
-			-- Load when opening files in the vault
-			"BufReadPre " .. vim.fn.expand("~") .. "/obsidian-vault-kriscard/*.md",
-			"BufNewFile " .. vim.fn.expand("~") .. "/obsidian-vault-kriscard/*.md",
-		},
 		dependencies = {
 			"nvim-lua/plenary.nvim",
-			"folke/snacks.nvim", -- for picker
+			"folke/snacks.nvim", -- picker and image support
+			"folke/which-key.nvim",
 		},
 		config = function(_, opts)
 			require("obsidian").setup(opts)
@@ -23,6 +19,8 @@ return {
 				{ "<leader>o", group = "Obsidian" },
 			})
 		end,
+		---@module "obsidian"
+		---@type obsidian.config
 		opts = {
 			-- Disable legacy commands (use new command structure)
 			legacy_commands = false,
@@ -31,15 +29,11 @@ return {
 				{
 					name = "kriscard",
 					path = "~/obsidian-vault-kriscard",
-					-- Workspace-specific overrides
-					overrides = {
-						notes_subdir = "1 - Notes",
-					},
 				},
 			},
 
 			-- Notes directory configuration
-			notes_subdir = "1 - Notes",
+			notes_subdir = "0 - Inbox",
 			new_notes_location = "notes_subdir",
 
 			-- ══════════════════════════════════════════════════════════════════════
@@ -54,6 +48,7 @@ return {
 			-- Frontmatter configuration
 			frontmatter = {
 				enabled = true,
+				sort = { "id", "aliases", "tags", "created" },
 				func = function(note)
 					local out = {
 						id = note.id,
@@ -71,33 +66,18 @@ return {
 				end,
 			},
 
-			-- Note ID generation (for new notes)
-			note_id_func = function(title)
-				-- Clean title for file name
-				local suffix = ""
-				if title ~= nil then
-					-- If title is provided, transform it to valid filename
-					suffix = title:gsub(" ", "-"):gsub("[^A-Za-z0-9-]", ""):lower()
-				else
-					-- If no title, use timestamp
-					suffix = tostring(os.time())
-				end
-				return suffix
-			end,
-
-			-- Note path function (where new notes are created)
-			note_path_func = function(spec)
-				local path = spec.dir / tostring(spec.id)
-				return path:with_suffix(".md")
+			-- Readable UTF-8 IDs with collision handling and a timestamp fallback.
+			note_id_func = function(title, dir)
+				return require("obsidian.builtin").title_id(title, dir)
 			end,
 
 			-- ══════════════════════════════════════════════════════════════════════
 			-- Templates
 			-- ══════════════════════════════════════════════════════════════════════
 			templates = {
-				subdir = "Templates", -- Must be 'subdir' not 'folder'
-				date_format = "%Y-%m-%d",
-				time_format = "%H:%M",
+				folder = "Templates",
+				date_format = "YYYY-MM-DD",
+				time_format = "HH:mm",
 				-- Template substitutions
 				substitutions = {
 					yesterday = function()
@@ -107,7 +87,7 @@ return {
 						return os.date("%Y-%m-%d", os.time() + 86400)
 					end,
 					week = function()
-						return os.date("%Y-W%W")
+						return os.date("%G-W%V")
 					end,
 				},
 			},
@@ -116,34 +96,19 @@ return {
 			-- Daily Notes
 			-- ══════════════════════════════════════════════════════════════════════
 			daily_notes = {
-				folder = "1 - Notes/Daily Notes",
-				date_format = "%Y-%m-%d",
-				alias_format = "%B %-d, %Y", -- e.g., "January 15, 2025"
+				folder = "2 - Areas/Daily Ops",
+				date_format = "YYYY/YYYY-MM-DD",
+				alias_format = "MMMM D, YYYY", -- e.g., "January 15, 2025"
 				template = "Daily Notes.md",
 				default_tags = { "daily" },
+				workdays_only = true,
 			},
 
 			-- ══════════════════════════════════════════════════════════════════════
-			-- Picker (Snacks.pick integration)
+			-- Picker (Snacks integration)
 			-- ══════════════════════════════════════════════════════════════════════
 			picker = {
-				name = "snacks.pick",
-				note_mappings = {
-					new = "<C-x>",
-					insert_link = "<C-l>",
-				},
-				tag_mappings = {
-					tag_note = "<C-x>",
-					insert_tag = "<C-l>",
-				},
-			},
-
-			-- ══════════════════════════════════════════════════════════════════════
-			-- Search & Sort
-			-- ══════════════════════════════════════════════════════════════════════
-			search = {
-				sort_by = "modified",
-				sort_reversed = true,
+				name = "snacks.picker",
 			},
 
 			-- ══════════════════════════════════════════════════════════════════════
@@ -186,40 +151,12 @@ return {
 			-- ══════════════════════════════════════════════════════════════════════
 			attachments = {
 				folder = "Attachments",
-				-- Image naming function
 				img_name_func = function()
 					return string.format("img-%s", os.date("%Y%m%d%H%M%S"))
 				end,
-				-- Image text function for embedding
-				img_text_func = function(client, path)
-					path = client:vault_relative_path(path) or path
-					return string.format("![[%s]]", path.name)
-				end,
 			},
 
-			-- ══════════════════════════════════════════════════════════════════════
-			-- Callbacks
-			-- ══════════════════════════════════════════════════════════════════════
-			callbacks = {
-				-- Called after note creation
-				post_setup = function(client)
-					-- Custom highlight groups for Obsidian
-					vim.api.nvim_set_hl(0, "ObsidianTodo", { bold = true, fg = "#f5a97f" })
-					vim.api.nvim_set_hl(0, "ObsidianDone", { bold = true, fg = "#a6da95" })
-				end,
-			},
-
-			-- ══════════════════════════════════════════════════════════════════════
-			-- Open Configuration
-			-- ══════════════════════════════════════════════════════════════════════
 			open_notes_in = "vsplit",
-			open = {
-				use_advanced_uri = true,
-				func = vim.ui.open,
-			},
-
-			-- Logging
-			log_level = vim.log.levels.INFO,
 		},
 	},
 }
