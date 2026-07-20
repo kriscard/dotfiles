@@ -26,13 +26,30 @@ def main():
         if not Path(file_path).exists():
             sys.exit(0)
 
-        # Run ESLint to check for errors and style violations
+        # Use the project's own ESLint so the version matches its plugins.
+        # (npx from a workspace root silently downloads latest ESLint, which
+        # breaks against project configs pinned to an older major.)
+        eslint_bin = None
+        package_root = None
+        for parent in Path(file_path).resolve().parents:
+            candidate = parent / "node_modules" / ".bin" / "eslint"
+            if candidate.exists():
+                eslint_bin = str(candidate)
+                package_root = str(parent)
+                break
+
+        if eslint_bin is None:
+            sys.exit(0)
+
+        # Run ESLint to check for errors and style violations. cwd must be
+        # the package root: flat-config discovery is cwd-based in ESLint 9+.
         try:
             result = subprocess.run(
-                ["npx", "eslint", file_path, "--format", "compact"],
+                [eslint_bin, file_path, "--format", "compact"],
                 capture_output=True,
                 text=True,
                 timeout=30,
+                cwd=package_root,
             )
 
             if result.returncode != 0 and (result.stdout or result.stderr):
