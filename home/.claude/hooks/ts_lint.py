@@ -45,7 +45,7 @@ def main():
         # the package root: flat-config discovery is cwd-based in ESLint 9+.
         try:
             result = subprocess.run(
-                [eslint_bin, file_path, "--format", "compact"],
+                [eslint_bin, file_path],
                 capture_output=True,
                 text=True,
                 timeout=30,
