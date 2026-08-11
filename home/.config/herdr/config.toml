@@ -114,6 +114,7 @@ agent_panel_scope = "all" # sidebar shows agents across all workspaces
 accent = "#c6a0f6"
 
 show_agent_labels_on_pane_borders = true
+agent_panel_sort = "priority"
 [session]
 resume_agents_on_restore = true # ~ tmux-resurrect, for supported agents
 

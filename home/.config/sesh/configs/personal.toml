@@ -25,6 +25,11 @@ name = "Playground 🧪"
 path = "~/projects/playground/"
 
 [[session]]
+name = "Learning 📚"
+path = "~/learning/"
+disable_startup_command = true
+
+[[session]]
 name = "Chris blog ✍️"
 path = "~/projects/christophercardoso.dev/"
 windows = ["lazygit"]

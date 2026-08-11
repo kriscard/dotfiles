@@ -131,7 +131,7 @@ cask "figma"
 # Music & Entertainment
 cask "spotify"
 
-# Fonts (MonoLisa is purchased separately - install manually)
+# Fonts (MonoLisaCode is purchased separately and installed manually)
 cask "font-hack-nerd-font"
 cask "font-fira-code-nerd-font"
 

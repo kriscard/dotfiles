@@ -12,8 +12,8 @@ theme = dark:Catppuccin Macchiato,light:Catppuccin Latte
 # FONTS & APPEARANCE
 # =============================================================================
 
-# Font Configuration (using Nerd Font from Brewfile)
-font-family = MonoLisa
+# MonoLisaCode is installed manually; Nerd Font symbols use a fallback face.
+font-family = MonoLisaCode
 font-family = Symbols Nerd Font
 font-size = 14
 
@@ -24,7 +24,7 @@ font-feature = +calt  # Enable contextual alternates
 # macOS font thickening (reduces halation on dark backgrounds)
 font-thicken = true
 
-# Line height adjustment (MonoLisa benefits from slight increase)
+# Line height adjustment (MonoLisaCode benefits from slight increase)
 adjust-cell-height = 2
 
 # =============================================================================

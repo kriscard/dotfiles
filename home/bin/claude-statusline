@@ -51,6 +51,17 @@ color_for_pct() {
     fi
 }
 
+format_tokens() {
+    local tokens=${1:-0}
+    if [ "$tokens" -ge 1000000 ]; then
+        awk -v n="$tokens" 'BEGIN { printf "%.1fM", n / 1000000 }'
+    elif [ "$tokens" -ge 1000 ]; then
+        awk -v n="$tokens" 'BEGIN { printf "%.1fk", n / 1000 }'
+    else
+        printf '%s' "$tokens"
+    fi
+}
+
 # ── Extract data ────────────────────────────────────────
 model_name=$(echo "$input" | jq -r '.model.display_name // "Claude"')
 
@@ -61,6 +72,36 @@ cache_create=$(echo "$input" | jq -r '.context_window.current_usage.cache_creati
 cache_read=$(echo "$input" | jq -r '.context_window.current_usage.cache_read_input_tokens // 0')
 current=$(( input_tokens + cache_create + cache_read ))
 pct_used=$(( size > 0 ? current * 100 / size : 0 ))
+current_fmt=$(format_tokens "$current")
+size_fmt=$(format_tokens "$size")
+
+# Claude does not expose cumulative session tokens directly to the status line.
+# Sum one usage record per API request from the current session transcript.
+transcript_path=$(echo "$input" | jq -r '.transcript_path // ""')
+session_tokens=0
+if [ -r "$transcript_path" ]; then
+    session_tokens=$(jq -n '
+        reduce inputs as $entry (
+            {seen: {}, total: 0};
+            ($entry.requestId // $entry.uuid // "") as $id
+            | if $entry.type == "assistant"
+                and ($entry.message.usage != null)
+                and ($id != "")
+                and ((.seen[$id] // false) | not)
+              then .seen[$id] = true
+                | .total += (
+                    ($entry.message.usage.input_tokens // 0)
+                    + ($entry.message.usage.cache_creation_input_tokens // 0)
+                    + ($entry.message.usage.cache_read_input_tokens // 0)
+                    + ($entry.message.usage.output_tokens // 0)
+                )
+              else .
+              end
+        )
+        | .total
+    ' "$transcript_path" 2>/dev/null) || session_tokens=0
+fi
+session_tokens_fmt=$(format_tokens "$session_tokens")
 
 cwd=$(echo "$input" | jq -r '.cwd // ""')
 [ -z "$cwd" ] || [ "$cwd" = "null" ] && cwd=$(pwd)
@@ -109,15 +150,18 @@ line1+=" "
 # Arrow: blue → surface1
 line1+="${reset}${surface1_bg}${blue_fg}${arrow}"
 
-# Segment 3: Context % (surface1 bg)
+# Segment 3: Live context usage (surface1 bg)
 pct_color=$(color_for_pct "$pct_used")
-line1+="${surface1_bg}${text_fg} ${icon_ctx} ${pct_used}% "
+line1+="${surface1_bg}${text_fg} ${icon_ctx} ${current_fmt}/${size_fmt} · ${pct_color}${pct_used}% "
 
-# Segment 4: Session cost (surface0 bg)
-if [ "$session_cost" != "0" ] && [ "$session_cost" != "null" ]; then
+# Segment 4: Cumulative session tokens + cost (surface0 bg)
+if [ "$session_tokens" -gt 0 ] || { [ "$session_cost" != "0" ] && [ "$session_cost" != "null" ]; }; then
     line1+="${reset}${surface0_bg}${surface1_fg}${arrow}"
-    line1+="${surface0_bg}${teal_txt} ${session_cost_fmt} "
-    line1+="${reset}${surface0_fg}${arrow}${reset}"
+    line1+="${surface0_bg}${teal_txt} Σ ${session_tokens_fmt}"
+    if [ "$session_cost" != "0" ] && [ "$session_cost" != "null" ]; then
+        line1+=" · ${session_cost_fmt}"
+    fi
+    line1+=" ${reset}${surface0_fg}${arrow}${reset}"
 else
     line1+="${reset}${surface1_fg}${arrow}${reset}"
 fi

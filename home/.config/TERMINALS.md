@@ -6,7 +6,7 @@ This dotfiles setup includes configurations for two modern terminals optimized f
 
 ### Features
 - **Theme**: Catppuccin Macchiato with automatic theme switching
-- **Font**: Hack Nerd Font Mono with ligatures and symbol mapping
+- **Font**: MonoLisaCode with ligatures and Nerd Font symbol mapping
 - **Splits**: Vim-style window management with intuitive layouts
 - **Performance**: Hardware-accelerated rendering with optimized settings
 - **Remote Control**: Enabled for vim-kitty-navigator integration
@@ -33,7 +33,7 @@ Located at: `.config/kitty/kitty.conf`
 
 ### Features
 - **Theme**: Catppuccin with automatic light/dark mode support
-- **Font**: Hack Nerd Font Mono with advanced typography features
+- **Font**: MonoLisaCode with advanced typography features and a Nerd Font symbol fallback
 - **Native**: True native macOS integration with system behaviors
 - **Fast**: GPU-accelerated with minimal resource usage
 - **Modern**: Latest terminal features and standards compliance
@@ -76,11 +76,11 @@ Located at: `.config/ghostty/config`
 
 ## Font Requirements
 
-Both terminals are configured to use **Hack Nerd Font Mono** which is automatically installed via the Brewfile. This ensures:
-- Consistent appearance across terminals and applications
+Both terminals are configured to use **MonoLisaCode**, installed manually through Font Book. **Symbols Nerd Font**, installed via the Brewfile, supplies terminal icons and symbols. This ensures:
+- Consistent code typography across terminal applications
 - Full icon/symbol support for modern CLI tools (eza, bat, etc.)
-- Proper ligature rendering for enhanced code readability
-- Complete Nerd Font icon range coverage
+- Proper ligature and contextual-alternate rendering
+- Complete Nerd Font icon range coverage without replacing MonoLisaCode glyphs
 
 ## Theme Consistency
 

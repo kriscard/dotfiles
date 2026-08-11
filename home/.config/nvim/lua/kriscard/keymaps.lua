@@ -64,15 +64,20 @@ map("n", "<leader>sr", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], {
 
 -- Diagnostic navigation (global)
 local diagnostic_goto = function(next, severity)
-	local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
 	severity = severity and vim.diagnostic.severity[severity] or nil
 	return function()
-		go({
+		vim.diagnostic.jump({
+			count = next and 1 or -1,
 			severity = severity,
-			float = {
-				source = true,
-				border = "rounded",
-			},
+			on_jump = function(_, bufnr)
+				vim.diagnostic.open_float({
+					bufnr = bufnr,
+					scope = "cursor",
+					focus = false,
+					source = true,
+					border = "rounded",
+				})
+			end,
 		})
 	end
 end
