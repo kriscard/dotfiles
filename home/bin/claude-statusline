@@ -25,9 +25,6 @@ blue_fg='\033[38;2;138;173;244m'
 surface1_bg='\033[48;2;73;77;100m'  # #494d64
 surface1_fg='\033[38;2;73;77;100m'
 
-surface0_bg='\033[48;2;54;58;79m'   # #363a4f
-surface0_fg='\033[38;2;54;58;79m'
-
 # Text colors
 text_fg='\033[38;2;202;211;245m'     # #cad3f5
 subtext_fg='\033[38;2;165;173;203m'  # #a5adcb
@@ -36,7 +33,6 @@ green_txt='\033[38;2;166;218;149m'
 yellow_txt='\033[38;2;238;212;159m'
 peach_txt='\033[38;2;245;169;127m'
 red_txt='\033[38;2;237;135;150m'
-teal_txt='\033[38;2;139;213;202m'
 
 # Powerline arrow
 arrow=$'\uE0B0'
@@ -75,34 +71,6 @@ pct_used=$(( size > 0 ? current * 100 / size : 0 ))
 current_fmt=$(format_tokens "$current")
 size_fmt=$(format_tokens "$size")
 
-# Claude does not expose cumulative session tokens directly to the status line.
-# Sum one usage record per API request from the current session transcript.
-transcript_path=$(echo "$input" | jq -r '.transcript_path // ""')
-session_tokens=0
-if [ -r "$transcript_path" ]; then
-    session_tokens=$(jq -n '
-        reduce inputs as $entry (
-            {seen: {}, total: 0};
-            ($entry.requestId // $entry.uuid // "") as $id
-            | if $entry.type == "assistant"
-                and ($entry.message.usage != null)
-                and ($id != "")
-                and ((.seen[$id] // false) | not)
-              then .seen[$id] = true
-                | .total += (
-                    ($entry.message.usage.input_tokens // 0)
-                    + ($entry.message.usage.cache_creation_input_tokens // 0)
-                    + ($entry.message.usage.cache_read_input_tokens // 0)
-                    + ($entry.message.usage.output_tokens // 0)
-                )
-              else .
-              end
-        )
-        | .total
-    ' "$transcript_path" 2>/dev/null) || session_tokens=0
-fi
-session_tokens_fmt=$(format_tokens "$session_tokens")
-
 cwd=$(echo "$input" | jq -r '.cwd // ""')
 [ -z "$cwd" ] || [ "$cwd" = "null" ] && cwd=$(pwd)
 dirname=$(basename "$cwd")
@@ -113,10 +81,6 @@ if git -C "$cwd" --no-optional-locks rev-parse --is-inside-work-tree >/dev/null 
     [ -n "$(git -C "$cwd" --no-optional-locks status --porcelain 2>/dev/null)" ] && git_dirty=" ●"
 fi
 
-session_cost=$(echo "$input" | jq -r '.cost.total_cost_usd // 0')
-session_cost_fmt=$(printf '$%.2f' "$session_cost")
-
-
 # Model icon (Nerd Font — using printf to preserve glyphs)
 case "$model_name" in
     *[Oo]pus*)   model_icon=$(printf '\U000f0219') ;;  # 󰈙 nf-md-file_music
@@ -126,7 +90,7 @@ case "$model_name" in
 esac
 
 # ── Powerline segments ────────────────────────────────
-# Segment order: Model → Directory (+ git) → Context → Session
+# Segment order: Model → Directory (+ git) → Current context
 line1=""
 
 # Segment 1: Model (mauve bg)
@@ -154,17 +118,7 @@ line1+="${reset}${surface1_bg}${blue_fg}${arrow}"
 pct_color=$(color_for_pct "$pct_used")
 line1+="${surface1_bg}${text_fg} ${icon_ctx} ${current_fmt}/${size_fmt} · ${pct_color}${pct_used}% "
 
-# Segment 4: Cumulative session tokens + cost (surface0 bg)
-if [ "$session_tokens" -gt 0 ] || { [ "$session_cost" != "0" ] && [ "$session_cost" != "null" ]; }; then
-    line1+="${reset}${surface0_bg}${surface1_fg}${arrow}"
-    line1+="${surface0_bg}${teal_txt} Σ ${session_tokens_fmt}"
-    if [ "$session_cost" != "0" ] && [ "$session_cost" != "null" ]; then
-        line1+=" · ${session_cost_fmt}"
-    fi
-    line1+=" ${reset}${surface0_fg}${arrow}${reset}"
-else
-    line1+="${reset}${surface1_fg}${arrow}${reset}"
-fi
+line1+="${reset}${surface1_fg}${arrow}${reset}"
 
 # ── Output ──────────────────────────────────────────────
 printf "%b" "$line1"
