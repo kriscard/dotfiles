@@ -2,7 +2,6 @@
 # Organized by category for better maintainability
 
 # Homebrew Taps
-tap "fsouza/prettierd"
 tap "asmvik/formulae"
 tap "ngrok/ngrok"
 
@@ -67,7 +66,7 @@ brew "asdf"         # Unified version manager for multiple languages
 brew "watchman"     # File watching
 
 # Code Quality & Formatting
-brew "fsouza/prettierd/prettierd"
+brew "prettierd"
 brew "shellcheck"       # Shell script linter
 brew "pre-commit"       # Git hook framework
 
