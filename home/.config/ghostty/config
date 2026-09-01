@@ -173,10 +173,10 @@ selection-word-chars = :@-./_~?&=%+#
 
 # Theme environment for consistency with other tools
 env = THEME_FLAVOUR=macchiato
-# Force Arc as default browser for CLI tools
-env = BROWSER=open -a Arc
+# Force Google Chrome as default browser for CLI tools
+env = BROWSER=open -a "Google Chrome"
 # Multiline input for Claude Code (Shift+Enter sends newline without submitting)
 keybind = shift+enter=text:\x1b\n
 
-# Quick open clipboard URL in Arc (copy URL, then Cmd+Shift+O)
-keybind = super+shift+o=text:open -a Arc "$(pbpaste)"\n
+# Quick open clipboard URL in Google Chrome (copy URL, then Cmd+Shift+O)
+keybind = super+shift+o=text:open -a "Google Chrome" "$(pbpaste)"\n

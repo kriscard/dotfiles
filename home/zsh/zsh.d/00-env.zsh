@@ -38,8 +38,8 @@ export THEME_FLAVOUR=macchiato
 export BAT_THEME="Catppuccin Macchiato"
 
 # Browser
-export BROWSER="open -a Arc"
-export PLANNOTATOR_BROWSER="Arc"
+export BROWSER='open -a "Google Chrome"'
+export PLANNOTATOR_BROWSER="Google Chrome"
 
 # pnpm
 export PNPM_HOME="$HOME/Library/pnpm"
