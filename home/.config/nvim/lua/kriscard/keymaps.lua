@@ -141,8 +141,8 @@ map("n", "<leader>wd", "<C-W>c", { desc = "Delete window", remap = true })
 map("n", "<leader>w-", "<C-W>s", { desc = "Split window below", remap = true })
 map("n", "<leader>w|", "<C-W>v", { desc = "Split window right", remap = true })
 
--- Window navigation handled by vim-tmux-navigator plugin
--- (supports both normal and terminal mode, plus tmux pane navigation)
+-- Window navigation is integrated across Neovim, Herdr, and tmux by
+-- plugins/vim_tmux_navigator.lua (normal and terminal modes).
 
 -- Window resizing
 map("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase window height" })
