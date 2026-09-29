@@ -131,6 +131,67 @@ type = "plugin_action"
 command = "cloudmanic.herdr-plus.quick-actions"
 description = "herdr-plus: quick actions"
 
+# Herdr Annotate / Plannotator
+[[keys.command]]
+key = "prefix+a"
+type = "plugin_action"
+command = "annotate.capture"
+description = "annotate text"
+
+[[keys.command]]
+key = "prefix+shift+a"
+type = "plugin_action"
+command = "annotate.copy-context"
+description = "copy annotations as context"
+
+[[keys.command]]
+key = "prefix+alt+a"
+type = "plugin_action"
+command = "annotate.copy-archive"
+description = "copy annotations as context and archive them"
+
+[[keys.command]]
+key = "prefix+ctrl+v"
+type = "plugin_action"
+command = "annotate.paste-archive"
+description = "paste annotations into the agent's prompt and archive them"
+
+[[keys.command]]
+key = "prefix+ctrl+s"
+type = "plugin_action"
+command = "annotate.send-archive"
+description = "send annotations to the agent and archive them"
+
+[[keys.command]]
+key = "prefix+m"
+type = "plugin_action"
+command = "annotate.manage"
+description = "manage annotations"
+
+[[keys.command]]
+key = "prefix+o"
+type = "plugin_action"
+command = "annotate.open"
+description = "review documents in this folder"
+
+[[keys.command]]
+key = "prefix+shift+l"
+type = "plugin_action"
+command = "annotate.last"
+description = "review the agent's last reply"
+
+[[keys.command]]
+key = "prefix+ctrl+o"
+type = "plugin_action"
+command = "annotate.last-newest"
+description = "review the agent's newest reply"
+
+[[keys.command]]
+key = "prefix+shift+t"
+type = "plugin_action"
+command = "annotate.terminal"
+description = "review this pane's recent output"
+
 [ui]
 sidebar_width = 32
 mouse_capture = true

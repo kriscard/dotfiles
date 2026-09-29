@@ -29,7 +29,6 @@ return {
 		spec = {
 			mode = { "n", "v" },
 			-- Primary groups (alphabetically organized)
-			{ "<leader>a", group = "ai", icon = { icon = " ", color = "purple" } },
 			{ "<leader>b", group = "buffer", icon = { icon = " ", color = "cyan" } },
 			{ "<leader>c", group = "code", icon = { icon = " ", color = "yellow" } },
 			{ "<leader>d", group = "debug", icon = { icon = " ", color = "red" } },
