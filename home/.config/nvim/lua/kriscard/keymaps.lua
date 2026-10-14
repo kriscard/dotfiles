@@ -151,31 +151,6 @@ map("n", "<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "Decrease window wi
 map("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase window width" })
 
 -- ══════════════════════════════════════════════════════════════════════════════
--- OBSIDIAN NOTES (using new command format)
--- ══════════════════════════════════════════════════════════════════════════════
--- Note: Avoid keymap prefix conflicts (e.g., <leader>ot vs <leader>otg)
-
-map("n", "<leader>oo", "<cmd>Obsidian open<cr>", { desc = "Open in Obsidian app" })
-map("n", "<leader>on", "<cmd>Obsidian new<cr>", { desc = "New note" })
-map("n", "<leader>oq", "<cmd>Obsidian quick_switch<cr>", { desc = "Quick switch" })
-map("n", "<leader>od", "<cmd>Obsidian today<cr>", { desc = "Daily note (today)" })
-map("n", "<leader>oy", "<cmd>Obsidian yesterday<cr>", { desc = "Yesterday's note" })
-map("n", "<leader>oD", "<cmd>Obsidian tomorrow<cr>", { desc = "Tomorrow's note" })
-map("n", "<leader>oi", "<cmd>Obsidian template<cr>", { desc = "Insert template" })
-map("n", "<leader>ob", "<cmd>Obsidian backlinks<cr>", { desc = "Backlinks" })
-map("n", "<leader>ol", "<cmd>Obsidian links<cr>", { desc = "Links in note" })
-map("n", "<leader>oc", "<cmd>Obsidian toc<cr>", { desc = "Table of contents" })
-map("n", "<leader>op", "<cmd>Obsidian paste_img<cr>", { desc = "Paste image" })
-map("n", "<leader>os", "<cmd>Obsidian search<cr>", { desc = "Search notes" })
-map("n", "<leader>or", "<cmd>Obsidian rename<cr>", { desc = "Rename note" })
-map("n", "<leader>of", "<cmd>Obsidian follow_link<cr>", { desc = "Follow link" })
-map("n", "<leader>ot", "<cmd>Obsidian tags<cr>", { desc = "Search tags" })
--- Visual mode mappings
-map("v", "<leader>oL", "<cmd>Obsidian link<cr>", { desc = "Link to existing note" })
-map("v", "<leader>oN", "<cmd>Obsidian link_new<cr>", { desc = "Link to new note" })
-map("v", "<leader>oe", "<cmd>Obsidian extract_note<cr>", { desc = "Extract to note" })
-
--- ══════════════════════════════════════════════════════════════════════════════
 -- EDUCATIONAL / HELPFUL REMINDERS
 -- ══════════════════════════════════════════════════════════════════════════════
 

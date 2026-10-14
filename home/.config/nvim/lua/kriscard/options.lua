@@ -80,7 +80,7 @@ opt.grepprg = "rg --vimgrep" -- Set the external grep-like search command to use
 
 opt.laststatus = 3 -- global statusline
 
-opt.conceallevel = 2 -- Config for Obsidian
+opt.conceallevel = 2 -- Conceal Markdown syntax such as wiki links
 
 -- Set fold settings
 -- These options were reccommended by nvim-ufo
