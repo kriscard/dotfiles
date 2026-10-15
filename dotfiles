@@ -332,6 +332,20 @@ cmd_update() {
         warning "Pi is not installed; skipping Pi update"
     fi
 
+    info "Refreshing QMD search index and embeddings..."
+    if [[ "$DRY_RUN" == true ]]; then
+        echo "[DRY RUN] Would run: qmd update"
+        echo "[DRY RUN] Would run: qmd embed"
+    elif command_exists "qmd"; then
+        if qmd update; then
+            qmd embed || warning "Could not refresh QMD embeddings"
+        else
+            warning "Could not update QMD search index; skipping embedding refresh"
+        fi
+    else
+        warning "QMD is not installed; skipping search index refresh"
+    fi
+
     success "Update complete!"
 }
 
