@@ -7,6 +7,12 @@ repos:
   # Note: Excludes .zsh files since shellcheck has limited ZSH support
   - repo: local
     hooks:
+      - id: gitleaks
+        name: gitleaks (staged content, fully redacted)
+        entry: gitleaks git --pre-commit --staged --redact=100 --no-banner
+        language: system
+        pass_filenames: false
+        always_run: true
       - id: shellcheck
         name: shellcheck
         entry: shellcheck
