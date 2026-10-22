@@ -30,8 +30,8 @@ channel = "stable"
 prefix = "ctrl+a"
 
 help = "prefix+?"
-reload_config = "prefix+r"        # tmux: bind r source-file
-detach = ["prefix+d", "prefix+q"] # tmux: bind D detach-client
+reload_config = ["prefix+r", "ctrl+alt+r"] # direct fallback avoids prefix timing
+detach = ["prefix+shift+d", "prefix+q"] # keep q as a secondary detach binding
 goto = "prefix+g"
 settings = "prefix+shift+s"       # moved off prefix+s to free it for workspace picker
 
@@ -41,7 +41,7 @@ new_workspace = "prefix+shift+n"
 new_worktree = "prefix+shift+w"
 open_worktree = "prefix+shift+o"
 rename_workspace = "prefix+<"
-close_workspace = "prefix+shift+d"
+close_workspace = "prefix+d"
 previous_workspace = "prefix+("             # cycle to previous workspace (direct, no prefix needed)
 next_workspace = "prefix+)"                 # cycle to next workspace     (direct, no prefix needed)
 
