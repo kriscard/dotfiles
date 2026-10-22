@@ -2,10 +2,22 @@
 # GNU Stow matches these against relative paths inside the package.
 
 # App/runtime files that should not be stowed
-^\.config/raycast
-^\.config/tmux/plugins/tmux-resurrect
+^\.config/raycast/(?!scripts(?:/|$)).*
+^\.config/tmux/plugins(?:/|$)
+^\.config/spicetify/(?!config-xpui\.ini$).*
+^\.config/karabiner/automatic_backups(?:/|$)
+^\.config/gh(?:/|$)
+^\.config/kitty/kitty\.app\.icns$
+^\.gitconfig-work$
 ^\.config/ghostty/local-config/config
 ^\.config/herdr/session\.json
+
+# Generated Python bytecode, wherever a tool writes it.
+(?:^|/)__pycache__(?:/|$)
+\.pyc$
+
+# Claude settings are machine-local (hooks and permissions may vary per machine).
+^\.claude/settings\.json(?:\..*)?$
 
 # Claude Code runtime/cache/local files (not config)
 ^\.claude/debug
