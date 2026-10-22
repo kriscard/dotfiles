@@ -1,4 +1,6 @@
 # ZSH Configuration Entry Point
+# Enable profiling before sourcing any modules (opt-in via zsh-profile).
+[[ "${ZPROF:-0}" == 1 ]] && zmodload zsh/zprof
 # Modular configuration in zsh.d/
 
 export ZDOTDIR="${ZDOTDIR:-$HOME}"

@@ -4,8 +4,9 @@
 # Cargo/Rust
 [[ -f "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"
 
-# Homebrew (Apple Silicon)
-eval "$(/opt/homebrew/bin/brew shellenv)"
+# Homebrew (Apple Silicon): avoid spawning brew for every child shell.
+export HOMEBREW_PREFIX="/opt/homebrew"
+path=("$HOMEBREW_PREFIX/bin" "$HOMEBREW_PREFIX/sbin" $path)
 
 # asdf shims — must precede Homebrew so asdf-managed tool versions win
 # in non-interactive shells (scripts, cron, child shells) as well as interactive ones
