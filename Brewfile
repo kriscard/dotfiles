@@ -68,6 +68,8 @@ brew "watchman"     # File watching
 # Code Quality & Formatting
 brew "prettierd"
 brew "shellcheck"       # Shell script linter
+brew "actionlint"       # GitHub Actions workflow validation
+brew "zizmor"           # GitHub Actions security checks
 brew "pre-commit"       # Git hook framework
 
 # Git Tools

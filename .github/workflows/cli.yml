@@ -1,0 +1,29 @@
+name: CLI checks
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  cli:
+    runs-on: macos-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out source
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Install lint tools
+        run: brew install shellcheck
+      - name: CLI regression tests
+        run: python3 scripts/test-doctor.py
+      - name: Shell lint and syntax
+        run: |
+          shellcheck dotfiles
+          bash -n dotfiles
+          for file in home/.zshrc home/.zshenv home/zsh/zsh.d/*.zsh; do
+            zsh -n "$file"
+          done
