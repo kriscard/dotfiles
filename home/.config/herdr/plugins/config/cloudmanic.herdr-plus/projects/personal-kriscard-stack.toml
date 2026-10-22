@@ -1,0 +1,18 @@
+# Generated from ~/.config/sesh/configs/personal.toml.
+# Managed in ~/.dotfiles; synced to herdr-plus plugin config.
+name = "Kriscard-Stack 👨‍💻"
+description = "My AI stack workflow and software factory"
+group = "Personal"
+working_dir = "~/projects/Kriscard-Stack/"
+
+[[tabs]]
+name = "editor"
+command = "nvim +GoToFile"
+
+[[tabs]]
+name = "lazygit"
+command = "git pull && lazygit"
+
+[[tabs]]
+name = "Pi Orchestrator"
+command = "kstack"

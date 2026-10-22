@@ -1,7 +1,7 @@
 # Generated from ~/.config/sesh/configs/personal.toml.
 # Managed in ~/.dotfiles; synced to herdr-plus plugin config.
 name = "Markly 👨‍💻"
-description = "Imported from sesh Personal sessions"
+description = "BookMark and Marketing intelligence with AI Side project"
 group = "Personal"
 working_dir = "~/projects/markly/"
 
@@ -12,3 +12,7 @@ command = "nvim +GoToFile"
 [[tabs]]
 name = "lazygit"
 command = "git pull && lazygit"
+
+[[tabs]]
+name = "Pi Orchestrator"
+command = "kstack"

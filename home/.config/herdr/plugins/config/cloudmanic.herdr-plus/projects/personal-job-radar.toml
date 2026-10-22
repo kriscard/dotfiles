@@ -1,0 +1,18 @@
+# Generated from ~/.config/sesh/configs/personal.toml.
+# Managed in ~/.dotfiles; synced to herdr-plus plugin config.
+name = "Job Radar 👨‍💻"
+description = "Job finder with AI side project"
+group = "Personal"
+working_dir = "~/projects/job-radar/"
+
+[[tabs]]
+name = "editor"
+command = "nvim +GoToFile"
+
+[[tabs]]
+name = "lazygit"
+command = "git pull && lazygit"
+
+[[tabs]]
+name = "Pi Orchestrator"
+command = "kstack"
