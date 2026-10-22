@@ -3,9 +3,8 @@ return {
 	dependencies = {
 		"rcarriga/nvim-dap-ui",
 		"nvim-neotest/nvim-nio",
-		"williamboman/mason.nvim",
+		"mason-org/mason.nvim",
 		"jay-babu/mason-nvim-dap.nvim",
-		"mxsdev/nvim-dap-vscode-js",
 	},
 	keys = {
 		-- Standard debug commands with function keys
@@ -47,7 +46,7 @@ return {
 		local dapui = require("dapui")
 
 		require("mason-nvim-dap").setup({
-			ensure_installed = { "node2" },
+			ensure_installed = { "js" },
 			automatic_installation = true,
 			handlers = {
 				function(config)
@@ -56,15 +55,18 @@ return {
 			},
 		})
 
-		require("dap-vscode-js").setup({
-			node_path = "node",
-			debugger_path = vim.fn.stdpath("data") .. "/vscode-js-debug",
-			debugger_cmd = { "js-debug-adapter" },
-			adapters = { "pwa-node", "pwa-chrome", "pwa-msedge", "node-terminal", "pwa-extensionHost" },
-			log_file_path = vim.fn.stdpath("cache") .. "/dap_vscode_js.log",
-			log_file_level = vim.log.levels.DEBUG,
-			log_console_level = vim.log.levels.ERROR,
-		})
+		-- Mason's js-debug server implements DAP directly; no VS Code bridge needed.
+		for _, adapter in ipairs({ "pwa-node", "pwa-chrome", "pwa-msedge", "node-terminal", "pwa-extensionHost" }) do
+			dap.adapters[adapter] = {
+				type = "server",
+				host = "127.0.0.1",
+				port = "${port}",
+				executable = {
+					command = vim.fn.stdpath("data") .. "/mason/bin/js-debug-adapter",
+					args = { "${port}" },
+				},
+			}
+		end
 
 		for _, language in ipairs({ "typescript", "javascript" }) do
 			dap.configurations[language] = {
