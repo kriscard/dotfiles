@@ -12,3 +12,7 @@ command = "nvim +GoToFile"
 [[tabs]]
 name = "lazygit"
 command = "git pull && lazygit"
+
+[[tabs]]
+name = "Pi"
+command = "Pi"
