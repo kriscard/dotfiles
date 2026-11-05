@@ -133,6 +133,23 @@ launch, stop on entry, and evaluate an expression. It does not upgrade plugins.
 Existing launch/attach/Jest configurations are preserved, but browser attach,
 Jest, and TypeScript source maps still need project-specific checks.
 
+## Shell startup checks
+
+`zsh-profile` enables zprof before loading shell modules and prints its function
+table. Normal startup does not load the profiler. Apple Silicon Homebrew paths
+are set directly rather than spawning `brew shellenv` in every child shell.
+The shell remains macOS-specific; this does not add Linux portability.
+
+```bash
+python3 scripts/test-shell-startup.py
+zsh-profile
+```
+
+The regression test uses real Zsh with a disposable home and controlled asdf
+shim. It verifies shim priority, absence of the Homebrew subprocess, profiling,
+and the simple `sysinfo` fallback. It does not load your `.env`, activate mise,
+change runtime versions, or require Neofetch/Fastfetch.
+
 ## What's Included
 
 ### Core Tools
