@@ -79,6 +79,29 @@ removed secrets. `pre-commit run --all-files` does not turn the staged-content
 hook into a history scan. CI runs the regression test and a full-history scan.
 Ignored `.env` files are not scanned by these Git commands; keep them private.
 
+## Claude security defaults
+
+Claude settings remain machine-local. This opt-in helper preserves hooks, model
+preferences, and unrelated permissions while tightening the audited defaults:
+
+```bash
+python3 scripts/harden-claude-settings.py         # Check only
+python3 scripts/harden-claude-settings.py --apply # Private backup, then update
+python3 scripts/test-claude-security.py
+```
+
+It disables blanket project MCP activation, clears the global project-server
+allowlist, and moves seven broad interpreter/container/build approvals to prompts.
+Those commands are not forbidden. Check-only mode returns status 1 when changes
+are needed and never writes. Apply mode creates a mode-0600 backup, follows Stow
+links without replacing them, and is idempotent. The existing settings file must
+already exist; use `--settings /path/to/settings.json` for a nonstandard location.
+
+Restart Claude after applying and approve trusted servers individually. Merging
+this code does not apply it automatically, install servers, or change project
+`.mcp.json` files. Permission prompts reduce accidental approval; they are not a
+sandbox or a complete security audit.
+
 ## What's Included
 
 ### Core Tools
