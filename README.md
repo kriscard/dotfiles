@@ -62,6 +62,23 @@ Inspect the backup and restore selected files manually.
 Run the regression suite with `python3 scripts/test-doctor.py`. The tests use the
 real CLI with disposable tool-availability fixtures and do not alter live config.
 
+## Secret scanning
+
+Install Gitleaks through `dotfiles packages` and enable the hooks with
+`pre-commit install`. The hook scans staged Git contents with fully redacted
+output, including cases where an unstaged edit hides a staged secret.
+
+```bash
+python3 scripts/test-secret-scanning.py
+gitleaks git --pre-commit --staged --redact=100 --no-banner
+gitleaks git --log-opts=--all --redact=100 --no-banner
+```
+
+The first scan is the commit check; the second scans committed history, including
+removed secrets. `pre-commit run --all-files` does not turn the staged-content
+hook into a history scan. CI runs the regression test and a full-history scan.
+Ignored `.env` files are not scanned by these Git commands; keep them private.
+
 ## What's Included
 
 ### Core Tools
