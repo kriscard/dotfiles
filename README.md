@@ -118,6 +118,21 @@ CI compiles the configuration without loading plugins. The local integration
 test uses installed plugins to verify provider flags, keymap ownership, and
 Snacks input/select wiring after `UIEnter`. It does not sync or upgrade plugins.
 
+## JavaScript debugging
+
+nvim-dap connects directly to Mason's `js-debug-adapter`; the VS Code bridge and
+retired `node2` adapter are no longer requested. On a fresh machine, load DAP and
+let Mason's `js` installation complete, or run `:MasonInstall js-debug-adapter`.
+
+```bash
+bash scripts/test-javascript-dap.sh
+```
+
+This local smoke test uses installed plugins and a real temporary Node target:
+launch, stop on entry, and evaluate an expression. It does not upgrade plugins.
+Existing launch/attach/Jest configurations are preserved, but browser attach,
+Jest, and TypeScript source maps still need project-specific checks.
+
 ## What's Included
 
 ### Core Tools
