@@ -12,11 +12,16 @@ SCRIPT = Path(__file__).with_name("harden-claude-settings.py")
 
 class ClaudeDefaults(unittest.TestCase):
     def test_check_apply_and_repeat_through_stow_link(self):
+        execution_rules = [
+            "Bash(docker compose exec *)", "Bash(docker run *)", "Bash(node *)",
+            "Bash(nvim --headless *)", "Bash(luajit *)", "Bash(lua -e *)",
+            "Bash(npm run build *)",
+        ]
         original = {
             "enableAllProjectMcpServers": True,
             "enabledMcpjsonServers": ["context7"],
             "permissions": {
-                "allow": ["Bash(node *)", "Bash(docker run *)", "Bash(git status)"],
+                "allow": execution_rules + ["Bash(git status)"],
                 "ask": ["Bash(git commit *)"],
                 "deny": ["Read(./.env)"],
             },
@@ -42,8 +47,7 @@ class ClaudeDefaults(unittest.TestCase):
             self.assertEqual(result["model"], original["model"])
             self.assertEqual(result["permissions"]["deny"], original["permissions"]["deny"])
             self.assertEqual(result["permissions"]["allow"], ["Bash(git status)"])
-            self.assertIn("Bash(node *)", result["permissions"]["ask"])
-            self.assertIn("Bash(docker run *)", result["permissions"]["ask"])
+            self.assertTrue(set(execution_rules) <= set(result["permissions"]["ask"]))
             self.assertIn("Bash(git commit *)", result["permissions"]["ask"])
             backups = list(Path(tmp).glob("settings.json.*.bak"))
             self.assertEqual(len(backups), 1)
