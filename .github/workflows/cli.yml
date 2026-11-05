@@ -16,10 +16,15 @@ jobs:
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           persist-credentials: false
+          fetch-depth: 0
       - name: Install lint tools
-        run: brew install shellcheck
+        run: brew install shellcheck gitleaks
       - name: CLI regression tests
         run: python3 scripts/test-doctor.py
+      - name: Secret scanner regression tests
+        run: python3 scripts/test-secret-scanning.py
+      - name: Scan committed history
+        run: gitleaks git --log-opts=--all --redact=100 --no-banner
       - name: Shell lint and syntax
         run: |
           shellcheck dotfiles
