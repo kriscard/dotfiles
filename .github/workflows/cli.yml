@@ -18,7 +18,7 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
       - name: Install lint tools
-        run: brew install shellcheck gitleaks
+        run: brew install shellcheck gitleaks neovim
       - name: CLI regression tests
         run: python3 scripts/test-doctor.py
       - name: Claude settings regression tests
@@ -27,6 +27,8 @@ jobs:
         run: python3 scripts/test-secret-scanning.py
       - name: Scan committed history
         run: gitleaks git --log-opts=--all --redact=100 --no-banner
+      - name: Neovim config syntax
+        run: nvim --headless -u NONE -l scripts/check-nvim-syntax.lua
       - name: Shell lint and syntax
         run: |
           shellcheck dotfiles

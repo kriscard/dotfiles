@@ -102,6 +102,22 @@ this code does not apply it automatically, install servers, or change project
 `.mcp.json` files. Permission prompts reduce accidental approval; they are not a
 sandbox or a complete security audit.
 
+## Neovim configuration checks
+
+`[[` / `]]` navigate Treesitter class starts; `[r` / `]r` navigate references
+through Snacks. The optional Node/Python/Ruby/Perl remote-plugin hosts are disabled
+because no configured plugin needs them. This does not disable LSP servers or
+DAP adapters; re-enable a host if a future plugin requires it.
+
+```bash
+nvim --headless -u NONE -l scripts/check-nvim-syntax.lua
+bash scripts/test-nvim-audit.sh
+```
+
+CI compiles the configuration without loading plugins. The local integration
+test uses installed plugins to verify provider flags, keymap ownership, and
+Snacks input/select wiring after `UIEnter`. It does not sync or upgrade plugins.
+
 ## What's Included
 
 ### Core Tools
