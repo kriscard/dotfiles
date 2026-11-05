@@ -14,12 +14,12 @@ return {
 		dependencies = { "nvim-treesitter/nvim-treesitter", "echasnovski/mini.nvim" },
 		---@module 'render-markdown'
 		---@type render.md.UserConfig
-		ft = { "markdown", "vimwiki", "norg", "rmd", "org", "Avante", "mdx", "codecompanion" },
+		ft = { "markdown", "vimwiki", "norg", "rmd", "org", "mdx" },
 		keys = {
 			{ "<leader>um", "<cmd>RenderMarkdown toggle<cr>", desc = "Toggle markdown render" },
 		},
 		opts = {
-			file_types = { "markdown", "vimwiki", "norg", "rmd", "org", "Avante", "mdx", "codecompanion" },
+			file_types = { "markdown", "vimwiki", "norg", "rmd", "org", "mdx" },
 
 			-- Skip rendering inside floating windows (LSP hover popups have
 			-- filetype=markdown, which would otherwise trigger conceal +
