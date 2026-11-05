@@ -21,9 +21,8 @@ zsh-profile() {
   # Detailed profiling with zprof
   echo "Detailed breakdown (top 10):"
   echo "─────────────────────────────────────────"
-  ZPROF=1 zsh -i -c 'zprof | head -15' 2>/dev/null
+  ZPROF=1 zsh -i -c 'zprof | head -15'
   echo ""
-  echo "Tip: Add 'zmodload zsh/zprof' at top of .zshrc for more detail"
 }
 
 # Quick directory creation and navigation
@@ -75,18 +74,12 @@ extract() {
 
 # System information
 sysinfo() {
-  if (( $+commands[neofetch] )); then
-    neofetch
-  elif (( $+commands[fastfetch] )); then
-    fastfetch
-  else
-    echo "System Information:"
-    echo "OS: $(uname -s) $(uname -r)"
-    echo "Hostname: $(hostname)"
-    echo "User: $(whoami)"
-    echo "Shell: $SHELL"
-    echo "Terminal: $TERM"
-  fi
+  echo "System Information:"
+  echo "OS: $(uname -s) $(uname -r)"
+  echo "Hostname: $(hostname)"
+  echo "User: $(whoami)"
+  echo "Shell: $SHELL"
+  echo "Terminal: $TERM"
 }
 
 # Quick npm/yarn/pnpm project initialization
