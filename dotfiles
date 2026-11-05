@@ -141,7 +141,6 @@ Commands:
     init        Full system setup (packages, configs, symlinks)
     update      Update dotfiles and packages
     backup      Backup existing configurations
-    restore     Restore from backup
     doctor      Run system diagnostics
     sync        Sync configuration files only (with conflict handling)
     stow        Create symlinks (quick stow)
@@ -222,9 +221,6 @@ main() {
             ;;
         backup)
             cmd_backup
-            ;;
-        restore)
-            cmd_restore
             ;;
         doctor)
             cmd_doctor
@@ -390,26 +386,23 @@ cmd_backup() {
     fi
 }
 
-cmd_restore() {
-    title "🔄 Restoring from backup"
-    error "Restore functionality not yet implemented"
-    # TODO: Implement restore functionality
-}
-
 cmd_doctor() {
     title "🔍 Running system diagnostics"
 
     local issues=0
+    local warnings=0
+    local tool
 
     # Check required tools
     info "Checking required tools..."
 
-    local required_tools=("git" "curl" "zsh")
+    local required_tools=("git" "curl" "zsh" "stow")
     for tool in "${required_tools[@]}"; do
         if command_exists "$tool"; then
             success "$tool is installed"
         else
-            error "❌ $tool is not installed"
+            warning "$tool is not installed"
+            issues=$((issues + 1))
         fi
     done
 
@@ -423,34 +416,42 @@ cmd_doctor() {
 
         # Check for outdated packages
         local outdated
-        outdated=$(brew outdated --quiet)
-        if [[ -n "$outdated" ]]; then
-            warning "Some packages are outdated:"
-            # shellcheck disable=SC2001 # Prefix each line for readable output.
-            echo "$outdated" | sed 's/^/  /'
+        if outdated=$(brew outdated --quiet); then
+            if [[ -n "$outdated" ]]; then
+                warning "Some packages are outdated:"
+                warnings=$((warnings + 1))
+                while IFS= read -r tool; do printf '  %s\n' "$tool"; done <<< "$outdated"
+            else
+                success "All packages are up to date"
+            fi
         else
-            success "All packages are up to date"
+            warning "Could not check Homebrew package status"
+            issues=$((issues + 1))
         fi
     else
         warning "Homebrew is not installed"
+        issues=$((issues + 1))
         info "Run 'dotfiles packages' to install Homebrew"
     fi
 
     # Check shell
-    if [[ "$SHELL" == */zsh ]]; then
+    if [[ "${SHELL:-}" == */zsh ]]; then
         success "Using zsh shell"
     else
-        warning "Not using zsh shell (current: $SHELL)"
+        warning "Not using zsh shell (current: ${SHELL:-unset})"
+        warnings=$((warnings + 1))
         info "Run 'dotfiles macos' to set zsh as default shell"
     fi
 
     # Summary
     echo
     if [[ $issues -eq 0 ]]; then
-        success "System health check passed! 🎉"
+        success "System health check passed ($warnings warning(s))"
+        return 0
     else
-        warning "Found $issues issue(s) that need attention"
-        info "Run 'dotfiles init' to fix these issues"
+        warning "Found $issues failure(s) and $warnings warning(s)"
+        info "Resolve the failures above, then rerun 'dotfiles doctor'."
+        return 1
     fi
 }
 

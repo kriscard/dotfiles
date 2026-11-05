@@ -39,7 +39,6 @@ cd ~/.dotfiles
 | `dotfiles sync`     | Sync config symlinks (Stow)   |
 | `dotfiles doctor`   | Health check & diagnostics    |
 | `dotfiles backup`   | Backup existing configs       |
-| `dotfiles restore`  | Restore from backup           |
 | `dotfiles macos`    | Apply macOS defaults          |
 | `dotfiles ds_store` | Clean .DS_Store files         |
 
@@ -51,6 +50,17 @@ dotfiles doctor --verbose     # Detailed diagnostics
 dotfiles sync --dry-run      # Preview changes
 dotfiles backup              # Safe backup
 ```
+
+`dotfiles doctor` exits with status 1 when a required tool is missing or a
+Homebrew package-status query fails. Outdated packages and a non-Zsh login shell
+are warnings. It checks CLI prerequisites and package status, not every app's
+configuration.
+
+`dotfiles backup` creates backups, but there is no automated restore command.
+Inspect the backup and restore selected files manually.
+
+Run the regression suite with `python3 scripts/test-doctor.py`. The tests use the
+real CLI with disposable tool-availability fixtures and do not alter live config.
 
 ## What's Included
 
