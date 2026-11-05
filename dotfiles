@@ -655,13 +655,16 @@ cmd_packages() {
         fi
     fi
 
-    # Setup tmux TPM
-    if [[ ! -d "$HOME/.tmux/plugins/tpm" ]]; then
+    # Keep TPM in the same directory as tmux.conf. Existing legacy installs are
+    # left intact; do not move user plugin state during package installation.
+    local tpm_dir="$HOME/.config/tmux/plugins/tpm"
+    if [[ ! -d "$tpm_dir" ]]; then
         info "Installing TPM (Tmux Plugin Manager)..."
         if [[ "$DRY_RUN" == true ]]; then
-            echo "[DRY RUN] Would clone TPM repository"
+            echo "[DRY RUN] Would clone TPM repository to $tpm_dir"
         else
-            git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+            mkdir -p "$(dirname "$tpm_dir")"
+            git clone https://github.com/tmux-plugins/tpm "$tpm_dir"
         fi
     fi
 
@@ -671,7 +674,7 @@ cmd_packages() {
         if [[ "$DRY_RUN" == true ]]; then
             echo "[DRY RUN] Would install tmux plugins"
         else
-            ~/.tmux/plugins/tpm/bin/install_plugins
+            TMUX_PLUGIN_MANAGER_PATH="$HOME/.config/tmux/plugins/" "$tpm_dir/bin/install_plugins"
         fi
     else
         info "Tmux is not running. Start tmux and press prefix + I to install plugins"
