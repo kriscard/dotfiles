@@ -38,15 +38,21 @@ MAX_HITS = 3
 
 QMD_ENV = {
     **os.environ,
-    "PATH": os.path.expanduser("~/.asdf/shims") + ":/opt/homebrew/bin:" + os.environ.get("PATH", ""),
+    "PATH": os.path.expanduser("~/.local/bin")
+    + ":/opt/homebrew/bin:"
+    + os.environ.get("PATH", ""),
 }
 
 
 def bm25_candidates(prompt):
     try:
         result = subprocess.run(
-            ["qmd", "search", prompt[:200], "--json", "-n", str(MAX_HITS)],
+            [
+                "mise", "exec", "node@26.12.1", "--", "qmd", "search",
+                prompt[:200], "--json", "-n", str(MAX_HITS),
+            ],
             capture_output=True, text=True, timeout=4, env=QMD_ENV,
+            cwd=os.path.expanduser("~"),
         )
         hits = json.loads(result.stdout)
     except Exception:

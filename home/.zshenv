@@ -8,9 +8,8 @@
 export HOMEBREW_PREFIX="/opt/homebrew"
 path=("$HOMEBREW_PREFIX/bin" "$HOMEBREW_PREFIX/sbin" $path)
 
-# asdf shims — must precede Homebrew so asdf-managed tool versions win
-# in non-interactive shells (scripts, cron, child shells) as well as interactive ones
-export ASDF_DATA_DIR="${ASDF_DATA_DIR:-$HOME/.asdf}"
-[[ -d "$ASDF_DATA_DIR/shims" ]] && path=("$ASDF_DATA_DIR/shims" $path)
+# mise shims keep managed tools available to non-interactive shells and GUI apps.
+export MISE_DATA_DIR="${MISE_DATA_DIR:-$HOME/.local/share/mise}"
+[[ -d "$MISE_DATA_DIR/shims" ]] && path=("$MISE_DATA_DIR/shims" $path)
 
 # Full config is in zsh.d/*.zsh (loaded via .zshrc for interactive shells)

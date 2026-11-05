@@ -37,6 +37,3 @@ fi
 
 # Starship config location
 export STARSHIP_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/starship.toml"
-
-# asdf 0.16+ ships as a native Go binary — no shell loader to source, no
-# lazy-load needed. Shim PATH is set in .zshenv for non-interactive shells.

@@ -9,10 +9,10 @@ export PATH="$HOMEBREW_PREFIX/bin:$HOMEBREW_PREFIX/sbin:$PATH"
 export DOTFILES="$HOME/.dotfiles"
 
 # PATH configuration (ordered by priority, first = highest)
-# asdf shims must precede Homebrew so asdf-managed tool versions (node, npm,
-# pnpm, ...) win over Homebrew-installed copies of the same binaries.
+# mise shims keep managed tools ahead of Homebrew in shells that do not run
+# interactive activation, such as scripts and GUI-launched processes.
 path=(
-  "${ASDF_DATA_DIR:-$HOME/.asdf}/shims"
+  "${MISE_DATA_DIR:-$HOME/.local/share/mise}/shims"
   "$HOME/bin"
   "$HOME/.local/bin"
   "$HOME/.config/bin"

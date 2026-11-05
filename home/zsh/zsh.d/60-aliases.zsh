@@ -88,9 +88,15 @@ alias lzg='lazygit'
 alias preview="fzf --preview 'bat --color=always {}'"
 alias pf="fzf --preview 'bat --color=always {}'"
 
-# Node version management (via asdf)
-alias node-use="asdf shell nodejs"
-alias node-list="asdf list nodejs"
-alias node-install="asdf install nodejs"
+# Node version management (via mise)
+node-use() {
+  [[ -n "$1" ]] || { echo "usage: node-use <version>" >&2; return 2; }
+  mise shell "node@$1"
+}
+node-list() { mise ls node; }
+node-install() {
+  [[ -n "$1" ]] || { echo "usage: node-install <version>" >&2; return 2; }
+  mise install "node@$1"
+}
 # Launch Chrome with CDP for agent-browser (quits existing instance first)
 alias chrome-debug='osascript -e "tell application \"Google Chrome\" to quit" 2>/dev/null; sleep 2; /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222 --user-data-dir=/tmp/chrome-debug &'
