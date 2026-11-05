@@ -150,6 +150,30 @@ shim. It verifies shim priority, absence of the Homebrew subprocess, profiling,
 and the simple `sysinfo` fallback. It does not load your `.env`, activate mise,
 change runtime versions, or require Neofetch/Fastfetch.
 
+## Stow and tmux ownership
+
+Stow deploys authored Raycast scripts and keeps TPM installs, downloaded
+Spicetify content, Karabiner backups, machine-local settings/work identity, and
+Python caches local. New ignore rules do not delete old links or relocate data.
+
+```bash
+python3 scripts/test-stow.py
+bash scripts/test-tmux.sh
+./dotfiles sync --dry-run
+```
+
+The Stow test applies and repeats against a disposable home while preserving
+existing runtime files. The tmux test uses an isolated server and a TPM
+load-count fixture to check every palette, fallback selection, and one TPM load.
+CI runs both tests; neither touches an existing user session.
+
+Tmux and the installer now agree on `~/.config/tmux/plugins/tpm`. Keep any old
+`~/.tmux/plugins` data until the new installation works. If TPM is missing, the
+config loads without it; install TPM through the package setup before installing
+plugins. Preview the full sync before applying from the canonical checkout, then
+reload with `tmux source-file ~/.config/tmux/tmux.conf`. This does not restart the
+server. Only the user should decide when to reload their existing sessions.
+
 ## What's Included
 
 ### Core Tools
