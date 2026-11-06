@@ -65,7 +65,6 @@ home/.gitconfig-work
 # Other
 fzf
 fish_variables
-.tool-versions
 
 # Backup files
 *.bak

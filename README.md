@@ -145,10 +145,10 @@ python3 scripts/test-shell-startup.py
 zsh-profile
 ```
 
-The regression test uses real Zsh with a disposable home and controlled asdf
+The regression test uses real Zsh with a disposable home and controlled mise
 shim. It verifies shim priority, absence of the Homebrew subprocess, profiling,
-and the simple `sysinfo` fallback. It does not load your `.env`, activate mise,
-change runtime versions, or require Neofetch/Fastfetch.
+and the simple `sysinfo` fallback. It does not load your `.env`, alter your live
+shell, or require Neofetch/Fastfetch.
 
 ## Stow and tmux ownership
 
@@ -173,6 +173,45 @@ config loads without it; install TPM through the package setup before installing
 plugins. Preview the full sync before applying from the canonical checkout, then
 reload with `tmux source-file ~/.config/tmux/tmux.conf`. This does not restart the
 server. Only the user should decide when to reload their existing sessions.
+
+## Draft asdf to mise migration
+
+Follow the [official asdf migration guide](https://mise.jdx.dev/dev-tools/comparison-to-asdf.html):
+prove one project with `mise exec` before changing shell activation. Keep asdf
+and `.tool-versions` until all required tools and projects work. mise installs
+its own runtimes; do not share or symlink asdf install directories.
+
+The proposed global defaults in `home/.config/mise/config.toml` are Node
+`26.12.1`, Ruby `3.3.6`, and pnpm `10.34.4`. QMD `2.8.3` must be installed under
+that mise Node, including its native dependencies; existing npm globals and Ruby
+gems are not copied automatically. The plan includes a targeted install command
+that does not clone the vault or rebuild embeddings.
+
+```bash
+# Before activation, in a representative project with its existing version file:
+mise config ls
+mise ls --current
+mise install
+mise exec -- node --version
+# Run that project's own build/test commands through mise exec as well.
+
+# Isolated migration and rollback checks from this checkout:
+bash scripts/test-mise.sh
+python3 scripts/test-migration-rollback.py
+# Personal-vault integration check: requires existing index and local models.
+python3 scripts/test-qmd-runtime.py
+```
+
+The runtime test exercises a legacy project before activation, real tool
+resolution in disposable shells, and project overrides. The rollback test
+unstows migration links before restoring saved runtime declarations. CI installs
+the pinned runtimes in its disposable runner; it does not access personal notes
+or run the private-vault query test.
+
+**Do not activate or uninstall asdf merely to review this draft.** See the
+[staged migration and rollback plan](docs/plans/asdf-to-mise.md). Activation must
+coordinate the canonical checkout, Stow links, and home `.tool-versions`; blindly
+switching branches can leave dangling links and no selected runtime.
 
 ## What's Included
 

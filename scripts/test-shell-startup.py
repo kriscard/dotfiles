@@ -14,10 +14,10 @@ class ShellStartup(unittest.TestCase):
         self.home = Path(self.temp.name)
         for name in (".zshrc", ".zshenv", "zsh"):
             (self.home / name).symlink_to(ROOT / "home" / name)
-        shims = self.home / ".asdf/shims"
+        shims = self.home / ".local/share/mise/shims"
         shims.mkdir(parents=True)
         node = shims / "node"
-        node.write_text("#!/bin/sh\nprintf 'asdf-node-fixture\\n'\n")
+        node.write_text("#!/bin/sh\nprintf 'mise-node-fixture\\n'\n")
         node.chmod(0o755)
         self.env = {
             "HOME": str(self.home), "ZDOTDIR": str(self.home), "SHELL": "/bin/zsh",
@@ -32,10 +32,10 @@ class ShellStartup(unittest.TestCase):
         return subprocess.run(["/bin/zsh", flag, command], cwd=self.home, env=self.env,
                               capture_output=True, text=True, timeout=45)
 
-    def test_noninteractive_shell_keeps_asdf_priority(self):
+    def test_noninteractive_shell_keeps_mise_priority(self):
         result = self.shell("-c", "command -v node; node")
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual(result.stdout.splitlines(), [str(self.home / ".asdf/shims/node"), "asdf-node-fixture"])
+        self.assertEqual(result.stdout.splitlines(), [str(self.home / ".local/share/mise/shims/node"), "mise-node-fixture"])
 
     def test_startup_does_not_spawn_brew_shellenv(self):
         result = self.shell("-xc", "true")

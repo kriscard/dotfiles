@@ -18,7 +18,7 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
       - name: Install lint tools
-        run: brew install shellcheck gitleaks neovim stow tmux
+        run: brew install shellcheck gitleaks neovim stow tmux mise
       - name: CLI regression tests
         run: python3 scripts/test-doctor.py
       - name: Claude settings regression tests
@@ -29,6 +29,12 @@ jobs:
         run: gitleaks git --log-opts=--all --redact=100 --no-banner
       - name: Neovim config syntax
         run: nvim --headless -u NONE -l scripts/check-nvim-syntax.lua
+      - name: Install pinned mise runtimes in CI
+        run: MISE_GLOBAL_CONFIG_FILE="$PWD/home/.config/mise/config.toml" mise install
+      - name: Isolated mise migration tests
+        run: bash scripts/test-mise.sh
+      - name: Migration rollback protocol
+        run: python3 scripts/test-migration-rollback.py
       - name: Shell startup regression tests
         run: python3 scripts/test-shell-startup.py
       - name: Stow boundary regression tests

@@ -5,17 +5,16 @@
 # and indexing reads files on disk regardless of git state.
 set -euo pipefail
 
-# asdf shims first so `node` resolves to the version qmd's better-sqlite3 was
-# built against (Node 24 / MODULE_VERSION 137). Homebrew's Node (25/141) would
-# fail the native dlopen. Then /opt/homebrew/bin for the qmd wrapper itself.
-export PATH="${HOME}/.asdf/shims:/opt/homebrew/bin:${PATH}"
+# QMD is installed under mise Node 26; keep its native modules on that runtime.
+export PATH="/opt/homebrew/bin:${PATH}"
 
 LOG="${HOME}/.cache/qmd/reindex.log"
 mkdir -p "$(dirname "$LOG")"
+cd "$HOME"
 
 {
   echo "=== $(date '+%Y-%m-%d %H:%M:%S') reindex start ==="
-  qmd update
-  qmd embed
+  mise exec node@26.12.1 -- qmd update
+  mise exec node@26.12.1 -- qmd embed
   echo "=== $(date '+%Y-%m-%d %H:%M:%S') reindex done ==="
 } >>"$LOG" 2>&1

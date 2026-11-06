@@ -251,6 +251,22 @@ main() {
 
 # Command implementations (to be filled in next)
 
+install_mise_tools() {
+    local mise_config="$DOTFILES_DIR/home/.config/mise/config.toml"
+
+    [[ -f "$mise_config" ]] || return 0
+
+    info "Installing runtimes from mise config..."
+    if [[ "$DRY_RUN" == true ]]; then
+        echo "[DRY RUN] Would run: MISE_GLOBAL_CONFIG_FILE=$mise_config mise install"
+    elif command_exists "mise"; then
+        MISE_GLOBAL_CONFIG_FILE="$mise_config" mise install
+        success "mise runtimes installed"
+    else
+        warning "mise is not installed; skipping runtime installation"
+    fi
+}
+
 cmd_init() {
     title "🚀 Initializing dotfiles setup"
 
@@ -307,6 +323,8 @@ cmd_update() {
         warning "Homebrew is not installed; skipping package update"
     fi
 
+    install_mise_tools
+
     info "Re-syncing GNU Stow symlinks..."
     cmd_sync
 
@@ -330,16 +348,17 @@ cmd_update() {
 
     info "Refreshing QMD search index and embeddings..."
     if [[ "$DRY_RUN" == true ]]; then
-        echo "[DRY RUN] Would run: qmd update"
-        echo "[DRY RUN] Would run: qmd embed"
-    elif command_exists "qmd"; then
-        if qmd update; then
-            qmd embed || warning "Could not refresh QMD embeddings"
+        echo "[DRY RUN] Would run: mise exec node@26.12.1 -- qmd update"
+        echo "[DRY RUN] Would run: mise exec node@26.12.1 -- qmd embed"
+    elif command_exists "mise" && mise exec node@26.12.1 -- qmd --version >/dev/null 2>&1; then
+        if mise exec node@26.12.1 -- qmd update; then
+            mise exec node@26.12.1 -- qmd embed \
+                || warning "Could not refresh QMD embeddings"
         else
             warning "Could not update QMD search index; skipping embedding refresh"
         fi
     else
-        warning "QMD is not installed; skipping search index refresh"
+        warning "QMD is not installed for mise Node 26; skipping search index refresh"
     fi
 
     success "Update complete!"
@@ -644,6 +663,8 @@ cmd_packages() {
     else
         warning "Brewfile not found at $DOTFILES_DIR/Brewfile"
     fi
+
+    install_mise_tools
 
     # Install fzf key bindings
     if command_exists "brew" && [[ -f "$(brew --prefix)/opt/fzf/install" ]]; then

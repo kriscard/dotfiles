@@ -53,12 +53,8 @@ brew "gum"          # Interactive CLI prompts (used in roofr scripts)
 brew "neovim"
 brew "lua-language-server"
 
-# Version Managers
-brew "asdf"         # Unified version manager for multiple languages
-# Individual version managers (alternative to asdf)
-# brew "fnm"          # Fast Node Manager (better than nvm)
-# brew "pyenv"        # Python version management
-# brew "rbenv"        # Ruby version management
+# Version Manager
+brew "mise"         # Cross-platform runtime and tool version manager
 
 # Databases (using Docker instead)
 
@@ -90,8 +86,7 @@ brew "uv"           # Python runner (Claude Code notification.py Stop hook)
 # WEB DEVELOPMENT SPECIFIC
 # =============================================================================
 
-# Package Managers & Runtimes
-brew "pnpm"         # Fast package manager
+# Package managers and runtimes are pinned in ~/.config/mise/config.toml.
 
 # API Testing
 brew "httpie"       # Better HTTP client
