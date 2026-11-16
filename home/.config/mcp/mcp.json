@@ -5,7 +5,7 @@
       "auth": "oauth"
     },
     "supabase": {
-      "url": "https://mcp.supabase.com/mcp?read_only=true",
+      "url": "https://mcp.supabase.com/mcp",
       "auth": "oauth"
     },
     "context7": {

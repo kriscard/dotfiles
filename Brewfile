@@ -15,7 +15,6 @@ brew "curl"
 brew "wget"
 brew "jq"
 brew "htop"
-brew "tldr"
 brew "coreutils"    # GNU utilities (gdate for ms-precision timing)
 
 # Modern command line tools (replacements for traditional tools)
