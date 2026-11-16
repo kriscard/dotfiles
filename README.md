@@ -59,9 +59,6 @@ configuration.
 `dotfiles backup` creates backups, but there is no automated restore command.
 Inspect the backup and restore selected files manually.
 
-Run the regression suite with `python3 scripts/test-doctor.py`. The tests use the
-real CLI with disposable tool-availability fixtures and do not alter live config.
-
 ## Secret scanning
 
 Install Gitleaks through `dotfiles packages` and enable the hooks with
@@ -69,14 +66,13 @@ Install Gitleaks through `dotfiles packages` and enable the hooks with
 output, including cases where an unstaged edit hides a staged secret.
 
 ```bash
-python3 scripts/test-secret-scanning.py
 gitleaks git --pre-commit --staged --redact=100 --no-banner
 gitleaks git --log-opts=--all --redact=100 --no-banner
 ```
 
 The first scan is the commit check; the second scans committed history, including
 removed secrets. `pre-commit run --all-files` does not turn the staged-content
-hook into a history scan. CI runs the regression test and a full-history scan.
+hook into a history scan. CI runs a full-history scan.
 Ignored `.env` files are not scanned by these Git commands; keep them private.
 
 ## Claude security defaults
@@ -87,7 +83,6 @@ preferences, and unrelated permissions while tightening the audited defaults:
 ```bash
 python3 scripts/harden-claude-settings.py         # Check only
 python3 scripts/harden-claude-settings.py --apply # Private backup, then update
-python3 scripts/test-claude-security.py
 ```
 
 It disables blanket project MCP activation, clears the global project-server
@@ -102,7 +97,7 @@ this code does not apply it automatically, install servers, or change project
 `.mcp.json` files. Permission prompts reduce accidental approval; they are not a
 sandbox or a complete security audit.
 
-## Neovim configuration checks
+## Neovim configuration
 
 `[[` / `]]` navigate Treesitter class starts; `[r` / `]r` navigate references
 through Snacks. The optional Node/Python/Ruby/Perl remote-plugin hosts are disabled
@@ -111,12 +106,10 @@ DAP adapters; re-enable a host if a future plugin requires it.
 
 ```bash
 nvim --headless -u NONE -l scripts/check-nvim-syntax.lua
-bash scripts/test-nvim-audit.sh
 ```
 
-CI compiles the configuration without loading plugins. The local integration
-test uses installed plugins to verify provider flags, keymap ownership, and
-Snacks input/select wiring after `UIEnter`. It does not sync or upgrade plugins.
+CI checks Lua syntax without loading or upgrading plugins. Use `:checkhealth`
+inside Neovim to inspect the running configuration.
 
 ## JavaScript debugging
 
@@ -124,16 +117,10 @@ nvim-dap connects directly to Mason's `js-debug-adapter`; the VS Code bridge and
 retired `node2` adapter are no longer requested. On a fresh machine, load DAP and
 let Mason's `js` installation complete, or run `:MasonInstall js-debug-adapter`.
 
-```bash
-bash scripts/test-javascript-dap.sh
-```
+Existing launch/attach/Jest configurations are preserved. Check browser attach,
+Jest, and TypeScript source maps in the project where you use them.
 
-This local smoke test uses installed plugins and a real temporary Node target:
-launch, stop on entry, and evaluate an expression. It does not upgrade plugins.
-Existing launch/attach/Jest configurations are preserved, but browser attach,
-Jest, and TypeScript source maps still need project-specific checks.
-
-## Shell startup checks
+## Shell startup
 
 `zsh-profile` enables zprof before loading shell modules and prints its function
 table. Normal startup does not load the profiler. Apple Silicon Homebrew paths
@@ -141,14 +128,8 @@ are set directly rather than spawning `brew shellenv` in every child shell.
 The shell remains macOS-specific; this does not add Linux portability.
 
 ```bash
-python3 scripts/test-shell-startup.py
 zsh-profile
 ```
-
-The regression test uses real Zsh with a disposable home and controlled mise
-shim. It verifies shim priority, absence of the Homebrew subprocess, profiling,
-and the simple `sysinfo` fallback. It does not load your `.env`, alter your live
-shell, or require Neofetch/Fastfetch.
 
 ## Stow and tmux ownership
 
@@ -157,15 +138,8 @@ Spicetify content, Karabiner backups, machine-local settings/work identity, and
 Python caches local. New ignore rules do not delete old links or relocate data.
 
 ```bash
-python3 scripts/test-stow.py
-bash scripts/test-tmux.sh
 ./dotfiles sync --dry-run
 ```
-
-The Stow test applies and repeats against a disposable home while preserving
-existing runtime files. The tmux test uses an isolated server and a TPM
-load-count fixture to check every palette, fallback selection, and one TPM load.
-CI runs both tests; neither touches an existing user session.
 
 Tmux and the installer now agree on `~/.config/tmux/plugins/tpm`. Keep any old
 `~/.tmux/plugins` data until the new installation works. If TPM is missing, the
@@ -174,44 +148,22 @@ plugins. Preview the full sync before applying from the canonical checkout, then
 reload with `tmux source-file ~/.config/tmux/tmux.conf`. This does not restart the
 server. Only the user should decide when to reload their existing sessions.
 
-## Draft asdf to mise migration
+## Runtime management
 
-Follow the [official asdf migration guide](https://mise.jdx.dev/dev-tools/comparison-to-asdf.html):
-prove one project with `mise exec` before changing shell activation. Keep asdf
-and `.tool-versions` until all required tools and projects work. mise installs
-its own runtimes; do not share or symlink asdf install directories.
-
-The proposed global defaults in `home/.config/mise/config.toml` are Node
-`26.12.1`, Ruby `3.3.6`, and pnpm `10.34.4`. QMD `2.8.3` must be installed under
-that mise Node, including its native dependencies; existing npm globals and Ruby
-gems are not copied automatically. The plan includes a targeted install command
-that does not clone the vault or rebuild embeddings.
+Homebrew installs mise. Global versions live in
+`home/.config/mise/config.toml`: Node `26.12.1`, Ruby `3.3.6`, and pnpm `10.34.4`.
+Use `mise.toml` for project-specific versions.
 
 ```bash
-# Before activation, in a representative project with its existing version file:
-mise config ls
-mise ls --current
-mise install
-mise exec -- node --version
-# Run that project's own build/test commands through mise exec as well.
-
-# Isolated migration and rollback checks from this checkout:
-bash scripts/test-mise.sh
-python3 scripts/test-migration-rollback.py
-# Personal-vault integration check: requires existing index and local models.
-python3 scripts/test-qmd-runtime.py
+mise install          # Install the configured versions
+mise ls --current    # Show versions selected in this directory
+mise doctor          # Check mise setup in an activated shell
 ```
 
-The runtime test exercises a legacy project before activation, real tool
-resolution in disposable shells, and project overrides. The rollback test
-unstows migration links before restoring saved runtime declarations. CI installs
-the pinned runtimes in its disposable runner; it does not access personal notes
-or run the private-vault query test.
-
-**Do not activate or uninstall asdf merely to review this draft.** See the
-[staged migration and rollback plan](docs/plans/asdf-to-mise.md). Activation must
-coordinate the canonical checkout, Stow links, and home `.tool-versions`; blindly
-switching branches can leave dangling links and no selected runtime.
+QMD `2.8.3` is installed under mise's Node `26.12.1`, including its native
+dependencies. Run each project's own build and test commands through `mise exec`.
+The [migration notes](docs/plans/asdf-to-mise.md) document the previous cutover
+and rollback procedure.
 
 ## What's Included
 

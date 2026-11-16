@@ -1,7 +1,8 @@
-# Draft: project-first asdf to mise migration
+# asdf to mise migration notes
 
-Status: proposed configuration only. Do not merge, activate, retire version
-files, or uninstall asdf as part of reviewing this draft.
+Historical plan for the completed personal-Mac migration. Use the README for
+current runtime configuration; these notes preserve the cutover and rollback
+sequence for reference.
 
 Authoritative sequence:
 https://mise.jdx.dev/dev-tools/comparison-to-asdf.html
@@ -46,9 +47,8 @@ with the home `.tool-versions` individually rather than bulk converting it.
 
 Install QMD under the selected mise Node, not an inherited asdf/Homebrew npm
 prefix. Its bootstrap checks the mise installation's actual `bin/qmd` path.
-The global npm install is pinned to `@tobilu/qmd@2.8.3`; it is not run by the test
-suite. Native database and semantic checks must run with both Node and QMD
-resolving from mise.
+The global npm install is pinned to `@tobilu/qmd@2.8.3`. Check native database
+access and semantic retrieval with both Node and QMD resolving from mise.
 
 From this PR's worktree, installing into mise's own data directory does not
 activate its shell integration:
@@ -57,28 +57,17 @@ activate its shell integration:
 MISE_GLOBAL_CONFIG_FILE="$PWD/home/.config/mise/config.toml" mise install
 mise exec node@26.12.1 -- npm install -g --prefix "$(mise where node@26.12.1)" @tobilu/qmd@2.8.3
 mise reshim
-bash scripts/test-mise.sh
-python3 scripts/test-migration-rollback.py
-python3 scripts/test-qmd-runtime.py
+mise exec node@26.12.1 -- qmd --version
+mise exec node@26.12.1 -- qmd status
 ```
 
 The explicit npm prefix prevents a machine's npmrc from redirecting the QMD
 installation back into an unrelated global prefix.
 
-Prerequisites: mise, the declared runtimes, QMD under mise, and (for the last
-command only) the existing indexed vault and local models. No test should rebuild
-vault indexes, clone the vault, or print note contents.
-
-The shell test uses a disposable HOME and sanitized PATH. It first proves that
-mise reads a legacy project's `.tool-versions` and runs its Node program without
-activation, then tests activation, non-interactive shims, helpers, and overrides.
-The rollback test exercises actual Stow apply/unstow in a temporary home and
-asserts there are no remaining migration links and saved version declarations
-can be restored. This is not a substitute for real project and work-Mac testing.
-
-CI installs the declared versions into a disposable runner, runs the isolated
-migration/rollback tests, and retains the existing regression/lint/history checks.
-It does not use personal vault data or claim private integration coverage.
+Prerequisites: mise, the declared runtimes, QMD under mise, and an existing
+indexed vault for `qmd status`. Verify a keyword search and semantic query
+against known notes without rebuilding indexes or embeddings. CI runs syntax,
+lint, and secret checks; it does not access personal vault data.
 
 ## 3. Activate only after approval and project proof
 
